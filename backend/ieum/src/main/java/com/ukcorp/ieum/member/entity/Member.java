@@ -1,8 +1,6 @@
 package com.ukcorp.ieum.member.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 
@@ -18,6 +16,7 @@ import lombok.*;
 public class Member {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberNo;
     private long careNo;
     private String memberId;

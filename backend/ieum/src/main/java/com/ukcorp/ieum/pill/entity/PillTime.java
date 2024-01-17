@@ -1,8 +1,6 @@
 package com.ukcorp.ieum.pill.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,6 +16,7 @@ import java.time.LocalDateTime;
 @Table(name = "PILL_TIME")
 public class PillTime {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pillTimeNo;
     private long pillInfoNo;
 //    복용 요일

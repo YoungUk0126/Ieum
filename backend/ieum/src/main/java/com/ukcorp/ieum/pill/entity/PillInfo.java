@@ -1,9 +1,6 @@
 package com.ukcorp.ieum.pill.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -20,6 +17,7 @@ import java.util.List;
 @Table(name = "PILL_INFO")
 public class PillInfo {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pillInfoNo;
     private long careNo;
     private LocalDate pillStartDate;

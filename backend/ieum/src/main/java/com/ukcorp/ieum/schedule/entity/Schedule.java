@@ -1,8 +1,6 @@
 package com.ukcorp.ieum.schedule.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -18,6 +16,7 @@ import java.time.LocalDate;
 @Table(name = "SCHEDULE")
 public class Schedule {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long scheduleNo;
     private long careNo;
     private LocalDate scheduleDate;
