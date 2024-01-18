@@ -1,22 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import ChatView from '../views/ChatView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    /*{
+      path: '/',
+      name: 'TheMainView',
+      component: TheMainView
+    },
+     자식 페이지 라우팅 예시
     {
-      //메인화면
-      path: '/home',
-      name: 'home',
-      component: HomeView
+      path: '/spot',
+      name: 'TheSpotMapView',
+      component: TheSpotMapView
     },
     {
-      //대화목록 상세
-      path: '/chat',
-      name: 'chat',
-      component: ChatView
-    }
+      path: '/board',
+      name: 'TheBoardView',
+      component: TheBoardView,
+      children: [
+        {
+          path: 'list',
+          name: 'BoardList',
+          component: () => import('@/components/board/BoardList.vue')
+        },
+        {
+          path: 'detail/:articleNo',
+          name: 'BoardDetail',
+          component: () => import('@/components/board/BoardDetail.vue')
+        }
+      ]
+    },*/
   ]
 })
 
