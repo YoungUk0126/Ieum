@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.api.controller;
 
+import com.ukcorp.ieum.api.service.ChatGPTService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

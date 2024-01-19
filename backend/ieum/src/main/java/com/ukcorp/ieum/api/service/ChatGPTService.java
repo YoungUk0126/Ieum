@@ -1,4 +1,4 @@
-package com.ukcorp.ieum.api.service.impl;
+package com.ukcorp.ieum.api.service;
 
 import org.springframework.stereotype.Service;
 
@@ -19,5 +19,5 @@ public interface ChatGPTService {
     List<Map<String, Object>> modelList();
 
     Map<String, Object> prompt(String message);
-    
+
 }
