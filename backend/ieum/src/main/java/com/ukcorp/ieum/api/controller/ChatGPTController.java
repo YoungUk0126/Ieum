@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ChatGPT에서 사용하는 환경 구성
+ * ChatGPT 컨트롤러 생성
  *
  * @author : dachan
- * @fileName : ChatGPTConfig
+ * @fileName : ChatGPTController
  * @since : 01/19/24
  */
 @RestController
