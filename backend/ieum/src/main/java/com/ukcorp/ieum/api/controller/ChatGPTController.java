@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.api.controller;
 
 import com.ukcorp.ieum.api.service.ChatGPTService;
+import java.util.HashMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,9 +31,13 @@ public class ChatGPTController {
      * @return List
      */
     @GetMapping("/modelList")
-    public ResponseEntity<List<Map<String, Object>>> selectModelList() {
-        List<Map<String, Object>> result = chatGPTService.modelList();
-        return new ResponseEntity<>(result, HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> selectModelList() {
+        try{
+          List<Map<String, Object>> result = chatGPTService.modelList();
+          return handleSuccess(result);
+        }catch (Exception e){
+            return handleFail(e.getMessage());
+        }
     }
 
     /**
@@ -41,9 +46,28 @@ public class ChatGPTController {
      * @return Map
      */
     @PostMapping("/prompt")
-    public ResponseEntity<Map<String, Object>> selectPrompt(@RequestBody String message) {
+    public ResponseEntity<Map<String,Object>> selectPrompt(@RequestBody String message) {
+      try{
         Map<String, Object> result = chatGPTService.prompt(message);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return handleSuccess(result);
+      }catch (Exception e){
+        return handleFail(e.getMessage());
+      }
+    }
+
+    // Http 전송 템플릿
+    private ResponseEntity<Map<String,Object>> handleSuccess(Object data){
+      Map<String, Object> result = new HashMap<>();
+      result.put("success", true);
+      result.put("data", data);
+      return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+    }
+
+    private ResponseEntity<Map<String,Object>> handleFail(Object data){
+      Map<String, Object> result = new HashMap<>();
+      result.put("success", false);
+      result.put("data", data);
+      return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
     }
 
 }

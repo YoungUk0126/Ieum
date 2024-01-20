@@ -87,24 +87,25 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         // [STEP1] 토큰 정보가 포함된 Header를 가져옵니다.
         HttpHeaders headers = chatGPTConfig.httpHeaders();
 
+        // [STEP2] 프롬프트 전송을 위한 메세지 템플릿을 생성합니다.
         String requestBody = "";
         ObjectMapper om = new ObjectMapper();
 
         List<Map<String, Object>> messages = new ArrayList<>();
 
-        // 첫 번째 메시지
+        // 첫 번째 메시지 - 시스템 역할 지정
         Map<String, Object> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
         systemMessage.put("content", "당신은 도움이 되는 어시스턴트입니다.");
         messages.add(systemMessage);
 
-        // 두 번째 메시지 (사용자 메시지)
+        // 두 번째 메시지 - 사용자 메세지 전달
         Map<String, Object> userMessage = new HashMap<>();
         userMessage.put("role", "user");
         userMessage.put("content", message);
         messages.add(userMessage);
 
-        // 세 번째 메시지 (어시스턴트 메시지)
+        // 세 번째 메시지 - 답변을 도와줄 내용 전달
         Map<String, Object> assistantMessage = new HashMap<>();
         assistantMessage.put("role", "assistant");
         assistantMessage.put("content", "오늘 날씨는 맑고 기온은 25도입니다.");
@@ -139,6 +140,8 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+
+        log.debug("[+] 프롬프트 답변이 생성됐습니다" + result);
         return result;
     }
 }
