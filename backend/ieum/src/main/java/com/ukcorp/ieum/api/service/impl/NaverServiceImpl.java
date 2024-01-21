@@ -6,9 +6,17 @@ import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.dto.SmsRequestDTO;
 import com.ukcorp.ieum.api.dto.SmsResponseDTO;
 import com.ukcorp.ieum.api.service.NaverService;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -25,6 +33,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * Naver Service 구현체
  *
@@ -48,6 +58,13 @@ public class NaverServiceImpl implements NaverService {
 
   @Value("${naver-cloud-sms.senderPhone}")
   private String phone;
+
+  @Value("${naver-cloud-stt.secret}")
+  private String ttsSecret;
+
+  @Value("${naver-cloud-stt.id}")
+  private String ttsId;
+
 
   /**
    * 문자 전송 로직
@@ -131,4 +148,82 @@ public class NaverServiceImpl implements NaverService {
     return encodeBase64String;
   }
 
+  /**
+   * STT 로직
+   * @param MultipartFile
+   * @return String
+   */
+  @Override
+  public String getSTT(MultipartFile file) {
+    log.debug("[+] STT 생성 시작");
+    try {
+      String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
+      String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
+      URL url = new URL(apiURL);
+
+      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+      conn.setUseCaches(false);
+      conn.setDoOutput(true);
+      conn.setDoInput(true);
+      conn.setRequestProperty("Content-Type", "application/octet-stream");
+      conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", ttsId);
+      conn.setRequestProperty("X-NCP-APIGW-API-KEY", ttsSecret);
+
+      OutputStream outputStream = conn.getOutputStream();
+      File voiceFile = convertMultiPartToFile(file);
+      FileInputStream inputStream = new FileInputStream(voiceFile);
+      byte[] buffer = new byte[4096];
+      int bytesRead = -1;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+      outputStream.flush();
+      inputStream.close();
+      BufferedReader br = null;
+      int responseCode = conn.getResponseCode();
+      if(responseCode == 200) { // 정상 호출
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+      } else {  // 오류 발생
+        System.out.println("error!!!!!!! responseCode= " + responseCode);
+        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+      }
+      String inputLine;
+
+      if(br != null) {
+        StringBuffer response = new StringBuffer();
+        while ((inputLine = br.readLine()) != null) {
+          response.append(inputLine);
+        }
+        br.close();
+        System.out.println(response.toString());
+        log.debug("[+] STT 성공");
+        return response.toString();
+      } else {
+        log.debug("[+] STT 실패");
+      }
+    } catch (Exception e) {
+      System.out.println(e);
+      log.debug("[+] STT 실패");
+    }
+    log.debug("[+] STT 실패");
+    return "Fail";
+  };
+
+  /**
+   * MultipartFile to File 메서드
+   * @param MultipartFile
+   * @return File
+   */
+  private File convertMultiPartToFile(MultipartFile file) {
+    try {
+      File convertedFile = File.createTempFile("temp", null);
+      file.transferTo(convertedFile);
+      log.debug("Multipart to File 변환 성공");
+      return convertedFile;
+    } catch (IOException e) {
+      e.printStackTrace();
+      log.debug("Multipart to File 변환 실패");
+      return null;
+    }
+  }
 }
