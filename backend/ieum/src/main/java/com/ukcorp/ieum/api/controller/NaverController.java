@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Naver API 컨트롤러 생성
@@ -52,6 +54,26 @@ public class NaverController {
       }
     } catch (Exception e) {
       return handleFail("메세지 전송 실패 ");
+    }
+  }
+
+  /**
+   * [Method] Naver 클로바 STT
+   *
+   * @param : MultipartFile (mp3, aac, ac3, ogg, flac, wav) - 최대 60초
+   * @return ResponseEntity<Map<String, Object>>
+   */
+  @PostMapping("/stt")
+  public ResponseEntity<Map<String, Object>> getSTT(@RequestParam("file") MultipartFile file) {
+    try {
+      String result = naverService.getSTT(file);
+      if (!result.equals("Fail")) {
+        return handleSuccess(result);
+      }else{
+        return handleFail("STT 실패");
+      }
+    } catch (Exception e) {
+      return handleFail("STT 실패 ");
     }
   }
 
