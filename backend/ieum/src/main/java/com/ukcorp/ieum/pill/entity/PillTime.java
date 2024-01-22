@@ -6,7 +6,6 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,6 +28,6 @@ public class PillTime {
     @Enumerated(EnumType.STRING)
     private PillDate pillDate;
 
-    @Column(name = "PILL_TIME")
-    private Long pillTime;
+    @Column(name = "PILL_TAKE_TIME")
+    private Long pillTakeTime;
 }
