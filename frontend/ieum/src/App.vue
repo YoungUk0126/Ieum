@@ -7,7 +7,7 @@ import TheNavbar from './components/common/TheNavbar.vue'
 <template>
   <div>
     <TheNavbar></TheNavbar>
-    <h1>메인화면</h1>
+
     <router-view></router-view>
     <TheFooter></TheFooter>
 
