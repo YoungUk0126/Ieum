@@ -1,4 +1,4 @@
-package com.ukcorp.ieum.schedule.dto;
+package com.ukcorp.ieum.temporalEvent.dto;
 
 
 import com.ukcorp.ieum.care.entity.CareInfo;

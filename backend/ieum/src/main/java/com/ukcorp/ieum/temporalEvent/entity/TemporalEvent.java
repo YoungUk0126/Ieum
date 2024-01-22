@@ -1,4 +1,4 @@
-package com.ukcorp.ieum.schedule.entity;
+package com.ukcorp.ieum.temporalEvent.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import jakarta.persistence.*;
