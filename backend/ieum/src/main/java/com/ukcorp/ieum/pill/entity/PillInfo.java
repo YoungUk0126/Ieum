@@ -20,6 +20,7 @@ public class PillInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long pillInfoNo;
     private long careNo;
+    private String pillName;
     private LocalDate pillStartDate;
     private LocalDate pillEndDate;
 //    식전/식후
