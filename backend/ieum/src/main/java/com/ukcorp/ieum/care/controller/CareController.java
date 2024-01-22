@@ -9,18 +9,4 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/care")
 public class CareController {
 
-    @GetMapping("/{care-id}")
-    public ResponseEntity getCareInfo(@PathVariable("care-id") Long careId) {
-        // TODO : 피보호자 정보 조회 로직 추가
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity postCareInfo(@RequestBody CareRequestDto careRequestDto) {
-        // TODO : 피보호자 정보 등록 로직 추가
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
-    // TODO : 피보호자 정보 수정
-    // TODO : 피보호자 정보 삭제
 }
