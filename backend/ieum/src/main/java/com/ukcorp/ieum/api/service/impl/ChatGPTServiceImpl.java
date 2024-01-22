@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukcorp.ieum.api.config.ChatGPTConfig;
 import com.ukcorp.ieum.api.dto.ChatGPTRequestDto;
 import com.ukcorp.ieum.api.service.ChatGPTService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -22,13 +23,10 @@ import java.util.*;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ChatGPTServiceImpl implements ChatGPTService {
 
     private final ChatGPTConfig chatGPTConfig;
-
-    public ChatGPTServiceImpl(ChatGPTConfig chatGPTConfig) {
-        this.chatGPTConfig = chatGPTConfig;
-    }
 
     @Value("${openai.model}")
     private String model;

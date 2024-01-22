@@ -2,10 +2,13 @@ package com.ukcorp.ieum.api.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ukcorp.ieum.api.config.ChatGPTConfig;
+import com.ukcorp.ieum.api.config.NaverConfig;
 import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.dto.SmsRequestDTO;
 import com.ukcorp.ieum.api.dto.SmsResponseDTO;
 import com.ukcorp.ieum.api.service.NaverService;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,58 +50,43 @@ import org.springframework.web.multipart.MultipartFile;
 @Primary
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class NaverServiceImpl implements NaverService {
 
-  @Value("${naver-cloud-sms.accessKey}")
-  private String accessKey;
-
-  @Value("${naver-cloud-sms.secretKey}")
-  private String secretKey;
-
-  @Value("${naver-cloud-sms.serviceId}")
-  private String serviceId;
+  // 네이버 API 활용 관련 Config 클래스 주입
+  private final NaverConfig naverConfig;
 
   @Value("${naver-cloud-sms.senderPhone}")
   private String phone;
 
-  @Value("${naver-cloud-stt.secret}")
-  private String ttsSecret;
-
-  @Value("${naver-cloud-stt.id}")
-  private String ttsId;
-
+  @Value("${naver-cloud-sms.serviceId}")
+  private String serviceId;
 
   /**
    * 문자 전송 로직
+   *
    * @param messageDto
    * @return SmsResponseDTO
    */
   @Override
-  public SmsResponseDTO sendSms(MessageDTO messageDto )
-      throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
+  public SmsResponseDTO sendSms(MessageDTO messageDto)
+          throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
     log.debug("[+] 메세지 전송 시작");
 
-    Long time = System.currentTimeMillis();
-    // 네이버에 전송하게 될 헤더 값
-    // 헤더 설정시 주의 사항은 time을 설정할 때 header에 들어가는 시간과 signature에 들어가는 시간이 동일한 값을 가지고 있어야 한다.
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("x-ncp-apigw-timestamp", time.toString());
-    headers.set("x-ncp-iam-access-key", accessKey);
-    headers.set("x-ncp-apigw-signature-v2", makeSignature(time));
+    HttpHeaders headers = naverConfig.getSmsHttpHeaders();
 
     List<MessageDTO> messages = new ArrayList<>();
     messages.add(messageDto);
 
     // Smsrequest에는 아래와 같은 정보가 들어가야 함
     SmsRequestDTO request = SmsRequestDTO.builder()
-        .type("SMS")
-        .contentType("COMM")
-        .countryCode("82")
-        .from(phone)
-        .content(messageDto.getContent())
-        .messages(messages)
-        .build();
+            .type("SMS")
+            .contentType("COMM")
+            .countryCode("82")
+            .from(phone)
+            .content(messageDto.getContent())
+            .messages(messages)
+            .build();
 
     // ObjectMapper를 통해서 request값을 body에 매핑시켜주기
     ObjectMapper objectMapper = new ObjectMapper();
@@ -106,50 +96,14 @@ public class NaverServiceImpl implements NaverService {
     // RestTemplate을 만들어서 네이버로 reqeust를 보내면 문자가 전송되고 이후 SmsResponse가 들어온다.
     RestTemplate restTemplate = new RestTemplate();
     restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
-    SmsResponseDTO response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/"+ serviceId +"/messages"), httpBody, SmsResponseDTO.class);
+    SmsResponseDTO response = restTemplate.postForObject(new URI("https://sens.apigw.ntruss.com/sms/v2/services/" + serviceId + "/messages"), httpBody, SmsResponseDTO.class);
     log.debug("[+] 메세지 전송 완료");
     return response;
-  };
-  
-  /**
-   * 문자 전송을 위해 필요한 시그니처 생성 로직
-   * @param time
-   * @return String
-   */
-  public String makeSignature(Long time)
-      throws NoSuchAlgorithmException, InvalidKeyException, UnsupportedEncodingException {
-
-    // signature에서 사용하게 될 구분자와 HTTP 방식, 앱키등을 등록해서 인코딩된 값으로 시그니쳐를 생성하기
-    String space = " ";
-    String newLine = "\n";
-    String method = "POST";
-    String url = "/sms/v2/services/"+ this.serviceId+"/messages";
-    String timestamp = time.toString();
-    String accessKey = this.accessKey;
-    String secretKey = this.secretKey;
-
-    String message = new StringBuilder()
-        .append(method)
-        .append(space)
-        .append(url)
-        .append(newLine)
-        .append(timestamp)
-        .append(newLine)
-        .append(accessKey)
-        .toString();
-
-    SecretKeySpec signingKey = new SecretKeySpec(secretKey.getBytes("UTF-8"), "HmacSHA256");
-    Mac mac = Mac.getInstance("HmacSHA256");
-    mac.init(signingKey);
-
-    byte[] rawHmac = mac.doFinal(message.getBytes("UTF-8"));
-    String encodeBase64String = Base64.encodeBase64String(rawHmac);
-
-    return encodeBase64String;
   }
 
   /**
    * STT 로직
+   *
    * @param MultipartFile
    * @return String
    */
@@ -157,20 +111,13 @@ public class NaverServiceImpl implements NaverService {
   public String getSTT(MultipartFile file) {
     log.debug("[+] STT 생성 시작");
     try {
-      String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
-      String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
-      URL url = new URL(apiURL);
-
-      HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-      conn.setUseCaches(false);
-      conn.setDoOutput(true);
-      conn.setDoInput(true);
-      conn.setRequestProperty("Content-Type", "application/octet-stream");
-      conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", ttsId);
-      conn.setRequestProperty("X-NCP-APIGW-API-KEY", ttsSecret);
-
+      // STT를 위한 Connection 객체 생성
+      HttpURLConnection conn = naverConfig.getSttHttpURLConnection();
+      
+      // 음성 파일을 Byte 단위로 읽어서 outputStream으로 출력
       OutputStream outputStream = conn.getOutputStream();
       File voiceFile = convertMultiPartToFile(file);
+
       FileInputStream inputStream = new FileInputStream(voiceFile);
       byte[] buffer = new byte[4096];
       int bytesRead = -1;
@@ -179,51 +126,49 @@ public class NaverServiceImpl implements NaverService {
       }
       outputStream.flush();
       inputStream.close();
+      
+      // HTTP 응답 받기
       BufferedReader br = null;
       int responseCode = conn.getResponseCode();
-      if(responseCode == 200) { // 정상 호출
+      if (responseCode == 200) { // 정상 호출
         br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
       } else {  // 오류 발생
-        System.out.println("error!!!!!!! responseCode= " + responseCode);
-        br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+        throw new Exception("호출 오류!!");
       }
+      
+      // response 읽어와서 출력
       String inputLine;
-
-      if(br != null) {
-        StringBuffer response = new StringBuffer();
-        while ((inputLine = br.readLine()) != null) {
-          response.append(inputLine);
-        }
-        br.close();
-        System.out.println(response.toString());
-        log.debug("[+] STT 성공");
-        return response.toString();
-      } else {
-        log.debug("[+] STT 실패");
+      StringBuilder response = new StringBuilder();
+      while ((inputLine = br.readLine()) != null) {
+        response.append(inputLine);
       }
+      br.close();
+      log.debug("[+] STT 성공");
+
+      return response.toString();
     } catch (Exception e) {
-      System.out.println(e);
-      log.debug("[+] STT 실패");
+      log.debug("[+] STT 실패\n" + e.getMessage());
     }
     log.debug("[+] STT 실패");
     return "Fail";
-  };
+  }
 
   /**
    * MultipartFile to File 메서드
+   *
    * @param MultipartFile
    * @return File
    */
-  private File convertMultiPartToFile(MultipartFile file) {
+  private File convertMultiPartToFile(MultipartFile file) throws Exception {
     try {
       File convertedFile = File.createTempFile("temp", null);
       file.transferTo(convertedFile);
       log.debug("Multipart to File 변환 성공");
       return convertedFile;
+
     } catch (IOException e) {
-      e.printStackTrace();
       log.debug("Multipart to File 변환 실패");
-      return null;
+      throw new Exception("Multipart to File 변환 실패");
     }
   }
 }
