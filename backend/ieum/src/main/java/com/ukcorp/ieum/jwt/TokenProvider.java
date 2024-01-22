@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.jwt;
 
+import com.ukcorp.ieum.jwt.dto.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -28,7 +29,7 @@ public class TokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "auth";
     private final String SECRET;
-    private final long TOKEN_VALIDITY_SECONDS;
+    private final long ACCESS_VALIDITY_SECONDS;
     private final long REFRESH_VALIDITY_SECONDS;
 
     private Key key;
@@ -38,7 +39,7 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.expiration}") long tokenValidity,
             @Value("${jwt.refresh.expiration}") long refreshValidity) {
         this.SECRET = secret;
-        this.TOKEN_VALIDITY_SECONDS = tokenValidity;
+        this.ACCESS_VALIDITY_SECONDS = tokenValidity;
         this.REFRESH_VALIDITY_SECONDS = refreshValidity;
     }
 
@@ -57,25 +58,54 @@ public class TokenProvider implements InitializingBean {
      * @param authentication
      * @return
      */
-    public String createToken(Authentication authentication, boolean isRefresh) {
+    public JwtToken createToken(Authentication authentication) {
         // Authentication 객체의 권한 정보 얻어오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        // 토큰 만료 시간 설정
-        long now = (new Date()).getTime();
-        Date validity = null;
-        if (isRefresh) {
-            validity = new Date(now + this.REFRESH_VALIDITY_SECONDS);
-        } else {
-            validity = new Date(now + this.TOKEN_VALIDITY_SECONDS);
-        }
+        // 토큰 생성
+        String accessToken = createAccessToken(authentication, authorities);
+        String refreshToken = createRefreshToken(authentication);
 
-        // 토큰 생성하여 반환
+        return JwtToken.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+
+    /**
+     * AccessToken 생성 Method
+     * @param authentication
+     * @param authorities
+     * @return
+     */
+    private String createAccessToken(Authentication authentication, String authorities) {
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.ACCESS_VALIDITY_SECONDS);
+
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .signWith(key, SignatureAlgorithm.HS512)
+                .setExpiration(validity)
+                .compact();
+    }
+
+    /**
+     * RefreshToken 생성 Method
+     * @param authentication
+     * @return
+     */
+    private String createRefreshToken(Authentication authentication) {
+        long now = (new Date()).getTime();
+        Date validity = new Date(now + this.REFRESH_VALIDITY_SECONDS);
+
+        // TODO : RefreshToken Redis 저장 로직 추가
+
+        return Jwts.builder()
+                .setSubject(authentication.getName())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
