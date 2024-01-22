@@ -1,12 +1,12 @@
-package com.ukcorp.ieum.schedule.controller;
+package com.ukcorp.ieum.temporalEvent.controller;
 
-import com.ukcorp.ieum.schedule.dto.TemporalEventDto;
-import com.ukcorp.ieum.schedule.service.TemporalEventService;
+import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
+import com.ukcorp.ieum.temporalEvent.service.TemporalEventService;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +21,7 @@ public class TemporalEventController {
 
     private final TemporalEventService temporalEventService;
 
+    @GetMapping("/")
     public  ResponseEntity<Map<String, Object>> getEvent(@RequestParam Long careNo){
       try{
         List<TemporalEventDto> list = temporalEventService.getList(careNo);
