@@ -1,10 +1,8 @@
-package com.ukcorp.ieum.schedule.repository;
+package com.ukcorp.ieum.temporalEvent.repository;
 
-import com.ukcorp.ieum.schedule.entity.TemporalEvent;
+import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
