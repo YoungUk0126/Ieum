@@ -34,7 +34,6 @@ import java.util.List;
  * @fileName : NaverServiceImpl
  * @since : 01/20/24
  */
-@Primary
 @Service
 @Slf4j
 @RequiredArgsConstructor

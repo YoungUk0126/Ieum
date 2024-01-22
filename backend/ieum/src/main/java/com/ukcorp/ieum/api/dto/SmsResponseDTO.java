@@ -5,7 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * API 문자 응답 형식
  * Naver Cloud에서 날라오는 응답
@@ -13,10 +16,9 @@ import lombok.NoArgsConstructor;
  * @fileName : SmsResponseDTO
  * @since : 01/20/24
  */
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class SmsResponseDTO {
   String requestId;
   LocalDateTime requestTime;
