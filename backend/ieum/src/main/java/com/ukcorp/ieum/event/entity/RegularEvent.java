@@ -1,9 +1,7 @@
 package com.ukcorp.ieum.event.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ukcorp.ieum.care.entity.CareInfo;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,13 +12,21 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 @ToString
-public class ReguralEvent {
+public class RegularEvent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "EVENT_NO")
     private Long eventNo;
-    private Long careNo;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CARE_NO")
+    private CareInfo careInfo;
+
+    @Column(name = "EVENT_NAME")
     private String eventName;
+
+    @Column(name = "EVENT_DATE")
     private LocalDate eventDate;
 
 }
