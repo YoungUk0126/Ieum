@@ -1,13 +1,15 @@
 package com.ukcorp.ieum.care.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Getter
+@ToString
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "CARE_INFO")
 public class CareInfo {
@@ -36,3 +38,4 @@ public class CareInfo {
     @Column(name = "CARE_IMAGE")
     private String careImage;
 }
+
