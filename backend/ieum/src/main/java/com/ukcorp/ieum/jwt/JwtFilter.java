@@ -40,9 +40,6 @@ public class JwtFilter extends GenericFilterBean {
         String accessToken = resolveToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
-        // Refresh Token 확인
-        String refreshToken = resolveRefreshToken(httpServletRequest);
-
         // 토큰 유효성 검사 진행
         if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             // 토큰이 정상적이라면 Authentication 객체 받아오기
@@ -50,25 +47,13 @@ public class JwtFilter extends GenericFilterBean {
             // 받아온 Authentication 객체 SecurityContext에 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
-        } else if (StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
-            // Refresh Token으로 새로운 Access Token 생성
-            String newAccessToken = tokenProvider.createToken(tokenProvider.getAuthentication(refreshToken), false);
-
-            // 새로운 Access Token을 HttpServletResponse에 설정
-            HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
-            httpServletResponse.setHeader("Authorization", "Bearer " + newAccessToken);
-
-            // 받아온 Authentication 객체 SecurityContext에 저장
-            Authentication authentication = tokenProvider.getAuthentication(newAccessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            log.debug("Security Context에 '{}' 리프레시 토큰을 사용하여 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
             log.debug("유효한 JWT 토큰 또는 REFRESH 토큰이 없습니다, uri: {}", requestURI);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
+
 
     /**
      * Request Header에서 토큰 정보 꺼내오는 Method
