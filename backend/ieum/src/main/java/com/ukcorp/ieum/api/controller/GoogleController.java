@@ -1,6 +1,6 @@
 package com.ukcorp.ieum.api.controller;
 
-import com.ukcorp.ieum.api.service.ChatGPTService;
+
 import com.ukcorp.ieum.api.service.GoogleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

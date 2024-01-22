@@ -9,10 +9,16 @@ import com.ukcorp.ieum.api.service.ChatGPTService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import java.io.IOException;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * ChatGPT Service 구현체

@@ -2,43 +2,30 @@ package com.ukcorp.ieum.api.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ukcorp.ieum.api.config.ChatGPTConfig;
 import com.ukcorp.ieum.api.config.NaverConfig;
 import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.dto.SmsRequestDTO;
 import com.ukcorp.ieum.api.dto.SmsResponseDTO;
 import com.ukcorp.ieum.api.service.NaverService;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Naver Service 구현체
