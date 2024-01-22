@@ -41,7 +41,7 @@ public class Member {
     @Column(name = "MEMBER_PHONE")
     private String memberPhone;
 
-    @Column(name = "WIRDRAWUL")
+    @Column(name = "WITHDRAWAL")
     @Enumerated(EnumType.STRING)
     private Withdrawal withdrawal;
 }
