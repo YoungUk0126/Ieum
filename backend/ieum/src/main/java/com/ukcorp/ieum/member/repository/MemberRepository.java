@@ -9,10 +9,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
-
-    @Query("select m from Member m where m.memberId=:memberId")
-    Member findByMemberId(String memberId);
-
-//    로그인용
-    Member findByMemberIdAndPassword(String loginId, String loginPassword);
 }

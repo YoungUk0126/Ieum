@@ -6,6 +6,4 @@ import java.util.List;
 
 public interface PillService {
 
-//    약 정보 등록
-    int insertPill(PillInfoRequestDto pillInfo, List<String> pillTimeDate, List<String> pillTimeTime);
 }
