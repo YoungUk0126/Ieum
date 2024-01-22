@@ -1,9 +1,9 @@
-package com.ukcorp.ieum.schedule.service;
+package com.ukcorp.ieum.temporalEvent.service;
 
-import com.ukcorp.ieum.schedule.dto.TemporalEventDto;
-import com.ukcorp.ieum.schedule.entity.TemporalEvent;
-import com.ukcorp.ieum.schedule.mapper.TemporalEventMapper;
-import com.ukcorp.ieum.schedule.repository.TemporalEventRepository;
+import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
+import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
+import com.ukcorp.ieum.temporalEvent.mapper.TemporalEventMapper;
+import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
