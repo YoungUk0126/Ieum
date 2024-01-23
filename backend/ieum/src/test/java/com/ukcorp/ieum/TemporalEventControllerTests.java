@@ -50,10 +50,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 삭제")
   void testDelete() throws Exception {
 
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-    map.add("eventNo", "17");
-
-    mock.perform(delete("/api/event").params(map))
+    mock.perform(delete("/api/event/17"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }
@@ -63,10 +60,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 리스트 조회")
   void testSelect() throws Exception {
 
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-    map.add("careNo", "18");
-
-    mock.perform(get("/api/event").params(map))
+    mock.perform(get("/api/event/17"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }
