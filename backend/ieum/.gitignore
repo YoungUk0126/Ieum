@@ -491,8 +491,6 @@ pyrightconfig.json
 # TODO: where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
-
 ### Vuejs ###
 # Recommended template: Node.gitignore
 
@@ -558,6 +556,7 @@ gradle-app.setting
 src/main/resources/application-prod.yml
 src/main/resources/application-dev.yml
 
+.idea/*
 
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
