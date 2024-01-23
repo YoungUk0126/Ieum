@@ -33,9 +33,23 @@ public class MealController {
 
     @PostMapping
     public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealDto mealDto) {
-        mealService.insertMeal(mealDto);
+        try {
+            mealService.insertMeal(mealDto);
+            return handleSuccess("");
+        } catch (Exception e) {
+            return handleError("Fail");
+        }
 
-        return handleSuccess(1);
+    }
+
+    @DeleteMapping("/{meal-info-no}")
+    public ResponseEntity<Map<String, Object>> deleteMeal(@PathVariable("meal-info-no") Long mealInfoNo) {
+        try{
+            mealService.deleteMeal(mealInfoNo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            return handleError("Fail");
+        }
     }
 
 
