@@ -44,6 +44,10 @@ dependencies {
 
 	// valid
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	// test
+	testAnnotationProcessor 'org.projectlombok:lombok' // 테스트를 위한 세팅
+	testImplementation 'org.projectlombok:lombok' // 테스트를 위한 세팅
 }
 
 tasks.named('test') {
