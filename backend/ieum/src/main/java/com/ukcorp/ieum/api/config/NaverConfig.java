@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.web.client.RestTemplate;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -16,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
 @Configuration
 public class NaverConfig {
 
@@ -34,10 +34,6 @@ public class NaverConfig {
     @Value("${naver-cloud-stt.id}")
     private String ttsId;
 
-    @Bean
-    public RestTemplate restTemplate() {
-      return new RestTemplate();
-    }
 
     /**
      * STT 사용을 위한 HttpURLConnection 생성

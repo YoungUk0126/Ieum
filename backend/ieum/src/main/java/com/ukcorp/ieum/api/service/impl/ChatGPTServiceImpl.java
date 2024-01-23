@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukcorp.ieum.api.config.ChatGPTConfig;
 import com.ukcorp.ieum.api.dto.ChatGPTRequestDto;
 import com.ukcorp.ieum.api.service.ChatGPTService;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +52,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         HttpHeaders headers = chatGPTConfig.httpHeaders();
 
         // [STEP2] 통신을 위한 RestTemplate을 구성합니다.
-        ResponseEntity<String> response = chatGPTConfig.restTemplate()
+        ResponseEntity<String> response = new RestTemplate()
                 .exchange(
                         "https://api.openai.com/v1/models",
                         HttpMethod.GET,
@@ -132,7 +134,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
         // [STEP5] 통신을 위한 RestTemplate을 구성합니다.
         HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-        ResponseEntity<String> response = chatGPTConfig.restTemplate()
+        ResponseEntity<String> response = new RestTemplate()
                 .exchange(
                         "https://api.openai.com/v1/chat/completions",
                         HttpMethod.POST,
