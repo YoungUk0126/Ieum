@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.meal.controller;
 
+import com.ukcorp.ieum.meal.dto.MealDto;
 import com.ukcorp.ieum.meal.service.MealServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +21,14 @@ public class MealController {
 
     @GetMapping("/{care-no}")
     public ResponseEntity<Map<String, Object>> getMeal(@PathVariable("care-no") Long careNo) {
+        MealDto mealDto = mealService.getMeal(careNo);
 
+        if(mealDto != null) {
+            return handleSuccess(mealDto);
+        }
+        else {
+            return handleError(mealDto);
+        }
     }
 
 
