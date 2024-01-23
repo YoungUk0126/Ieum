@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.pill.controller;
 
 import com.ukcorp.ieum.pill.dto.request.PillInfoRequestDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,26 +20,48 @@ import java.util.Map;
 public class PillController {
 
 
-    final PillServiceImpl pillService;
-    @GetMapping("/")
-    public ResponseEntity<Map<String, Object>> getPillList() {
+    private final PillServiceImpl pillService;
+    /**
+     * @author : 김영욱
+     * 피보호자의 PK를 받아 피보호자와 관련된
+     * 약 정보들을 받기 위한 Controller
+     */
+    @GetMapping("/{care-no}")
+    public ResponseEntity<Map<String, Object>> getPillList(Long careNo) {
 
-        return null;
-    }
+        List<PillInfoResponseDto> result = pillService.getAllPillInfo(careNo);
 
-    @GetMapping("/{pill-info-id}")
-    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-id") Long id) {
-        return null;
+        if(result != null) {
+            return handleSuccess(result);
+        }
+        else {
+            return handleError(result);
+        }
     }
 
     /**
      * @author : 김영욱
-     * 약 정보를 받기 위한 Controller
+     * 약 PK를 받아 약 상세 정보를 받기 위한 Controller
+     */
+    @GetMapping("/{pill-info-id}")
+    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-id") Long pillId) {
+        PillInfoResponseDto result = pillService.getPillInfo(pillId);
+        if(result != null) {
+            return handleSuccess(result);
+        }
+        else {
+            return handleError(result);
+        }
+    }
+
+    /**
+     * @author : 김영욱
+     * 약 정보를 넣기 위한 Controller
      */
     @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoRequestDto pillInfo, @RequestParam(value = "pill_date[]") List<String> pillTimeDate, @RequestParam(value = "pill_time[]") List<String> pillTimeTime) {
+    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoRequestDto pillInfo) {
         log.debug("==============약 정보 등록 시작===============");
-        int result = pillService.insertPill(pillInfo, pillTimeDate, pillTimeTime);
+        int result = pillService.insertPill(pillInfo);
 
         if(result != 0){
             return handleSuccess(result);
@@ -60,6 +83,6 @@ public class PillController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
         result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
     }
 }

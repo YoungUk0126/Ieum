@@ -14,7 +14,7 @@ import lombok.*;
 public class Meal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEAL_INFO_NO")
     private Long mealInfoNO;
 

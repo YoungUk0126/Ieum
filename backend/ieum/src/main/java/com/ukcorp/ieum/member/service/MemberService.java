@@ -9,9 +9,13 @@ import com.ukcorp.ieum.member.entity.Member;
 public interface MemberService {
 
     void signup(MemberDto memberSignupDto);
+
     JwtToken login(LoginDto loginDto);
+
     int modifyMember(MemberDto memberModifyDto);
+
     int deleteMember(String memberId);
+
     Member findById(String memberId);
 
 //    int updateMember(MemberDto member);

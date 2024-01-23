@@ -1,4 +1,7 @@
 package com.ukcorp.ieum.meal.repository;
 
-public interface MealRepository {
+import com.ukcorp.ieum.meal.entity.Meal;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface MealRepository extends JpaRepository<Meal, Long> {
 }
