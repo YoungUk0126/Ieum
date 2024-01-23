@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class PillServiceImpl implements PillService {
     //    Repository 의존성 생성자 주입
     private final PillInfoRepository pillInfoRepo;
-    private final PillTimeRepository pillTimeRepo;
 
 
     //    약 정보 넣기
@@ -57,28 +56,6 @@ public class PillServiceImpl implements PillService {
             for(PillTime p: pillInfo.getPillTimes()) {
                 pillInfoResponseDto.getPillTimes().add(new PillTimeResponseDto(p));
             }
-//            *****JPA를 이해하지 못한 나쁜 예시*****
-//            PillTimesDto들을 담아줄 List 선언 -1
-//            List<PillTimeResponseDto> pillTimeList = new ArrayList<>();
-////            PillInfo PK로 pillTimes 리스트를 받아온다.
-//            Optional<List<PillTime>> byPillInfoNoPillTimes = pillTimeRepo.findAllByPillInfoNo(pillInfoNo);
-////            DB에서 받아온 PillTimes가 있다면
-//            if (byPillInfoNoPillTimes.isPresent()) {
-//                List<PillTime> pillTimes = byPillInfoNoPillTimes.get();
-//
-//
-////            Builder를 사용해 사용자에게 데이터를 전송할 DTO로 옮긴다
-//                for (PillTime current : pillTimes) {
-//                    PillTimeResponseDto pillTimeResponseDto = PillTimeResponseDto.builder()
-//                            .pillDate(current.getPillDate().toString())
-//                            .pillTime(current.getPillTakeTime())
-//                            .build();
-////                    PillTimeResponseDTO를 만들어 준 후 -1에 선언한 리스트에 추가
-//                    pillTimeList.add(pillTimeResponseDto);
-//                }
-//            }
-////            만들어준 리스트를 pillInfoResponseDto에 추가
-//            pillInfoResponseDto.setPillTimes(pillTimeList);
         }
         return pillInfoResponseDto;
     }

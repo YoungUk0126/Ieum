@@ -20,7 +20,7 @@ import java.util.Map;
 public class PillController {
 
 
-    final PillServiceImpl pillService;
+    private final PillServiceImpl pillService;
     /**
      * @author : 김영욱
      * 피보호자의 PK를 받아 피보호자와 관련된
