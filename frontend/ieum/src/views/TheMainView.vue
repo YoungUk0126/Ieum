@@ -1,16 +1,16 @@
 <template>
   <div class="content-container mx-auto">
     <TheProfile></TheProfile>
-
-    <TheLatestMessage></TheLatestMessage>
-
+    <TheRecentConversations></TheRecentConversations>
+    <TheVoiceVideoMessages></TheVoiceVideoMessages>
     <router-view></router-view>
   </div>
 </template>
 
 <script setup>
 import TheProfile from '@/components/profile/TheProfile.vue'
-import TheLatestMessage from '@/components/mainframes/TheLatestMessage.vue'
+import TheRecentConversations from '@/components/mainframes/TheRecentConversations.vue'
+import TheVoiceVideoMessages from '@/components/mainframes/TheVoiceVideoMessages.vue'
 </script>
 
 <style scoped>
