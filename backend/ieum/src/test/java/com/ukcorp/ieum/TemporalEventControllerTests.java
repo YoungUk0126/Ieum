@@ -70,7 +70,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 상세 조회")
   void testSelectDetail() throws Exception {
     // eventNo으로 해당 일정 상세 조회
-    mock.perform(get("/api/event/detail/18"))
+    mock.perform(get("/api/event/detail/1"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }

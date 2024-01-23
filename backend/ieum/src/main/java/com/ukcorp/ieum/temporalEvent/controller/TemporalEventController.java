@@ -72,8 +72,9 @@ public class TemporalEventController {
    * @param event
    * @return
    */
-  @PostMapping("/")
+  @PostMapping
   public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody TemporalEventDto event) {
+    System.out.println("안녕!!");
     try{
       temporalEventService.registEvent(event);
       return handleSuccess("");
@@ -82,7 +83,12 @@ public class TemporalEventController {
     }
   }
 
-  @PutMapping("/")
+  /**
+   * 일정 수정
+   * @param event
+   * @return
+   */
+  @PutMapping
   public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody TemporalEventDto event) {
     try{
       temporalEventService.modifyEvent(event);
