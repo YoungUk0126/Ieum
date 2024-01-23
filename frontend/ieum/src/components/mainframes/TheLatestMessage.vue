@@ -1,73 +1,93 @@
 <template>
-  <div class="container gap-0 row">
-    <div class="box1 col-10 row-gap-3">
+  <div class="container row mt-5">
+    <div class="col-8">
       <h3>최근 대화 목록</h3>
-      <button>알람 등록</button>
-      <div class="dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          알람 종류
-        </a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#">끼니 알람</a></li>
-          <li><a class="dropdown-item" href="#">투약 정보 알람</a></li>
-          <li><a class="dropdown-item" href="#">취침 정보 알람</a></li>
-          <li><a class="dropdown-item" href="#">기념일 정보 알람</a></li>
-        </ul>
+      <div class="alarm-buttons">
+        <button type="button" class="btn alarm-btn">알람 등록</button>
+        <div class="dropdown">
+          <a
+            class="nav-link dropdown-toggle col-2"
+            href="#"
+            role="button"
+            data-toggle="dropdown"
+            aria-expanded="false"
+          >
+            알람 종류
+          </a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#">끼니 알람</a>
+            <a class="dropdown-item" href="#">투약 정보 알람</a>
+            <a class="dropdown-item" href="#">취침 정보 알람</a>
+            <a class="dropdown-item" href="#">기념일 정보 알람</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">주체</th>
+              <th scope="col">날짜</th>
+              <th scope="col">내용</th>
+              <th scope="col">감정</th>
+            </tr>
+          </thead>
+          <tbody class="tbody table-hover">
+            <tr>
+              <td>AI</td>
+              <td>2024-01-07 09:00</td>
+              <td>할아버지!! 안녕히 주무셨어요?? 좋은 아침이에요</td>
+              <td>😄</td>
+            </tr>
+            <tr>
+              <td>영욱이</td>
+              <td>2024-01-07 09:00</td>
+              <td>그래~ 잘잤니?? 오늘 날씨가 참 좋구나</td>
+              <td>😢</td>
+            </tr>
+            <tr>
+              <td>AI</td>
+              <td>2024-01-07 09:00</td>
+              <td>그러게요!! 날씨도 좋은데 할아버지랑 산책가고 싶어요!!</td>
+              <td>🙂</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
-    <div class="col-2">모든 대화</div>
-    <div class="box2 col-10 row-gap-3">
-      <div class="col-1">주체</div>
-      <div class="col-3">날짜</div>
-      <div class="col-7">내용</div>
-      <div class="col-1">감정</div>
-
-      <div class="col-1">AI</div>
-      <div class="col-3">2024-01-07 09:00</div>
-      <div class="col-7">할아버지!! 안녕히 주무셨어요?? 좋은 아침이에요</div>
-      <div class="col-1">😄</div>
-
-      <div class="col-1">영욱이</div>
-      <div class="col-3">2024-01-07 09:00</div>
-      <div class="col-7">그래~ 잘잤니?? 오늘 날씨가 참 좋구나</div>
-      <div class="col-1">😢</div>
-
-      <div class="col-1">AI</div>
-      <div class="col-3">2024-01-07 09:00</div>
-      <div class="col-7">그러게요!! 날씨도 좋은데 할아버지랑 산책가고 싶어요!!</div>
-      <div class="col-1">🙂</div>
+    <div class="col-1">
+      <a href="">>전체 대화</a>
     </div>
   </div>
 </template>
 
-<script>
-// Your script logic goes here
-</script>
+<script setup></script>
 
 <style scoped>
 .container {
-  margin: 2%;
+  font-family: 'Montserrat';
+  justify-content: center;
 }
 
-.box1 {
+.alarm-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: end;
 }
 
-.box2 {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin: 0 auto;
-  /* justify-content: ; */
+.alarm-btn {
+  margin-right: 5%;
 }
 
-.box2 > div {
-  padding: 10px;
+.tbody {
+  border: white;
+}
+
+.alarm-btn {
+  background-color: #33a38f;
+  display: inline-block;
+}
+
+.dropdown {
+  display: inline-block;
 }
 </style>

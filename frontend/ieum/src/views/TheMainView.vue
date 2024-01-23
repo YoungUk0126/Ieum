@@ -1,7 +1,9 @@
 <template>
   <div class="content-container mx-auto">
     <TheProfile></TheProfile>
+
     <TheLatestMessage></TheLatestMessage>
+
     <router-view></router-view>
   </div>
 </template>
@@ -16,6 +18,7 @@ import TheLatestMessage from '@/components/mainframes/TheLatestMessage.vue'
   margin: 3%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
 }
 </style>
