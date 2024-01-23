@@ -35,4 +35,9 @@ public class TemporalEventServiceImpl implements TemporalEventService {
       throw new Exception("존재하지 않는 번호입니다.");
     }
   }
+
+  @Override
+  public void deleteEvent(Long eventNo){
+    temporalEventRepository.deleteById(eventNo);
+  }
 }
