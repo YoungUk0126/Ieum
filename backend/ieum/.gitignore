@@ -556,6 +556,8 @@ gradle-app.setting
 src/main/resources/application-prod.yml
 src/main/resources/application-dev.yml
 
-
+backend/ieum/.idea/compiler.xml
+backend/ieum/.idea/codeStyles/
+backend/ieum/.idea/intellij-javadocs-4.0.1.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
