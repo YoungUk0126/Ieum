@@ -1,10 +1,13 @@
 package com.ukcorp.ieum.jwt;
 
+import com.ukcorp.ieum.exception.ExpiredTokenException;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +18,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -25,23 +30,19 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @Getter
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "auth";
-    private final String SECRET;
-    private final long ACCESS_VALIDITY_SECONDS;
-    private final long REFRESH_VALIDITY_SECONDS;
+    @Value("${jwt.secret-key}")
+    private String SECRET;
+    @Value("${jwt.expiration}")
+    private long ACCESS_VALIDITY_SECONDS;
+    @Value("${jwt.refresh.expiration}")
+    private long REFRESH_VALIDITY_SECONDS;
 
     private Key key;
 
-    public TokenProvider(
-            @Value("${jwt.secret-key}") String secret,
-            @Value("${jwt.expiration}") long tokenValidity,
-            @Value("${jwt.refresh.expiration}") long refreshValidity) {
-        this.SECRET = secret;
-        this.ACCESS_VALIDITY_SECONDS = tokenValidity;
-        this.REFRESH_VALIDITY_SECONDS = refreshValidity;
-    }
 
     /**
      * Bean 생성된 후 주입받은 secret값 Base64 decode하여 key변수에 할당
@@ -77,6 +78,7 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * AccessToken 생성 Method
+     *
      * @param authentication
      * @param authorities
      * @return
@@ -95,6 +97,7 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * RefreshToken 생성 Method
+     *
      * @param authentication
      * @return
      */
@@ -153,6 +156,7 @@ public class TokenProvider implements InitializingBean {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
+            throw new ExpiredTokenException("Expired Token");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
