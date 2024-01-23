@@ -71,6 +71,19 @@ class TemporalEventControllerTests {
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
+  @Test
+  @DisplayName("일정 상세 조회")
+  void testSelectDetail() throws Exception {
+
+    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+    map.add("eventNo", "18");
+
+    mock.perform(get("/api/event/detail").params(map))
+            .andExpect(status().isOk())
+            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+  }
+
+
 
   @Test
   @DisplayName("일정 수정")
