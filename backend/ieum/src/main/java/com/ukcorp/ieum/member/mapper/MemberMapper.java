@@ -16,5 +16,6 @@ public interface MemberMapper {
     @Mapping(target = "careInfo", ignore = true)
     @Mapping(target = "serialCode", ignore = true)
     @Mapping(target = "withdrawal", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     Member memberDtoToMember(MemberDto member);
 }
