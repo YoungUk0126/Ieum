@@ -33,14 +33,9 @@ public class MealController {
 
     @PostMapping("/")
     public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealDto mealDto) {
-        int result = mealService.insertMeal(mealDto);
+        mealService.insertMeal(mealDto);
 
-        if(result != 0) {
-            return handleSuccess(result);
-        }
-        else {
-            return handleError(result);
-        }
+        return handleSuccess(1);
     }
 
 
