@@ -3,6 +3,7 @@ package com.ukcorp.ieum.temporalEvent.controller;
 import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
 import com.ukcorp.ieum.temporalEvent.service.TemporalEventService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/event")
 @RequiredArgsConstructor
@@ -32,9 +34,27 @@ public class TemporalEventController {
       List<TemporalEventDto> list = temporalEventService.getList(careNo);
       return handleSuccess(list);
     } catch (Exception exception) {
+      log.debug(exception.getMessage());
       return handleFail("Fail");
     }
   }
+
+  /**
+   * 일정 관련 상세 정보(개별) 조회
+   * @param eventNo
+   * @return TemporalEventDto
+   */
+  @GetMapping("/")
+  public ResponseEntity<Map<String, Object>> getEventDetail(@RequestParam Long eventNo) {
+    try {
+      TemporalEventDto event = temporalEventService.getDetail(eventNo);
+      return handleSuccess(event);
+    } catch (Exception exception) {
+      log.debug(exception.getMessage());
+      return handleFail("Fail");
+    }
+  }
+
 
   private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
     Map<String, Object> result = new HashMap<>();

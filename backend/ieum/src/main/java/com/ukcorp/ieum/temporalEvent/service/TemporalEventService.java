@@ -5,5 +5,7 @@ import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
 import java.util.List;
 
 public interface TemporalEventService {
-  List<TemporalEventDto> getList(Long careNo);
+  List<TemporalEventDto> getList(Long careNo) throws Exception;
+  TemporalEventDto getDetail(Long eventNo) throws Exception;
+
 }

@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface TemporalEventRepository extends JpaRepository<TemporalEvent, Long> {
   List<TemporalEvent> findByCareInfoCareNo(Long careNo);
+
 }
