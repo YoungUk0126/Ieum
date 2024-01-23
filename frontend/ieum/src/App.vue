@@ -6,16 +6,9 @@ import TheFooter from './components/common/TheFooter.vue'
 <template>
   <div>
     <TheNavbar></TheNavbar>
-    <div class="content-container">
-      <router-view></router-view>
-    </div>
-    <TheFooter></TheFooter>
+    <router-view></router-view>
   </div>
+  <TheFooter></TheFooter>
 </template>
 
-<style scoped>
-.content-container {
-  margin-top: 3%;
-  margin-bottom: 3%;
-}
-</style>
+<style scoped></style>
