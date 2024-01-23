@@ -2,6 +2,7 @@ package com.ukcorp.ieum.member.service;
 
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -41,11 +42,12 @@ public class MemberDetailsService implements UserDetailsService {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
 
-        log.debug("토큰 생성할 때의 User 권한 >> " + grantedAuthorities);
+        log.info("토큰 생성할 때의 User 권한 >> " + grantedAuthorities);
 
+        log.info("DB 멤버 비밀번호 >> "+member.getMemberPassword());
         return User.builder()
                 .username(member.getMemberId())
-                .password(passwordEncoder.encode(member.getMemberPassword()))
+                .password(member.getMemberPassword())
                 .authorities(grantedAuthorities)
                 .build();
     }
