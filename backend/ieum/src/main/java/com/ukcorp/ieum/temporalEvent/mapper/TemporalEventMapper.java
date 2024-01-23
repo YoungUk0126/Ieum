@@ -1,14 +1,15 @@
 package com.ukcorp.ieum.temporalEvent.mapper;
+
 import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
 import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
+import org.mapstruct.Mapper;
 
-@RequiredArgsConstructor
-public class TemporalEventMapper {
-  private final ModelMapper modelMapper;
+@Mapper(componentModel = "spring")
+public interface TemporalEventMapper {
 
-  public TemporalEventDto convertToDto(TemporalEvent entity) {
-    return modelMapper.map(entity, TemporalEventDto.class);
-  }
+  TemporalEventDto TemporalEventEntityToDto(TemporalEvent temporalEventDto);
+
+  TemporalEvent TemporalEventDtoToEntity(TemporalEventDto temporalEvent);
+
+
 }
