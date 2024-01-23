@@ -21,6 +21,11 @@ public class TemporalEventController {
 
   private final TemporalEventService temporalEventService;
 
+  /**
+   * 일정 관련 리스트 조회
+   * @param careNo
+   * @return List<TemporalEventDto>
+   */
   @GetMapping("/")
   public ResponseEntity<Map<String, Object>> getEvent(@RequestParam Long careNo) {
     try {
