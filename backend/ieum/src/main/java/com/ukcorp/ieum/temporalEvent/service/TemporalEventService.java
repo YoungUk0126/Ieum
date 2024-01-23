@@ -9,4 +9,6 @@ public interface TemporalEventService {
   TemporalEventDto getDetail(Long eventNo) throws Exception;
   void deleteEvent(Long eventNo);
   void registEvent(TemporalEventDto event);
+
+  void modifyEvent(TemporalEventDto event) throws Exception;
 }

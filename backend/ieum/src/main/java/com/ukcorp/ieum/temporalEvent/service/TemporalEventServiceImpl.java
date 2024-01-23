@@ -5,11 +5,13 @@ import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import com.ukcorp.ieum.temporalEvent.mapper.TemporalEventMapper;
 import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TemporalEventServiceImpl implements TemporalEventService {
@@ -27,6 +29,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   public List<TemporalEventDto> getList(Long careNo) throws Exception {
     List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
     if(list == null || list.isEmpty()){
+      log.debug("등록된 일정이 없습니다");
       throw new Exception("등록된 일정이 없습니다.");
     }
     return temporalEventMapper.TemporalEventEntityToDto(list);
@@ -44,7 +47,8 @@ public class TemporalEventServiceImpl implements TemporalEventService {
     if(event.isPresent()){
       return temporalEventMapper.TemporalEventEntityToDto(event.get());
     }else{
-      throw new Exception("존재하지 않는 번호입니다.");
+      log.debug("존재하지 않는 일정입니다.");
+      throw new Exception("존재하지 않는 일정입니다.");
     }
   }
 
@@ -64,6 +68,16 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Override
   public void registEvent(TemporalEventDto event){
     temporalEventRepository.save(temporalEventMapper.TemporalEventDtoToEntity(event));
+  }
+
+  @Override
+  public void modifyEvent(TemporalEventDto event) throws Exception {
+    if(temporalEventRepository.findById(event.getEventNo()).isPresent()){
+      temporalEventRepository.save(temporalEventMapper.TemporalEventDtoToEntity(event));
+    }else{
+      log.debug("존재하지 않는 일정입니다.");
+      throw new Exception("존재하지 않는 일정입니다.");
+    }
   }
 
 

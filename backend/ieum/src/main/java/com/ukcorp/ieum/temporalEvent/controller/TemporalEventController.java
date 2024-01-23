@@ -82,6 +82,16 @@ public class TemporalEventController {
     }
   }
 
+  @PutMapping("/")
+  public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody TemporalEventDto event) {
+    try{
+      temporalEventService.modifyEvent(event);
+      return handleSuccess("");
+    }catch (Exception e){
+      return handleFail("Fail");
+    }
+  }
+
 
   private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
     Map<String, Object> result = new HashMap<>();
