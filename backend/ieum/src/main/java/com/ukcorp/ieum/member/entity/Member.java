@@ -4,6 +4,9 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @ToString
@@ -44,4 +47,14 @@ public class Member {
     @Column(name = "WITHDRAWAL")
     @Enumerated(EnumType.STRING)
     private Withdrawal withdrawal;
+
+    @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    private List<Authority> authorities;
+
+    public void setAuthorities() {
+        List<Authority> auth = new ArrayList<>();
+        auth.add(Authority.ROLE_USER);
+        this.authorities = auth;
+    }
 }
