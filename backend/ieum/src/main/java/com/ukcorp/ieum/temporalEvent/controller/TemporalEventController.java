@@ -19,25 +19,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class TemporalEventController {
 
-    private final TemporalEventService temporalEventService;
+  private final TemporalEventService temporalEventService;
 
-    @GetMapping("/")
-    public  ResponseEntity<Map<String, Object>> getEvent(@RequestParam Long careNo){
-      try{
-        List<TemporalEventDto> list = temporalEventService.getList(careNo);
-        return handleSuccess(list);
-      }catch (Exception exception){
-        return handleFail("Fail");
-      }
+  @GetMapping("/")
+  public ResponseEntity<Map<String, Object>> getEvent(@RequestParam Long careNo) {
+    try {
+      List<TemporalEventDto> list = temporalEventService.getList(careNo);
+      return handleSuccess(list);
+    } catch (Exception exception) {
+      return handleFail("Fail");
     }
+  }
 
-    private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
-        Map<String, Object> result = new HashMap<>();
+  private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
+    Map<String, Object> result = new HashMap<>();
 
-        result.put("success", true);
-        result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-    }
+    result.put("success", true);
+    result.put("data", data);
+    return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+  }
 
   private ResponseEntity<Map<String, Object>> handleFail(Object data) {
     Map<String, Object> result = new HashMap<>();
@@ -46,10 +46,10 @@ public class TemporalEventController {
     return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
   }
 
-    private ResponseEntity<Map<String, Object>> handleError(Object data) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", false);
-        result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
-    }
+  private ResponseEntity<Map<String, Object>> handleError(Object data) {
+    Map<String, Object> result = new HashMap<>();
+    result.put("success", false);
+    result.put("data", data);
+    return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
+  }
 }
