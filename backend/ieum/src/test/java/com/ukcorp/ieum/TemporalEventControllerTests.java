@@ -33,6 +33,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 등록")
   void testRegist() throws Exception {
 
+    // 일정 등록 관련 테스트
     String requestBody = "{\"eventNo\": \"18\", " +
             "\"careNo\": \"17\", " +
             "\"eventName\": \"경로당가기\"" +
@@ -50,6 +51,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 삭제")
   void testDelete() throws Exception {
 
+    // 17에 해당하는 eventNo 일정 삭제
     mock.perform(delete("/api/event/17"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
@@ -59,7 +61,8 @@ class TemporalEventControllerTests {
   @Test
   @DisplayName("일정 리스트 조회")
   void testSelect() throws Exception {
-
+    
+    // careNo이 17인 사용자의 일정 리스트 조회
     mock.perform(get("/api/event/17"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
@@ -68,11 +71,8 @@ class TemporalEventControllerTests {
   @Test
   @DisplayName("일정 상세 조회")
   void testSelectDetail() throws Exception {
-
-    MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
-    map.add("eventNo", "18");
-
-    mock.perform(get("/api/event/detail").params(map))
+    // eventNo으로 해당 일정 상세 조회
+    mock.perform(get("/api/event/detail/18").params(map))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }
