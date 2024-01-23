@@ -8,8 +8,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -72,7 +70,7 @@ class TemporalEventControllerTests {
   @DisplayName("일정 상세 조회")
   void testSelectDetail() throws Exception {
     // eventNo으로 해당 일정 상세 조회
-    mock.perform(get("/api/event/detail/18").params(map))
+    mock.perform(get("/api/event/detail/18"))
             .andExpect(status().isOk())
             .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
   }
