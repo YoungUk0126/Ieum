@@ -1,6 +1,6 @@
 import TheMainViewVue from '@/views/TheMainView.vue'
+import TheRegisterViewVue from '@/views/TheRegisterView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
-
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,11 +10,17 @@ const router = createRouter({
       name: 'TheMainView',
       component: TheMainViewVue
     },
-     // 자식 페이지 라우팅 예시
+    {
+      //회원가입 페이지
+      path: '/register',
+      name: 'TheRegisterView',
+      component: TheRegisterViewVue
+    }
+    // 자식 페이지 라우팅 예시
     // {
     //   path: '/',
     //   name: 'TheSpotMapView',
-    //   component: 
+    //   component:
     // },
     // {
     //   path: '/board',
