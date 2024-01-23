@@ -7,7 +7,6 @@ import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,10 +19,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Override
   public List<TemporalEventDto> getList(Long careNo) {
     List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
-    List<TemporalEventDto> result = new ArrayList<>();
-    for(TemporalEvent i : list){
-      result.add(temporalEventMapper.TemporalEventEntityToDto(i));
-    }
-    return result;
+
+    return temporalEventMapper.TemporalEventEntityToDto(list);
   }
 }

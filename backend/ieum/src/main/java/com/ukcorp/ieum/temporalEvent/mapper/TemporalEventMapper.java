@@ -4,6 +4,8 @@ import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
 import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TemporalEventMapper {
 
@@ -11,5 +13,6 @@ public interface TemporalEventMapper {
 
   TemporalEvent TemporalEventDtoToEntity(TemporalEventDto temporalEvent);
 
+  List<TemporalEventDto> TemporalEventEntityToDto(List<TemporalEvent> temporalEvent);
 
 }
