@@ -22,7 +22,7 @@
               <th scope="col">발신자</th>
               <th scope="col">날짜</th>
               <th scope="col">내용</th>
-              <th scope="col">전송 여부</th>
+              <th scope="col">전송여부</th>
               <th scope="col">수정</th>
               <th scope="col">삭제</th>
             </tr>
@@ -33,31 +33,31 @@
               <td>2024-01-07 09:00</td>
               <td>할아버지!! 안녕히 주무셨어요?? 좋은 아침이에요</td>
               <td>대기중</td>
-              <td><button class="button">수정</button></td>
-              <td><button class="button">삭제</button></td>
+              <td><button class="button modify-button">수정</button></td>
+              <td><button class="button delete-button">삭제</button></td>
             </tr>
             <tr>
               <td>영욱이</td>
               <td>2024-01-07 09:00</td>
               <td>그래~ 잘잤니?? 오늘 날씨가 참 좋구나</td>
               <td>대기중</td>
-              <td><button class="button">수정</button></td>
-              <td><button class="button">삭제</button></td>
+              <td><button class="button modify-button">수정</button></td>
+              <td><button class="button delete-button">삭제</button></td>
             </tr>
             <tr>
               <td>AI</td>
               <td>2024-01-07 09:00</td>
               <td>그러게요!! 날씨도 좋은데 할아버지랑 산책가고 싶어요!!</td>
               <td>전송완료</td>
-              <td><button class="button non-active-button">수정</button></td>
-              <td><button class="button non-active-button">삭제</button></td>
+              <td><button class="button non-active-button modify-button">수정</button></td>
+              <td><button class="button non-active-button delete-button">삭제</button></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div class="col-1">
-      <a href="" class="to-whole-message">>전체 메세지</a>
+    <div class="col-2">
+      <a href="/message" class="to-whole-message">>전체 메세지</a>
     </div>
   </div>
 </template>
@@ -89,25 +89,31 @@
   padding-left: 15px;
   padding-right: 15px;
   background: #33a38f;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
   border: 1px #1de4c1 solid;
   justify-content: center;
   align-items: center;
   display: inline-flex;
   color: white;
-  font-size: 16px;
+  font-size: 14px;
   font-family: Work Sans;
-  font-weight: 700;
+  font-weight: 550;
   line-height: 24px;
   word-wrap: break-word;
+}
+
+.modify-button,
+.delete-button {
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .non-active-button {
   background: gray;
 }
 
-.voice-button,
+. .voice-button,
 .video-button {
   width: 35px;
   height: 35px;

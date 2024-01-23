@@ -55,7 +55,7 @@
       </div>
     </div>
     <div class="col-1 to-whole-conv">
-      <a href="">>전체 대화</a>
+      <a href="/chat">>전체 대화</a>
     </div>
   </div>
 </template>
