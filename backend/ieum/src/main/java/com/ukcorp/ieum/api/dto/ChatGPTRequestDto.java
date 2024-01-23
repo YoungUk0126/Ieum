@@ -1,12 +1,14 @@
 package com.ukcorp.ieum.api.dto;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Map;
+import lombok.Setter;
 
 /**
  * ChatGPT 메세지 형식
@@ -16,7 +18,10 @@ import java.util.Map;
  * @since : 01/19/24
  */
 @Getter
+@Setter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ChatGPTRequestDto {
     // 프롬프트에 사용할 GPT 모델 명
     private String model;
@@ -34,12 +39,5 @@ public class ChatGPTRequestDto {
     * 0에 가까울수록 결정적이고 일관성, 멀어질수록 다양하고 창의적
     */
     private float temperature;
-
-    @Builder
-    ChatGPTRequestDto(String model, List<Map<String, Object>> messages, float temperature) {
-        this.model = model;
-        this.messages = messages;
-        this.temperature = temperature;
-    }
 
 }
