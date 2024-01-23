@@ -201,6 +201,9 @@ cython_debug/
 .idea/**/gradle.xml
 .idea/**/libraries
 
+# datasource
+.idea/dataSources.xml
+
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
@@ -550,5 +553,12 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
+
+### yml 설정 파일
+src/main/resources/application-prod.yml
+src/main/resources/application-dev.yml
+
+
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
