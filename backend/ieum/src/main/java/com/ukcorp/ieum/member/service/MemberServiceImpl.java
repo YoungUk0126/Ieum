@@ -22,12 +22,24 @@ public class MemberServiceImpl implements MemberService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
 
-    //    mapper
+    /**
+     * 회원가입
+     *
+     * @param memberSignupDto
+     */
     @Override
     public void signup(MemberDto memberSignupDto) {
-        memberMapper.memberDtoToMember(memberSignupDto);
+        Member newMember = memberMapper.memberDtoToMember(memberSignupDto);
+        newMember.setAuthorities();
+        memberRepository.save(newMember);
     }
 
+    /**
+     * 로그인
+     *
+     * @param loginDto
+     * @return
+     */
     @Override
     public JwtToken login(LoginDto loginDto) {
         // username + password 를 기반으로 Authentication 객체 생성
