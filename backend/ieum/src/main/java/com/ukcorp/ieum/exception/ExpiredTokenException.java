@@ -1,0 +1,9 @@
+package com.ukcorp.ieum.exception;
+
+public class ExpiredTokenException extends RuntimeException{
+
+    public ExpiredTokenException(String message) {
+        super(message);
+    }
+
+}
