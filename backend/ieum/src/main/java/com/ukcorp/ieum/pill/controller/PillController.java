@@ -19,7 +19,6 @@ import java.util.Map;
 @Slf4j
 public class PillController {
 
-
     private final PillServiceImpl pillService;
     /**
      * @author : 김영욱
