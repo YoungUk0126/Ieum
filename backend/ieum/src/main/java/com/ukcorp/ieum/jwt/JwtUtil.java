@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Optional;
 
@@ -11,6 +12,11 @@ import java.util.Optional;
 @Slf4j
 public class JwtUtil {
 
+    /**
+     * 토큰에서 UserId 얻어오는 method
+     *
+     * @return Optional<UserId>
+     */
     public static Optional<String> getUserId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -20,9 +26,9 @@ public class JwtUtil {
         }
 
         String userId = null;
-        if (authentication.getPrincipal() instanceof CustomUserDetails) {
-            CustomUserDetails loginUser = (CustomUserDetails) authentication.getPrincipal();
-            userId = loginUser.getUserId();
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            UserDetails loginUser = (UserDetails) authentication.getPrincipal();
+            userId = loginUser.getUsername();
         } else if (authentication.getPrincipal() instanceof String) {
             userId = (String) authentication.getPrincipal();
         }
