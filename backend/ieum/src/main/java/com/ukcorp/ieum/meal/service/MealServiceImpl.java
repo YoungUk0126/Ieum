@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class MealServiceImpl implements MealService{
+public class MealServiceImpl implements MealService {
 
     private final MealRepository mealRepository;
     private final MealMapper mealMapper;

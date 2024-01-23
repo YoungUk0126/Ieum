@@ -1,6 +1,6 @@
 package com.ukcorp.ieum.meal.controller;
 
-import static org.mockito.Mockito.when;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,25 +9,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ukcorp.ieum.meal.entity.Meal;
-import com.ukcorp.ieum.meal.service.MealService;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-
-import java.util.Optional;
 
 @SpringBootTest
 @Slf4j
@@ -37,8 +26,6 @@ public class MealControllerTest {
     @Autowired
     private MockMvc mock;
 
-    @MockBean
-    MealService service;
 
     @Test
     void build() {
@@ -48,7 +35,7 @@ public class MealControllerTest {
     @Test
     @DisplayName("약 정보 등록")
     void testInsert() throws Exception {
-        String requestBody = "{\"meal_time1\": \"09:00:00\", \"meal_time2\": \"14:00:00\", \"meal_time3\": \"21:00:00\"}";
+        String requestBody = "{\"care_no\": \"2\", \"meal_time1\": \"90000\", \"meal_time2\": \"140000\", \"meal_time3\": \"210000\"}";
 
         mock.perform(post("/api/meal")
                         .content(requestBody)
@@ -71,3 +58,4 @@ public class MealControllerTest {
                 .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
     }
 }
+

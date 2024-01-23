@@ -2,17 +2,23 @@ package com.ukcorp.ieum.meal.dto;
 
 
 import com.ukcorp.ieum.meal.entity.Meal;
+import lombok.*;
 
+@Getter
+@Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Builder
 public class MealDto {
-    private Long mealTIme1;
-    private Long mealTIme2;
-    private Long mealTIme3;
+    private Long mealTime1;
+    private Long mealTime2;
+    private Long mealTime3;
     private Long careNo;
 
     public MealDto(Meal meal) {
-        this.mealTIme1 = meal.getMealTIme1();
-        this.mealTIme2 = meal.getMealTIme2();
-        this.mealTIme3 = meal.getMealTIme3();
+        this.mealTime1 = meal.getMealTime1();
+        this.mealTime2 = meal.getMealTime2();
+        this.mealTime3 = meal.getMealTime3();
         this.careNo = meal.getCareInfo().getCareNo();
     }
 }

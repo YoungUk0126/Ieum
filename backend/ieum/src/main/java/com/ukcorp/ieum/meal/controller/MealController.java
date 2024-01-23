@@ -21,17 +21,17 @@ public class MealController {
 
     @GetMapping("/{care-no}")
     public ResponseEntity<Map<String, Object>> getMeal(@PathVariable("care-no") Long careNo) {
-        MealDto mealDto = mealService.getMeal(careNo);
 
-        if(mealDto != null) {
+        try{
+            MealDto mealDto = mealService.getMeal(careNo);
             return handleSuccess(mealDto);
-        }
-        else {
-            return handleError(mealDto);
+        } catch (Exception e){
+            log.debug(e.getMessage());
+            return handleError("Fail");
         }
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealDto mealDto) {
         mealService.insertMeal(mealDto);
 
