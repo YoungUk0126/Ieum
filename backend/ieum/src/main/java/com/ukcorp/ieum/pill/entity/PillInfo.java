@@ -9,7 +9,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Getter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -39,7 +38,6 @@ public class PillInfo {
     @Enumerated(EnumType.STRING)
     private PillMethod pillMethod;
 
-    @OneToMany(mappedBy = "pillInfo")
-//    @JoinColumn(name = "PILL_TIME_NO")
+    @OneToMany(mappedBy = "pillInfo", fetch = FetchType.LAZY)
     private List<PillTime> pillTimes;
 }
