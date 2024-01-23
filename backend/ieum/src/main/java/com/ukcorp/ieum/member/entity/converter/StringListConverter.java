@@ -14,13 +14,13 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
     @Override
     public String convertToDatabaseColumn(List<String> attribute) {
-        // List<String>을 JSON 형태의 문자열로 변환
+        // DB 저장을 위해 List<String>을 문자열로 변환
         return String.join(",", attribute);
     }
 
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
-        // JSON 형태의 문자열을 List<String>으로 변환
+        // DB에 저장된 문자열을 List<String>으로 변환
         return Arrays.asList(dbData.split(","));
     }
 }
