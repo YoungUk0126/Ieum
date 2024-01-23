@@ -56,4 +56,15 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   public void deleteEvent(Long eventNo){
     temporalEventRepository.deleteById(eventNo);
   }
+
+  /**
+   * 일정 등록
+   * @param event
+   */
+  @Override
+  public void registEvent(TemporalEventDto event){
+    temporalEventRepository.save(temporalEventMapper.TemporalEventDtoToEntity(event));
+  }
+
+
 }

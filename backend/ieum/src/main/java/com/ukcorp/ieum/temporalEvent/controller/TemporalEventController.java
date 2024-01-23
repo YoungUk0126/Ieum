@@ -52,10 +52,30 @@ public class TemporalEventController {
     }
   }
 
+  /**
+   * 일정 삭제
+   * @param eventNo
+   * @return
+   */
   @DeleteMapping("/{eventNo}")
   public ResponseEntity<Map<String, Object>> deleteEvent(@PathVariable("eventNo") Long eventNo) {
     try{
       temporalEventService.deleteEvent(eventNo);
+      return handleSuccess("");
+    }catch (Exception e){
+      return handleFail("Fail");
+    }
+  }
+
+  /**
+   * 일정 등록
+   * @param event
+   * @return
+   */
+  @PostMapping("/")
+  public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody TemporalEventDto event) {
+    try{
+      temporalEventService.registEvent(event);
       return handleSuccess("");
     }catch (Exception e){
       return handleFail("Fail");
