@@ -1,14 +1,9 @@
 <template>
-    <div>
-        
-    </div>
+  <div>
+    <h1>통화 hi</h1>
+  </div>
 </template>
 
-<script setup>
+<script setup></script>
 
-</script>
-
-<style scoped>
-
-
-</style>
+<style scoped></style>

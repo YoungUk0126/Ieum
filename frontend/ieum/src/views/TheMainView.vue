@@ -9,8 +9,8 @@
 
 <script setup>
 import TheProfile from '@/components/profile/TheProfile.vue'
-import TheRecentConversations from '@/components/mainframes/TheRecentConversations.vue'
-import TheVoiceVideoMessages from '@/components/mainframes/TheVoiceVideoMessages.vue'
+import TheRecentConversations from '@/components/main/TheRecentConversations.vue'
+import TheVoiceVideoMessages from '@/components/main/TheVoiceVideoMessages.vue'
 </script>
 
 <style scoped>

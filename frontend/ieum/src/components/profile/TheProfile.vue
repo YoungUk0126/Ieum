@@ -14,6 +14,7 @@
             src="@/assets/images/전화걸기.png"
             class="img-fluid rounded-start profile-img2"
             alt="..."
+            @click="navigateToTheCallView"
           />
           <h5 class="card-title">영욱이 할아버지</h5>
         </div>
@@ -23,11 +24,20 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const navigateToTheCallView = () => {
+  router.push({
+    path: '/call'
+  })
+}
+</script>
 
 <style scoped>
 .card {
-  width: 70%;
+  width: 60%;
   border: 0px;
 }
 

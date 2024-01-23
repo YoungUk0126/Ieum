@@ -1,25 +1,24 @@
 <template>
   <div class="container row mt-5">
-    <div class="col-8">
+    <div class="col-9">
       <h3>최근 대화 목록</h3>
       <div class="alarm-buttons">
-        <button type="button" class="btn alarm-btn">알람 등록</button>
+        <button class="alarm-btn" @click="navigateToTheAlarmModalview">알람 등록</button>
         <div class="dropdown">
-          <a
-            class="nav-link dropdown-toggle col-2"
-            href="#"
-            role="button"
-            data-toggle="dropdown"
+          <button
+            class="btn btn-secondary dropdown-toggle alarm-btn"
+            type="button"
+            data-bs-toggle="dropdown"
             aria-expanded="false"
           >
             알람 종류
-          </a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#">끼니 알람</a>
-            <a class="dropdown-item" href="#">투약 정보 알람</a>
-            <a class="dropdown-item" href="#">취침 정보 알람</a>
-            <a class="dropdown-item" href="#">기념일 정보 알람</a>
-          </div>
+          </button>
+          <ul class="dropdown-menu bg-success-subtle">
+            <li><a class="dropdown-item" href="#">식사</a></li>
+            <li><a class="dropdown-item" href="#">투약 정보</a></li>
+            <li><a class="dropdown-item" href="#">취침</a></li>
+            <li><a class="dropdown-item" href="#">기념일</a></li>
+          </ul>
         </div>
       </div>
       <div class="col-12">
@@ -55,18 +54,35 @@
         </table>
       </div>
     </div>
-    <div class="col-1">
+    <div class="col-1 to-whole-conv">
       <a href="">>전체 대화</a>
     </div>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const navigateToTheAlarmModalview = () => {
+  router.push({
+    path: '@/components/modal/TheAlarmModal.vue'
+  })
+}
+</script>
 
 <style scoped>
 .container {
   font-family: 'Montserrat';
   justify-content: center;
+  width: 80%;
+  height: 100%;
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 200, 156, 0.1);
+  border-radius: 10px;
+  border: 1px #1de4c1 solid;
+  padding-top: 2%;
+  padding-bottom: 2%;
 }
 
 .alarm-buttons {
@@ -75,6 +91,23 @@
 }
 
 .alarm-btn {
+  padding-top: 6px;
+  padding-bottom: 5.11px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #33a38f;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px #1de4c1 solid;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  color: white;
+  font-size: 16px;
+  font-family: Work Sans;
+  font-weight: 700;
+  line-height: 24px;
+  word-wrap: break-word;
   margin-right: 5%;
 }
 
@@ -82,12 +115,11 @@
   border: white;
 }
 
-.alarm-btn {
-  background-color: #33a38f;
+.dropdown {
   display: inline-block;
 }
 
-.dropdown {
-  display: inline-block;
+.to-whole-conv {
+  font-size: 13px;
 }
 </style>
