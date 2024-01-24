@@ -1,5 +1,7 @@
 package com.ukcorp.ieum.meal.service;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.meal.dto.MealDto;
 import com.ukcorp.ieum.meal.dto.request.MealRequestDto;
 import com.ukcorp.ieum.meal.dto.response.MealResponseDto;
@@ -19,6 +21,9 @@ public class MealServiceImpl implements MealService {
 
     private final MealRepository mealRepository;
     private final MealMapper mealMapper;
+
+    private final CareRepository careRepository;
+
     @Override
     public MealDto getMeal(Long careNo) throws Exception {
         Optional<Meal> mealTemp = mealRepository.findByCareInfo_CareNo(careNo);
@@ -41,7 +46,10 @@ public class MealServiceImpl implements MealService {
     @Transactional
     @Override
     public void insertMeal(MealRequestDto mealRequestDto) {
-        Meal meal = mealMapper.mealRequestDtoToMeal(mealRequestDto);
+        Optional<CareInfo> careTemp = careRepository.findById(mealRequestDto.getCareNo());
+        CareInfo care = careTemp.get();
+
+        Meal meal = mealMapper.mealRequestDtoAndCareInfoToMeal(mealRequestDto, care);
         mealRepository.save(meal);
     }
 

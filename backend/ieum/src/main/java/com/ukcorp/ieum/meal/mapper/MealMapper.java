@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.meal.mapper;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.meal.dto.MealDto;
 import com.ukcorp.ieum.meal.dto.request.MealRequestDto;
 import com.ukcorp.ieum.meal.dto.response.MealResponseDto;
@@ -10,22 +11,14 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MealMapper {
     @Mapping(target = "mealInfoNo", ignore = true)
-    @Mapping(target = "careInfo", ignore = true)
-    Meal mealRequestDtoToMeal(MealRequestDto meal);
-
-    @Mapping(source = "careInfo.careNo", target="careNo")
-    MealRequestDto mealToMealRequestDto(Meal meal);
-
-    @Mapping(target = "mealInfoNo", ignore = true)
-    @Mapping(target = "careInfo", ignore = true)
-    Meal mealResponseDtoToMeal(MealResponseDto meal);
-
-    @Mapping(source = "careInfo.careNo", target="careNo")
-    MealResponseDto mealToMealResponseDto(Meal meal);
+    @Mapping(target = "meal.careNo", ignore = true)
+    @Mapping( source = "care", target = "careInfo")
+    Meal mealRequestDtoAndCareInfoToMeal(MealRequestDto meal, CareInfo care);
 
     Meal mealDtoToMeal(MealDto meal);
 
-    @Mapping(source = "careInfo.careNo", target = "careNo")
+//    Meal안에 있는 careInfo라는 객체 안에 careNo를 mealDto의 careNo에 매핑하겠다.
+    @Mapping(source = "meal.careInfo.careNo", target= "careNo")
     MealDto mealToMealDto(Meal meal);
 
 }

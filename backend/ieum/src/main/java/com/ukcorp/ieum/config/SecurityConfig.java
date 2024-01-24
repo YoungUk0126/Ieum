@@ -52,11 +52,12 @@ public class SecurityConfig {
                 // HttpServletRequest에 대한 접근 제한 설정
                 .authorizeHttpRequests(httpRequest -> httpRequest
                         // 인증없이 접근 허용
-                        .requestMatchers("/api/member/join",
-                                "/api/member/login",
-                                "/api/member/check-id/*").permitAll()
+//                        .requestMatchers("/api/member/join",
+//                                "/api/member/login",
+//                                "/api/member/check-id/*").permitAll()
                         // 나머지 요청에 대해서는 인증 필요
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+//                        .anyRequest().authenticated()
                 )
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정

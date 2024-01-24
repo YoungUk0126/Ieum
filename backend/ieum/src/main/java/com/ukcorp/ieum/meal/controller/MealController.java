@@ -45,7 +45,7 @@ public class MealController {
     public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealRequestDto mealRequestDto) {
         try {
             mealService.insertMeal(mealRequestDto);
-            return handleSuccess("");
+            return handleSuccess(mealRequestDto);
         } catch (Exception e) {
             return handleError("Fail");
         }
