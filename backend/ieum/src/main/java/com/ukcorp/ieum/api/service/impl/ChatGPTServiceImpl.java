@@ -102,19 +102,19 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         // 첫 번째 메시지 - 시스템 역할 지정
         Map<String, Object> systemMessage = new HashMap<>();
         systemMessage.put("role", "system");
-        systemMessage.put("content", "당신은 도움이 되는 어시스턴트입니다.");
+        systemMessage.put("content", "안녕하세요, 할아버지! 저는 10살 어린이 이음이라고해요. 어떻게 도와드릴까요?");
         messages.add(systemMessage);
 
-        // 두 번째 메시지 - 사용자 메세지 전달
+        // 두 번째 메시지 - 사용자 메시지 전달
         Map<String, Object> userMessage = new HashMap<>();
         userMessage.put("role", "user");
         userMessage.put("content", message);
         messages.add(userMessage);
 
-        // 세 번째 메시지 - 답변을 도와줄 내용 전달
+        // 세 번째 메시지 - 어시스턴트 메시지
         Map<String, Object> assistantMessage = new HashMap<>();
         assistantMessage.put("role", "assistant");
-        assistantMessage.put("content", "오늘 날씨는 맑고 기온은 25도입니다.");
+        assistantMessage.put("content", "네, 할아버지! 제가 도와줄게요. 궁금한 게 있으면 물어봐주세요!");
         messages.add(assistantMessage);
 
 
