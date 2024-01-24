@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .backdrop {
   z-index: 999;
   display: flex;
@@ -48,13 +48,14 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba($color: #000000, $alpha: 0.2);
+  background-color: hsla(0, 0%, 87%, 0.7);
+}
 
-  .modal-container {
-    background: white;
-    max-width: 320px;
-    width: 100%;
-    padding: 1.5rem;
-  }
+.modal-container {
+  background-color: hsla(0, 0%, 87%, 1);
+  width: 30%;
+  height: 40%;
+  border-radius: 10px;
+  border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 </style>
