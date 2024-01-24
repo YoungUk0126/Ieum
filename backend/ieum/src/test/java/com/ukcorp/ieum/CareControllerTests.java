@@ -11,8 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +35,7 @@ public class CareControllerTests {
     @DisplayName("피보호자 정보 등록")
     void testInsert() throws Exception {
         String requestBody = "{\"care_birth\": \"1945-01-01\", \"care_addr\": \"서울시송파구마천동\", \"care_name\": \"김옥지\", \"care_phone\" : \"010-1234-5678\", \"care_gender\" : \"FEMALE\"}";
-
+//        post
         mock.perform(post("/api/care")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -49,6 +48,29 @@ public class CareControllerTests {
 
 //        get
         mock.perform(get("/api/care/1"))
+                .andExpect(status().isOk())
+                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+    }
+
+    @Test
+    @DisplayName("피보호자 정보 수정")
+    void testUpdate() throws Exception {
+        String requestBody = "{\"care_no\" : \"15\", \"care_birth\": \"1945-01-01\", \"care_addr\": \"서울시송파구마천동\", \"care_name\": \"수정김옥지\", \"care_phone\" : \"010-1234-5678\", \"care_gender\" : \"FEMALE\"}";
+
+//        put
+        mock.perform(put("/api/care")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
+    }
+
+    @Test
+    @DisplayName("피보호자 정보 삭제")
+    void testDelete() throws Exception {
+
+//        delete
+        mock.perform(delete("/api/care/15"))
                 .andExpect(status().isOk())
                 .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
     }

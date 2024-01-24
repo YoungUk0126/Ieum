@@ -55,15 +55,28 @@ public class CareController {
     }
 
     @PutMapping
-    private ResponseEntity<Map<String, Object>> updateCareInfo(CareUpdateRequestDto careDto) {
+    private ResponseEntity<Map<String, Object>> updateCareInfo(@RequestBody CareUpdateRequestDto careDto) {
 
-        return null;
+        try {
+            careService.updateCareInfo(careDto);
+            return handleSuccess(careDto);
+
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
     }
 
     @DeleteMapping("/{care-no}")
     private ResponseEntity<Map<String, Object>> deleteCareInfo(@PathVariable("care-no") Long careNo) {
+        try {
+            careService.deleteCareInfo(careNo);
+            return handleSuccess("");
 
-        return null;
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
     }
 
 

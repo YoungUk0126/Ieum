@@ -49,12 +49,18 @@ public class CareServiceImpl implements CareService{
     @Transactional
     @Override
     public void updateCareInfo(CareUpdateRequestDto careDto) throws Exception {
-
+        Optional<CareInfo> tempCareInfo = careRepository.findById(careDto.getCareNo());
+        if(tempCareInfo.isPresent()) {
+            CareInfo care = careMapper.CareUpdateRequestDtoToCareInfo(careDto);
+            careRepository.save(care);
+        } else {
+            throw new Exception("수정할 피보호자 정보가 없습니다.");
+        }
     }
 
     @Transactional
     @Override
     public void deleteCareInfo(Long careNo) {
-
+        careRepository.deleteById(careNo);
     }
 }
