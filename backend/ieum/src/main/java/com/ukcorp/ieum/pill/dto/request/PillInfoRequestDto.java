@@ -16,6 +16,7 @@ import java.util.List;
  * InfoRequest를 받기 위한 Dto
  */
 public class PillInfoRequestDto {
+    private Long careNo;
     private String pillName;
     private LocalDate startDate;
     private LocalDate endDate;
