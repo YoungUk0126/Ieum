@@ -11,7 +11,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -71,6 +78,37 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findById(String memberId) {
         return null;
+    }
+
+    /**
+     * RefreshToken으로 Token 재발급
+     * @param refreshToken
+     * @return JwtToken(AccessToken + RefreshToken)
+     */
+    @Override
+    public JwtToken refreshAccessToken(String refreshToken) {
+        // 유저 정보 가져오기
+        String memberId = tokenProvider.getMemberId(refreshToken);
+        Member member = memberRepository.findByMemberId(memberId).get();
+
+        // 가져온 member로 authorities 생성
+        Set<GrantedAuthority> authorities = member.getAuthorities().stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
+
+        // 새로운 AccessToken을 위한 UserDetails
+        UserDetails memberDetails = User.builder()
+                .username(member.getMemberId())
+                .password(member.getMemberPassword())
+                .authorities(authorities)
+                .build();
+
+        // DB 정보로 authentication 생성
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
+
+        // 인증 정보 기반으로 Token 생성
+        return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);
     }
 
 
