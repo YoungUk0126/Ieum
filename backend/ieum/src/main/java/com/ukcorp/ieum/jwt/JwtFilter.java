@@ -1,6 +1,8 @@
 package com.ukcorp.ieum.jwt;
 
 import com.ukcorp.ieum.exception.ExpiredTokenException;
+import com.ukcorp.ieum.jwt.dto.JwtToken;
+import io.lettuce.core.RedisConnectionException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -9,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,6 +43,7 @@ public class JwtFilter extends GenericFilterBean {
         // Header에서 토큰 정보 받아오기
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         String accessToken = resolveToken(httpServletRequest);
+        String refreshToken = resolveRefreshToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
 
         try {
@@ -50,12 +54,23 @@ public class JwtFilter extends GenericFilterBean {
                 // 받아온 Authentication 객체 SecurityContext에 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            } else if (StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
+                // Refresh Token 들어왔을 때 Authentication 받아오기
+                Authentication authentication = tokenProvider.getAuthentication(refreshToken);
+                // 받아온 authentication 객체 SecurityContext에 저장
+                log.info("authentication refresh 에서 뽑아옴 " + authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.debug("Security Context에 '{}' REFRESH 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
             } else {
                 log.debug("유효한 JWT 토큰 또는 REFRESH 토큰이 없습니다, uri: {}", requestURI);
             }
         } catch (ExpiredTokenException e) {
             // 만료된 토큰이라면 ExpiredTokenException을 catch
             httpServletRequest.setAttribute("exception", "Expired Token");
+        } catch (RedisConnectionFailureException e) {
+            log.debug("Redis Connection Fail");
+            SecurityContextHolder.clearContext();
+            throw e;
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
