@@ -113,7 +113,7 @@
   background: gray;
 }
 
-. .voice-button,
+.voice-button,
 .video-button {
   width: 35px;
   height: 35px;
