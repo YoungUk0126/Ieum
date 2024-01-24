@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,7 +31,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 @Getter
-@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
     private final RedisTemplate<String, String> redisTemplate;
     private final MemberRepository memberRepository;
@@ -44,6 +45,11 @@ public class TokenProvider implements InitializingBean {
 
     private Key key;
 
+    @Autowired
+    public TokenProvider(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate, MemberRepository memberRepository) {
+        this.redisTemplate = redisTemplate;
+        this.memberRepository = memberRepository;
+    }
 
     /**
      * Bean 생성된 후 주입받은 secret값 Base64 decode하여 key변수에 할당
