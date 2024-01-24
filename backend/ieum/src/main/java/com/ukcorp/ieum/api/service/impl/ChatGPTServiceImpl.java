@@ -85,7 +85,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
      * @return
      */
     @Override
-    public Map<String, Object> prompt(String message) {
+    public String prompt(String message) {
         log.debug("[+] 프롬프트를 수행합니다.");
 
         Map<String, Object> result = new HashMap<>();
@@ -99,23 +99,23 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
         List<Map<String, Object>> messages = new ArrayList<>();
 
-        // 첫 번째 메시지 - 시스템 역할 지정
-        Map<String, Object> systemMessage = new HashMap<>();
-        systemMessage.put("role", "system");
-        systemMessage.put("content", "안녕하세요, 할아버지! 저는 10살 어린이 이음이라고해요. 어떻게 도와드릴까요?");
-        messages.add(systemMessage);
+        // 첫 번째 메시지 - 시스템 역할 지정 (어린이 역할)
+        Map<String, Object> childSystemMessage = new HashMap<>();
+        childSystemMessage.put("role", "system");
+        childSystemMessage.put("content", "너는 10살 어린이 이음이야. 비속어를 사용하지 않고 답변은 한국어로해. 말투, 지능, 답변은 10살 어린아이에 맞게 해야해. 답변은 예의있고 친근한 말투를 사용해야하고 높임말을 써줘. 답변은 한두줄로 한번만 대답을 하고 긍정적인 대답을 해야해. 나는 너의 할아버지야.");
+        messages.add(childSystemMessage);
 
-        // 두 번째 메시지 - 사용자 메시지 전달
-        Map<String, Object> userMessage = new HashMap<>();
-        userMessage.put("role", "user");
-        userMessage.put("content", message);
-        messages.add(userMessage);
+        // 두 번째 메시지 - 사용자 메시지 전달 (할아버지 역할)
+        Map<String, Object> grandpaUserMessage = new HashMap<>();
+        grandpaUserMessage.put("role", "user");
+        grandpaUserMessage.put("content", message);
+        messages.add(grandpaUserMessage);
 
-        // 세 번째 메시지 - 어시스턴트 메시지
-        Map<String, Object> assistantMessage = new HashMap<>();
-        assistantMessage.put("role", "assistant");
-        assistantMessage.put("content", "네, 할아버지! 제가 도와줄게요. 궁금한 게 있으면 물어봐주세요!");
-        messages.add(assistantMessage);
+//        // 세 번째 메시지 - 어시스턴트 메시지 (어린이 역할)
+//        Map<String, Object> childAssistantMessage = new HashMap<>();
+//        childAssistantMessage.put("role", "assistant");
+//        childAssistantMessage.put("content", "안녕 할아버지! 이음이가 도와줄 수 있는 건 무엇인가요?");
+//        messages.add(childAssistantMessage);
 
 
         // [STEP3] properties의 model을 가져와서 객체에 추가합니다.
@@ -148,6 +148,10 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         }
 
         log.debug("[+] 프롬프트 답변이 생성됐습니다" + result);
-        return result;
+
+        ArrayList<Object> choices = (ArrayList<Object>) result.get("choices");
+        Map<String, Object> choice = (Map<String, Object>) choices.get(0);
+        Map<String, Object> choicesMessage = (Map<String, Object>) choice.get("message");
+      return (String) choicesMessage.get("content");
     }
 }
