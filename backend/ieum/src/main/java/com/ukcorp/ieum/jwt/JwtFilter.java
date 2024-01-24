@@ -49,18 +49,10 @@ public class JwtFilter extends GenericFilterBean {
         try {
             // 토큰 유효성 검사 진행
             if (StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
-                // 토큰이 정상적이라면 Authentication 객체 받아오기
-                Authentication authentication = tokenProvider.getAuthentication(accessToken);
-                // 받아온 Authentication 객체 SecurityContext에 저장
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+                setAuthenticationInSecurityContext(accessToken);
             } else if (StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
                 // Refresh Token 들어왔을 때 Authentication 받아오기
-                Authentication authentication = tokenProvider.getAuthentication(refreshToken);
-                // 받아온 authentication 객체 SecurityContext에 저장
-                log.info("authentication refresh 에서 뽑아옴 " + authentication);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                log.debug("Security Context에 '{}' REFRESH 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+                setAuthenticationInSecurityContext(refreshToken);
             } else {
                 log.debug("유효한 JWT 토큰 또는 REFRESH 토큰이 없습니다, uri: {}", requestURI);
             }
@@ -107,5 +99,20 @@ public class JwtFilter extends GenericFilterBean {
         }
 
         return null;
+    }
+
+    /**
+     * 토큰 정상적일 떄 SecurityContext에 저장하는 Method
+     *
+     * @param token
+     */
+    private void setAuthenticationInSecurityContext(String token) {
+        // token 들어왔을 때 Authentication 받아오기
+        Authentication authentication = tokenProvider.getAuthentication(token);
+
+        // 받아온 authentication 객체 SecurityContext에 저장
+        log.debug("authentication refresh 에서 뽑아옴 " + authentication);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.debug("Security Context에 '{}' 인증 정보 저장", authentication.getName());
     }
 }
