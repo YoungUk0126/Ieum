@@ -2,8 +2,10 @@ package com.ukcorp.ieum.care.controller;
 
 import com.ukcorp.ieum.care.dto.request.CareInsertRequestDto;
 import com.ukcorp.ieum.care.dto.request.CareUpdateRequestDto;
+import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
 import com.ukcorp.ieum.care.service.CareServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,14 +16,25 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/care")
+@Slf4j
 public class CareController {
 
     private final CareServiceImpl careService;
 
+    /**
+     * 피보호자의 PK로 피보호자 정보를 반환하는 기능
+     * @param careNo
+     */
     @GetMapping("/{care-no}")
     private ResponseEntity<Map<String, Object>> getCareInfo(@PathVariable("care-no") Long careNo) {
+        try {
+            CareGetResponseDto careDto = careService.getCareInfo(careNo);
+            return handleSuccess(careDto);
 
-        return null;
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
     }
 
     @PostMapping
