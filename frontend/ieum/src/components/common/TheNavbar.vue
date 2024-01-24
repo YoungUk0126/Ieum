@@ -3,7 +3,9 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">Navbar</a>
+      <a class="navbar-brand" href="/"
+        ><img class="logo-img" src="@/assets/images/logo.png" alt=""
+      /></a>
       <button
         class="navbar-toggler"
         type="button"
@@ -51,5 +53,14 @@
 <style scoped>
 .navbar {
   background-color: rgb(235, 251, 247) !important;
+}
+
+.navbar-brand {
+  text-align: center;
+}
+
+.logo-img {
+  width: 50%;
+  object-fit: cover;
 }
 </style>
