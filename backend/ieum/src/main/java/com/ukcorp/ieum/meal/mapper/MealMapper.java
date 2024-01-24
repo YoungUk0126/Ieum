@@ -25,4 +25,7 @@ public interface MealMapper {
 
     Meal mealDtoToMeal(MealDto meal);
 
+    @Mapping(source = "careInfo.careNo", target = "careNo")
+    MealDto mealToMealDto(Meal meal);
+
 }

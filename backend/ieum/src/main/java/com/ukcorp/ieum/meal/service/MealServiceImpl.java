@@ -20,19 +20,19 @@ public class MealServiceImpl implements MealService {
     private final MealRepository mealRepository;
     private final MealMapper mealMapper;
     @Override
-    public MealResponseDto getMeal(Long careNo) throws Exception {
+    public MealDto getMeal(Long careNo) throws Exception {
         Optional<Meal> mealTemp = mealRepository.findByCareInfo_CareNo(careNo);
 
         if(mealTemp.isPresent()) {
-            MealResponseDto mealResponseDto = null;
+            MealDto mealDto = null;
 
             Meal meal = mealTemp.get();
             /**
              * e생성자 였던 부분 mapper로 수정
              * @param meal
              */
-            mealResponseDto = mealMapper.mealToMealResponseDto(meal);
-            return mealResponseDto;
+            mealDto = mealMapper.mealToMealDto(meal);
+            return mealDto;
         } else {
             throw new Exception("존재하지 않는 피보호자입니다.");
         }

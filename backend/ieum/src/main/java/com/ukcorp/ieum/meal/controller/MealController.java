@@ -29,8 +29,8 @@ public class MealController {
     public ResponseEntity<Map<String, Object>> getMeal(@PathVariable("care-no") Long careNo) {
 
         try{
-            MealResponseDto mealResponseDto = mealService.getMeal(careNo);
-            return handleSuccess(mealResponseDto);
+            MealDto mealDto = mealService.getMeal(careNo);
+            return handleSuccess(mealDto);
         } catch (Exception e){
             log.debug(e.getMessage());
             return handleError("Fail");
