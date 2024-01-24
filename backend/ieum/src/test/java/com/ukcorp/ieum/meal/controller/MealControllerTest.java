@@ -35,7 +35,7 @@ public class MealControllerTest {
     @Test
     @DisplayName("약 정보 등록")
     void testInsert() throws Exception {
-        String requestBody = "{\"care_no\": \"2\", \"meal_time1\": \"90000\", \"meal_time2\": \"140000\", \"meal_time3\": \"210000\"}";
+        String requestBody = "{\"care_no\": \"1\", \"meal_time1\": \"90000\", \"meal_time2\": \"140000\", \"meal_time3\": \"210000\"}";
 
         mock.perform(post("/api/meal")
                         .content(requestBody)
@@ -54,6 +54,27 @@ public class MealControllerTest {
 
 //        get
         mock.perform(get("/api/meal/1"))
+                .andExpect(status().isOk())
+                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+    }
+
+    @Test
+    @DisplayName("약 정보 수정")
+    void testUpdate() throws Exception {
+        String requestBody = "{\"care_no\": \"1\", \"meal_info_no\": \"14\", \"meal_time1\": \"90000\", \"meal_time2\": \"130000\", \"meal_time3\": \"200000\"}";
+
+        mock.perform(put("/api/meal")
+                        .content(requestBody)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+    }
+
+    @Test
+    @DisplayName("약 정보 삭제")
+    void testDelete() throws Exception {
+//        delete
+        mock.perform(delete("/api/meal/14"))
                 .andExpect(status().isOk())
                 .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
     }
