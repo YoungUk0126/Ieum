@@ -12,8 +12,8 @@ import java.util.Optional;
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
     Optional<Member> findByMemberId(String memberId);
-//    @Query("select m from Member m where m.memberId=:memberId")
-//    Member findByMemberId(String memberId);
+
+    boolean existsByMemberId(String memberId);
 
     //    로그인용
     Member findByMemberIdAndMemberPassword(String loginId, String loginPassword);

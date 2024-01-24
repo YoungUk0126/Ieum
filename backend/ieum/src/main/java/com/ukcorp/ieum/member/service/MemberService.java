@@ -18,6 +18,8 @@ public interface MemberService {
 
     Member findById(String memberId);
 
+    boolean isExistsMemberId(String memberId);
+
     JwtToken refreshAccessToken(String refreshToken);
 
 //    int updateMember(MemberDto member);

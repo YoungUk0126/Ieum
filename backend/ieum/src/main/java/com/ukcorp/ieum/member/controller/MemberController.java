@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -68,15 +69,17 @@ public class MemberController {
 
 
     @GetMapping("/check-id/{member-id}")
-    public ResponseEntity<Map<String, Object>> searchMemberById(@PathVariable("member-id") String checkId) {
-        Member result = memberService.findById(checkId);
-//        이미 아이디가 존재한다면
-        if (result != null) {
-            return handleError(0);
-        }
-//        아이디가 없다면
-        else {
-            return handleSuccess(1);
+    public ResponseEntity<Map<String, Object>> isDuplicatedId(@PathVariable("member-id") String checkId) {
+        boolean isExists = memberService.isExistsMemberId(checkId);
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 아이디인 경우
+            response.put("isDuplicated", true);
+            return handleFail(response);
+        } else {
+            // 사용 가능한 아이디인 경우
+            response.put("isDuplicated", false);
+            return handleSuccess(response);
         }
     }
 
@@ -85,6 +88,14 @@ public class MemberController {
         Map<String, Object> result = new HashMap<>();
 
         result.put("success", true);
+        result.put("data", data);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
+
+    private ResponseEntity<Map<String, Object>> handleFail(Object data) {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("success", false);
         result.put("data", data);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }

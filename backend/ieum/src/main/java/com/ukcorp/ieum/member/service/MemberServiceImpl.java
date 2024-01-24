@@ -80,6 +80,11 @@ public class MemberServiceImpl implements MemberService {
         return null;
     }
 
+    @Override
+    public boolean isExistsMemberId(String memberId) {
+        return memberRepository.existsByMemberId(memberId);
+    }
+
     /**
      * RefreshToken으로 Token 재발급
      * @param refreshToken
