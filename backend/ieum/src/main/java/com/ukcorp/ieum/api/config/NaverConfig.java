@@ -2,7 +2,6 @@ package com.ukcorp.ieum.api.config;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -39,7 +38,6 @@ public class NaverConfig {
      * STT 사용을 위한 HttpURLConnection 생성
      * @return HttpURLConnection
      */
-    @Bean
     public HttpURLConnection getSttHttpURLConnection() throws IOException {
         String language = "Kor";        // 언어 코드 ( Kor, Jpn, Eng, Chn )
         String apiURL = "https://naveropenapi.apigw.ntruss.com/recog/v1/stt?lang=" + language;
@@ -59,7 +57,6 @@ public class NaverConfig {
      * Sms 사용을 위한 HttpHeaders 생성
      * @return HttpHeaders
      */
-    @Bean
     public HttpHeaders getSmsHttpHeaders() throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         Long time = System.currentTimeMillis();
         HttpHeaders headers = new HttpHeaders();
