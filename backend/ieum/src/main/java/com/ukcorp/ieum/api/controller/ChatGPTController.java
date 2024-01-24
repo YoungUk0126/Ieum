@@ -46,7 +46,7 @@ public class ChatGPTController {
     @PostMapping("/prompt")
     public ResponseEntity<Map<String,Object>> selectPrompt(@RequestBody String message) {
       try{
-        Map<String, Object> result = chatGPTService.prompt(message);
+        String result = chatGPTService.prompt(message);
         return handleSuccess(result);
       }catch (Exception e){
         return handleFail(e.getMessage());
