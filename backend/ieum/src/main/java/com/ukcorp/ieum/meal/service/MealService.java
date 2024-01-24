@@ -7,7 +7,7 @@ import com.ukcorp.ieum.meal.dto.response.MealResponseDto;
 public interface MealService {
     MealDto getMeal(Long careNo) throws Exception;
 
-    void insertMeal(MealRequestDto mealRequestDto);
+    void insertMeal(MealRequestDto mealRequestDto) throws Exception;
 
     void deleteMeal(Long mealInfoNo);
 

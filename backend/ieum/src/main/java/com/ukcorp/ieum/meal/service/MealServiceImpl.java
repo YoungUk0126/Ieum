@@ -45,12 +45,17 @@ public class MealServiceImpl implements MealService {
 
     @Transactional
     @Override
-    public void insertMeal(MealRequestDto mealRequestDto) {
+    public void insertMeal(MealRequestDto mealRequestDto) throws Exception{
         Optional<CareInfo> careTemp = careRepository.findById(mealRequestDto.getCareNo());
-        CareInfo care = careTemp.get();
+        if(careTemp.isPresent()){
+            CareInfo care = careTemp.get();
+            Meal meal = mealMapper.mealRequestDtoAndCareInfoToMeal(mealRequestDto, care);
+            mealRepository.save(meal);
+        } else {
+            throw new Exception("존재하지 않는 피보호자입니다.");
 
-        Meal meal = mealMapper.mealRequestDtoAndCareInfoToMeal(mealRequestDto, care);
-        mealRepository.save(meal);
+        }
+
     }
 
 
@@ -66,7 +71,7 @@ public class MealServiceImpl implements MealService {
 //            save로 자동 merge(update)
             mealRepository.save(meal);
         } else {
-            throw new Exception("식사 시간 정보가 없습니다.");
+            throw new Exception("수정할 식사 시간 정보가 없습니다.");
         }
     }
 
