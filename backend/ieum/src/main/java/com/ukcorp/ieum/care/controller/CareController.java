@@ -22,9 +22,26 @@ public class CareController {
     private final CareServiceImpl careService;
 
     /**
+     * 피보호자의 Dto로 Entity에 저장하는 기능
+     * @param careDto
+     */
+    @PostMapping
+    private ResponseEntity<Map<String, Object>> insertCareInfo(@RequestBody CareInsertRequestDto careDto) {
+        log.debug(careDto.toString());
+        try {
+            careService.insertCareInfo(careDto);
+            return handleSuccess(careDto);
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    /**
      * 피보호자의 PK로 피보호자 정보를 반환하는 기능
      * @param careNo
      */
+
     @GetMapping("/{care-no}")
     private ResponseEntity<Map<String, Object>> getCareInfo(@PathVariable("care-no") Long careNo) {
         try {
@@ -35,12 +52,6 @@ public class CareController {
             log.debug(e.getMessage());
             return handleError("Fail");
         }
-    }
-
-    @PostMapping
-    private ResponseEntity<Map<String, Object>> insertCareInfo(CareInsertRequestDto careDto) {
-
-        return null;
     }
 
     @PutMapping

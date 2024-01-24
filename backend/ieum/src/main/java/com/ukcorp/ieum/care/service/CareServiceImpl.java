@@ -7,6 +7,7 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.mapper.CareMapper;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 @Transactional(readOnly = true)
 public class CareServiceImpl implements CareService{
 
@@ -23,7 +25,13 @@ public class CareServiceImpl implements CareService{
     @Transactional
     @Override
     public void insertCareInfo(CareInsertRequestDto careDto) throws Exception {
+        System.out.println("========careDTO=======");
+        System.out.println(careDto.toString());
+        CareInfo care = careMapper.careInsertRequestDtoToCareInfo(careDto);
 
+        System.out.println(care.toString());
+
+        careRepository.save(care);
     }
 
     @Override

@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class CareUpdateRequestDto {
-    private Long careNo;
-    private String careName;
-    private String careGender;
     private LocalDate careBirth;
-    private String carePhone;
+    private Long careNo;
     private String careAddr;
+    private String careName;
+    private String carePhone;
+    private String careGender;
 }

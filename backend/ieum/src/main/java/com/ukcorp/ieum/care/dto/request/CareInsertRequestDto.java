@@ -9,10 +9,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class CareInsertRequestDto {
-    private String careName;
-    private String careGender;
     private LocalDate careBirth;
-    private String carePhone;
     private String careAddr;
+    private String careName;
+    private String carePhone;
+    private String careGender;
 }
