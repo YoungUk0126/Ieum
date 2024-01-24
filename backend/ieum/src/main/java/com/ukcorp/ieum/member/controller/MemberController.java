@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.member.controller;
 
 import com.ukcorp.ieum.jwt.JwtFilter;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
 import com.ukcorp.ieum.member.dto.MemberDto;
@@ -95,4 +96,15 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/refresh")
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
+
+        // Header에  토큰 설정
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+
+        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+    }
 }
