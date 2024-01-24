@@ -1,5 +1,5 @@
 <template>
-  <div class="container row mt-5">
+  <div class="voice-video-message-container row mt-5">
     <div class="col-9">
       <h3>음성 / 영상 메세지</h3>
       <div class="col message-buttons mx-auto">
@@ -65,7 +65,7 @@
 <script setup></script>
 
 <style scoped>
-.container {
+.voice-video-message-container {
   font-family: 'Montserrat';
   justify-content: center;
   width: 80%;
