@@ -1,18 +1,31 @@
 package com.ukcorp.ieum.temporalEvent.mapper;
 
-import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventUpdateRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
 import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface TemporalEventMapper {
 
-  TemporalEventDto TemporalEventEntityToDto(TemporalEvent temporalEventDto);
+  @Mapping(source="event.careInfo.careNo", target="careNo")
+  TemporalEventResponseDto TemporalEventEntityToResponseDto(TemporalEvent event);
 
-  TemporalEvent TemporalEventDtoToEntity(TemporalEventDto temporalEvent);
+  List<TemporalEventResponseDto> TemporalEventEntityToResponseDto(List<TemporalEvent> temporalEvent);
 
-  List<TemporalEventDto> TemporalEventEntityToDto(List<TemporalEvent> temporalEvent);
+  @Mapping(target = "event.careNo", ignore = true)
+  @Mapping(source = "care", target = "careInfo")
+  TemporalEvent temporalEventUpdateRequestDtoAndCareInfoToMeal(TemporalEventUpdateRequestDto event, CareInfo care);
+
+  @Mapping(target = "eventNo", ignore = true)
+  @Mapping(target = "event.careNo", ignore = true)
+  @Mapping(source = "care", target = "careInfo")
+  TemporalEvent temporalEventInsertRequestDtoAndCareInfoToMeal(TemporalEventInsertRequestDto event, CareInfo care);
+
 
 }

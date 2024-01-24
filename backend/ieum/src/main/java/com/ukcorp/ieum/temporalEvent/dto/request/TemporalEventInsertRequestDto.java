@@ -1,7 +1,6 @@
 package com.ukcorp.ieum.temporalEvent.dto.request;
 
 
-import com.ukcorp.ieum.care.entity.CareInfo;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ import java.time.LocalDate;
 @Builder
 public class TemporalEventInsertRequestDto {
 
-  private CareInfo careInfo;
+  private Long careNo;
 
   private String eventName;
 

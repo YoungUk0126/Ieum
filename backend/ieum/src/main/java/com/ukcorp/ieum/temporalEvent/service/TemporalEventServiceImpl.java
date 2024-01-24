@@ -1,6 +1,10 @@
 package com.ukcorp.ieum.temporalEvent.service;
 
-import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventUpdateRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
 import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import com.ukcorp.ieum.temporalEvent.mapper.TemporalEventMapper;
 import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
@@ -18,7 +22,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
 
   private final TemporalEventMapper temporalEventMapper;
   private final TemporalEventRepository temporalEventRepository;
-
+  private final CareRepository careRepository;
   /**
    * 사용자 id에 따른 일정 목록 조회
    * @param careNo
@@ -26,13 +30,13 @@ public class TemporalEventServiceImpl implements TemporalEventService {
    * @throws Exception
    */
   @Override
-  public List<TemporalEventDto> getList(Long careNo) throws Exception {
+  public List<TemporalEventResponseDto> getList(Long careNo) throws Exception {
     List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
     if(list == null || list.isEmpty()){
       log.debug("등록된 일정이 없습니다");
       throw new Exception("등록된 일정이 없습니다.");
     }
-    return temporalEventMapper.TemporalEventEntityToDto(list);
+    return temporalEventMapper.TemporalEventEntityToResponseDto(list);
   }
 
   /**
@@ -42,10 +46,10 @@ public class TemporalEventServiceImpl implements TemporalEventService {
    * @throws Exception
    */
   @Override
-  public TemporalEventDto getDetail(Long eventNo) throws Exception {
+  public TemporalEventResponseDto getDetail(Long eventNo) throws Exception {
     Optional<TemporalEvent> event = temporalEventRepository.findById(eventNo);
     if(event.isPresent()){
-      return temporalEventMapper.TemporalEventEntityToDto(event.get());
+      return temporalEventMapper.TemporalEventEntityToResponseDto(event.get());
     }else{
       log.debug("존재하지 않는 일정입니다.");
       throw new Exception("존재하지 않는 일정입니다.");
@@ -66,18 +70,38 @@ public class TemporalEventServiceImpl implements TemporalEventService {
    * @param event
    */
   @Override
-  public void registEvent(TemporalEventDto event){
-    temporalEventRepository.save(temporalEventMapper.TemporalEventDtoToEntity(event));
+  public void registEvent(TemporalEventInsertRequestDto event) throws Exception {
+    try{
+      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
+      if(careGet.isEmpty()){
+        throw new Exception("보호자 정보 조회 오류");
+      }
+
+      CareInfo care = careGet.get();
+      TemporalEvent entity = temporalEventMapper.temporalEventInsertRequestDtoAndCareInfoToMeal(event,care);
+      temporalEventRepository.save(entity);
+
+    } catch (RuntimeException e) {
+      throw new Exception("입력 오류!");
+    }
+
   }
 
   @Override
-  public void modifyEvent(TemporalEventDto event) throws Exception {
-    if(temporalEventRepository.findById(event.getEventNo()).isPresent()){
-      temporalEventRepository.save(temporalEventMapper.TemporalEventDtoToEntity(event));
-    }else{
-      log.debug("존재하지 않는 일정입니다.");
-      throw new Exception("존재하지 않는 일정입니다.");
+  public void modifyEvent(TemporalEventUpdateRequestDto event) throws Exception {
+    try{
+      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
+      if(careGet.isEmpty()){
+        throw new Exception("보호자 정보 조회 오류");
+      }
+      CareInfo care = careGet.get();
+      TemporalEvent entity = temporalEventMapper.temporalEventUpdateRequestDtoAndCareInfoToMeal(event,care);
+      temporalEventRepository.save(entity);
+
+    } catch (RuntimeException e) {
+      throw new Exception("입력 오류!");
     }
+
   }
 
 
