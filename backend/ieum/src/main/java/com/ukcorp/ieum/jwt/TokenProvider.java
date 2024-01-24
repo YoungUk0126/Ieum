@@ -3,9 +3,7 @@ package com.ukcorp.ieum.jwt;
 import com.ukcorp.ieum.exception.ExpiredTokenException;
 import com.ukcorp.ieum.exception.InvalidRefreshTokenException;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
-import com.ukcorp.ieum.member.service.MemberDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -20,7 +18,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -205,6 +202,14 @@ public class TokenProvider implements InitializingBean {
         } catch (Exception e) {
             throw new InvalidRefreshTokenException("Invalid Token Exception");
         }
+    }
+
+    /**
+     * 로그아웃 시 Redis에서 RefreshToken 삭제
+     * @param memberId
+     */
+    public void deleteRefreshTokenFromRedis(String memberId) {
+        redisTemplate.delete(memberId);
     }
 
     /**
