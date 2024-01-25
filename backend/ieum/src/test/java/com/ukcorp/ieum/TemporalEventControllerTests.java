@@ -32,17 +32,17 @@ class TemporalEventControllerTests {
   void testRegist() throws Exception {
 
     // 일정 등록 관련 테스트
-    String requestBody = "{\"eventNo\": \"18\", " +
-            "\"careNo\": \"17\", " +
-            "\"eventName\": \"경로당가기\"" +
-            "\"eventDate\": \"2024-01-15\"" +
+    String requestBody = "{" +
+            "\"care_no\": \"1\", " +
+            "\"event_name\": \"경로당가기\"," +
+            "\"event_date\": \"2024-01-15\"" +
             "}";
 
-    mock.perform(put("/api/event")
+    mock.perform(post("/api/event")
                     .content(requestBody)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+            .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
   @Test
@@ -50,9 +50,9 @@ class TemporalEventControllerTests {
   void testDelete() throws Exception {
 
     // 17에 해당하는 eventNo 일정 삭제
-    mock.perform(delete("/api/event/17"))
+    mock.perform(delete("/api/event/1"))
             .andExpect(status().isOk())
-            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+            .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
 
@@ -61,18 +61,18 @@ class TemporalEventControllerTests {
   void testSelect() throws Exception {
     
     // careNo이 17인 사용자의 일정 리스트 조회
-    mock.perform(get("/api/event/17"))
+    mock.perform(get("/api/event/1"))
             .andExpect(status().isOk())
-            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+            .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
   @Test
   @DisplayName("일정 상세 조회")
   void testSelectDetail() throws Exception {
     // eventNo으로 해당 일정 상세 조회
-    mock.perform(get("/api/event/detail/18"))
+    mock.perform(get("/api/event/detail/1"))
             .andExpect(status().isOk())
-            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+            .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
 
@@ -81,17 +81,17 @@ class TemporalEventControllerTests {
   @DisplayName("일정 수정")
   void testUpdate() throws Exception {
 
-    String requestBody = "{\"eventNo\": \"18\", " +
-                           "\"careNo\": \"17\", " +
-                          "\"eventName\": \"경로당가기\"" +
-                          "\"eventDate\": \"2024-01-15\"" +
-                         "}";
+    String requestBody = "{\"event_no\": \"4\", " +
+            "\"care_no\": \"1\", " +
+            "\"event_name\": \"경로당22가기\"," +
+            "\"event_date\": \"2024-01-15\"" +
+            "}";
 
-    mock.perform(post("/api/event")
+    mock.perform(put("/api/event")
                     .content(requestBody)
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+            .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
 
 

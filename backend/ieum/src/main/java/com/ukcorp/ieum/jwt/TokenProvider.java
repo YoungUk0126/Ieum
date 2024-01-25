@@ -1,13 +1,20 @@
 package com.ukcorp.ieum.jwt;
 
+import com.ukcorp.ieum.exception.ExpiredTokenException;
+import com.ukcorp.ieum.exception.InvalidRefreshTokenException;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
+import com.ukcorp.ieum.member.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,9 +23,8 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 // 토큰 생성, 유효성 검사 담당 Class
@@ -26,21 +32,23 @@ import java.util.stream.Collectors;
 @Slf4j
 @Getter
 public class TokenProvider implements InitializingBean {
+    private final RedisTemplate<String, String> redisTemplate;
+    private final MemberRepository memberRepository;
 
     private static final String AUTHORITIES_KEY = "auth";
-    private final String SECRET;
-    private final long ACCESS_VALIDITY_SECONDS;
-    private final long REFRESH_VALIDITY_SECONDS;
+    @Value("${jwt.secret-key}")
+    private String SECRET;
+    @Value("${jwt.expiration}")
+    private long ACCESS_VALIDITY_SECONDS;
+    @Value("${jwt.refresh.expiration}")
+    private long REFRESH_VALIDITY_SECONDS;
 
     private Key key;
 
-    public TokenProvider(
-            @Value("${jwt.secret-key}") String secret,
-            @Value("${jwt.expiration}") long tokenValidity,
-            @Value("${jwt.refresh.expiration}") long refreshValidity) {
-        this.SECRET = secret;
-        this.ACCESS_VALIDITY_SECONDS = tokenValidity;
-        this.REFRESH_VALIDITY_SECONDS = refreshValidity;
+    @Autowired
+    public TokenProvider(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate, MemberRepository memberRepository) {
+        this.redisTemplate = redisTemplate;
+        this.memberRepository = memberRepository;
     }
 
     /**
@@ -66,7 +74,7 @@ public class TokenProvider implements InitializingBean {
 
         // 토큰 생성
         String accessToken = createAccessToken(authentication, authorities);
-        String refreshToken = createRefreshToken(authentication);
+        String refreshToken = createRefreshToken(authentication, authorities);
 
         return JwtToken.builder()
                 .grantType("Bearer")
@@ -77,8 +85,8 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * AccessToken 생성 Method
+     *
      * @param authentication
-     * @param authorities
      * @return
      */
     private String createAccessToken(Authentication authentication, String authorities) {
@@ -95,20 +103,56 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * RefreshToken 생성 Method
+     *
      * @param authentication
      * @return
      */
-    private String createRefreshToken(Authentication authentication) {
+    private String createRefreshToken(Authentication authentication, String authorities) {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.REFRESH_VALIDITY_SECONDS);
 
-        // TODO : RefreshToken Redis 저장 로직 추가
-
-        return Jwts.builder()
+        // Refresh Token 생성
+        String refreshToken = Jwts.builder()
                 .setSubject(authentication.getName())
+                .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
+
+        // Redis에 RefreshToken 저장
+        redisTemplate.opsForValue().set(
+                authentication.getName(),
+                refreshToken,
+                REFRESH_VALIDITY_SECONDS,
+                TimeUnit.MILLISECONDS
+        );
+
+        return refreshToken;
+    }
+
+    /**
+     * RefreshToken을 이용하여 AccessToken 재발급 받는 Method
+     *
+     * @param refreshToken
+     * @return accessToken
+     */
+    public JwtToken refreshAccessToken(String refreshToken, String memberId, Authentication authentication) {
+
+        // Redis에서 저장된 RefreshToken 가져오기
+        String storedRefreshToken = redisTemplate.opsForValue().get(memberId);
+
+        // 저장된 RefreshToken과 들어온 RefreshToken이 일치하면 새로운 AccessToken 생성
+        if (storedRefreshToken != null && storedRefreshToken.equals(refreshToken)) {
+            // 데이터베이스에서 사용자 정보 가져오기
+
+            // 기존 AccessToken의 권한 정보를 그대로 사용하여 새로운 AccessToken 생성
+            return createToken(authentication);
+
+        } else {
+            // Redis에 있는 Refresh Token 아니라면 InvalidRefreshTokenException
+            throw new InvalidRefreshTokenException("Invalid Refresh Token");
+        }
+
     }
 
     /**
@@ -139,6 +183,41 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
+
+    /**
+     * RefreshToken에서 유저 정보 얻기
+     *
+     * @param refreshToken
+     * @return memberId
+     */
+    public String getMemberId(String refreshToken) {
+        try {
+            // RefreshToken에서 claims 뽑아오기
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(key).build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody();
+
+            // Claims에 저장된 memberId 가져오기
+            return Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(refreshToken)
+                    .getBody()
+                    .getSubject();
+        } catch (Exception e) {
+            throw new InvalidRefreshTokenException("Invalid Token Exception");
+        }
+    }
+
+    /**
+     * 로그아웃 시 Redis에서 RefreshToken 삭제
+     * @param memberId
+     */
+    public void deleteRefreshTokenFromRedis(String memberId) {
+        redisTemplate.delete(memberId);
+    }
+
     /**
      * 토큰의 유효성 검사
      *
@@ -153,6 +232,7 @@ public class TokenProvider implements InitializingBean {
             log.info("잘못된 JWT 서명입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토큰입니다.");
+            throw new ExpiredTokenException("Expired Token");
         } catch (UnsupportedJwtException e) {
             log.info("지원되지 않는 JWT 토큰입니다.");
         } catch (IllegalArgumentException e) {
