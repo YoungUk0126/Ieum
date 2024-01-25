@@ -8,8 +8,11 @@ import java.util.List;
 
 public interface MessageService {
   List<MessageResponseDto> getList(Long careNo) throws Exception;
+
   MessageResponseDto getDetail(Long messageNo) throws Exception;
+
   void deleteMessage(Long messageNo);
+
   void registMessage(MessageInsertRequestDto message) throws Exception;
 
   void modifyMessage(MessageUpdateRequestDto message) throws Exception;

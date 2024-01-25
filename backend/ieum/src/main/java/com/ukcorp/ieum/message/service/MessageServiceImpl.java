@@ -27,7 +27,7 @@ public class MessageServiceImpl implements MessageService {
   @Override
   public List<MessageResponseDto> getList(Long careNo) throws Exception {
     List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
-    if(list == null || list.isEmpty()){
+    if (list == null || list.isEmpty()) {
       log.debug("등록된 메세지이 없습니다");
       throw new Exception("등록된 메세지이 없습니다.");
     }
@@ -37,9 +37,9 @@ public class MessageServiceImpl implements MessageService {
   @Override
   public MessageResponseDto getDetail(Long messageNo) throws Exception {
     Optional<Message> message = messageRepository.findById(messageNo);
-    if(message.isPresent()){
+    if (message.isPresent()) {
       return messageMapper.MessageToResponseDto(message.get());
-    }else{
+    } else {
       log.debug("존재하지 않는 메세지입니다.");
       throw new Exception("존재하지 않는 메세지입니다.");
     }
@@ -47,23 +47,23 @@ public class MessageServiceImpl implements MessageService {
 
 
   @Override
-  public void deleteMessage(Long messageNo){
+  public void deleteMessage(Long messageNo) {
     messageRepository.deleteById(messageNo);
   }
 
 
   @Override
   public void registMessage(MessageInsertRequestDto message) throws Exception {
-    try{
+    try {
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
-      if(careGet.isEmpty()){
+      if (careGet.isEmpty()) {
         log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
 
       CareInfo care = careGet.get();
       Message entity = messageMapper
-              .messageInsertRequestDtoAndCareInfoToMessage(message,care);
+              .messageInsertRequestDtoAndCareInfoToMessage(message, care);
       messageRepository.save(entity);
 
     } catch (RuntimeException e) {
@@ -75,15 +75,15 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public void modifyMessage(MessageUpdateRequestDto message) throws Exception {
-    try{
+    try {
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
-      if(careGet.isEmpty()){
+      if (careGet.isEmpty()) {
         log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
       CareInfo care = careGet.get();
       Message entity = messageMapper
-              .messageUpdateRequestDtoAndCareInfoToMessage(message,care);
+              .messageUpdateRequestDtoAndCareInfoToMessage(message, care);
       messageRepository.save(entity);
 
     } catch (RuntimeException e) {

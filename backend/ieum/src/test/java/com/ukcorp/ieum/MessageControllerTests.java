@@ -61,7 +61,7 @@ class MessageControllerTests {
   @Test
   @DisplayName("메세지 리스트 조회")
   void testSelect() throws Exception {
-    
+
     // careNo이 1인 사용자의 메세지 리스트 조회
     mock.perform(get("/api/message/1"))
             .andExpect(status().isOk())
@@ -76,7 +76,6 @@ class MessageControllerTests {
             .andExpect(status().isOk())
             .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
-
 
 
   @Test
@@ -97,7 +96,6 @@ class MessageControllerTests {
             .andExpect(status().isOk())
             .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
-
 
 
 }
