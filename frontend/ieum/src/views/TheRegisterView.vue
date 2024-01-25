@@ -45,8 +45,8 @@
 
                                             <div class="form-outline datepicker w-100">
                                                 <label for="passwordCheak" class="form-label">비밀번호확인/password cheak</label>
-                                                <input type="password" v-model="password_check" @change="check_password"
-                                                    class="form-control form-control-lg" />
+                                                <input type="password" v-model.lazy="password_check"
+                                                    @change="check_password" class="form-control form-control-lg" />
                                             </div>
 
                                         </div>
@@ -147,7 +147,7 @@ const check_policy = () => {
 }
 
 const check_password = () => {
-    if (password_check.value != userInfo.value.password) {
+    if (password_check.value != '' && password_check.value != userInfo.value.password) {
         alert('비밀번호가 일치하지 않습니다.')
     }
 }
