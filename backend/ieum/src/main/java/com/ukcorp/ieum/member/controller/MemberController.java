@@ -1,17 +1,16 @@
 package com.ukcorp.ieum.member.controller;
 
 import com.ukcorp.ieum.jwt.JwtFilter;
-import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
-import com.ukcorp.ieum.member.dto.MemberDto;
-import com.ukcorp.ieum.member.entity.Member;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -26,7 +25,7 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/join")
-    public ResponseEntity joinMember(@Valid @RequestBody MemberDto member) {
+    public ResponseEntity joinMember(@Valid @RequestBody MemberRequestDto member) {
 
         memberService.signup(member);
 
@@ -46,7 +45,7 @@ public class MemberController {
     }
 
     @PutMapping("/modify")
-    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberDto member) {
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
         int result = memberService.modifyMember(member);
 
         if (result != 0) {
@@ -78,6 +77,21 @@ public class MemberController {
             return handleFail(response);
         } else {
             // 사용 가능한 아이디인 경우
+            response.put("isDuplicated", false);
+            return handleSuccess(response);
+        }
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody @Email String email) {
+        boolean isExists = memberService.isExistsMemberEmail(email);
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 이메일인 경우
+            response.put("isDuplicated", true);
+            return handleFail(response);
+        } else {
+            // 사용 가능한 이메일인 경우
             response.put("isDuplicated", false);
             return handleSuccess(response);
         }

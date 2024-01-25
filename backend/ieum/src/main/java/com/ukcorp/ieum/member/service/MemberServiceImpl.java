@@ -3,7 +3,7 @@ package com.ukcorp.ieum.member.service;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
-import com.ukcorp.ieum.member.dto.MemberDto;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
@@ -35,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
      * @param memberSignupDto
      */
     @Override
-    public void signup(MemberDto memberSignupDto) {
+    public void signup(MemberRequestDto memberSignupDto) {
         Member newMember = memberMapper.memberDtoToMember(memberSignupDto);
         newMember.setAuthorities();
         memberRepository.save(newMember);
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int modifyMember(MemberDto member) {
+    public int modifyMember(MemberRequestDto member) {
         return 0;
     }
 
@@ -83,6 +83,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean isExistsMemberId(String memberId) {
         return memberRepository.existsByMemberId(memberId);
+    }
+
+    @Override
+    public boolean isExistsMemberEmail(String email) {
+        return memberRepository.existsByMemberEmail(email);
     }
 
     /**
