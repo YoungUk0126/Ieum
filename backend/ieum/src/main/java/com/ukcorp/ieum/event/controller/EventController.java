@@ -87,7 +87,7 @@ public class EventController {
     }
   }
 
-  @DeleteMapping
+  @DeleteMapping("/{event-no}")
   public ResponseEntity<Map<String, Object>> deleteEvent(@PathVariable("event-no") Long eventNo) {
     try {
       eventService.deleteEvent(eventNo);
