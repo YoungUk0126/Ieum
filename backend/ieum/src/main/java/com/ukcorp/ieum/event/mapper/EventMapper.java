@@ -7,6 +7,8 @@ import com.ukcorp.ieum.event.entity.RegularEvent;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface EventMapper {
 
@@ -17,4 +19,6 @@ public interface EventMapper {
 
     @Mapping(source = "event.careInfo.careNo", target= "careNo")
     EventGetResponseDto RegularEventToEventGetResponseDto(RegularEvent event);
+
+    List<EventGetResponseDto> RegularEventEntityToResponseDto(List<RegularEvent> event);
 }
