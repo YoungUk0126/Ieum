@@ -36,7 +36,7 @@ public class EventControllerTest {
 
         String requestBody = "{\"care_no\": \"1\", \"event_name\": \"둘째 아들 생일\", \"event_date\": \"1998-01-26\"}";
 //        post
-        mock.perform(post("/api/event")
+        mock.perform(post("/api/ani")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -47,9 +47,9 @@ public class EventControllerTest {
     void testSelect() throws Exception {
 
 //        get(event-no)
-        mock.perform(get("/api/event/detail/1"))
+        mock.perform(get("/api/ani/detail/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
@@ -57,9 +57,9 @@ public class EventControllerTest {
     void testSelectList() throws Exception {
 
 //        get(care-no)
-        mock.perform(get("/api/event/list/1"))
+        mock.perform(get("/api/ani/list/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
@@ -68,7 +68,7 @@ public class EventControllerTest {
         String requestBody = "{\"event_no\" : \"1\", \"care_no\": \"1\", \"event_name\": \"둘째 아들 생일\", \"event_date\": \"1998-01-26\"}";;
 
 //        put
-        mock.perform(put("/api/event")
+        mock.perform(put("/api/ani")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -80,8 +80,8 @@ public class EventControllerTest {
     void testDelete() throws Exception {
 
 //        delete
-        mock.perform(delete("/api/care/1"))
+        mock.perform(delete("/api/ani/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 }

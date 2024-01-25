@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/event")
+@RequestMapping("/api/ani")
 @Slf4j
 public class EventController {
 
