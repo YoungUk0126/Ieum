@@ -5,6 +5,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import TheMessageViewVue from '@/views/TheMessageView.vue'
 import TheChatViewVue from '@/views/TheChatView.vue'
 import TheScheduleViewVue from '@/views/TheScheduleView.vue'
+import TheLoginViewVue from '@/views/TheLoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,6 +20,12 @@ const router = createRouter({
       path: '/register',
       name: 'TheRegisterView',
       component: TheRegisterViewVue
+    },
+    {
+      //로그인 페이지
+      path: '/login',
+      name: 'TheLoginView',
+      component: TheLoginViewVue
     },
     {
       //화상통화 페이지
