@@ -20,5 +20,7 @@ import TheVoiceVideoMessages from '@/components/main/TheVoiceVideoMessages.vue'
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: Work Sans;
+  font-weight: 700;
 }
 </style>
