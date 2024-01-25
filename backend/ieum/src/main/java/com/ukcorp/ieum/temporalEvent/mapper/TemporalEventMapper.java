@@ -20,12 +20,12 @@ public interface TemporalEventMapper {
 
   @Mapping(target = "event.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
-  TemporalEvent temporalEventUpdateRequestDtoAndCareInfoToMeal(TemporalEventUpdateRequestDto event, CareInfo care);
+  TemporalEvent temporalEventUpdateRequestDtoAndCareInfoToTemporalEvent(TemporalEventUpdateRequestDto event, CareInfo care);
 
   @Mapping(target = "eventNo", ignore = true)
   @Mapping(target = "event.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
-  TemporalEvent temporalEventInsertRequestDtoAndCareInfoToMeal(TemporalEventInsertRequestDto event, CareInfo care);
+  TemporalEvent temporalEventInsertRequestDtoAndCareInfoToTemporalEvent(TemporalEventInsertRequestDto event, CareInfo care);
 
 
 }

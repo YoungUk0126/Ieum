@@ -78,7 +78,8 @@ public class TemporalEventServiceImpl implements TemporalEventService {
       }
 
       CareInfo care = careGet.get();
-      TemporalEvent entity = temporalEventMapper.temporalEventInsertRequestDtoAndCareInfoToMeal(event,care);
+      TemporalEvent entity = temporalEventMapper
+              .temporalEventInsertRequestDtoAndCareInfoToTemporalEvent(event,care);
       temporalEventRepository.save(entity);
 
     } catch (RuntimeException e) {
@@ -95,7 +96,8 @@ public class TemporalEventServiceImpl implements TemporalEventService {
         throw new Exception("보호자 정보 조회 오류");
       }
       CareInfo care = careGet.get();
-      TemporalEvent entity = temporalEventMapper.temporalEventUpdateRequestDtoAndCareInfoToMeal(event,care);
+      TemporalEvent entity = temporalEventMapper
+              .temporalEventUpdateRequestDtoAndCareInfoToTemporalEvent(event,care);
       temporalEventRepository.save(entity);
 
     } catch (RuntimeException e) {
