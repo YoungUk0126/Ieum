@@ -28,8 +28,8 @@ public class MessageServiceImpl implements MessageService {
   public List<MessageResponseDto> getList(Long careNo) throws Exception {
     List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
     if(list == null || list.isEmpty()){
-      log.debug("등록된 일정이 없습니다");
-      throw new Exception("등록된 일정이 없습니다.");
+      log.debug("등록된 메세지이 없습니다");
+      throw new Exception("등록된 메세지이 없습니다.");
     }
     return messageMapper.MessageToMessageResponseDto(list);
   }
@@ -40,8 +40,8 @@ public class MessageServiceImpl implements MessageService {
     if(message.isPresent()){
       return messageMapper.MessageToResponseDto(message.get());
     }else{
-      log.debug("존재하지 않는 일정입니다.");
-      throw new Exception("존재하지 않는 일정입니다.");
+      log.debug("존재하지 않는 메세지입니다.");
+      throw new Exception("존재하지 않는 메세지입니다.");
     }
   }
 
@@ -57,6 +57,7 @@ public class MessageServiceImpl implements MessageService {
     try{
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
       if(careGet.isEmpty()){
+        log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
 
@@ -66,6 +67,7 @@ public class MessageServiceImpl implements MessageService {
       messageRepository.save(entity);
 
     } catch (RuntimeException e) {
+      log.debug("입력 오류!ㄴ");
       throw new Exception("입력 오류!");
     }
 
@@ -76,6 +78,7 @@ public class MessageServiceImpl implements MessageService {
     try{
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
       if(careGet.isEmpty()){
+        log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
       CareInfo care = careGet.get();
@@ -84,10 +87,9 @@ public class MessageServiceImpl implements MessageService {
       messageRepository.save(entity);
 
     } catch (RuntimeException e) {
+      log.debug("입력 오류!");
       throw new Exception("입력 오류!");
     }
 
   }
-
-
 }
