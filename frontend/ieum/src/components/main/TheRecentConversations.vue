@@ -3,7 +3,7 @@
     <div class="col-9">
       <h3>최근 대화 목록</h3>
       <div class="alarm-buttons">
-        <TheAnniversaryAlarm modalId="anniv"></TheAnniversaryAlarm>
+        <VModal></VModal>
         <div class="dropdown">
           <button
             class="btn btn-secondary dropdown-toggle alarm-btn"
@@ -63,7 +63,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import TheAnniversaryAlarm from '@/components/modal/TheAnniversaryAlarm.vue'
+import VModal from '../modal/VModal.vue'
 </script>
 
 <style scoped>
@@ -109,9 +109,9 @@ import TheAnniversaryAlarm from '@/components/modal/TheAnniversaryAlarm.vue'
   border: white;
 }
 
-/* .dropdown {
+.dropdown {
   display: inline-block;
-} */
+}
 
 .to-whole-conv {
   font-size: 13px;

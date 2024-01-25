@@ -12,34 +12,16 @@
         </button>
         <ul class="dropdown-menu">
           <li>
-            <div
-              class="dropdown-item"
-              dropdownId="anniv"
-              @click="changeModalBody('VModalAnniBody')"
-            >
-              기념일
-            </div>
+            <div class="dropdown-item" dropdownId="anniv" @click="goAnniv">기념일</div>
           </li>
           <li>
-            <a
-              class="dropdown-item"
-              dropdownId="wakeandsleep"
-              @click="changeModalBody('VModalWakeandSleep')"
-              >기상/취침</a
-            >
+            <a class="dropdown-item" dropdownId="wakeandsleep" @click="goWake">기상/취침</a>
           </li>
           <li>
-            <a
-              class="dropdown-item"
-              dropdownId="injection"
-              @click="changeModalBody('VModalInjection')"
-              >투약</a
-            >
+            <a class="dropdown-item" dropdownId="injection" @click="goInject">투약</a>
           </li>
           <li>
-            <a class="dropdown-item" dropdownId="meal" @click="changeModalBody('VModalMeal')"
-              >식사</a
-            >
+            <a class="dropdown-item" dropdownId="meal" @click="goMeal">식사</a>
           </li>
         </ul>
       </div>
@@ -59,8 +41,7 @@
         <div class="checkbox-box col-4">
           <input type="checkbox" class="btn btn-check" id="btncheck1" autocomplete="off" />
           <label class="btn btn-outline-secondary" for="btncheck1">매년 반복</label>
-          <div>기념일</div>
-          <component :is="currentModalComponent" />
+          <div>약</div>
         </div>
       </div>
     </div>
@@ -77,12 +58,14 @@ const props = defineProps(['modalId'])
 
 const modalId = ref(props.modalId)
 console.log(modalId.value)
-const currentModalComponent = ref('VModalAnniBody') // 초기값은 VModalAnniBody
 
-const changeModalBody = (componentName) => {
-  currentModalComponent.value = componentName
-  console.log(currentModalComponent)
-}
+const goAnniv = () => {}
+
+const goInject = () => {}
+
+const goMeal = () => {}
+
+const goWake = () => {}
 </script>
 
 <style scoped>
