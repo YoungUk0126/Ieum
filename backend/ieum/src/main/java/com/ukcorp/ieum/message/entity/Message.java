@@ -26,6 +26,9 @@ public class Message {
   @Column(name = "MESSAGE_NAME")
   private String messageName;
 
+  @Column(name = "MESSAGE_PEOPLE")
+  private String messagePeople;
+
   @Column(name = "MESSAGE_TYPE")
   private String messageType;
 

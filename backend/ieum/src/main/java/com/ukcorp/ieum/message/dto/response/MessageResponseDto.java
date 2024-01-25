@@ -17,6 +17,8 @@ public class MessageResponseDto {
 
   private Long careNo;
 
+  private String messagePeople;
+
   private String messageName;
 
   private String messageType;
