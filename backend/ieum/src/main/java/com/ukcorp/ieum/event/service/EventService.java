@@ -16,5 +16,5 @@ public interface EventService {
 
   void updateEvent(EventUpdateRequestDto event) throws Exception;
 
-  void deleteEvent(Long event);
+  void deleteEvent(Long eventNo);
 }

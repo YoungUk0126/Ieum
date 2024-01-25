@@ -25,5 +25,8 @@ public interface EventMapper {
   @Mapping(source = "care", target = "careInfo")
   RegularEvent EventUpdateRequestDtoAndCareInfoToRegualrEvent(EventUpdateRequestDto event, CareInfo care);
 
+
+
+  @Mapping(source = "event.careInfo.careNo", target = "careNo")
   List<EventGetResponseDto> RegularEventEntityToResponseDto(List<RegularEvent> event);
 }

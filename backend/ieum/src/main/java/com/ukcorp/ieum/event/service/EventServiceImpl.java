@@ -88,7 +88,7 @@ public class EventServiceImpl implements EventService {
 
   @Transactional
   @Override
-  public void deleteEvent(Long event) {
-
+  public void deleteEvent(Long eventNo) {
+    eventRepository.deleteById(eventNo);
   }
 }
