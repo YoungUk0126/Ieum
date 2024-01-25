@@ -1,8 +1,10 @@
 package com.ukcorp.ieum.event.controller;
 
 
+import com.ukcorp.ieum.event.dto.request.EventInsertRequestDto;
 import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
 import com.ukcorp.ieum.event.service.EventServiceImpl;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,22 @@ public class EventController {
             EventGetResponseDto eventGetResponseDto = eventService.getEvent(eventNo);
             return handleSuccess(eventGetResponseDto);
         } catch (Exception e){
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    /**
+     * 일정 등록
+     * @param event
+     * @return
+     */
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody EventInsertRequestDto event) {
+        try{
+            eventService.insertEvent(event);
+            return handleSuccess(event);
+        }catch (Exception e){
             log.debug(e.getMessage());
             return handleError("Fail");
         }

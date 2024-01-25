@@ -1,5 +1,7 @@
 package com.ukcorp.ieum.event.service;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.event.dto.request.EventInsertRequestDto;
 import com.ukcorp.ieum.event.dto.request.EventUpdateRequestDto;
 import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
@@ -21,13 +23,27 @@ import java.util.Optional;
 public class EventServiceImpl implements EventService{
 
     private final EventRepository eventRepository;
+    private final CareRepository careRepository;
     private final EventMapper eventMapper;
 
 
     @Transactional
     @Override
-    public void insertEvent(EventInsertRequestDto event) {
+    public void insertEvent(EventInsertRequestDto event) throws Exception{
+        try{
+            Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
+            if(careGet.isEmpty()){
+                throw new Exception("보호자 정보 조회 오류");
+            }
 
+            CareInfo care = careGet.get();
+            RegularEvent entity = eventMapper
+                    .eventInsertRequestDtoAndCareToRegularEvent(event,care);
+            eventRepository.save(entity);
+
+        } catch (RuntimeException e) {
+            throw new Exception("입력 오류!");
+        }
     }
 
     @Override
