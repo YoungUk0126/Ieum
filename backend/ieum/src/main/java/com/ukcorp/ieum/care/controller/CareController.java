@@ -27,7 +27,7 @@ public class CareController {
      */
     @PostMapping
     private ResponseEntity<Map<String, Object>> insertCareInfo(@RequestBody CareInsertRequestDto careDto) {
-        log.debug(careDto.toString());
+
         try {
             careService.insertCareInfo(careDto);
             return handleSuccess(careDto);
@@ -44,6 +44,7 @@ public class CareController {
 
     @GetMapping("/{care-no}")
     private ResponseEntity<Map<String, Object>> getCareInfo(@PathVariable("care-no") Long careNo) {
+
         try {
             CareGetResponseDto careDto = careService.getCareInfo(careNo);
             return handleSuccess(careDto);
@@ -69,6 +70,7 @@ public class CareController {
 
     @DeleteMapping("/{care-no}")
     private ResponseEntity<Map<String, Object>> deleteCareInfo(@PathVariable("care-no") Long careNo) {
+
         try {
             careService.deleteCareInfo(careNo);
             return handleSuccess("");

@@ -25,17 +25,15 @@ public class CareServiceImpl implements CareService{
     @Transactional
     @Override
     public void insertCareInfo(CareInsertRequestDto careDto) throws Exception {
-        System.out.println("========careDTO=======");
-        System.out.println(careDto.toString());
+
         CareInfo care = careMapper.careInsertRequestDtoToCareInfo(careDto);
-
-        System.out.println(care.toString());
-
         careRepository.save(care);
+
     }
 
     @Override
     public CareGetResponseDto getCareInfo(Long careNo) throws Exception {
+
         Optional<CareInfo> tempCareInfo = careRepository.findById(careNo);
         if(tempCareInfo.isPresent()) {
             CareInfo care = tempCareInfo.get();
@@ -44,11 +42,13 @@ public class CareServiceImpl implements CareService{
         } else {
             throw new Exception("피보호자 데이터가 존재하지 않습니다.");
         }
+
     }
 
     @Transactional
     @Override
     public void updateCareInfo(CareUpdateRequestDto careDto) throws Exception {
+
         Optional<CareInfo> tempCareInfo = careRepository.findById(careDto.getCareNo());
         if(tempCareInfo.isPresent()) {
             CareInfo care = careMapper.CareUpdateRequestDtoToCareInfo(careDto);
@@ -56,6 +56,7 @@ public class CareServiceImpl implements CareService{
         } else {
             throw new Exception("수정할 피보호자 정보가 없습니다.");
         }
+
     }
 
     @Transactional
