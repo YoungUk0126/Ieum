@@ -4,6 +4,7 @@ import TheCallViewVue from '@/views/TheCallView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import TheMessageViewVue from '@/views/TheMessageView.vue'
 import TheChatViewVue from '@/views/TheChatView.vue'
+import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/chat',
       name: 'TheChatView',
       component: TheChatViewVue
+    },
+    {
+      path: '/schedule',
+      name: 'TheScheduleView',
+      component: TheScheduleViewVue
     }
     // {
     //   path: '/board',
