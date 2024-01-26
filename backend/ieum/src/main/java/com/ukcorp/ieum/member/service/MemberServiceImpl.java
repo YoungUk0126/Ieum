@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.member.service;
 
+import com.ukcorp.ieum.jwt.MemberDetails;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
@@ -8,6 +9,7 @@ import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;

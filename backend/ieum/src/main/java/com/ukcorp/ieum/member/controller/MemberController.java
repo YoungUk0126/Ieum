@@ -9,6 +9,8 @@ import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberServiceImpl memberService;
@@ -34,6 +37,8 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtToken> loginMember(@RequestBody LoginDto loginDto) {
+        log.info("로그인한 회원 아이디 >> " + loginDto.getMemberId());
+        log.info("로그인한 회원 비밀번호 >> " + loginDto.getPassword());
         JwtToken jwtToken = memberService.login(loginDto);
 
         // Header에  토큰 설정
@@ -78,6 +83,20 @@ public class MemberController {
         else {
             return handleSuccess(1);
         }
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<Map<String, Object>> test() {
+        String memberId = JwtUtil.getUserId().get();
+        log.info(memberId);
+        Long careNo = JwtUtil.getCareNo().get();
+        log.info(careNo.toString());
+
+        Map<String, Object> result = new HashMap<>();
+        result.put("memberId", memberId);
+        result.put("careNo", careNo);
+
+        return handleSuccess(result);
     }
 
 

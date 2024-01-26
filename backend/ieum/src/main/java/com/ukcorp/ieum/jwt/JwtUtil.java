@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.jwt;
 
+import io.jsonwebtoken.Claims;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -26,13 +27,36 @@ public class JwtUtil {
         }
 
         String userId = null;
-        if (authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails loginUser = (UserDetails) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof UserDetails loginUser) {
             userId = loginUser.getUsername();
         } else if (authentication.getPrincipal() instanceof String) {
             userId = (String) authentication.getPrincipal();
         }
 
         return Optional.ofNullable(userId);
+    }
+
+    /**
+     * 토큰에서 careNo 얻어오는 Method
+     *
+     * @return careNo
+     */
+    public static Optional<Long> getCareNo() {
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null) {
+            log.debug("Security Context에 인증 정보가 없습니다.");
+            return Optional.empty();
+        }
+
+        Long careNo = null;
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            MemberDetails loginUser = (MemberDetails) authentication.getPrincipal();
+            careNo = loginUser.getCareNo();
+        } else if (authentication.getPrincipal() instanceof Long) {
+            careNo = (Long) authentication.getPrincipal();
+        }
+
+        return Optional.ofNullable(careNo);
     }
 }

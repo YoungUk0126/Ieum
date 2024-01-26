@@ -92,12 +92,19 @@ public class TokenProvider implements InitializingBean {
     private String createAccessToken(Authentication authentication, String authorities) {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.ACCESS_VALIDITY_SECONDS);
+        MemberDetails principal = (MemberDetails) authentication.getPrincipal();
+        log.info("principal에서 받아온 careNo >> " + principal.getCareNo());
+
+        Claims claims = Jwts.claims()
+                .setSubject(authentication.getName())
+                .setExpiration(validity);
+
+        claims.put(AUTHORITIES_KEY, authorities);
+        claims.put("careNo", principal.getCareNo());
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setClaims(claims)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
                 .compact();
     }
 
@@ -177,7 +184,10 @@ public class TokenProvider implements InitializingBean {
                         .collect(Collectors.toList());
 
         // 권한 정보로 User 객체 만들기
-        User principal = new User(claims.getSubject(), "", authorities);
+        MemberWithCareNo principal = new MemberWithCareNo(claims.getSubject(),
+                "",
+                Long.valueOf(String.valueOf(claims.get("careNo"))),
+                authorities);
 
         // 유저, 토큰, 권한 정보로 Authentication 생성 후 반환
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
