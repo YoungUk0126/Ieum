@@ -27,6 +27,7 @@ public class EventController {
    * 피보호자의 FK로 피보호자 기념일 정보 리스트를 반환하는 기능
    *
    * @param careNo
+   * @return List<EventGetResponseDto>
    */
   @GetMapping("/list/{care-no}")
   public ResponseEntity getEventList(@PathVariable("care-no") Long careNo) {
@@ -45,8 +46,9 @@ public class EventController {
    * 기념일의 pk로 피보호자 기념일 정보를 반환하는 기능
    *
    * @param eventNo
+   * @return eventGetResponseDto
+   *
    */
-  // TODO : 기념일 정보 상세 조회
   @GetMapping("/detail/{event-no}")
   public ResponseEntity<Map<String, Object>> getEvent(@PathVariable("event-no") Long eventNo) {
 
@@ -60,7 +62,7 @@ public class EventController {
   }
 
   /**
-   * 일정 등록
+   * 기념일 등록
    *
    * @param event
    * @return
@@ -76,6 +78,12 @@ public class EventController {
     }
   }
 
+  /**
+   * 기념일 수정
+   *
+   * @param event
+   * @return
+   */
   @PutMapping
   public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody EventUpdateRequestDto event) {
     try {
@@ -86,7 +94,12 @@ public class EventController {
       return handleError("Fail");
     }
   }
-
+  /**
+   * 기념일 삭제
+   *
+   * @param eventNo
+   * @return
+   */
   @DeleteMapping("/{event-no}")
   public ResponseEntity<Map<String, Object>> deleteEvent(@PathVariable("event-no") Long eventNo) {
     try {

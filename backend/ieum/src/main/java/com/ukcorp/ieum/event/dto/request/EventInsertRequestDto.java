@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class EventInsertRequestDto {
-    private Long careNo;
-    private String eventName;
-    private LocalDate eventDate;
+  private Long careNo;
+  private String eventName;
+  private LocalDate eventDate;
 }
