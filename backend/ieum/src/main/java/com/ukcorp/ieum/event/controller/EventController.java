@@ -5,7 +5,7 @@ import com.ukcorp.ieum.event.dto.request.EventInsertRequestDto;
 import com.ukcorp.ieum.event.dto.request.EventUpdateRequestDto;
 import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
 import com.ukcorp.ieum.event.service.EventServiceImpl;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/ani")
 @Slf4j
 public class EventController {
