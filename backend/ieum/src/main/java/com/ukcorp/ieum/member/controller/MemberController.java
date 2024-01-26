@@ -97,6 +97,23 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/check-phone")
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(
+            @RequestBody
+            @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Invalid phone number format") String phone) {
+        boolean isExists = memberService.isExistsMemberPhone(phone);
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 이메일인 경우
+            response.put("isDuplicated", true);
+            return handleFail(response);
+        } else {
+            // 사용 가능한 이메일인 경우
+            response.put("isDuplicated", false);
+            return handleSuccess(response);
+        }
+    }
+
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();

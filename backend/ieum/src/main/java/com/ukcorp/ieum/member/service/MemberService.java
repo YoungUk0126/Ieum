@@ -22,6 +22,8 @@ public interface MemberService {
 
     boolean isExistsMemberEmail(String email);
 
+    boolean isExistsMemberPhone(String phone);
+
     JwtToken refreshAccessToken(String refreshToken);
 
 //    int updateMember(MemberDto member);

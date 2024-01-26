@@ -90,6 +90,11 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByMemberEmail(email);
     }
 
+    @Override
+    public boolean isExistsMemberPhone(String phone) {
+        return memberRepository.existsByMemberPhone(phone);
+    }
+
     /**
      * RefreshToken으로 Token 재발급
      * @param refreshToken
