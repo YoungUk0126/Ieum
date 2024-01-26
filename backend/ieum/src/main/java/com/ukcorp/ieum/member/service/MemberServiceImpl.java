@@ -1,5 +1,7 @@
 package com.ukcorp.ieum.member.service;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final CareRepository careRepository;
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -37,7 +40,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void signup(MemberRequestDto memberSignupDto) {
         Member newMember = memberMapper.memberDtoToMember(memberSignupDto);
-        newMember.setAuthorities();
+        CareInfo careInfo = CareInfo.builder().build();
+        CareInfo savedCareInfo = careRepository.save(careInfo);
+        newMember.setNewMember(savedCareInfo);
         memberRepository.save(newMember);
     }
 
