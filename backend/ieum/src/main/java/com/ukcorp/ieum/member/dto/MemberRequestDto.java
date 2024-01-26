@@ -11,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class MemberDto {
+public class MemberRequestDto {
     @NotEmpty(message = "Member ID cannot be empty")
     private String memberId;
 

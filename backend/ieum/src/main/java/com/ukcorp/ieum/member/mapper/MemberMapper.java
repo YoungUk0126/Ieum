@@ -1,12 +1,11 @@
 package com.ukcorp.ieum.member.mapper;
 
-import com.ukcorp.ieum.member.dto.MemberDto;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
@@ -20,7 +19,7 @@ public interface MemberMapper {
     @Mapping(target = "serialCode", ignore = true)
     @Mapping(target = "withdrawal", ignore = true)
     @Mapping(target = "authorities", ignore = true)
-    Member memberDtoToMember(MemberDto member);
+    Member memberDtoToMember(MemberRequestDto member);
 
     @Named("encryptPassword")
     default String encryptPassword(String password) {
