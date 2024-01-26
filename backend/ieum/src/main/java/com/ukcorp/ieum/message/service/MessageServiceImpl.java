@@ -11,6 +11,7 @@ import com.ukcorp.ieum.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MessageServiceImpl implements MessageService {
 
   private final MessageMapper messageMapper;
@@ -47,12 +49,14 @@ public class MessageServiceImpl implements MessageService {
 
 
   @Override
+  @Transactional
   public void deleteMessage(Long messageNo) {
     messageRepository.deleteById(messageNo);
   }
 
 
   @Override
+  @Transactional
   public void registMessage(MessageInsertRequestDto message) throws Exception {
     try {
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
@@ -74,6 +78,7 @@ public class MessageServiceImpl implements MessageService {
   }
 
   @Override
+  @Transactional
   public void modifyMessage(MessageUpdateRequestDto message) throws Exception {
     try {
       Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
