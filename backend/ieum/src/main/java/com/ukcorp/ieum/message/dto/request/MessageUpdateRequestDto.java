@@ -22,5 +22,5 @@ public class MessageUpdateRequestDto {
 
   private String messageType;
 
-  private LocalDate sendDate;
+  private LocalDate messageTime;
 }

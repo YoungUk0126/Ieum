@@ -32,7 +32,7 @@ public class Message {
   @Column(name = "MESSAGE_TYPE")
   private String messageType;
 
-  @Column(name = "SEND_DATE")
-  private LocalDate sendDate;
+  @Column(name = "MESSAGE_TIME")
+  private LocalDate messageTime;
 
 }

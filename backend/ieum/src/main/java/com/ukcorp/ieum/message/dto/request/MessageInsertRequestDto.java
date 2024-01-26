@@ -21,5 +21,5 @@ public class MessageInsertRequestDto {
 
   private String messageType;
 
-  private LocalDate sendDate;
+  private LocalDate messageTime;
 }

@@ -23,5 +23,5 @@ public class MessageResponseDto {
 
   private String messageType;
 
-  private LocalDate sendDate;
+  private LocalDate messageTime;
 }

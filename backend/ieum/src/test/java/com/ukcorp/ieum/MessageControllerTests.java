@@ -36,7 +36,7 @@ class MessageControllerTests {
             "\"care_no\": \"1\", " +
             "\"message_name\": \"sds.mp3\"," +
             "\"message_type\": \"video\"," +
-            "\"send_date\": \"2024-01-15\"," +
+            "\"message_time\": \"2024-01-15\"," +
             "\"message_people\": \"딸\"" +
             "}";
 
@@ -86,7 +86,7 @@ class MessageControllerTests {
             "\"care_no\": \"1\", " +
             "\"message_name\": \"update.mp3\"," +
             "\"message_type\": \"video\"," +
-            "\"send_date\": \"2024-01-15\"," +
+            "\"message_time\": \"2024-01-15\"," +
             "\"message_people\": \"딸\"" +
             "}";
 
