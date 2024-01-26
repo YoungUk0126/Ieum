@@ -5,6 +5,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface IotService {
 
-    void registDevice(String code);
-    void updateDeviceInfo(String code);
+    void registDevice(String memberId, String code);
+    void updateDeviceInfo(String memberId, String code);
 }
