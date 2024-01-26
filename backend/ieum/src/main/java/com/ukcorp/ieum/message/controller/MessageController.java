@@ -9,7 +9,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,9 +85,14 @@ public class MessageController {
    * @return
    */
   @PostMapping
-  public ResponseEntity<Map<String, Object>> postsMessage(@RequestBody MessageInsertRequestDto message) {
+  public ResponseEntity<Map<String, Object>> postsMessage(@ModelAttribute MessageInsertRequestDto message) {
     try {
+
+      uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
+
+      // 메세지에 대한 정보 저장
       messageService.registMessage(message);
+
       return handleSuccess("");
     } catch (Exception e) {
       log.debug(e.getMessage());
@@ -100,6 +109,8 @@ public class MessageController {
   @PutMapping
   public ResponseEntity<Map<String, Object>> putMessage(@RequestBody MessageUpdateRequestDto message) {
     try {
+      uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
+
       messageService.modifyMessage(message);
       return handleSuccess("");
     } catch (Exception e) {
@@ -108,6 +119,20 @@ public class MessageController {
     }
   }
 
+
+  public static void uploadFile(String name, MultipartFile file, String type) throws IOException {
+    // 파일 저장 디렉토리 경로
+    String uploadDir = ".";
+    // 업로드 날라온 파일 저장
+    String fileName = name;
+    if(type.equals("VIDEO")){
+      fileName += ".mp4";
+    }else{
+      fileName += ".ogg";
+    }
+    Path filePath = Paths.get(uploadDir, fileName);
+    file.transferTo(filePath); // 파일 다운로드
+  }
 
   private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
     Map<String, Object> result = new HashMap<>();
