@@ -4,6 +4,10 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Time;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Entity
 @Getter
 @ToString
@@ -23,9 +27,9 @@ public class SleepInfo {
     private CareInfo careInfo;
 
     @Column(name = "SLEEP_START_TIME")
-    private Long sleepStartTime;
+    private Time sleepStartTime;
 
-    @Column(name = "SLEEP_End_TIME")
-    private Long sleepEndTime;
+    @Column(name = "SLEEP_END_TIME")
+    private Time sleepEndTime;
 }
 
