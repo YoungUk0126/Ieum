@@ -87,9 +87,9 @@ public class MessageController {
   @PostMapping
   public ResponseEntity<Map<String, Object>> postsMessage(@ModelAttribute MessageInsertRequestDto message) {
     try {
-
+      System.out.println(message);
       uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
-
+      System.out.println("저장 성공");
       // 메세지에 대한 정보 저장
       messageService.registMessage(message);
 
@@ -122,7 +122,7 @@ public class MessageController {
 
   public static void uploadFile(String name, MultipartFile file, String type) throws IOException {
     // 파일 저장 디렉토리 경로
-    String uploadDir = ".";
+    String uploadDir = "./messageFile/";
     // 업로드 날라온 파일 저장
     String fileName = name;
     if(type.equals("VIDEO")){
