@@ -14,10 +14,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class TemporalEventServiceImpl implements TemporalEventService {
 
   private final TemporalEventMapper temporalEventMapper;
@@ -61,6 +63,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
    * @param eventNo
    */
   @Override
+  @Transactional
   public void deleteEvent(Long eventNo){
     temporalEventRepository.deleteById(eventNo);
   }
@@ -70,6 +73,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
    * @param event
    */
   @Override
+  @Transactional
   public void registEvent(TemporalEventInsertRequestDto event) throws Exception {
     try{
       Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
@@ -89,6 +93,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   }
 
   @Override
+  @Transactional
   public void modifyEvent(TemporalEventUpdateRequestDto event) throws Exception {
     try{
       Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
