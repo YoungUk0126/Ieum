@@ -16,7 +16,7 @@ public class MessageInsertRequestDto {
 
   private Long careNo;
 
-  private String messagePeople;
+  private String messageSender;
 
   private String messageName;
 

@@ -17,7 +17,7 @@ public class MessageUpdateRequestDto {
 
   private Long careNo;
 
-  private String messagePeople;
+  private String messageSender;
 
   private String messageName;
 
