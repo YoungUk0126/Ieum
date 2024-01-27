@@ -15,7 +15,6 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
@@ -94,12 +93,11 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Transactional
   public void registEvent(TemporalEventInsertRequestDto event) throws Exception {
     try{
-      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
-      if(careGet.isEmpty()){
+      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
+      if(care == null){
         throw new Exception("보호자 정보 조회 오류");
       }
 
-      CareInfo care = careGet.get();
       TemporalEvent entity = temporalEventMapper
               .temporalEventInsertRequestDtoAndCareInfoToTemporalEvent(event,care);
       temporalEventRepository.save(entity);
@@ -121,11 +119,11 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Transactional
   public void modifyEvent(TemporalEventUpdateRequestDto event) throws Exception {
     try{
-      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
-      if(careGet.isEmpty()){
+      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
+      if(care == null){
         throw new Exception("보호자 정보 조회 오류");
       }
-      CareInfo care = careGet.get();
+
       TemporalEvent check = temporalEventRepository.findById(event.getEventNo()).orElse(null);
       if(check == null){
         throw new Exception("일정 조회 오류");
