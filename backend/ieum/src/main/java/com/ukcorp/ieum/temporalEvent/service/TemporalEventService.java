@@ -9,7 +9,7 @@ import java.util.List;
 public interface TemporalEventService {
   List<TemporalEventResponseDto> getList(Long careNo) throws Exception;
   TemporalEventResponseDto getDetail(Long eventNo) throws Exception;
-  void deleteEvent(Long eventNo);
+  void deleteEvent(Long eventNo) throws Exception;
   void registEvent(TemporalEventInsertRequestDto event) throws Exception;
 
   void modifyEvent(TemporalEventUpdateRequestDto event) throws Exception;
