@@ -2,7 +2,7 @@ package com.ukcorp.ieum.member.controller;
 
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.LoginDto;
+import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
@@ -25,15 +25,15 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/join")
-    public ResponseEntity joinMember(@Valid @RequestBody MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> joinMember(@Valid @RequestBody MemberRequestDto member) {
 
         memberService.signup(member);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return handleSuccess("success");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtToken> loginMember(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<JwtToken> loginMember(@RequestBody MemberLoginRequestDto loginDto) {
         JwtToken jwtToken = memberService.login(loginDto);
 
         // Header에  토큰 설정
@@ -43,6 +43,14 @@ public class MemberController {
 
         return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logoutMember() {
+        memberService.logout();
+
+        return handleSuccess("success");
+    }
+
 
     @PutMapping("/modify")
     public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
@@ -104,11 +112,11 @@ public class MemberController {
         boolean isExists = memberService.isExistsMemberPhone(phone);
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
-            // 이미 존재하는 이메일인 경우
+            // 이미 존재하는 핸드폰 번호인 경우
             response.put("isDuplicated", true);
             return handleFail(response);
         } else {
-            // 사용 가능한 이메일인 경우
+            // 사용 가능한 핸드폰 번호인 경우
             response.put("isDuplicated", false);
             return handleSuccess(response);
         }
@@ -140,7 +148,7 @@ public class MemberController {
 
     @GetMapping("/refresh")
     private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken);
 
         // Header에  토큰 설정
         HttpHeaders httpHeaders = new HttpHeaders();

@@ -2,9 +2,10 @@ package com.ukcorp.ieum.member.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.LoginDto;
+import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
@@ -53,17 +54,24 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public JwtToken login(LoginDto loginDto) {
+    public JwtToken login(MemberLoginRequestDto loginDto) {
         // username + password 를 기반으로 Authentication 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
 
         // 검증 진행 (MemberDetailsService의 loadUserByUsername 메서드 실행
-        Authentication authentication = authenticationManagerBuilder
-                .getObject().authenticate(authenticationToken);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         // 인증 정보 기반으로 Token 생성
         return tokenProvider.createToken(authentication);
+    }
+
+    @Override
+    public void logout() {
+        String logoutMember = JwtUtil.getUserId()
+                .orElseThrow(() -> new RuntimeException("NOT FOUND MEMBER"));
+
+        // 로그아웃 시 Redis에서 RefreshToken 삭제
+        tokenProvider.deleteRefreshTokenFromRedis(logoutMember);
     }
 
     @Override
@@ -102,6 +110,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * RefreshToken으로 Token 재발급
+     *
      * @param refreshToken
      * @return JwtToken(AccessToken + RefreshToken)
      */
@@ -112,20 +121,13 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findByMemberId(memberId).get();
 
         // 가져온 member로 authorities 생성
-        Set<GrantedAuthority> authorities = member.getAuthorities().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = member.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
 
         // 새로운 AccessToken을 위한 UserDetails
-        UserDetails memberDetails = User.builder()
-                .username(member.getMemberId())
-                .password(member.getMemberPassword())
-                .authorities(authorities)
-                .build();
+        UserDetails memberDetails = User.builder().username(member.getMemberId()).password(member.getMemberPassword()).authorities(authorities).build();
 
         // DB 정보로 authentication 생성
-        Authentication authentication =
-                new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
 
         // 인증 정보 기반으로 Token 생성
         return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);

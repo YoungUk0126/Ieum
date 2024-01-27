@@ -2,7 +2,7 @@ package com.ukcorp.ieum.member.service;
 
 
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.LoginDto;
+import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.entity.Member;
 
@@ -10,7 +10,9 @@ public interface MemberService {
 
     void signup(MemberRequestDto memberSignupDto);
 
-    JwtToken login(LoginDto loginDto);
+    JwtToken login(MemberLoginRequestDto loginDto);
+
+    void logout();
 
     int modifyMember(MemberRequestDto memberModifyDto);
 
