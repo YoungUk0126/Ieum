@@ -10,11 +10,12 @@ import com.ukcorp.ieum.message.mapper.MessageMapper;
 import com.ukcorp.ieum.message.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,30 +29,45 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public List<MessageResponseDto> getList(Long careNo) throws Exception {
-    List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
-    if (list == null || list.isEmpty()) {
-      log.debug("등록된 메세지이 없습니다");
-      throw new Exception("등록된 메세지이 없습니다.");
+    try{
+      List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
+      if (list.isEmpty()) {
+        log.debug("등록된 메세지이 없습니다");
+        throw new Exception("등록된 메세지이 없습니다.");
+      }
+      return messageMapper.MessageToMessageResponseDto(list);
+    }catch (RuntimeException e) {
+      log.debug("조회하는데 오류가 있습니다");
+      throw new Exception("조회 오류!");
     }
-    return messageMapper.MessageToMessageResponseDto(list);
   }
 
   @Override
   public MessageResponseDto getDetail(Long messageNo) throws Exception {
-    Optional<Message> message = messageRepository.findById(messageNo);
-    if (message.isPresent()) {
-      return messageMapper.MessageToResponseDto(message.get());
-    } else {
-      log.debug("존재하지 않는 메세지입니다.");
-      throw new Exception("존재하지 않는 메세지입니다.");
+    try{
+      Message message = messageRepository.findById(messageNo).orElse(null);
+      if (message != null) {
+        return messageMapper.MessageToResponseDto(message);
+      } else {
+        log.debug("존재하지 않는 메세지입니다.");
+        throw new Exception("존재하지 않는 메세지입니다.");
+      }
+    }catch (RuntimeException e) {
+      log.debug("조회하는데 오류가 있습니다");
+      throw new Exception("조회 오류!");
     }
   }
 
 
   @Override
   @Transactional
-  public void deleteMessage(Long messageNo) {
-    messageRepository.deleteById(messageNo);
+  public void deleteMessage(Long messageNo) throws Exception {
+    try {
+      messageRepository.deleteById(messageNo);
+    }catch (EmptyResultDataAccessException e) {
+      log.debug("삭제 오류");
+      throw new Exception("삭제 오류!");
+    }
   }
 
 
@@ -59,21 +75,21 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void registMessage(MessageInsertRequestDto message) throws Exception {
     try {
-      Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
-      if (careGet.isEmpty()) {
+      CareInfo care = careRepository.findById(message.getCareNo()).orElse(null);
+      if (care == null) {
         log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
 
-      CareInfo care = careGet.get();
       Message entity = messageMapper
               .messageInsertRequestDtoAndCareInfoToMessage(message, care);
       messageRepository.save(entity);
 
-    } catch (RuntimeException e) {
-      log.debug("입력 오류!ㄴ");
-      throw new Exception("입력 오류!");
+    } catch (DataIntegrityViolationException e) {
+      log.debug("등록 오류");
+      throw new Exception("등록 오류!");
     }
+
 
   }
 
@@ -81,20 +97,24 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void modifyMessage(MessageUpdateRequestDto message) throws Exception {
     try {
-      Optional<CareInfo> careGet = careRepository.findById(message.getCareNo());
-      if (careGet.isEmpty()) {
+      CareInfo care = careRepository.findById(message.getCareNo()).orElse(null);
+      if (care == null) {
         log.debug("보호자 정보 조회 오류.");
         throw new Exception("보호자 정보 조회 오류");
       }
-      CareInfo care = careGet.get();
+
+      Message check = messageRepository.findById(message.getMessageNo()).orElse(null);
+      if(check == null){
+        throw new Exception("메세지 조회 오류");
+      }
+
       Message entity = messageMapper
               .messageUpdateRequestDtoAndCareInfoToMessage(message, care);
       messageRepository.save(entity);
 
-    } catch (RuntimeException e) {
-      log.debug("입력 오류!");
-      throw new Exception("입력 오류!");
+    } catch (DataIntegrityViolationException e) {
+      log.debug("수정하는데 오류가 있습니다");
+      throw new Exception("수정 오류!");
     }
-
   }
 }

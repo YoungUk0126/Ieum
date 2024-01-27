@@ -11,7 +11,7 @@ public interface MessageService {
 
   MessageResponseDto getDetail(Long messageNo) throws Exception;
 
-  void deleteMessage(Long messageNo);
+  void deleteMessage(Long messageNo) throws Exception;
 
   void registMessage(MessageInsertRequestDto message) throws Exception;
 
