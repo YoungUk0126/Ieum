@@ -14,19 +14,19 @@ import java.time.LocalDate;
 @ToString
 public class RegularEvent {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "EVENT_NO")
-    private Long eventNo;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "EVENT_NO")
+  private Long eventNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CARE_NO")
-    private CareInfo careInfo;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "CARE_NO")
+  private CareInfo careInfo;
 
-    @Column(name = "EVENT_NAME")
-    private String eventName;
+  @Column(name = "EVENT_NAME")
+  private String eventName;
 
-    @Column(name = "EVENT_DATE")
-    private LocalDate eventDate;
+  @Column(name = "EVENT_DATE")
+  private LocalDate eventDate;
 
 }

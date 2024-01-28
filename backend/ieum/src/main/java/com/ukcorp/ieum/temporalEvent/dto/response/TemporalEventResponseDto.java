@@ -1,7 +1,6 @@
-package com.ukcorp.ieum.temporalEvent.dto;
+package com.ukcorp.ieum.temporalEvent.dto.response;
 
 
-import com.ukcorp.ieum.care.entity.CareInfo;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -12,11 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @ToString
 @Builder
-public class TemporalEventDto {
+public class TemporalEventResponseDto {
 
   private Long eventNo;
 
-  private CareInfo careInfo;
+  private Long careNo;
 
   private String eventName;
 

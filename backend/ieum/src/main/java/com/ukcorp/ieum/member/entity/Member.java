@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.member.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.member.entity.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -49,12 +50,12 @@ public class Member {
     private Withdrawal withdrawal;
 
     @Column(name = "role")
-    @Enumerated(EnumType.STRING)
-    private List<Authority> authorities;
+    @Convert(converter = StringListConverter.class)
+    private List<String> authorities;
 
     public void setAuthorities() {
-        List<Authority> auth = new ArrayList<>();
-        auth.add(Authority.ROLE_USER);
+        List<String> auth = new ArrayList<>();
+        auth.add("ROLE_USER");
         this.authorities = auth;
     }
 }

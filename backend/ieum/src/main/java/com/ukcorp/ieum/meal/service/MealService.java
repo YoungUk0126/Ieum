@@ -1,15 +1,13 @@
 package com.ukcorp.ieum.meal.service;
 
-import com.ukcorp.ieum.meal.dto.MealDto;
-import com.ukcorp.ieum.meal.dto.request.MealRequestDto;
-import com.ukcorp.ieum.meal.dto.response.MealResponseDto;
+import com.ukcorp.ieum.meal.dto.request.MealUpdateRequestDto;
+import com.ukcorp.ieum.meal.dto.response.MealGetResponseDto;
+import com.ukcorp.ieum.meal.dto.request.MealInsertRequestDto;
 
 public interface MealService {
-    MealResponseDto getMeal(Long careNo) throws Exception;
 
-    void insertMeal(MealRequestDto mealRequestDto) throws Exception;
-
+    void insertMeal(MealInsertRequestDto mealInsertRequestDto) throws Exception;
+    MealGetResponseDto getMeal(Long careNo) throws Exception;
+    void updateMeal(MealUpdateRequestDto mealUpdateRequestDto)throws Exception;
     void deleteMeal(Long mealInfoNo) throws Exception;
-
-    void updateMeal(MealDto mealDto)throws Exception;
 }

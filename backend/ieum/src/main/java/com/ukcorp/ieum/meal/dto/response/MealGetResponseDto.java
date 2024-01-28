@@ -1,4 +1,5 @@
-package com.ukcorp.ieum.meal.dto.request;
+package com.ukcorp.ieum.meal.dto.response;
+
 
 import lombok.*;
 
@@ -7,9 +8,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MealRequestDto {
+public class MealGetResponseDto {
+    private Long mealInfoNo;
+    private Long careNo;
     private Long mealTime1;
     private Long mealTime2;
     private Long mealTime3;
-    private Long careNo;
+
 }

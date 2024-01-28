@@ -1,8 +1,8 @@
 package com.ukcorp.ieum.meal.controller;
 
-import com.ukcorp.ieum.meal.dto.MealDto;
-import com.ukcorp.ieum.meal.dto.request.MealRequestDto;
-import com.ukcorp.ieum.meal.dto.response.MealResponseDto;
+import com.ukcorp.ieum.meal.dto.request.MealUpdateRequestDto;
+import com.ukcorp.ieum.meal.dto.response.MealGetResponseDto;
+import com.ukcorp.ieum.meal.dto.request.MealInsertRequestDto;
 import com.ukcorp.ieum.meal.service.MealServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +29,8 @@ public class MealController {
     public ResponseEntity<Map<String, Object>> getMeal(@PathVariable("care-no") Long careNo) {
 
         try{
-            MealResponseDto mealResponseDto = mealService.getMeal(careNo);
-            return handleSuccess(mealResponseDto);
+            MealGetResponseDto mealGetResponseDto = mealService.getMeal(careNo);
+            return handleSuccess(mealGetResponseDto);
         } catch (Exception e){
             log.debug(e.getMessage());
             return handleError("Fail");
@@ -39,13 +39,13 @@ public class MealController {
 
     /**
      * PK를 제외한 데이터를 받아 Entity로 변환하여 DB에 데이터를 넣는 기능
-     * @param mealRequestDto
+     * @param mealInsertRequestDto
      */
     @PostMapping
-    public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealRequestDto mealRequestDto) {
+    public ResponseEntity<Map<String, Object>> insertMeal(@RequestBody MealInsertRequestDto mealInsertRequestDto) {
         try {
-            mealService.insertMeal(mealRequestDto);
-            return handleSuccess("");
+            mealService.insertMeal(mealInsertRequestDto);
+            return handleSuccess(mealInsertRequestDto);
         } catch (Exception e) {
             return handleError("Fail");
         }
@@ -54,12 +54,12 @@ public class MealController {
 
     /**
      * 변경된 meal을 가져와 PK로 해당 데이터가 있는지 확인 후 있으면 덮어씌워주는 기능
-     * @param mealDto
+     * @param mealUpdateRequestDto
      */
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateMeal(@RequestBody MealDto mealDto) {
+    public ResponseEntity<Map<String, Object>> updateMeal(@RequestBody MealUpdateRequestDto mealUpdateRequestDto) {
         try {
-            mealService.updateMeal(mealDto);
+            mealService.updateMeal(mealUpdateRequestDto);
             return handleSuccess("");
         } catch (Exception e) {
             return handleError("Fail");

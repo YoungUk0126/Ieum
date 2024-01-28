@@ -18,5 +18,7 @@ public interface MemberService {
 
     Member findById(String memberId);
 
+    JwtToken refreshAccessToken(String refreshToken);
+
 //    int updateMember(MemberDto member);
 }
