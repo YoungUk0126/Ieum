@@ -1,9 +1,12 @@
 package com.ukcorp.ieum.event.repository;
 
-import com.ukcorp.ieum.event.entity.Event;
+import com.ukcorp.ieum.event.entity.RegularEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public interface EventRepository extends JpaRepository<Event, Long> {
+public interface EventRepository extends JpaRepository<RegularEvent, Long> {
+  List<RegularEvent> findAllByCareInfo_CareNo(Long careNo);
 }
