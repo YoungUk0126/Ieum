@@ -17,7 +17,7 @@ public interface MemberService {
 
     MemberResponseDto getMemberInfo();
 
-    int modifyMember(MemberRequestDto memberModifyDto);
+    void modifyMember(MemberRequestDto memberModifyDto);
 
     int deleteMember(String memberId);
 

@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void signup(MemberRequestDto memberSignupDto) {
-        Member newMember = memberMapper.memberDtoToMember(memberSignupDto);
+        Member newMember = memberMapper.memberRequestDtoToMember(memberSignupDto);
         CareInfo careInfo = CareInfo.builder().build();
         CareInfo savedCareInfo = careRepository.save(careInfo);
         newMember.setNewMember(savedCareInfo);
@@ -87,10 +87,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int modifyMember(MemberRequestDto member) {
-        return 0;
+    public void modifyMember(MemberRequestDto member) {
+        String memberId = JwtUtil.getMemberId()
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+        if (member.getMemberId().equals(member.getMemberId())) {
+            // 로그인한 사람이랑 정보가 일치할 떄만 업데이트
+            Member updateMember = memberMapper.memberRequestDtoToMember(member);
+            memberRepository.save(updateMember);
+        }
     }
-
 
     @Override
     public int deleteMember(String memberId) {

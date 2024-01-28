@@ -20,7 +20,7 @@ public interface MemberMapper {
     @Mapping(target = "serialCode", ignore = true)
     @Mapping(target = "withdrawal", ignore = true)
     @Mapping(target = "authorities", ignore = true)
-    Member memberDtoToMember(MemberRequestDto member);
+    Member memberRequestDtoToMember(MemberRequestDto member);
 
     @Mapping(target = "name", source = "memberName")
     @Mapping(target = "email", source = "memberEmail")

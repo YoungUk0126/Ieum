@@ -61,13 +61,8 @@ public class MemberController {
 
     @PutMapping("/modify")
     public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
-        int result = memberService.modifyMember(member);
-
-        if (result != 0) {
-            return handleSuccess(result);
-        } else {
-            return handleError(result);
-        }
+        memberService.modifyMember(member);
+        return handleSuccess("success");
     }
 
     @DeleteMapping("/{member-id}")
@@ -89,12 +84,11 @@ public class MemberController {
         if (isExists) {
             // 이미 존재하는 아이디인 경우
             response.put("isDuplicated", true);
-            return handleFail(response);
         } else {
             // 사용 가능한 아이디인 경우
             response.put("isDuplicated", false);
-            return handleSuccess(response);
         }
+        return handleSuccess(response);
     }
 
     @PostMapping("/check-email")
@@ -104,12 +98,11 @@ public class MemberController {
         if (isExists) {
             // 이미 존재하는 이메일인 경우
             response.put("isDuplicated", true);
-            return handleFail(response);
         } else {
             // 사용 가능한 이메일인 경우
             response.put("isDuplicated", false);
-            return handleSuccess(response);
         }
+        return handleSuccess(response);
     }
 
     @PostMapping("/check-phone")
@@ -121,12 +114,11 @@ public class MemberController {
         if (isExists) {
             // 이미 존재하는 핸드폰 번호인 경우
             response.put("isDuplicated", true);
-            return handleFail(response);
         } else {
             // 사용 가능한 핸드폰 번호인 경우
             response.put("isDuplicated", false);
-            return handleSuccess(response);
         }
+        return handleSuccess(response);
     }
 
     @GetMapping("/refresh")
@@ -162,7 +154,7 @@ public class MemberController {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
         result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
     }
 
 }
