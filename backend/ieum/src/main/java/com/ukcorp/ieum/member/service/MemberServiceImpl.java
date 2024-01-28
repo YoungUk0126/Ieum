@@ -7,9 +7,11 @@ import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberResponseDto;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
+import io.jsonwebtoken.Jwt;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,6 +22,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -67,11 +70,20 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void logout() {
-        String logoutMember = JwtUtil.getUserId()
-                .orElseThrow(() -> new RuntimeException("NOT FOUND MEMBER"));
+        String logoutMember = JwtUtil.getMemberId()
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
 
         // 로그아웃 시 Redis에서 RefreshToken 삭제
         tokenProvider.deleteRefreshTokenFromRedis(logoutMember);
+    }
+
+    @Override
+    public MemberResponseDto getMemberInfo() {
+        String memberId = JwtUtil.getMemberId().orElseThrow(()
+                -> new NoSuchElementException("NOT FOUND MEMBER"));
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+        return memberMapper.memberToMemberResponseDto(member);
     }
 
     @Override

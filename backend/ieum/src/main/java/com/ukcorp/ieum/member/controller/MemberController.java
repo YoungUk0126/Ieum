@@ -4,6 +4,7 @@ import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberResponseDto;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -42,6 +43,12 @@ public class MemberController {
         httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
 
         return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getMemberInfo() {
+        MemberResponseDto memberInfo = memberService.getMemberInfo();
+        return handleSuccess(memberInfo);
     }
 
     @GetMapping("/logout")
@@ -122,6 +129,18 @@ public class MemberController {
         }
     }
 
+    @GetMapping("/refresh")
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken);
+
+        // Header에  토큰 설정
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+
+        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+    }
+
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();
@@ -146,15 +165,4 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken);
-
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
-
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
-    }
 }

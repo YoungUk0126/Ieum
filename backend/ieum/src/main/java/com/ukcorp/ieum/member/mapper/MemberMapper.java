@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.member.mapper;
 
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberResponseDto;
 import com.ukcorp.ieum.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -20,6 +21,11 @@ public interface MemberMapper {
     @Mapping(target = "withdrawal", ignore = true)
     @Mapping(target = "authorities", ignore = true)
     Member memberDtoToMember(MemberRequestDto member);
+
+    @Mapping(target = "name", source = "memberName")
+    @Mapping(target = "email", source = "memberEmail")
+    @Mapping(target = "phone", source = "memberPhone")
+    MemberResponseDto memberToMemberResponseDto(Member member);
 
     @Named("encryptPassword")
     default String encryptPassword(String password) {

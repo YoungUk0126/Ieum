@@ -4,6 +4,7 @@ package com.ukcorp.ieum.member.service;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberResponseDto;
 import com.ukcorp.ieum.member.entity.Member;
 
 public interface MemberService {
@@ -13,6 +14,8 @@ public interface MemberService {
     JwtToken login(MemberLoginRequestDto loginDto);
 
     void logout();
+
+    MemberResponseDto getMemberInfo();
 
     int modifyMember(MemberRequestDto memberModifyDto);
 
