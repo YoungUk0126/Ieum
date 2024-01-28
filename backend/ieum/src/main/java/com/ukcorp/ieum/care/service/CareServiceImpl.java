@@ -8,6 +8,8 @@ import com.ukcorp.ieum.care.mapper.CareMapper;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,43 +27,56 @@ public class CareServiceImpl implements CareService{
     @Transactional
     @Override
     public void insertCareInfo(CareInsertRequestDto careDto) throws Exception {
-
-        CareInfo care = careMapper.careInsertRequestDtoToCareInfo(careDto);
-        careRepository.save(care);
-
+        try {
+            CareInfo care = careMapper.careInsertRequestDtoToCareInfo(careDto);
+            careRepository.save(care);
+        } catch (DataIntegrityViolationException e) {
+            log.debug("입력 오류!");
+            throw new Exception("입력 오류!");
+        }
     }
 
     @Override
     public CareGetResponseDto getCareInfo(Long careNo) throws Exception {
-
-        Optional<CareInfo> tempCareInfo = careRepository.findById(careNo);
-        if(tempCareInfo.isPresent()) {
-            CareInfo care = tempCareInfo.get();
-            CareGetResponseDto careDto = careMapper.careInfoToCareGetResponseDto(care);
-            return careDto;
-        } else {
-            throw new Exception("피보호자 데이터가 존재하지 않습니다.");
+        try {
+            CareInfo care = careRepository.findById(careNo).orElse(null);
+            if(care != null) {
+                return careMapper.careInfoToCareGetResponseDto(care);
+            } else {
+                log.debug("등록된 피보호자가 없습니다!");
+                throw new Exception("등록된 피보호자가 없습니다!");
+            }
+        } catch (RuntimeException e) {
+            log.debug("조회 오류!");
+            throw new Exception("조회 오류!");
         }
-
     }
 
     @Transactional
     @Override
     public void updateCareInfo(CareUpdateRequestDto careDto) throws Exception {
-
-        Optional<CareInfo> tempCareInfo = careRepository.findById(careDto.getCareNo());
-        if(tempCareInfo.isPresent()) {
-            CareInfo care = careMapper.CareUpdateRequestDtoToCareInfo(careDto);
-            careRepository.save(care);
-        } else {
-            throw new Exception("수정할 피보호자 정보가 없습니다.");
+        try {
+            CareInfo check = careRepository.findById(careDto.getCareNo()).orElse(null);
+            if(check == null) {
+                throw new Exception("수정하려는 피보호자 조회 오류");
+            } else {
+                CareInfo care = careMapper.CareUpdateRequestDtoToCareInfo(careDto);
+                careRepository.save(care);
+            }
+        } catch (DataIntegrityViolationException e) {
+            log.debug("수정 오류!");
+            throw new Exception("수정 오류!");
         }
-
     }
 
     @Transactional
     @Override
-    public void deleteCareInfo(Long careNo) {
-        careRepository.deleteById(careNo);
+    public void deleteCareInfo(Long careNo) throws Exception{
+        try{
+            careRepository.deleteById(careNo);
+        } catch (EmptyResultDataAccessException e) {
+            log.debug("삭제 오류!");
+            throw new Exception("삭제 오류!");
+        }
     }
 }
