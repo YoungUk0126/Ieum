@@ -50,7 +50,7 @@
                 class="btn btn-primary"
                 value="수정"
                 :id="item.message_no"
-                @click="edit"
+                @click="edit(item.message_type)"
               />
             </td>
             <td>
@@ -67,16 +67,52 @@
       </tbody>
     </table>
   </div>
+  <!-- Button trigger modal -->
+  <button
+    type="button"
+    class="invisible"
+    data-bs-toggle="modal"
+    data-bs-target="#staticBackdrop"
+    id="editModal"
+  ></button>
+
+  <!-- Modal -->
+  <div
+    class="modal fade"
+    id="staticBackdrop"
+    data-bs-backdrop="static"
+    data-bs-keyboard="false"
+    tabindex="-1"
+    aria-labelledby="staticBackdropLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <VVoiceModal v-if="modalType" :messageState="editSelect"></VVoiceModal>
+        <VVideoModal v-else :messageState="editSelect"></VVideoModal>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import swal from 'sweetalert'
 import { getApi, registApi, modifyApi, removeApi } from '@/api/message.js'
+import VVoiceModal from '@/components/message/VVoiceModal.vue'
+import VVideoModal from '@/components/message/VVideoModal.vue'
 
 const careId = '1'
-
 const items = ref([])
+const modalType = ref(false)
+const editSelect = ref({
+  message_no: 0,
+  message_type: ''
+})
+
+const openModal = () => {
+  document.getElementById('editModal').click()
+}
 
 onMounted(() => {
   getApi(
@@ -96,7 +132,13 @@ const check = (date) => {
   return targetDate.getTime() <= today.getTime()
 }
 
-const edit = () => {}
+const edit = (type) => {
+  modalType.value = type == 'video'
+  editSelect.value.message_no = event.target.id
+  editSelect.value.message_type = type
+
+  openModal()
+}
 
 const remove = () => {
   swal({
