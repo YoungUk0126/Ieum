@@ -87,9 +87,9 @@ public class MessageController {
   @PostMapping
   public ResponseEntity<Map<String, Object>> postsMessage(@ModelAttribute MessageInsertRequestDto message) {
     try {
-      System.out.println(message);
+      log.debug("파일 저장 시작");
       uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
-      System.out.println("저장 성공");
+      log.debug("파일 저장 성공");
       // 메세지에 대한 정보 저장
       messageService.registMessage(message);
 
