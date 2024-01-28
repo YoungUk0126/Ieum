@@ -65,8 +65,11 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import swal from 'sweetalert'
+import { getApi, registApi, modifyApi, removeApi } from '@/api/message.js'
+
+const careId = '1'
 
 const items = ref([
   {
@@ -91,6 +94,18 @@ const items = ref([
     message_sender: '딸'
   }
 ])
+
+onMounted(() => {
+  getApi(
+    careId,
+    (response) => {
+      items.value = response.data.data
+    },
+    () => {
+      alert('조회 실패')
+    }
+  )
+})
 
 const check = (date) => {
   const today = new Date()
@@ -129,7 +144,18 @@ const remove = () => {
 }
 
 const removeSuccess = (id) => {
-  alert(id + '삭제 완료!')
+  removeApi(
+    id,
+    // success
+    (response) => {
+      console.log(response)
+    },
+    // fail
+    (value) => {
+      console.log('fail')
+      console.log(value)
+    }
+  )
 }
 
 //swal 예시

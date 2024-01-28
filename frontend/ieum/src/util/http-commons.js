@@ -1,4 +1,4 @@
-/*
+
 import axios from "axios";
 
 const { VITE_VUE_API_URL } = import.meta.env;
@@ -14,4 +14,4 @@ function localAxios() {
   return instance;
 }
 
-export { localAxios };*/
+export { localAxios };
