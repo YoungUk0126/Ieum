@@ -44,7 +44,7 @@
                 type="button"
                 class="btn btn-primary"
                 value="수정"
-                :id="message_id"
+                :id="item.message_id"
                 @click="edit"
               />
             </td>
@@ -53,8 +53,8 @@
                 type="button"
                 class="btn btn-danger"
                 value="삭제"
-                :id="message_id"
-                @click="remove"
+                :id="item.message_id"
+                @click="remove()"
               />
             </td>
           </template>
@@ -66,6 +66,8 @@
 
 <script setup>
 import { ref } from 'vue'
+import swal from 'sweetalert'
+
 const items = ref([
   {
     message_id: '1',
@@ -99,8 +101,52 @@ const check = (date) => {
 const edit = () => {}
 
 const remove = () => {
-  alert('삭제?')
+  swal({
+    title: '주의',
+    text: '해당 메세지를 삭제하시겠습니까?',
+    icon: 'warning',
+    buttons: {
+      cancel: {
+        text: '취소',
+        value: false,
+        visible: true,
+        className: '',
+        closeModal: true
+      },
+      confirm: {
+        text: '확인',
+        value: event.target.id,
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then((value) => {
+    if (value) {
+      removeSuccess(value)
+    }
+  })
 }
+
+const removeSuccess = (id) => {
+  alert(id + '삭제 완료!')
+}
+
+//swal 예시
+/*
+아이콘
+success, error, warning, info, question
+swal({
+타이틀, 내용, 아이콘, 버튼
+})
+.then((value) => {})
+입력 받는 창인 경우 위처럼 value 설정
+
+*/
 </script>
 
-<style scoped></style>
+<style>
+.swal-footer {
+  text-align: center;
+}
+</style>
