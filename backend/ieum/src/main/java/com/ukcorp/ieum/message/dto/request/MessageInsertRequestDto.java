@@ -24,5 +24,4 @@ public class MessageInsertRequestDto {
 
   private LocalDate messageTime;
 
-  private MultipartFile file;
 }

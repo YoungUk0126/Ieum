@@ -24,6 +24,4 @@ public class MessageUpdateRequestDto {
   private String messageType;
 
   private LocalDate messageTime;
-
-  private MultipartFile file;
 }

@@ -21,7 +21,6 @@ public interface MessageMapper {
   Message messageInsertRequestDtoAndCareInfoToMessage(MessageInsertRequestDto message, CareInfo care);
 
 
-  @Mapping(target = "messageNo", ignore = true)
   @Mapping(target = "message.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
   Message messageUpdateRequestDtoAndCareInfoToMessage(MessageUpdateRequestDto message, CareInfo care);

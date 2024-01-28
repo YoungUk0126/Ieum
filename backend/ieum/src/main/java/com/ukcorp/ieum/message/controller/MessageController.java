@@ -4,6 +4,7 @@ import com.ukcorp.ieum.message.dto.request.MessageInsertRequestDto;
 import com.ukcorp.ieum.message.dto.request.MessageUpdateRequestDto;
 import com.ukcorp.ieum.message.dto.response.MessageResponseDto;
 import com.ukcorp.ieum.message.service.MessageService;
+import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,17 +82,30 @@ public class MessageController {
   /**
    * 메세지 전송 등록 (파일 등록 추후 추가)
    *
-   * @param message
+   * @param
    * @return
    */
   @PostMapping
-  public ResponseEntity<Map<String, Object>> postsMessage(@ModelAttribute MessageInsertRequestDto message) {
+  public ResponseEntity<Map<String, Object>> postsMessage(
+      @RequestParam Long careNo,
+      @RequestParam String messageSender,
+      @RequestParam String messageName,
+      @RequestParam String messageType,
+      @RequestParam LocalDate messageTime,
+      @RequestParam MultipartFile file
+      ) {
     try {
       log.debug("파일 저장 시작");
-      uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
+      uploadFile(messageName, file, messageType);
       log.debug("파일 저장 성공");
       // 메세지에 대한 정보 저장
-      messageService.registMessage(message);
+      messageService.registMessage(new MessageInsertRequestDto(
+          careNo,
+          messageSender,
+          messageName,
+          messageType,
+          messageTime
+      ));
 
       return handleSuccess("");
     } catch (Exception e) {
@@ -102,16 +116,31 @@ public class MessageController {
 
   /**
    * 메세지 정보 수정
+   * form-data를 받아올때는 Param을 사용해야 한다.
    *
-   * @param message
+   * @param
    * @return
    */
   @PutMapping
-  public ResponseEntity<Map<String, Object>> putMessage(@RequestBody MessageUpdateRequestDto message) {
+  public ResponseEntity<Map<String, Object>> putMessage(
+      @RequestParam Long careNo,
+      @RequestParam Long messageNo,
+      @RequestParam String messageSender,
+      @RequestParam String messageName,
+      @RequestParam String messageType,
+      @RequestParam LocalDate messageTime,
+      @RequestParam MultipartFile file) {
     try {
-      uploadFile(message.getMessageName(), message.getFile(), message.getMessageType());
+      uploadFile(messageName, file, messageType);
 
-      messageService.modifyMessage(message);
+      messageService.modifyMessage(new MessageUpdateRequestDto(
+          messageNo,
+          careNo,
+          messageSender,
+          messageName,
+          messageType,
+          messageTime
+      ));
       return handleSuccess("");
     } catch (Exception e) {
       log.debug(e.getMessage());
@@ -125,7 +154,7 @@ public class MessageController {
     String uploadDir = "./messageFile/";
     // 업로드 날라온 파일 저장
     String fileName = name;
-    if(type.equals("VIDEO")){
+    if(type.equals("video")){
       fileName += ".mp4";
     }else{
       fileName += ".ogg";
