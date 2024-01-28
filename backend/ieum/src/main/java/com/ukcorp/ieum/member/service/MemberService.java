@@ -19,7 +19,7 @@ public interface MemberService {
 
     void modifyMember(MemberRequestDto memberModifyDto);
 
-    int deleteMember(String memberId);
+    void withdrawMember();
 
     Member findById(String memberId);
 

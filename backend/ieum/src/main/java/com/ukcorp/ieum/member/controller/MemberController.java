@@ -59,21 +59,16 @@ public class MemberController {
     }
 
 
-    @PutMapping("/modify")
+    @PutMapping
     public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
         memberService.modifyMember(member);
         return handleSuccess("success");
     }
 
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity<Map<String, Object>> deleteMember(@PathVariable("member-id") String memberId) {
-        int result = memberService.deleteMember(memberId);
-
-        if (result != 0) {
-            return handleSuccess(result);
-        } else {
-            return handleError(result);
-        }
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> withdrawMember() {
+        memberService.withdrawMember();
+        return handleSuccess("success");
     }
 
 

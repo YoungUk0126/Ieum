@@ -98,11 +98,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public int deleteMember(String memberId) {
-//        Member member = repo.findByMemberId(memberId);
-//        JPA는 delete하면 return으로 int가 안나오나?
-//        return repo.delete(member);
-        return 0;
+    public void withdrawMember() {
+        String memberId = JwtUtil.getMemberId()
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+        member.withdrawMember();
     }
 
     @Override

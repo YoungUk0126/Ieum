@@ -60,4 +60,9 @@ public class Member {
         this.careInfo = careInfo;
         this.withdrawal = Withdrawal.ACTIVE;
     }
+
+    public void withdrawMember() {
+        this.withdrawal = Withdrawal.INACTIVE;
+        authorities = new ArrayList<>();
+    }
 }
