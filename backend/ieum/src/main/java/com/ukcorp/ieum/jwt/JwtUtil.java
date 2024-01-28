@@ -18,7 +18,7 @@ public class JwtUtil {
      *
      * @return Optional<UserId>
      */
-    public static Optional<String> getUserId() {
+    public static Optional<String> getMemberId() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
