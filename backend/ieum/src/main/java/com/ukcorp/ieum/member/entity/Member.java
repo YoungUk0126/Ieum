@@ -58,4 +58,8 @@ public class Member {
         auth.add("ROLE_USER");
         this.authorities = auth;
     }
+
+    public void updateSerialCode(String code) {
+        this.serialCode = code;
+    }
 }
