@@ -29,20 +29,17 @@ public class MealServiceImpl implements MealService {
 
     @Override
     public MealGetResponseDto getMeal(Long careNo) throws Exception {
-        Optional<Meal> mealTemp = mealRepository.findByCareInfo_CareNo(careNo);
-
-        if (mealTemp.isPresent()) {
-            MealGetResponseDto mealGetResponseDto = null;
-
-            Meal meal = mealTemp.get();
-            /**
-             * e생성자 였던 부분 mapper로 수정
-             * @param meal
-             */
-            mealGetResponseDto = mealMapper.mealToMealGetResponseDto(meal);
-            return mealGetResponseDto;
-        } else {
-            throw new Exception("존재하지 않는 피보호자입니다.");
+        try {
+            Meal meal = mealRepository.findByCareInfo_CareNo(careNo).orElse(null);
+            if(meal != null) {
+                return mealMapper.mealToMealGetResponseDto(meal);
+            }else{
+                log.debug("존재하지 않는 끼니 시간 정보입니다.");
+                throw new Exception("존재하지 않는 끼니 시간 정보입니다.");
+            }
+        } catch (RuntimeException e) {
+            log.debug("조회 오류!");
+            throw new Exception("조회 오류!");
         }
     }
 
