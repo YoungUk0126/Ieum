@@ -1,6 +1,8 @@
-import { localAxios } from "@/util/http-commons";
+import { localAxios, localAxiosFormData } from "@/util/http-commons";
 
 const local = localAxios();
+
+const form = localAxiosFormData();
 
 const url = "http://localhost:8080/api/message"
 
@@ -11,7 +13,7 @@ function registApi(data, success, fail) {
   local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
 }
 function modifyApi(data, success, fail) {
-  local.put(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+  form.put(`${url}`, data).then(success).catch(fail);
 }
 function removeApi(param, success, fail) {
   local.delete(`${url}/${param}`).then(success).catch(fail);

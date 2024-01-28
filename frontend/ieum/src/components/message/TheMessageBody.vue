@@ -12,7 +12,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in items" :key="item.message_no">
+        <tr v-for="(item, index) in items" :key="item.message_no">
           <th scope="row">{{ item.message_sender }}</th>
           <td>{{ item.message_time }}</td>
 
@@ -24,22 +24,10 @@
           <template v-if="check(item.message_time)">
             <td>전송완료</td>
             <td>
-              <input
-                type="button"
-                class="btn btn-secondary"
-                value="수정"
-                :id="item.message_no"
-                disabled
-              />
+              <input type="button" class="btn btn-secondary" value="수정" disabled />
             </td>
             <td>
-              <input
-                type="button"
-                class="btn btn-secondary"
-                value="삭제"
-                :id="item.message_no"
-                disabled
-              />
+              <input type="button" class="btn btn-secondary" value="삭제" disabled />
             </td>
           </template>
           <template v-if="!check(item.message_time)">
@@ -49,8 +37,8 @@
                 type="button"
                 class="btn btn-primary"
                 value="수정"
-                :id="item.message_no"
-                @click="edit(item.message_type)"
+                :name="index"
+                @click="edit()"
               />
             </td>
             <td>
@@ -58,7 +46,7 @@
                 type="button"
                 class="btn btn-danger"
                 value="삭제"
-                :id="item.message_no"
+                :name="item.message_no"
                 @click="remove()"
               />
             </td>
@@ -88,8 +76,8 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <VVoiceModal v-if="modalType" :messageState="editSelect"></VVoiceModal>
-        <VVideoModal v-else :messageState="editSelect"></VVideoModal>
+        <VVoiceModal v-if="!modalType" :messageState="editSelect"></VVoiceModal>
+        <VVideoModal v-if="modalType" :messageState="editSelect"></VVideoModal>
       </div>
     </div>
   </div>
@@ -132,10 +120,12 @@ const check = (date) => {
   return targetDate.getTime() <= today.getTime()
 }
 
-const edit = (type) => {
-  modalType.value = type == 'video'
-  editSelect.value.message_no = event.target.id
-  editSelect.value.message_type = type
+const edit = () => {
+  const item = items.value[event.target.name]
+
+  modalType.value = item.message_type === 'video'
+
+  editSelect.value = item
 
   openModal()
 }
@@ -155,14 +145,14 @@ const remove = () => {
       },
       confirm: {
         text: '확인',
-        value: event.target.id,
+        value: event.target.name,
         visible: true,
         className: '',
         closeModal: true
       }
     }
   }).then((value) => {
-    if (value) {
+    if (value !== false) {
       removeSuccess(value)
     }
   })
