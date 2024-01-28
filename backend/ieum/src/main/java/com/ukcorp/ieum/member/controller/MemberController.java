@@ -2,9 +2,7 @@ package com.ukcorp.ieum.member.controller;
 
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
-import com.ukcorp.ieum.member.dto.MemberRequestDto;
-import com.ukcorp.ieum.member.dto.MemberResponseDto;
+import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -87,8 +85,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody @Email String email) {
-        boolean isExists = memberService.isExistsMemberEmail(email);
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody CheckEmailRequestDto emailDto) {
+        boolean isExists = memberService.isExistsMemberEmail(emailDto.getEmail());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
             // 이미 존재하는 이메일인 경우
@@ -101,10 +99,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-phone")
-    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(
-            @RequestBody
-            @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Invalid phone number format") String phone) {
-        boolean isExists = memberService.isExistsMemberPhone(phone);
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody CheckPhonelRequestDto phoneDto) {
+        boolean isExists = memberService.isExistsMemberPhone(phoneDto.getPhone());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
             // 이미 존재하는 핸드폰 번호인 경우
@@ -117,8 +113,8 @@ public class MemberController {
     }
 
     @GetMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken);
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody RefreshRequestDto refreshDto) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshDto.getRefreshToken());
 
         // Header에  토큰 설정
         HttpHeaders httpHeaders = new HttpHeaders();
