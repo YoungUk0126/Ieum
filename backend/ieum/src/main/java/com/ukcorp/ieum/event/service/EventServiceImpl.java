@@ -8,8 +8,11 @@ import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
 import com.ukcorp.ieum.event.entity.RegularEvent;
 import com.ukcorp.ieum.event.mapper.EventMapper;
 import com.ukcorp.ieum.event.repository.EventRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,64 +34,83 @@ public class EventServiceImpl implements EventService {
   @Override
   public void insertEvent(EventInsertRequestDto event) throws Exception {
     try {
-      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
-      if (careGet.isEmpty()) {
+      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
+      if (care == null) {
         throw new Exception("보호자 정보 조회 오류");
       }
-
-      CareInfo care = careGet.get();
       RegularEvent entity = eventMapper
               .eventInsertRequestDtoAndCareToRegularEvent(event, care);
       eventRepository.save(entity);
 
-    } catch (RuntimeException e) {
+    } catch (DataIntegrityViolationException e) {
+      log.debug("입력 오류!");
       throw new Exception("입력 오류!");
     }
   }
 
   @Override
   public EventGetResponseDto getEvent(Long eventNo) throws Exception {
-    Optional<RegularEvent> tempEvent = eventRepository.findById(eventNo);
-    if (tempEvent.isPresent()) {
-      RegularEvent event = tempEvent.get();
-      EventGetResponseDto eventGetResponseDto = eventMapper.RegularEventToEventGetResponseDto(event);
-      return eventGetResponseDto;
-    } else {
-      throw new Exception("사라진 기념일 정보입니다.");
+    try{
+      RegularEvent event = eventRepository.findById(eventNo).orElse(null);
+      if(event != null) {
+        return eventMapper.RegularEventToEventGetResponseDto(event);
+      } else {
+        log.debug("등록된 기념일이 없습니다");
+        throw new Exception("등록된 기념일이 없습니다");
+      }
+    } catch (RuntimeException e) {
+      log.debug("조회 오류!");
+      throw new Exception("조회 오류!");
     }
   }
 
   @Override
   public List<EventGetResponseDto> getAllEvent(Long careNo) throws Exception {
-    List<RegularEvent> list = eventRepository.findAllByCareInfo_CareNo(careNo);
-    if (list == null || list.isEmpty()) {
-      log.debug("등록된 기념일이 없습니다");
-      throw new Exception("등록된 기념일이 없습니다");
+    try{
+      List<RegularEvent> list = eventRepository.findAllByCareInfo_CareNo(careNo);
+      if(list.isEmpty()) {
+        log.debug("등록된 기념일이 없습니다");
+        throw new Exception("등록된 기념일이 없습니다");
+      }
+      return eventMapper.RegularEventEntityToResponseDto(list);
+    } catch (RuntimeException e) {
+      log.debug("조회 오류!");
+      throw new Exception("조회 오류!");
     }
-    return eventMapper.RegularEventEntityToResponseDto(list);
+
   }
 
   @Transactional
   @Override
   public void updateEvent(EventUpdateRequestDto event) throws Exception {
     try {
-      Optional<CareInfo> careGet = careRepository.findById(event.getCareNo());
-      if (careGet.isEmpty()) {
-        throw new Exception("보호자 정보 조회 오류");
+      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
+      if (care == null) {
+        throw new Exception("피보호자 정보 조회 오류");
       }
-      CareInfo care = careGet.get();
+      RegularEvent check = eventRepository.findById(event.getEventNo()).orElse(null);
+      if(check == null) {
+        throw new Exception("수정하려는 기념일 조회 오류");
+      }
       RegularEvent entity = eventMapper
               .EventUpdateRequestDtoAndCareInfoToRegualrEvent(event, care);
       eventRepository.save(entity);
 
-    } catch (RuntimeException e) {
-      throw new Exception("입력 오류!");
+    } catch (DataIntegrityViolationException e) {
+      log.debug("수정 오류!");
+      throw new Exception("수정 오류!");
     }
   }
 
   @Transactional
   @Override
-  public void deleteEvent(Long eventNo) {
-    eventRepository.deleteById(eventNo);
+  public void deleteEvent(Long eventNo) throws Exception {
+    try {
+      eventRepository.deleteById(eventNo);
+    } catch (EmptyResultDataAccessException e) {
+      log.debug("삭제 오류!");
+      throw new Exception("삭제 오류!");
+    }
+
   }
 }
