@@ -7,7 +7,7 @@ import com.ukcorp.ieum.sleep.dto.response.SleepResponseDto;
 public interface SleepService {
   SleepResponseDto getSleep(Long sleepInfoNo) throws Exception;
 
-  void deleteSleep(Long sleepInfoNo);
+  void deleteSleep(Long sleepInfoNo) throws Exception;
 
   void registSleep(SleepInsertRequestDto sleep) throws Exception;
 
