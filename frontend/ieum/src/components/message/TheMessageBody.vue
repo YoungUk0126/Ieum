@@ -12,10 +12,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in items" :key="item.message_id">
+        <tr v-for="item in items" :key="item.message_no">
           <th scope="row">{{ item.message_sender }}</th>
           <td>{{ item.message_time }}</td>
-          <td>{{ item.message_type }}</td>
+
+          <td>
+            <img v-if="item.message_type == 'video'" src="../../assets/images/video.png" />
+            <img v-if="item.message_type == 'voice'" src="../../assets/images/voice.png" />
+          </td>
+
           <template v-if="check(item.message_time)">
             <td>전송완료</td>
             <td>
@@ -23,7 +28,7 @@
                 type="button"
                 class="btn btn-secondary"
                 value="수정"
-                :id="message_id"
+                :id="item.message_no"
                 disabled
               />
             </td>
@@ -32,7 +37,7 @@
                 type="button"
                 class="btn btn-secondary"
                 value="삭제"
-                :id="message_id"
+                :id="item.message_no"
                 disabled
               />
             </td>
@@ -44,7 +49,7 @@
                 type="button"
                 class="btn btn-primary"
                 value="수정"
-                :id="item.message_id"
+                :id="item.message_no"
                 @click="edit"
               />
             </td>
@@ -53,7 +58,7 @@
                 type="button"
                 class="btn btn-danger"
                 value="삭제"
-                :id="item.message_id"
+                :id="item.message_no"
                 @click="remove()"
               />
             </td>
@@ -71,29 +76,7 @@ import { getApi, registApi, modifyApi, removeApi } from '@/api/message.js'
 
 const careId = '1'
 
-const items = ref([
-  {
-    message_id: '1',
-    message_name: 'update.mp3',
-    message_type: 'video',
-    message_time: '2024-01-15',
-    message_sender: '딸'
-  },
-  {
-    message_id: '2',
-    message_name: 'update.mp3',
-    message_type: 'video',
-    message_time: '2024-01-15',
-    message_sender: '딸'
-  },
-  {
-    message_id: '3',
-    message_name: 'update.mp3',
-    message_type: 'video',
-    message_time: '2024-05-15',
-    message_sender: '딸'
-  }
-])
+const items = ref([])
 
 onMounted(() => {
   getApi(
@@ -147,13 +130,23 @@ const removeSuccess = (id) => {
   removeApi(
     id,
     // success
-    (response) => {
-      console.log(response)
+    ({ data }) => {
+      if (data.success) {
+        // 삭제가 성공됐다면 리스트 다시 불러오기
+        getApi(
+          careId,
+          (response) => {
+            items.value = response.data.data
+          },
+          () => {
+            alert('조회 실패')
+          }
+        )
+      }
     },
     // fail
     (value) => {
       console.log('fail')
-      console.log(value)
     }
   )
 }
