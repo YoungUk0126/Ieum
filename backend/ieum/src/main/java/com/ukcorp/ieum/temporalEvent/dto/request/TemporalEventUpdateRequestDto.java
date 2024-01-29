@@ -15,8 +15,6 @@ public class TemporalEventUpdateRequestDto {
 
   private Long eventNo;
 
-  private Long careNo;
-
   private String eventName;
 
   private LocalDate eventDate;

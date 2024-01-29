@@ -2,6 +2,7 @@ package com.ukcorp.ieum.temporalEvent.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
 import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventUpdateRequestDto;
 import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
@@ -29,8 +30,10 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   private final CareRepository careRepository;
 
   @Override
-  public List<TemporalEventResponseDto> getList(Long careNo) throws Exception {
+  public List<TemporalEventResponseDto> getList() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+
       List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
 
       return temporalEventMapper.TemporalEventEntityToResponseDto(list);
@@ -68,7 +71,9 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Transactional
   public void registEvent(TemporalEventInsertRequestDto event) throws Exception {
     try {
-      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
       TemporalEvent entity = temporalEventMapper
               .temporalEventInsertRequestDtoAndCareInfoToTemporalEvent(event, care);
@@ -84,9 +89,13 @@ public class TemporalEventServiceImpl implements TemporalEventService {
   @Transactional
   public void modifyEvent(TemporalEventUpdateRequestDto event) throws Exception {
     try {
-      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-      temporalEventRepository.findById(event.getEventNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 일정입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+
+      if (temporalEventRepository.existsById(event.getEventNo())) {
+        throw new NoSuchElementException("존재하지 않는 일정입니다.");
+      }
 
       TemporalEvent entity = temporalEventMapper
               .temporalEventUpdateRequestDtoAndCareInfoToTemporalEvent(event, care);
