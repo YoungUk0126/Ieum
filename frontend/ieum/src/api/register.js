@@ -18,12 +18,12 @@ function checkVerificationCode(data, success, fail) {
 
 function idcheck(param, success, fail) {
   local
-    .get(`${url}/api/member/check/${param}`)
+    .get(`${url}/api/member/check-id/${param}`)
     .then((response) => {
       if (response.data && response.data.isDuplicate) {
-        fail() // 중복일 경우 fail 호출
+        fail()
       } else {
-        success(response) // 중복이 아닐 경우 success 호출
+        success(response)
       }
     })
     .catch((error) => {
@@ -31,4 +31,34 @@ function idcheck(param, success, fail) {
     })
 }
 
-export { register, checkVerificationCode, sendVerificationCode, idcheck }
+function emailcheck(data, success, fail) {
+  local
+    .post(`${url}/api/member/check-email`, JSON.stringify(data))
+    .then((response) => {
+      if (response.data && response.data.isDuplicate) {
+        fail()
+      } else {
+        success(response)
+      }
+    })
+    .catch((error) => {
+      fail(error)
+    })
+}
+
+function phonecheck(data, success, fail) {
+  local
+    .post(`${url}/api/member/check-phone`, JSON.stringify(data))
+    .then((response) => {
+      if (response.data && response.data.isDuplicate) {
+        fail()
+      } else {
+        success(response)
+      }
+    })
+    .catch((error) => {
+      fail(error)
+    })
+}
+
+export { register, checkVerificationCode, sendVerificationCode, idcheck, emailcheck, phonecheck }

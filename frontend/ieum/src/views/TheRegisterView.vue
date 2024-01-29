@@ -7,128 +7,135 @@
                         <div class="card shadow-2-strong card-registration">
                             <div class="card-body p-4 p-md-5">
                                 <h3 class="regi">회원가입</h3>
-                                <form>
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
 
-                                            <div class="form-outline">
-                                                <label class="form-label">아이디/ID</label>
-                                                <button type="button" class="id_check btn btn-custom-primary btn-sm"
-                                                    @click="validateId">아이디 검사</button>
-                                                <input type="text" v-model="userInfo.member_id"
-                                                    class="form-control form-control-lg" @input="check_id" />
-                                                <label v-if="checkidtype">아이디형식이 일치하지 않습니다.</label>
-
-                                            </div>
+                                        <div class="form-outline">
+                                            <label class="form-label">아이디/ID</label>
+                                            <button type="button" class="id_check btn btn-custom-primary btn-sm"
+                                                @click="checkvalidateId">아이디 검사</button>
+                                            <input type="text" v-model="userInfo.member_id"
+                                                class="form-control form-control-lg" @input="check_id" />
+                                            <label v-if="checkidtype">아이디는 4-12자의 영어또는숫자를 사용해야합니다.</label>
+                                            <label v-else>사용이 가능한 아이디입니다.</label>
 
                                         </div>
-                                        <div class="col-md-6 mb-4">
 
-                                            <div class="form-outline">
-                                                <label class="form-label" for="Name">이름/Name</label>
-                                                <input type="text" v-model="userInfo.name" @input="validateName"
-                                                    class="form-control form-control-lg" autocomplete="new-password" />
-                                                <label v-if="checknametype">이름형식이 일치하지 않습니다.</label>
-
-                                            </div>
-
-                                        </div>
                                     </div>
+                                    <div class="col-md-6 mb-4">
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 d-flex align-items-center">
-
-                                            <div class="form-outline datepicker w-100">
-                                                <label for="password" class="form-label">비밀번호/password</label>
-                                                <input type="password" v-model="userInfo.password"
-                                                    class="form-control form-control-lg" autocomplete="new-password"
-                                                    @input="passwordlength" />
-                                                <label v-if="checkpasswordtype">비밀번호 형식이 일치하지 않습니다.</label>
-
-                                            </div>
+                                        <div class="form-outline">
+                                            <label class="form-label" for="Name">이름/Name</label>
+                                            <input type="text" v-model="userInfo.name" @input="validateName"
+                                                class="form-control form-control-lg" autocomplete="new-password" />
+                                            <label v-if="checknametype">이름은 1글자이상의 영어 또는 한글만 입력 가능합니다.</label>
+                                            <label v-else>사용이 가능한 이름입니다.</label>
 
                                         </div>
-                                        <div class="col-md-6 mb-4">
 
-                                            <div class="form-outline datepicker w-100">
-                                                <label for="passwordCheck" class="form-label">비밀번호확인/password check</label>
-                                                <input type="password" v-model="password_check" @input="check_password"
-                                                    class="form-control form-control-lg" autocomplete="new-password" />
-                                                <label v-if="checkpasswordrepeattype">비밀번호칸에 적은 비밀번호와 다릅니다.</label>
-
-                                            </div>
-
-                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
+                                </div>
 
-                                            <div class="form-outline">
-                                                <label class="form-label" for="email">이메일/email</label>
-                                                <input type="email" v-model="userInfo.email" @input="check_eamil"
-                                                    class="form-control form-control-lg email" />
-                                                <label v-if="checkemailtype">이메일 형식이 일치하지 않습니다.</label>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 d-flex align-items-center">
 
-                                            </div>
-
+                                        <div class="form-outline datepicker w-100">
+                                            <label for="password" class="form-label">비밀번호/password</label>
+                                            <input type="password" v-model="userInfo.password"
+                                                class="form-control form-control-lg" autocomplete="new-password"
+                                                @input="passwordlength" />
+                                            <label v-if="checkpasswordtype">비밀번호는 영어,숫자,특수문자'!@#$%^&*()'가 적어도 1개씩 들어간 7-16자로
+                                                기입해주세요.</label>
+                                            <label v-else>사용이 가능한 비밀번호입니다.</label>
                                         </div>
+
                                     </div>
+                                    <div class="col-md-6 mb-4">
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2">
+                                        <div class="form-outline datepicker w-100">
+                                            <label for="passwordCheck" class="form-label">비밀번호확인/password check</label>
+                                            <input type="password" v-model="password_check" @input="check_password"
+                                                class="form-control form-control-lg" autocomplete="new-password" />
+                                            <label v-if="checkpasswordrepeattype">비밀번호칸에 적은 비밀번호와 다릅니다.</label>
 
-                                            <div class="form-outline">
-                                                <label class="form-label" for="phoneNumber">휴대폰 번호/Phone Number</label>
-                                                <input type="text" v-model="userInfo.phone" @input="check_phone"
-                                                    class="form-control form-control-lg" />
-                                                <label v-if="checkphonenumbertype">전화번호 형식이 일치하지 않습니다.</label>
-                                            </div>
 
                                         </div>
-                                        <div class="col-md-6 pb-2 d-flex align-items-center">
-                                            <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold"
-                                                @click="certifiedsend">인증
-                                                전송</button>
-                                        </div>
+
                                     </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
 
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2 ">
-
-                                            <label class="form-label" for="certifiedNumber">인증번호/Certified</label>
-                                            <div class="form-outline">
-                                                <input type="text" id="certifiedNumber" class="form-control form-control-lg"
-                                                    v-model="certifiedcode" />
-                                            </div>
+                                        <div class="form-outline">
+                                            <label class="form-label" for="email">이메일/email</label>
+                                            <button type="button" class="email_check btn btn-custom-primary btn-sm"
+                                                @click="checkvalidateemail">이메일 검사</button>
+                                            <input type="email" v-model="userInfo.email" @input="check_eamil"
+                                                class="form-control form-control-lg email" />
+                                            <label v-if="checkemailtype">이메일 형식이 일치하지 않습니다. xxxx@xxx.xxx로 기입해주세요.</label>
 
                                         </div>
-                                        <div class="col-md-6 pb-2 d-flex align-items-center">
-                                            <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold"
-                                                @click="certifiedcheck">인증번호
-                                                확인</button>
-                                        </div>
+
                                     </div>
+                                </div>
 
-                                    <div class="mt-1" style="text-align: center; align-items: center;">
-                                        <input type="checkbox" @click="check_policy" style="margin-right: 8px;">
-                                        <label for="myCheckbox">회원가입 시, 필요한 개인정보 수집 이용내역에 대해
-                                            동의합니다.</label>
-                                    </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 pb-2">
 
-                                    <div class="mt-5 d-flex justify-content-around">
-                                        <div class="col-4 text-center">
-                                            <button @click="check_policy_agree"
-                                                class="btn btn-custom-primary btn-lg w-50 fw-bold">확인</button>
+                                        <div class="form-outline">
+                                            <label class="form-label" for="phoneNumber">휴대폰 번호/Phone Number</label>
+                                            <button type="button" class="phone_check btn btn-custom-primary btn-sm"
+                                                @click="checkvalidatephonenumber">전화번호 검사</button>
+                                            <input type="text" v-model="userInfo.phone" @input="check_phone"
+                                                class="form-control form-control-lg" />
+                                            <label v-if="checkphonenumbertype">전화번호 형식이 일치하지 않습니다. 010-xxxx-xxxx로
+                                                입력해주세요.</label>
                                         </div>
-                                        <div class="col-4 text-center">
-                                            <a href="/login" class="btn btn-custom-danger btn-lg w-50 fw-bold">취소</a>
-                                        </div>
+
                                     </div>
+                                    <div class="col-md-6 pb-2 d-flex align-items-center">
+                                        <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold"
+                                            @click="certifiedsend">인증
+                                            전송</button>
+                                    </div>
+                                </div>
 
-                                    <div @click="check_policy_agree">테스트</div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-4 pb-2 ">
 
-                                </form>
+                                        <label class="form-label" for="certifiedNumber">인증번호/Certified</label>
+                                        <div class="form-outline">
+                                            <input type="text" id="certifiedNumber" class="form-control form-control-lg"
+                                                v-model="certifiedcode" />
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 pb-2 d-flex align-items-center">
+                                        <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold"
+                                            @click="certifiedcheck">인증번호
+                                            확인</button>
+                                    </div>
+                                </div>
+
+                                <div class="mt-1" style="text-align: center; align-items: center;">
+                                    <input type="checkbox" @click="check_policy" style="margin-right: 8px;">
+                                    <label for="myCheckbox">회원가입 시, 필요한 개인정보 수집 이용내역에 대해
+                                        동의합니다.</label>
+                                </div>
+
+                                <div class="mt-5 d-flex justify-content-around">
+                                    <div class="col-4 text-center">
+                                        <button @click="check_policy_agree"
+                                            class="btn btn-custom-primary btn-lg w-50 fw-bold">확인</button>
+                                    </div>
+                                    <div class="col-4 text-center">
+                                        <a href="/login" class="btn btn-custom-danger btn-lg w-50 fw-bold">취소</a>
+                                    </div>
+                                </div>
+
+                                <div @click="check_policy_agree">테스트</div>
+
                             </div>
                         </div>
                     </div>
@@ -145,6 +152,8 @@ import { checkVerificationCode } from '@/api/register';
 import { idcheck } from '@/api/register';
 import { ref } from "vue";
 import swal from 'sweetalert';
+import { emailcheck } from '@/api/register';
+import { phonecheck } from '@/api/register';
 
 const password_check = ref('');
 // 비밀번호 확인을 위한 변수.
@@ -204,7 +213,7 @@ const registerFunc = () => {
 const validateIdstate = ref(false);
 //사용가능한 아이디일경우, true로 전환.
 
-const validateId = () => {
+const checkvalidateId = () => {
     idcheck(
         userInfo.value.member_id,
         () => {
@@ -218,6 +227,34 @@ const validateId = () => {
     );
 }
 // 아이디가 중복인지 아닌지 검사하는 메서드.
+
+const checkvalidateemail = () => {
+    emailcheck(
+        userInfo.value.email,
+        () => {
+            swal('사용 가능한 이메일입니다.');
+            validateIdstate.value = true;
+        },
+        () => {
+            swal('이미 사용 중인 이메일입니다.');
+            validateIdstate.value = false;
+        }
+    );
+}
+
+const checkvalidatephonenumber = () => {
+    phonecheck(
+        userInfo.value.phone,
+        () => {
+            swal('사용 가능한 전화번호입니다.');
+            validateIdstate.value = true;
+        },
+        () => {
+            swal('이미 사용 중인 전화번호입니다.');
+            validateIdstate.value = false;
+        }
+    );
+}
 
 const checkidtype = ref(true);
 
@@ -367,5 +404,13 @@ h6 {
 
 .id_check {
     margin-left: 340px;
+}
+
+.email_check {
+    margin-left: 313px;
+}
+
+.phone_check {
+    margin-left: 194px;
 }
 </style>
