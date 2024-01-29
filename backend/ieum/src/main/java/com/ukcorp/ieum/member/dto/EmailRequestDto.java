@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 @Builder
-public class CheckEmailRequestDto {
+public class EmailRequestDto {
     @Email @NotEmpty
     String email;
 }
