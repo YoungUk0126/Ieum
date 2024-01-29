@@ -8,7 +8,6 @@ import com.ukcorp.ieum.sleep.dto.response.SleepResponseDto;
 import com.ukcorp.ieum.sleep.entity.SleepInfo;
 import com.ukcorp.ieum.sleep.mapper.SleepMapper;
 import com.ukcorp.ieum.sleep.repository.SleepRepository;
-import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -16,7 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -31,13 +30,7 @@ public class SleepServiceImpl implements SleepService {
   public SleepResponseDto getSleep(Long sleepInfoNo) throws Exception {
 
     try {
-      SleepInfo sleep = sleepRepository.findById(sleepInfoNo).orElse(null);
-      if(sleep != null) {
-        return sleepMapper.SleepInfoToResponseDto(sleep);
-      } else {
-        log.debug("존재하지 않는 취침 시간 데이터입니다.");
-        throw new Exception("존재하지 않는 취침 시간 데이터입니다.");
-      }
+      SleepInfo sleep = sleepRepository.findById(sleepInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침 시간 데이터입니다."));
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류");
@@ -59,10 +52,7 @@ public class SleepServiceImpl implements SleepService {
   @Override
   public void registSleep(SleepInsertRequestDto sleep) throws Exception {
     try{
-      CareInfo care = careRepository.findById(sleep.getCareNo()).orElse(null);
-      if(care == null){
-        throw new Exception("보호자 정보 조회 오류");
-      }
+      CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
       SleepInfo entity = sleepMapper
               .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep,care);
       sleepRepository.save(entity);
@@ -78,10 +68,7 @@ public class SleepServiceImpl implements SleepService {
   @Override
   public void modifySleep(SleepUpdateRequestDto sleep) throws Exception {
     try{
-      CareInfo care = careRepository.findById(sleep.getCareNo()).orElse(null);
-      if(care == null){
-        throw new Exception("보호자 정보 조회 오류");
-      }
+      CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
       SleepInfo entity = sleepMapper
               .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep,care);
       sleepRepository.save(entity);
