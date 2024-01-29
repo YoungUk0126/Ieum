@@ -28,7 +28,6 @@ public class MemberController {
 
     @PostMapping("/join")
     public ResponseEntity<Map<String, Object>> joinMember(@Valid @RequestBody MemberRequestDto member) {
-
         memberService.signup(member);
 
         return handleSuccess("success");
@@ -49,6 +48,7 @@ public class MemberController {
     @GetMapping
     public ResponseEntity<Map<String, Object>> getMemberInfo() {
         MemberResponseDto memberInfo = memberService.getMemberInfo();
+
         return handleSuccess(memberInfo);
     }
 
@@ -63,15 +63,34 @@ public class MemberController {
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
         memberService.modifyMember(member);
+
         return handleSuccess("success");
     }
 
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> withdrawMember() {
         memberService.withdrawMember();
+
         return handleSuccess("success");
     }
 
+    @PostMapping("/auth")
+    public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody PhoneRequestDto phone) {
+        log.info("Controller 진입");
+        memberService.sendVerifyMessage(phone);
+
+        return handleSuccess("success");
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody VerifyRequestDto verifyRequestDto) {
+        boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
+        if (isCorrect) {
+            return handleSuccess("success");
+        } else {
+            return handleFail("fail");
+        }
+    }
 
     @GetMapping("/check-id/{member-id}")
     public ResponseEntity<Map<String, Object>> isDuplicatedId(@PathVariable("member-id") String checkId) {
@@ -88,7 +107,7 @@ public class MemberController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody CheckEmailRequestDto emailDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody EmailRequestDto emailDto) {
         boolean isExists = memberService.isExistsMemberEmail(emailDto.getEmail());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -102,7 +121,7 @@ public class MemberController {
     }
 
     @PostMapping("/check-phone")
-    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody CheckPhonelRequestDto phoneDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody PhoneRequestDto phoneDto) {
         boolean isExists = memberService.isExistsMemberPhone(phoneDto.getPhone());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -113,18 +132,6 @@ public class MemberController {
             response.put("isDuplicated", false);
         }
         return handleSuccess(response);
-    }
-
-    @GetMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody RefreshRequestDto refreshDto) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshDto.getRefreshToken());
-
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
-
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping("/refresh")
@@ -138,7 +145,6 @@ public class MemberController {
 
         return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
-
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();

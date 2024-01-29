@@ -6,12 +6,11 @@ import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.MemberDetails;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
-import com.ukcorp.ieum.member.dto.MemberRequestDto;
-import com.ukcorp.ieum.member.dto.MemberResponseDto;
+import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
+import com.ukcorp.ieum.Sms.SmsUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,6 +31,7 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final CareRepository careRepository;
+    private final SmsUtil smsUtil;
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -68,6 +68,9 @@ public class MemberServiceImpl implements MemberService {
         return tokenProvider.createToken(authentication);
     }
 
+    /**
+     * 로그아웃
+     */
     @Override
     public void logout() {
         String logoutMember = JwtUtil.getMemberId()
@@ -77,6 +80,11 @@ public class MemberServiceImpl implements MemberService {
         tokenProvider.deleteRefreshTokenFromRedis(logoutMember);
     }
 
+    /**
+     * 회원 정보 조회
+     *
+     * @return 회원 정보
+     */
     @Override
     public MemberResponseDto getMemberInfo() {
         String memberId = JwtUtil.getMemberId().orElseThrow(()
@@ -86,6 +94,11 @@ public class MemberServiceImpl implements MemberService {
         return memberMapper.memberToMemberResponseDto(member);
     }
 
+    /**
+     * 회원 수정
+     *
+     * @param member
+     */
     @Override
     public void modifyMember(MemberRequestDto member) {
         String memberId = JwtUtil.getMemberId()
@@ -97,6 +110,9 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    /**
+     * 회원 탈퇴
+     */
     @Override
     public void withdrawMember() {
         String memberId = JwtUtil.getMemberId()
@@ -106,24 +122,61 @@ public class MemberServiceImpl implements MemberService {
         member.withdrawMember();
     }
 
-    @Override
-    public Member findById(String memberId) {
-        return null;
-    }
-
+    /**
+     * 아이디 중복 확인
+     *
+     * @param memberId
+     * @return 중복 여부
+     */
     @Override
     public boolean isExistsMemberId(String memberId) {
         return memberRepository.existsByMemberId(memberId);
     }
 
+    /**
+     * 이메일 중복 확인
+     *
+     * @param email
+     * @return 중복 여부
+     */
     @Override
     public boolean isExistsMemberEmail(String email) {
         return memberRepository.existsByMemberEmail(email);
     }
 
+    /**
+     * 핸드폰 중복 확인
+     *
+     * @param phone
+     * @return 중복 여부
+     */
     @Override
     public boolean isExistsMemberPhone(String phone) {
         return memberRepository.existsByMemberPhone(phone);
+    }
+
+    /**
+     * 핸드폰 인증 코드 발송
+     *
+     * @param phoneRequestDto
+     */
+    @Override
+    public void sendVerifyMessage(PhoneRequestDto phoneRequestDto) {
+        String phone = phoneRequestDto.getPhone().replaceAll("-", "");
+        log.info("보내는 번호 >> " + phone);
+        smsUtil.sendOne(phone);
+    }
+
+    /**
+     * 문자 인증 코드 검증
+     *
+     * @param verifyRequestDto
+     * @return 검증 여부
+     */
+    @Override
+    public boolean checkMessageCode(VerifyRequestDto verifyRequestDto) {
+        String phone = verifyRequestDto.getPhone().replaceAll("-", "");
+        return smsUtil.verifyCode(phone, verifyRequestDto.getCode());
     }
 
     /**
@@ -136,7 +189,8 @@ public class MemberServiceImpl implements MemberService {
     public JwtToken refreshAccessToken(String refreshToken) {
         // 유저 정보 가져오기
         String memberId = tokenProvider.getMemberId(refreshToken);
-        Member member = memberRepository.findByMemberId(memberId).get();
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
 
         // 가져온 member로 authorities 생성
         Set<GrantedAuthority> authorities = member.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
@@ -155,11 +209,4 @@ public class MemberServiceImpl implements MemberService {
         return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);
     }
 
-
-//    @Override
-//    public int updateMember(MemberDto member) {
-////        member mapper로 Entity 변환 후 save에 넣고 리턴
-////        return repo.save(member);
-//        return 0;
-//    }
 }
