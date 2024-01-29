@@ -60,4 +60,8 @@ public class Member {
         this.careInfo = careInfo;
     }
 
+    public void updateSerialCode(String code) {
+        this.serialCode = code;
+    }
+
 }
