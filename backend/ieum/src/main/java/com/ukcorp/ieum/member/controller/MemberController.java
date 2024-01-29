@@ -9,6 +9,8 @@ import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +21,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberServiceImpl memberService;
@@ -34,6 +37,8 @@ public class MemberController {
 
     @PostMapping("/login")
     public ResponseEntity<JwtToken> loginMember(@RequestBody LoginDto loginDto) {
+        log.info("로그인한 회원 아이디 >> " + loginDto.getMemberId());
+        log.info("로그인한 회원 비밀번호 >> " + loginDto.getPassword());
         JwtToken jwtToken = memberService.login(loginDto);
 
         // Header에  토큰 설정
@@ -80,6 +85,18 @@ public class MemberController {
         }
     }
 
+    @PostMapping("/refresh")
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
+
+        // Header에  토큰 설정
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+
+        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+    }
+    
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();
@@ -96,15 +113,4 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
-
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
-
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
-    }
 }

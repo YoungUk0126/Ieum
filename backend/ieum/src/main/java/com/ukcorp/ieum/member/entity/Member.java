@@ -53,9 +53,11 @@ public class Member {
     @Convert(converter = StringListConverter.class)
     private List<String> authorities;
 
-    public void setAuthorities() {
+    public void setNewMember(CareInfo careInfo) {
         List<String> auth = new ArrayList<>();
         auth.add("ROLE_USER");
         this.authorities = auth;
+        this.careInfo = careInfo;
     }
+
 }

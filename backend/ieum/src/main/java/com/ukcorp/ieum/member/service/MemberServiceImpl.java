@@ -1,5 +1,8 @@
 package com.ukcorp.ieum.member.service;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.MemberDetails;
 import com.ukcorp.ieum.jwt.TokenProvider;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.LoginDto;
@@ -8,6 +11,7 @@ import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -22,9 +26,11 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
+    private final CareRepository careRepository;
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -37,7 +43,10 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void signup(MemberDto memberSignupDto) {
         Member newMember = memberMapper.memberDtoToMember(memberSignupDto);
-        newMember.setAuthorities();
+
+        CareInfo careInfo = CareInfo.builder().build();
+        CareInfo savedCareInfo = careRepository.save(careInfo);
+        newMember.setNewMember(savedCareInfo);
         memberRepository.save(newMember);
     }
 
@@ -96,12 +105,12 @@ public class MemberServiceImpl implements MemberService {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
 
-        // 새로운 AccessToken을 위한 UserDetails
-        UserDetails memberDetails = User.builder()
+        // 새로운 AccessToken을 위한 MemberDetails
+        MemberDetails memberDetails = MemberDetails.builder()
                 .username(member.getMemberId())
                 .password(member.getMemberPassword())
-                .authorities(authorities)
-                .build();
+                .careNo(member.getCareInfo().getCareNo())
+                .authorities(authorities).build();
 
         // DB 정보로 authentication 생성
         Authentication authentication =
