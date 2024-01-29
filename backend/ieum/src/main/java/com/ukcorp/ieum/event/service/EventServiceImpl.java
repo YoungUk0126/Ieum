@@ -8,7 +8,6 @@ import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
 import com.ukcorp.ieum.event.entity.RegularEvent;
 import com.ukcorp.ieum.event.mapper.EventMapper;
 import com.ukcorp.ieum.event.repository.EventRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -34,10 +33,8 @@ public class EventServiceImpl implements EventService {
   @Override
   public void insertEvent(EventInsertRequestDto event) throws Exception {
     try {
-      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
-      if (care == null) {
-        throw new Exception("보호자 정보 조회 오류");
-      }
+//      피보호자 정보 확인 및 피보호자 정보 받아오기
+      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
       RegularEvent entity = eventMapper
               .eventInsertRequestDtoAndCareToRegularEvent(event, care);
       eventRepository.save(entity);
@@ -50,14 +47,10 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public EventGetResponseDto getEvent(Long eventNo) throws Exception {
-    try{
-      RegularEvent event = eventRepository.findById(eventNo).orElse(null);
-      if(event != null) {
-        return eventMapper.RegularEventToEventGetResponseDto(event);
-      } else {
-        log.debug("등록된 기념일이 없습니다");
-        throw new Exception("등록된 기념일이 없습니다");
-      }
+    try {
+      RegularEvent event = eventRepository.findById(eventNo).orElseThrow(() -> new NoSuchElementException("등록된 기념일이 없습니다"));
+      return eventMapper.RegularEventToEventGetResponseDto(event);
+
     } catch (RuntimeException e) {
       log.debug("조회 오류!");
       throw new Exception("조회 오류!");
@@ -66,12 +59,8 @@ public class EventServiceImpl implements EventService {
 
   @Override
   public List<EventGetResponseDto> getAllEvent(Long careNo) throws Exception {
-    try{
+    try {
       List<RegularEvent> list = eventRepository.findAllByCareInfo_CareNo(careNo);
-      if(list.isEmpty()) {
-        log.debug("등록된 기념일이 없습니다");
-        throw new Exception("등록된 기념일이 없습니다");
-      }
       return eventMapper.RegularEventEntityToResponseDto(list);
     } catch (RuntimeException e) {
       log.debug("조회 오류!");
@@ -84,14 +73,10 @@ public class EventServiceImpl implements EventService {
   @Override
   public void updateEvent(EventUpdateRequestDto event) throws Exception {
     try {
-      CareInfo care = careRepository.findById(event.getCareNo()).orElse(null);
-      if (care == null) {
-        throw new Exception("피보호자 정보 조회 오류");
-      }
-      RegularEvent check = eventRepository.findById(event.getEventNo()).orElse(null);
-      if(check == null) {
-        throw new Exception("수정하려는 기념일 조회 오류");
-      }
+//      피보호자 정보가 있는지 확인 및 피보호자 정보 받아오기
+      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+//      수정하려는 기념일 정보가 있는지 확인
+      RegularEvent check = eventRepository.findById(event.getEventNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 기념일 정보입니다."));
       RegularEvent entity = eventMapper
               .EventUpdateRequestDtoAndCareInfoToRegualrEvent(event, care);
       eventRepository.save(entity);
