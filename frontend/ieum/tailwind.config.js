@@ -1,14 +1,12 @@
 /** @type {import('tailwindcss').Config} */
-import DaisyUIPlugin from 'daisyui/plugin'
-
 export default {
-  prefix: 'tw-',
-  content: [
-    // Or if using `src` directory:
-    './src/**/*.{js,ts,jsx,tsx}'
-  ],
+  purge: ['./src/index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {}
   },
-  plugins: [DaisyUIPlugin]
+  variants: {
+    extend: {}
+  },
+  plugins: []
 }

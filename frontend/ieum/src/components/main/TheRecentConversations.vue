@@ -81,7 +81,7 @@ import VModal from '../modal/VModal.vue'
 
 .alarm-buttons {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .alarm-btn {
