@@ -19,14 +19,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
@@ -42,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
      * @param memberSignupDto
      */
     @Override
+    @Transactional
     public void signup(MemberRequestDto memberSignupDto) {
         Member newMember = memberMapper.memberRequestDtoToMember(memberSignupDto);
         CareInfo careInfo = CareInfo.builder().build();
@@ -57,9 +61,11 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
+    @Transactional
     public JwtToken login(MemberLoginRequestDto loginDto) {
         // username + password 를 기반으로 Authentication 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
+        UsernamePasswordAuthenticationToken authenticationToken =
+                new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
 
         // 검증 진행 (MemberDetailsService의 loadUserByUsername 메서드 실행
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
@@ -72,9 +78,10 @@ public class MemberServiceImpl implements MemberService {
      * 로그아웃
      */
     @Override
+    @Transactional
     public void logout() {
         String logoutMember = JwtUtil.getMemberId()
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
 
         // 로그아웃 시 Redis에서 RefreshToken 삭제
         tokenProvider.deleteRefreshTokenFromRedis(logoutMember);
@@ -88,9 +95,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberResponseDto getMemberInfo() {
         String memberId = JwtUtil.getMemberId().orElseThrow(()
-                -> new NoSuchElementException("NOT FOUND MEMBER"));
+                -> new NoSuchElementException("MEMBER NOT FOUND"));
         Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
         return memberMapper.memberToMemberResponseDto(member);
     }
 
@@ -100,13 +107,16 @@ public class MemberServiceImpl implements MemberService {
      * @param member
      */
     @Override
+    @Transactional
     public void modifyMember(MemberRequestDto member) {
         String memberId = JwtUtil.getMemberId()
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
         if (member.getMemberId().equals(member.getMemberId())) {
             // 로그인한 사람이랑 정보가 일치할 떄만 업데이트
-            Member updateMember = memberMapper.memberRequestDtoToMember(member);
-            memberRepository.save(updateMember);
+            Member updateMember = memberRepository.findByMemberId(memberId)
+                    .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
+
+            updateMember.updateMember(member);
         }
     }
 
@@ -114,11 +124,12 @@ public class MemberServiceImpl implements MemberService {
      * 회원 탈퇴
      */
     @Override
+    @Transactional
     public void withdrawMember() {
         String memberId = JwtUtil.getMemberId()
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
         Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
         member.withdrawMember();
     }
 
@@ -186,14 +197,16 @@ public class MemberServiceImpl implements MemberService {
      * @return JwtToken(AccessToken + RefreshToken)
      */
     @Override
+    @Transactional
     public JwtToken refreshAccessToken(String refreshToken) {
         // 유저 정보 가져오기
         String memberId = tokenProvider.getMemberId(refreshToken);
         Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEMBER"));
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
 
         // 가져온 member로 authorities 생성
-        Set<GrantedAuthority> authorities = member.getAuthorities().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
+        Set<GrantedAuthority> authorities = member.getAuthorities().stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toSet());
 
         // 새로운 AccessToken을 위한 MemberDetails
         MemberDetails memberDetails = MemberDetails.builder()
@@ -203,7 +216,8 @@ public class MemberServiceImpl implements MemberService {
                 .authorities(authorities).build();
 
         // DB 정보로 authentication 생성
-        Authentication authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
 
         // 인증 정보 기반으로 Token 생성
         return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);
