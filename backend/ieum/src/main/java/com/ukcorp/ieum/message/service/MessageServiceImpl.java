@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Slf4j
 @Service
@@ -31,10 +32,7 @@ public class MessageServiceImpl implements MessageService {
   public List<MessageResponseDto> getList(Long careNo) throws Exception {
     try{
       List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
-      if (list.isEmpty()) {
-        log.debug("등록된 메세지이 없습니다");
-        throw new Exception("등록된 메세지이 없습니다.");
-      }
+
       return messageMapper.MessageToMessageResponseDto(list);
     }catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
@@ -45,13 +43,10 @@ public class MessageServiceImpl implements MessageService {
   @Override
   public MessageResponseDto getDetail(Long messageNo) throws Exception {
     try{
-      Message message = messageRepository.findById(messageNo).orElse(null);
-      if (message != null) {
-        return messageMapper.MessageToResponseDto(message);
-      } else {
-        log.debug("존재하지 않는 메세지입니다.");
-        throw new Exception("존재하지 않는 메세지입니다.");
-      }
+      Message message = messageRepository.findById(messageNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 메세지입니다."));
+
+      return messageMapper.MessageToResponseDto(message);
+
     }catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
@@ -75,11 +70,7 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void registMessage(MessageInsertRequestDto message) throws Exception {
     try {
-      CareInfo care = careRepository.findById(message.getCareNo()).orElse(null);
-      if (care == null) {
-        log.debug("보호자 정보 조회 오류.");
-        throw new Exception("보호자 정보 조회 오류");
-      }
+      CareInfo care = careRepository.findById(message.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
       Message entity = messageMapper
               .messageInsertRequestDtoAndCareInfoToMessage(message, care);
@@ -97,16 +88,9 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void modifyMessage(MessageUpdateRequestDto message) throws Exception {
     try {
-      CareInfo care = careRepository.findById(message.getCareNo()).orElse(null);
-      if (care == null) {
-        log.debug("보호자 정보 조회 오류.");
-        throw new Exception("보호자 정보 조회 오류");
-      }
+      CareInfo care = careRepository.findById(message.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
-      Message check = messageRepository.findById(message.getMessageNo()).orElse(null);
-      if(check == null){
-        throw new Exception("메세지 조회 오류");
-      }
+      messageRepository.findById(message.getMessageNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 메세지입니다."));
 
       Message entity = messageMapper
               .messageUpdateRequestDtoAndCareInfoToMessage(message, care);

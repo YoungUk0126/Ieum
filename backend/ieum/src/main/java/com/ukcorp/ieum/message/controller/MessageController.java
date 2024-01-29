@@ -4,10 +4,11 @@ import com.ukcorp.ieum.message.dto.request.MessageInsertRequestDto;
 import com.ukcorp.ieum.message.dto.request.MessageUpdateRequestDto;
 import com.ukcorp.ieum.message.dto.response.MessageResponseDto;
 import com.ukcorp.ieum.message.service.MessageService;
-import java.time.LocalDate;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +47,6 @@ public class MessageController {
 
   /**
    * 메세지 번호로 해당 메세지 정보 상세 조회
-   *
    * @param messageNo
    * @return MessageResponseDto
    */
@@ -63,11 +63,9 @@ public class MessageController {
 
   /**
    * 해당 번호에 해당하는 메세지 삭제
-   *
    * @param messageNo
    * @return
    */
-
   @DeleteMapping("/{messageNo}")
   public ResponseEntity<Map<String, Object>> deleteMessage(@PathVariable("messageNo") Long messageNo) {
     try {
@@ -81,31 +79,21 @@ public class MessageController {
 
   /**
    * 메세지 전송 등록 (파일 등록 추후 추가)
-   *
-   * @param
+   * @param message
+   * @param file
    * @return
    */
-  @PostMapping
+  @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<Map<String, Object>> postsMessage(
-      @RequestParam Long careNo,
-      @RequestParam String messageSender,
-      @RequestParam String messageName,
-      @RequestParam String messageType,
-      @RequestParam LocalDate messageTime,
-      @RequestParam MultipartFile file
+          @RequestPart(value = "data")  @Valid MessageInsertRequestDto message,
+          @RequestPart(value = "file") MultipartFile file
       ) {
     try {
       log.debug("파일 저장 시작");
-      uploadFile(messageName, file, messageType);
+      uploadFile(message.getMessageName(), file, message.getMessageType());
       log.debug("파일 저장 성공");
-      // 메세지에 대한 정보 저장
-      messageService.registMessage(new MessageInsertRequestDto(
-          careNo,
-          messageSender,
-          messageName,
-          messageType,
-          messageTime
-      ));
+
+      messageService.registMessage(message);
 
       return handleSuccess("");
     } catch (Exception e) {
@@ -116,31 +104,20 @@ public class MessageController {
 
   /**
    * 메세지 정보 수정
-   * form-data를 받아올때는 Param을 사용해야 한다.
-   *
-   * @param
+   * @param message
+   * @param file
    * @return
    */
-  @PutMapping
+  @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<Map<String, Object>> putMessage(
-      @RequestParam Long careNo,
-      @RequestParam Long messageNo,
-      @RequestParam String messageSender,
-      @RequestParam String messageName,
-      @RequestParam String messageType,
-      @RequestParam LocalDate messageTime,
-      @RequestParam MultipartFile file) {
+          @RequestPart(value = "data")  @Valid MessageUpdateRequestDto message,
+          @RequestPart(value = "file") MultipartFile file) {
     try {
-      uploadFile(messageName, file, messageType);
-
-      messageService.modifyMessage(new MessageUpdateRequestDto(
-          messageNo,
-          careNo,
-          messageSender,
-          messageName,
-          messageType,
-          messageTime
-      ));
+      log.debug("파일 저장 시작");
+      uploadFile(message.getMessageName(), file, message.getMessageType());
+      log.debug("파일 저장 성공");
+      
+      messageService.modifyMessage(message);
       return handleSuccess("");
     } catch (Exception e) {
       log.debug(e.getMessage());
@@ -149,6 +126,13 @@ public class MessageController {
   }
 
 
+  /**
+   * 음성/영상 메세지 파일 저장
+   * @param name
+   * @param file
+   * @param type
+   * @throws IOException
+   */
   public static void uploadFile(String name, MultipartFile file, String type) throws IOException {
     // 파일 저장 디렉토리 경로
     String uploadDir = "./messageFile/";
