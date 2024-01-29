@@ -85,20 +85,18 @@ public class MemberController {
         }
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<Map<String, Object>> test() {
-        String memberId = JwtUtil.getUserId().get();
-        log.info(memberId);
-        Long careNo = JwtUtil.getCareNo().get();
-        log.info(careNo.toString());
+    @PostMapping("/refresh")
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("memberId", memberId);
-        result.put("careNo", careNo);
+        // Header에  토큰 설정
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
 
-        return handleSuccess(result);
+        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
     }
-
+    
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();
@@ -115,15 +113,4 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
-    @GetMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
-
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
-
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
-    }
 }
