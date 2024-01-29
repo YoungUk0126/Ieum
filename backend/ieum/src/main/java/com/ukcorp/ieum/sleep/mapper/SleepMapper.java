@@ -12,16 +12,16 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SleepMapper {
 
-  @Mapping(source="sleep.careInfo.careNo", target="careNo")
+  @Mapping(source = "sleep.careInfo.careNo", target = "careNo")
   SleepResponseDto SleepInfoToResponseDto(SleepInfo sleep);
 
 
-// update
+  // update
   @Mapping(target = "sleep.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
   SleepInfo sleepUpdateRequestDtoAndCareInfoToSleepInfo(SleepUpdateRequestDto sleep, CareInfo care);
 
-//  insert
+  //  insert
   @Mapping(target = "sleepInfoNo", ignore = true)
   @Mapping(target = "event.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")

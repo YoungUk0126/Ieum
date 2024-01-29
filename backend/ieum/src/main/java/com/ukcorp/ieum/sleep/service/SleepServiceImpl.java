@@ -26,11 +26,13 @@ public class SleepServiceImpl implements SleepService {
   private final SleepRepository sleepRepository;
   private final CareRepository careRepository;
   private final SleepMapper sleepMapper;
+
   @Override
   public SleepResponseDto getSleep(Long sleepInfoNo) throws Exception {
-
     try {
+//      조회할 데이터가 있으면 가져오고 없으면 예외 처리
       SleepInfo sleep = sleepRepository.findById(sleepInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침 시간 데이터입니다."));
+      return sleepMapper.SleepInfoToResponseDto(sleep);
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류");
@@ -40,9 +42,9 @@ public class SleepServiceImpl implements SleepService {
   @Transactional
   @Override
   public void deleteSleep(Long sleepInfoNo) throws Exception {
-    try{
+    try {
       sleepRepository.deleteById(sleepInfoNo);
-    }catch (EmptyResultDataAccessException e) {
+    } catch (EmptyResultDataAccessException e) {
       log.debug("삭제 오류");
       throw new Exception("삭제 오류!");
     }
@@ -51,10 +53,11 @@ public class SleepServiceImpl implements SleepService {
   @Transactional
   @Override
   public void registSleep(SleepInsertRequestDto sleep) throws Exception {
-    try{
+    try {
+//      피보호자 정보가 있으면 가져오고 없으면 예외 처리
       CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
       SleepInfo entity = sleepMapper
-              .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep,care);
+              .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep, care);
       sleepRepository.save(entity);
 
     } catch (DataIntegrityViolationException e) {
@@ -67,10 +70,13 @@ public class SleepServiceImpl implements SleepService {
   @Transactional
   @Override
   public void modifySleep(SleepUpdateRequestDto sleep) throws Exception {
-    try{
+    try {
+//      피보호자 정보가 있으면 가져오고 없으면 예외 처리
       CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
+//      수정할 끼니시간 정보가 있으면 가져오고 없으면 예외 처리
+      SleepInfo check = sleepRepository.findById(sleep.getSleepInfoNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침시간 데이터입니다."));
       SleepInfo entity = sleepMapper
-              .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep,care);
+              .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep, care);
       sleepRepository.save(entity);
 
     } catch (DataIntegrityViolationException e) {

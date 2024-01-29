@@ -5,8 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Time;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -17,19 +15,19 @@ import java.time.LocalTime;
 @Table(name = "SLEEP_INFO")
 public class SleepInfo {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SLEEP_INFO_NO")
-    private Long sleepInfoNo;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "SLEEP_INFO_NO")
+  private Long sleepInfoNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CARE_NO")
-    private CareInfo careInfo;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "CARE_NO")
+  private CareInfo careInfo;
 
-    @Column(name = "SLEEP_START_TIME")
-    private Time sleepStartTime;
+  @Column(name = "SLEEP_START_TIME")
+  private Time sleepStartTime;
 
-    @Column(name = "SLEEP_END_TIME")
-    private Time sleepEndTime;
+  @Column(name = "SLEEP_END_TIME")
+  private Time sleepEndTime;
 }
 

@@ -4,11 +4,6 @@ import com.ukcorp.ieum.sleep.dto.request.SleepInsertRequestDto;
 import com.ukcorp.ieum.sleep.dto.request.SleepUpdateRequestDto;
 import com.ukcorp.ieum.sleep.dto.response.SleepResponseDto;
 import com.ukcorp.ieum.sleep.service.SleepService;
-import com.ukcorp.ieum.sleep.service.SleepServiceImpl;
-import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
-import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventUpdateRequestDto;
-import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
-import com.ukcorp.ieum.temporalEvent.service.TemporalEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -30,6 +24,7 @@ public class SleepController {
 
   /**
    * 취침 시간 관련 상세 정보(개별) 조회
+   *
    * @param sleepInfoNo
    * @return SleepResponseDto
    */
@@ -46,15 +41,15 @@ public class SleepController {
 
   /**
    * 취침 시간 삭제
-   * @param sleepInfoNo
    *
+   * @param sleepInfoNo
    */
   @DeleteMapping("/{sleep-info-no}")
   public ResponseEntity<Map<String, Object>> deleteSleep(@PathVariable("sleep-info-no") Long sleepInfoNo) {
-    try{
+    try {
       sleepService.deleteSleep(sleepInfoNo);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
@@ -62,15 +57,16 @@ public class SleepController {
 
   /**
    * 취침 시간 등록
+   *
    * @param sleep
    * @return
    */
   @PostMapping
   public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody SleepInsertRequestDto sleep) {
-    try{
+    try {
       sleepService.registSleep(sleep);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
@@ -78,15 +74,16 @@ public class SleepController {
 
   /**
    * 취침 시간 수정
+   *
    * @param sleep
    * @return
    */
   @PutMapping
   public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody SleepUpdateRequestDto sleep) {
-    try{
+    try {
       sleepService.modifySleep(sleep);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
@@ -102,13 +99,6 @@ public class SleepController {
   }
 
   private ResponseEntity<Map<String, Object>> handleFail(Object data) {
-    Map<String, Object> result = new HashMap<>();
-    result.put("success", false);
-    result.put("data", data);
-    return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
-  }
-
-  private ResponseEntity<Map<String, Object>> handleError(Object data) {
     Map<String, Object> result = new HashMap<>();
     result.put("success", false);
     result.put("data", data);
