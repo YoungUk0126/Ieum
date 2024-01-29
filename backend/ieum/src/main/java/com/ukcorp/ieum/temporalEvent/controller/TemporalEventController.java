@@ -24,6 +24,7 @@ public class TemporalEventController {
 
   /**
    * 일정 관련 리스트 조회
+   *
    * @param careNo
    * @return List<TemporalEventDto>
    */
@@ -40,6 +41,7 @@ public class TemporalEventController {
 
   /**
    * 일정 관련 상세 정보(개별) 조회
+   *
    * @param eventNo
    * @return TemporalEventDto
    */
@@ -56,15 +58,16 @@ public class TemporalEventController {
 
   /**
    * 일정 삭제
+   *
    * @param eventNo
    * @return
    */
   @DeleteMapping("/{eventNo}")
   public ResponseEntity<Map<String, Object>> deleteEvent(@PathVariable("eventNo") Long eventNo) {
-    try{
+    try {
       temporalEventService.deleteEvent(eventNo);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
@@ -72,15 +75,16 @@ public class TemporalEventController {
 
   /**
    * 일정 등록
+   *
    * @param event
    * @return
    */
   @PostMapping
   public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody TemporalEventInsertRequestDto event) {
-    try{
+    try {
       temporalEventService.registEvent(event);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
@@ -88,15 +92,16 @@ public class TemporalEventController {
 
   /**
    * 일정 수정
+   *
    * @param event
    * @return
    */
   @PutMapping
   public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody TemporalEventUpdateRequestDto event) {
-    try{
+    try {
       temporalEventService.modifyEvent(event);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
       log.debug(e.getMessage());
       return handleFail("Fail");
     }
