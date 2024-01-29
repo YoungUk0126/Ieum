@@ -40,9 +40,9 @@
             'bg-gray-200': check(item.message_time),
             'bg-white': !check(item.message_time)
           }"
-          class="p-3 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
+          class="px-3 pt-8 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
-          <div class="flex flex-col items-center pb-10">
+          <div class="flex flex-col items-center pb-5">
             <img
               class="w-24 h-24 mb-3 rounded-full shadow-lg"
               :src="'/src/assets/images/' + item.message_type + '.png'"
