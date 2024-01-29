@@ -26,7 +26,7 @@ public class Message {
   @Column(name = "MESSAGE_NAME")
   private String messageName;
 
-  @Column(name = "MESSAGE_SENDEr")
+  @Column(name = "MESSAGE_SENDER")
   private String messageSender;
 
   @Column(name = "MESSAGE_TYPE")

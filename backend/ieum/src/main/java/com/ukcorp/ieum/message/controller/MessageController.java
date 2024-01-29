@@ -47,6 +47,7 @@ public class MessageController {
 
   /**
    * 메세지 번호로 해당 메세지 정보 상세 조회
+   *
    * @param messageNo
    * @return MessageResponseDto
    */
@@ -63,6 +64,7 @@ public class MessageController {
 
   /**
    * 해당 번호에 해당하는 메세지 삭제
+   *
    * @param messageNo
    * @return
    */
@@ -79,15 +81,16 @@ public class MessageController {
 
   /**
    * 메세지 전송 등록 (파일 등록 추후 추가)
+   *
    * @param message
    * @param file
    * @return
    */
   @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<Map<String, Object>> postsMessage(
-          @RequestPart(value = "data")  @Valid MessageInsertRequestDto message,
+          @RequestPart(value = "data") @Valid MessageInsertRequestDto message,
           @RequestPart(value = "file") MultipartFile file
-      ) {
+  ) {
     try {
       log.debug("파일 저장 시작");
       uploadFile(message.getMessageName(), file, message.getMessageType());
@@ -104,19 +107,20 @@ public class MessageController {
 
   /**
    * 메세지 정보 수정
+   *
    * @param message
    * @param file
    * @return
    */
   @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
   public ResponseEntity<Map<String, Object>> putMessage(
-          @RequestPart(value = "data")  @Valid MessageUpdateRequestDto message,
+          @RequestPart(value = "data") @Valid MessageUpdateRequestDto message,
           @RequestPart(value = "file") MultipartFile file) {
     try {
       log.debug("파일 저장 시작");
       uploadFile(message.getMessageName(), file, message.getMessageType());
       log.debug("파일 저장 성공");
-      
+
       messageService.modifyMessage(message);
       return handleSuccess("");
     } catch (Exception e) {
@@ -128,6 +132,7 @@ public class MessageController {
 
   /**
    * 음성/영상 메세지 파일 저장
+   *
    * @param name
    * @param file
    * @param type
@@ -138,9 +143,9 @@ public class MessageController {
     String uploadDir = "./messageFile/";
     // 업로드 날라온 파일 저장
     String fileName = name;
-    if(type.equals("video")){
+    if (type.equals("video")) {
       fileName += ".mp4";
-    }else{
+    } else {
       fileName += ".ogg";
     }
     Path filePath = Paths.get(uploadDir, fileName);

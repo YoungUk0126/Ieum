@@ -30,11 +30,11 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public List<MessageResponseDto> getList(Long careNo) throws Exception {
-    try{
+    try {
       List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
 
       return messageMapper.MessageToMessageResponseDto(list);
-    }catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
     }
@@ -42,12 +42,12 @@ public class MessageServiceImpl implements MessageService {
 
   @Override
   public MessageResponseDto getDetail(Long messageNo) throws Exception {
-    try{
+    try {
       Message message = messageRepository.findById(messageNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 메세지입니다."));
 
       return messageMapper.MessageToResponseDto(message);
 
-    }catch (RuntimeException e) {
+    } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
     }
@@ -59,7 +59,7 @@ public class MessageServiceImpl implements MessageService {
   public void deleteMessage(Long messageNo) throws Exception {
     try {
       messageRepository.deleteById(messageNo);
-    }catch (EmptyResultDataAccessException e) {
+    } catch (EmptyResultDataAccessException e) {
       log.debug("삭제 오류");
       throw new Exception("삭제 오류!");
     }
