@@ -143,12 +143,11 @@ const record = async () => {
 
 const editSubmit = () => {
   const formData = new FormData()
-  formData.append('messageNo', Number(editState.value.message_no))
-  formData.append('careNo', Number(editState.value.care_no))
-  formData.append('messageSender', editState.value.message_sender)
-  formData.append('messageName', editState.value.message_name)
-  formData.append('messageType', editState.value.message_type)
-  formData.append('messageTime', editState.value.message_time)
+
+  const json = JSON.stringify(editState.value)
+  const formJson = new Blob([json], { type: 'application/json' })
+
+  formData.append('formJson', formJson)
   formData.append('file', file.value, 'editFile.ogg')
 
   modifyApi(
