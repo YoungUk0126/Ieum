@@ -29,7 +29,9 @@
           ></button>
         </div>
         <div class="modal-body">
-          <VModalAnniBody :modalId="modalId"></VModalAnniBody>
+          <!-- <VModalAnniBody :modalId="modalId"></VModalAnniBody>
+          <VModalMeal :modalId="modalId"></VModalMeal> -->
+          <VModalWakeandSleep></VModalWakeandSleep>
         </div>
         <div class="modal-footer">
           <button
@@ -42,7 +44,7 @@
           >
             Close
           </button>
-          <button type="button" class="register-button" @click="closeModal">등록</button>
+          <button type="button" class="btn btn-outline-secondary" @click="closeModal">등록</button>
         </div>
       </div>
     </div>
@@ -52,6 +54,9 @@
 <script setup>
 import { ref } from 'vue'
 import VModalAnniBody from './VModalAnniBody.vue'
+import VModalInjection from './VModalInjection.vue'
+import VModalMeal from './VModalMeal.vue'
+import VModalWakeandSleep from './VModalWakeandSleep.vue'
 
 const modalId = ref('anniv')
 
@@ -66,6 +71,10 @@ const closeModal = () => {
 </script>
 
 <style scoped>
+.modal-header, .modal-body, .modal-footer {
+  background-color: hsla(0, 0%, 83%, 0.3);
+}
+
 .alarm-btn,
 .register-button {
   padding-top: 6px;
