@@ -3,8 +3,7 @@
     <div class="col-9">
       <h3>최근 대화 목록</h3>
       <div class="alarm-buttons">
-        <button class="alarm-btn" @click="openModal">알람 등록</button>
-        <ConfirmationModal ref="modal" :content="modalContent" />
+        <VModal></VModal>
         <div class="dropdown">
           <button
             class="btn btn-secondary dropdown-toggle alarm-btn"
@@ -59,39 +58,12 @@
       <a href="/chat">>전체 대화</a>
     </div>
   </div>
+  <!-- <VModal :modalId="conv"></VModal> -->
 </template>
 
-<script>
+<script setup>
 import { ref } from 'vue'
-import ConfirmationModal from '@/components/modal/TheConfirmationModal.vue'
-
-export default {
-  name: 'App',
-  components: {
-    ConfirmationModal
-  },
-  setup() {
-    const modal = ref(null)
-    const modalContent = ref(['확인/취소를 누르고', '배경에 결과가 출력되는 것을', '확인해보세요'])
-    const result = ref('')
-
-    // async-await을 사용하여, Modal로부터 응답을 기다리게 된다.
-    const openModal = async () => {
-      const ok = await modal.value.show()
-      if (ok) {
-        result.value = '확인을 눌렀군요!'
-      } else {
-        result.value = '취소를 눌렀네요?'
-      }
-    }
-    return {
-      modal,
-      modalContent,
-      result,
-      openModal
-    }
-  }
-}
+import VModal from '../modal/VModal.vue'
 </script>
 
 <style scoped>
