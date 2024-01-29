@@ -8,7 +8,6 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -92,12 +90,19 @@ public class TokenProvider implements InitializingBean {
     private String createAccessToken(Authentication authentication, String authorities) {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.ACCESS_VALIDITY_SECONDS);
+        MemberDetails principal = (MemberDetails) authentication.getPrincipal();
+        log.info("principal에서 받아온 careNo >> " + principal.getCareNo());
+
+        Claims claims = Jwts.claims()
+                .setSubject(authentication.getName())
+                .setExpiration(validity);
+
+        claims.put(AUTHORITIES_KEY, authorities);
+        claims.put("careNo", principal.getCareNo());
 
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
+                .setClaims(claims)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
                 .compact();
     }
 
@@ -110,11 +115,13 @@ public class TokenProvider implements InitializingBean {
     private String createRefreshToken(Authentication authentication, String authorities) {
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.REFRESH_VALIDITY_SECONDS);
+        MemberDetails principal = (MemberDetails) authentication.getPrincipal();
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
+                .claim("careNo", principal.getCareNo())
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
@@ -143,16 +150,12 @@ public class TokenProvider implements InitializingBean {
 
         // 저장된 RefreshToken과 들어온 RefreshToken이 일치하면 새로운 AccessToken 생성
         if (storedRefreshToken != null && storedRefreshToken.equals(refreshToken)) {
-            // 데이터베이스에서 사용자 정보 가져오기
-
             // 기존 AccessToken의 권한 정보를 그대로 사용하여 새로운 AccessToken 생성
             return createToken(authentication);
-
         } else {
             // Redis에 있는 Refresh Token 아니라면 InvalidRefreshTokenException
             throw new InvalidRefreshTokenException("Invalid Refresh Token");
         }
-
     }
 
     /**
@@ -176,8 +179,11 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        // 권한 정보로 User 객체 만들기
-        User principal = new User(claims.getSubject(), "", authorities);
+        // 권한 정보로 MemberDetails 객체 만들기
+        MemberDetails principal = MemberDetails.builder()
+                .username(claims.getSubject())
+                .authorities(authorities)
+                .careNo(Long.valueOf(String.valueOf(claims.get("careNo")))).build();
 
         // 유저, 토큰, 권한 정보로 Authentication 생성 후 반환
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
@@ -212,6 +218,7 @@ public class TokenProvider implements InitializingBean {
 
     /**
      * 로그아웃 시 Redis에서 RefreshToken 삭제
+     *
      * @param memberId
      */
     public void deleteRefreshTokenFromRedis(String memberId) {

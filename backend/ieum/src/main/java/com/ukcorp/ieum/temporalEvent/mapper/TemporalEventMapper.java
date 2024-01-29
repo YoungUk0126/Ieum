@@ -13,7 +13,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface TemporalEventMapper {
 
-  @Mapping(source="event.careInfo.careNo", target="careNo")
+  @Mapping(source = "event.careInfo.careNo", target = "careNo")
   TemporalEventResponseDto TemporalEventEntityToResponseDto(TemporalEvent event);
 
   List<TemporalEventResponseDto> TemporalEventEntityToResponseDto(List<TemporalEvent> temporalEvent);
