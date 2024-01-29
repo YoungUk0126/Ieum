@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +20,8 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/member")
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Slf4j
 public class MemberController {
 
     private final MemberServiceImpl memberService;
@@ -115,6 +118,18 @@ public class MemberController {
     @GetMapping("/refresh")
     private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody RefreshRequestDto refreshDto) {
         JwtToken jwtToken = memberService.refreshAccessToken(refreshDto.getRefreshToken());
+
+        // Header에  토큰 설정
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+
+        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh")
+    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
+        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
 
         // Header에  토큰 설정
         HttpHeaders httpHeaders = new HttpHeaders();

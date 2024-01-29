@@ -65,4 +65,5 @@ public class Member {
         this.withdrawal = Withdrawal.INACTIVE;
         authorities = new ArrayList<>();
     }
+
 }

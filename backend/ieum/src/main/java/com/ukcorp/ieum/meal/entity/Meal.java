@@ -1,7 +1,6 @@
 package com.ukcorp.ieum.meal.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
-import com.ukcorp.ieum.meal.dto.MealDto;
 import jakarta.persistence.*;
 import lombok.*;
 

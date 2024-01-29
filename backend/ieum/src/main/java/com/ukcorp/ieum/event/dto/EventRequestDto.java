@@ -12,6 +12,6 @@ import java.time.LocalDate;
 @Getter
 @Builder
 public class EventRequestDto {
-    private String eventName;
-    private LocalDate eventDate;
+  private String eventName;
+  private LocalDate eventDate;
 }

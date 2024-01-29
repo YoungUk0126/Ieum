@@ -1,6 +1,8 @@
 package com.ukcorp.ieum.temporalEvent.controller;
 
-import com.ukcorp.ieum.temporalEvent.dto.TemporalEventDto;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventInsertRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.request.TemporalEventUpdateRequestDto;
+import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
 import com.ukcorp.ieum.temporalEvent.service.TemporalEventService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,13 +24,14 @@ public class TemporalEventController {
 
   /**
    * 일정 관련 리스트 조회
+   *
    * @param careNo
    * @return List<TemporalEventDto>
    */
   @GetMapping("/{careNo}")
   public ResponseEntity<Map<String, Object>> getEvent(@PathVariable("careNo") Long careNo) {
     try {
-      List<TemporalEventDto> list = temporalEventService.getList(careNo);
+      List<TemporalEventResponseDto> list = temporalEventService.getList(careNo);
       return handleSuccess(list);
     } catch (Exception exception) {
       log.debug(exception.getMessage());
@@ -38,13 +41,14 @@ public class TemporalEventController {
 
   /**
    * 일정 관련 상세 정보(개별) 조회
+   *
    * @param eventNo
    * @return TemporalEventDto
    */
   @GetMapping("/detail/{eventNo}")
   public ResponseEntity<Map<String, Object>> getEventDetail(@PathVariable("eventNo") Long eventNo) {
     try {
-      TemporalEventDto event = temporalEventService.getDetail(eventNo);
+      TemporalEventResponseDto event = temporalEventService.getDetail(eventNo);
       return handleSuccess(event);
     } catch (Exception exception) {
       log.debug(exception.getMessage());
@@ -52,12 +56,53 @@ public class TemporalEventController {
     }
   }
 
+  /**
+   * 일정 삭제
+   *
+   * @param eventNo
+   * @return
+   */
   @DeleteMapping("/{eventNo}")
   public ResponseEntity<Map<String, Object>> deleteEvent(@PathVariable("eventNo") Long eventNo) {
-    try{
+    try {
       temporalEventService.deleteEvent(eventNo);
       return handleSuccess("");
-    }catch (Exception e){
+    } catch (Exception e) {
+      log.debug(e.getMessage());
+      return handleFail("Fail");
+    }
+  }
+
+  /**
+   * 일정 등록
+   *
+   * @param event
+   * @return
+   */
+  @PostMapping
+  public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody TemporalEventInsertRequestDto event) {
+    try {
+      temporalEventService.registEvent(event);
+      return handleSuccess("");
+    } catch (Exception e) {
+      log.debug(e.getMessage());
+      return handleFail("Fail");
+    }
+  }
+
+  /**
+   * 일정 수정
+   *
+   * @param event
+   * @return
+   */
+  @PutMapping
+  public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody TemporalEventUpdateRequestDto event) {
+    try {
+      temporalEventService.modifyEvent(event);
+      return handleSuccess("");
+    } catch (Exception e) {
+      log.debug(e.getMessage());
       return handleFail("Fail");
     }
   }
