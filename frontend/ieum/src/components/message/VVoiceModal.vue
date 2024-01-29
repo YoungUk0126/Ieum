@@ -60,12 +60,12 @@
         <input
           datepicker
           datepicker-autohide
-          id="date-pick"
+          datepicker-format="yyyy-mm-dd"
           type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date"
-          v-model="editState.message_time"
-          @changeDate="changeDateFormat"
+          v-model.lazy="editState.message_time"
+          ref="datePicker"
         />
       </div>
       <div class="w-full border-t border-4 my-3"></div>
@@ -121,6 +121,7 @@ import { modifyApi } from '@/api/message'
 
 const props = defineProps(['messageState', 'modal'])
 const modal = ref(props.modal)
+const datePicker = ref()
 
 const editState = ref({
   message_no: '',
@@ -151,21 +152,6 @@ watch(
     modal.value = props.modal
   }
 )
-
-const changeDateFormat = () => {
-  const result = new Date(document.getElementById('date-pick').value)
-  if (Number(result.getFullYear()) > 2000) {
-    editState.value.message_time = dateFormat(result)
-  }
-}
-
-const dateFormat = (date) => {
-  const year = date.getFullYear()
-  const month = String(date.getMonth() + 1).padStart(2, '0')
-  const day = String(date.getDate()).padStart(2, '0')
-
-  return `${year}-${month}-${day}`
-}
 
 // 녹음중 상태 변수
 const isRecording = ref(false)
@@ -232,9 +218,10 @@ const record = async () => {
 
 const editSubmit = () => {
   const formData = new FormData()
+  editState.value.message_time = datePicker.value.value
+
   const json = JSON.stringify(editState.value)
   const formJson = new Blob([json], { type: 'application/json' })
-
   formData.append('data', formJson)
   formData.append('file', file.value, 'editFile.ogg')
 
