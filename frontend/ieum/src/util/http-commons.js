@@ -1,4 +1,4 @@
-/*
+
 import axios from "axios";
 
 const { VITE_VUE_API_URL } = import.meta.env;
@@ -14,4 +14,14 @@ function localAxios() {
   return instance;
 }
 
-export { localAxios };*/
+function localAxiosFormData() {
+  const instance = axios.create({
+    baseURL: VITE_VUE_API_URL,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return instance;
+}
+
+export { localAxios , localAxiosFormData};
