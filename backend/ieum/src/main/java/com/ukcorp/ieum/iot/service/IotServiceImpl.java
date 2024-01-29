@@ -15,76 +15,81 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IotServiceImpl implements IotService {
 
-    private final IotRepository iotRepository;
-    private final MemberRepository memberRepository;
+  private final IotRepository iotRepository;
+  private final MemberRepository memberRepository;
 
-    /**
-     * 작성자 : 이성목
-     * 해당 디바이스가 사용 중인지 확인
-     *
-     * @param code
-     * @return
-     */
-    @Override
-    public boolean activeCheck(String code) {
-        Optional<SerialCode> serialCode = iotRepository.searchSerialCode(code);
-        try {
-            SerialCode device = serialCode.get();
-            if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
-                return true;
-            }
-        } catch (NoSuchElementException e) {
-            e.printStackTrace();    //해당 코드의 기기를 찾을 수 없을 때
-        }
-        return false;
+  /**
+   * 작성자 : 이성목
+   * 해당 디바이스가 사용 중인지 확인
+   *
+   * @param code
+   * @return
+   */
+  @Override
+  public boolean activeCheck(String code) {
+    SerialCode device = iotRepository.searchSerialCode(code).orElseThrow(
+            () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
+
+    if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
+      return true;
     }
+    return false;
+  }
 
-    /**
-     * 작성자 : 이성목
-     * 기기 등록하는 서비스 메서드
-     *
-     * @param code
-     * @param userId
-     */
-    @Override
-    public void registSerialCode(String code, String userId) {
-        Optional<Member> byMemberId = memberRepository.findByMemberId(userId);
+  /**
+   * 작성자 : 이성목
+   * 기기 등록하는 서비스 메서드
+   *
+   * @param code
+   * @param userId
+   */
+  @Override
+  public void registSerialCode(String code, String userId) {
 
-        if (!activeCheck(code)) {
-            Optional<SerialCode> serialCode = iotRepository.searchSerialCode(code);
+    Member member = memberRepository.findByMemberId(userId).orElseThrow(
+            () -> new NoSuchElementException());
 
-            serialCode.get().updateUsableActice();  //기기 상태 활성화
+    if (!activeCheck(code)) {
+      SerialCode serialCode = iotRepository.searchSerialCode(code).orElseThrow(
+              () -> new NoSuchElementException());
 
-            byMemberId.get().updateSerialCode(code);    //회원에게 기기 할당
-        } else {
-            throw new RuntimeException("이미 사용중인 기기입니다");
-        }
+      serialCode.updateUsableActice();  //기기 상태 활성화
+
+      member.updateSerialCode(code);    //회원에게 기기 할당
+    } else {
+      throw new RuntimeException("이미 사용중인 기기입니다");
     }
+  }
 
-    /**
-     * 작성자 : 이성목
-     * 기기 수정하는 서비스 메서드
-     *
-     * @param code
-     * @param userId
-     */
-    @Override
-    public void updateSerialCode(String code, String userId) {
-        Member member = memberRepository.findByMemberId(userId).get();
-        String oldCode = member.getSerialCode();
+  /**
+   * 작성자 : 이성목
+   * 기기 수정하는 서비스 메서드
+   *
+   * @param code
+   * @param userId
+   */
+  @Override
+  public void updateSerialCode(String code, String userId) {
+    Member member = memberRepository.findByMemberId(userId).orElseThrow(
+            () -> new NoSuchElementException());
 
-        if (!activeCheck(code) && activeCheck(oldCode)) {
+    String oldCode = member.getSerialCode();
 
-            Optional<SerialCode> oldDevice = iotRepository.searchSerialCode(oldCode);
-            Optional<SerialCode> newDevice = iotRepository.searchSerialCode(code);
+    if (!activeCheck(code) && activeCheck(oldCode)) {
 
-            oldDevice.get().updateUsableInactive(); //사용하던 기기 비활성화
+      SerialCode oldDevice = iotRepository.searchSerialCode(oldCode).orElseThrow(
+              () -> new NoSuchElementException());
 
-            member.updateSerialCode(code);  //기기 정보 업데이트
-            newDevice.get().updateUsableActice();   //새 기기 활성화
+      SerialCode newDevice = iotRepository.searchSerialCode(code).orElseThrow(
+              () -> new NoSuchElementException());;
 
-        } else {
-            throw new RuntimeException("기기를 변경할 수 없다");
-        }
+      oldDevice.updateUsableInactive(); //사용하던 기기 비활성화
+
+      member.updateSerialCode(code);  //기기 정보 업데이트
+      newDevice.updateUsableActice();   //새 기기 활성화
+
+    } else {
+      throw new RuntimeException("기기를 변경할 수 없다");
     }
+  }
 }
