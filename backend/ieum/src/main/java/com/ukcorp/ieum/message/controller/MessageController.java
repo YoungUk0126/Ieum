@@ -31,13 +31,13 @@ public class MessageController {
   /**
    * 해당 사용자에 해당하는 음성/영상 리스트 조회
    *
-   * @param careNo
+   * @param
    * @return List<MessageResponseDto>
    */
-  @GetMapping("/{careNo}")
-  public ResponseEntity<Map<String, Object>> getMessage(@PathVariable("careNo") Long careNo) {
+  @GetMapping
+  public ResponseEntity<Map<String, Object>> getMessage() {
     try {
-      List<MessageResponseDto> list = messageService.getList(careNo);
+      List<MessageResponseDto> list = messageService.getList();
       return handleSuccess(list);
     } catch (Exception exception) {
       log.debug(exception.getMessage());
