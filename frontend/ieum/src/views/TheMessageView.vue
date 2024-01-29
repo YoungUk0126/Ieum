@@ -1,5 +1,5 @@
 <template>
-  <div class="body container my-5 border p-5">
+  <div class="container mx-auto my-5 border p-5">
     <h3 class="mb-5 fw-bold">전체 음성/ 영상 메세지 목록</h3>
     <TheMessageBody></TheMessageBody>
   </div>
