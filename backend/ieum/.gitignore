@@ -1,5 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
+messageFile/*
+
 
 ### Django ###
 *.log
