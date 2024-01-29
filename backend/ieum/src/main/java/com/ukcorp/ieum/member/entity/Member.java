@@ -74,4 +74,8 @@ public class Member {
         this.memberPhone = updateMember.getPhone();
     }
 
+    public void updateSerialCode(String code) {
+        this.serialCode = code;
+    }
+
 }

@@ -25,4 +25,12 @@ public class SerialCode {
     @Enumerated(EnumType.STRING)
     private Usable usable;
 
+
+    public void updateUsableActice() {
+        this.usable = Usable.ACTIVE;
+    }
+
+    public void updateUsableInactive() {
+        this.usable = Usable.INACTIVE;
+    }
 }
