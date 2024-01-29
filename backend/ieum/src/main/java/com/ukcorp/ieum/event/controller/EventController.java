@@ -31,7 +31,6 @@ public class EventController {
    */
   @GetMapping("/list/{care-no}")
   public ResponseEntity getEventList(@PathVariable("care-no") Long careNo) {
-    // TODO : 기념일 정보 전체 조회 로직 추가
     try {
       List<EventGetResponseDto> eventGetResponseDtoList = eventService.getAllEvent(careNo);
       return handleSuccess(eventGetResponseDtoList);
@@ -47,7 +46,6 @@ public class EventController {
    *
    * @param eventNo
    * @return eventGetResponseDto
-   *
    */
   @GetMapping("/detail/{event-no}")
   public ResponseEntity<Map<String, Object>> getEvent(@PathVariable("event-no") Long eventNo) {
@@ -94,6 +92,7 @@ public class EventController {
       return handleError("Fail");
     }
   }
+
   /**
    * 기념일 삭제
    *
