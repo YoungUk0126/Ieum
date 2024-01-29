@@ -27,6 +27,7 @@
   </div>
   <!-- Modal body -->
   <div class="p-4 md:p-5 space-y-4">
+    <video ref="video" autoplay />
     <div class="flex flex-wrap items-center">
       <div class="w-1/3 text-center md:text-right mb-3">
         <p class="font-bold mb-0">발신자</p>
@@ -132,8 +133,6 @@ const closeModal = () => {
   modal.value.hide()
 }
 
-onMounted(() => {})
-
 // 이후 messageState가 변경됨에 따라 이전 음성을 바꿔줘야 한다.
 watch(
   () => props.messageState,
@@ -150,90 +149,38 @@ watch(
   }
 )
 
-// 녹음중 상태 변수
-const isRecording = ref(false)
+const video = ref(null)
+const constraints = {
+  audio: false,
+  video: true
+}
 
-// MediaRecorder 변수 생성
-const mediaRecorder = ref()
+const handleStream = (stream) => {
+  const videoTracks = stream.getVideoTracks()
+  console.log('Got stream with constraints:', constraints)
+  console.log(`Using video device: ${videoTracks[0].label}`)
+  stream.onremovetrack = () => {
+    console.log('Stream ended')
+  }
+  video.value.srcObject = stream
+  console.log(stream)
+}
 
-// 녹음 데이터 저장 배열
-const audioArray = ref([])
-
-// 녹음 데이터 Blob 형식
-const file = ref()
-
-const record = async () => {
-  // 엘리먼트 취득
-  const _audioEl = document.querySelector('#newVoice')
-
-  if (!isRecording.value) {
-    // 마이크 mediaStream 생성: Promise를 반환하므로 async/await 사용
-    const mediaStream = await navigator.mediaDevices.getUserMedia({ audio: true })
-
-    // MediaRecorder 생성
-    mediaRecorder.value = new MediaRecorder(mediaStream)
-
-    // 이벤트핸들러: 녹음 데이터 취득 처리
-    mediaRecorder.value.ondataavailable = (event) => {
-      audioArray.value.push(event.data) // 오디오 데이터가 취득될 때마다 배열에 담아둔다.
-    }
-
-    // 이벤트핸들러: 녹음 종료 처리 & 재생하기
-    mediaRecorder.value.onstop = () => {
-      // 녹음이 종료되면, 배열에 담긴 오디오 데이터(Blob)들을 합친다: 코덱도 설정해준다.
-      const blob = new Blob(audioArray.value, { type: 'audio/ogg codecs=opus' })
-      audioArray.value.splice(0) // 기존 오디오 데이터들은 모두 비워 초기화한다.
-
-      // Blob 데이터에 접근할 수 있는 주소를 생성한다.
-      const blobURL = window.URL.createObjectURL(blob)
-
-      // audio엘리먼트로 재생한다.
-      _audioEl.src = blobURL
-      _audioEl.play()
-      file.value = blob
-      /*
-      const clipName = 'voiceRecord'
-
-      // 다운 로직
-      const a = document.createElement('a')
-      a.href = _audioEl.src
-
-      a.download = clipName
-      a.click()
-      */
-    }
-
-    // 녹음 시작
-    mediaRecorder.value.start()
-    isRecording.value = true
+const handleError = (error) => {
+  if (error.name === 'OverconstrainedError') {
+    console.error(
+      `The resolution ${constraints.video.width.exact}x${constraints.video.height.exact} px is not supported by your device.`
+    )
+  } else if (error.name === 'NotAllowedError') {
+    console.error('You need to grant this page permission to access your camera and microphone.')
   } else {
-    // 녹음 종료
-    mediaRecorder.value.stop()
-    isRecording.value = false
+    console.error(`getUserMedia error: ${error.name}`, error)
   }
 }
 
-const editSubmit = () => {
-  const formData = new FormData()
-
-  const json = JSON.stringify(editState.value)
-  const formJson = new Blob([json], { type: 'application/json' })
-
-  formData.append('formJson', formJson)
-  formData.append('file', file.value, 'editFile.ogg')
-
-  modifyApi(
-    formData,
-    ({ data }) => {
-      if (data.success) {
-        closeModal()
-      }
-    },
-    () => {
-      console.log('fail')
-    }
-  )
-}
+onMounted(() => {
+  navigator.mediaDevices.getUserMedia(constraints).then(handleStream).catch(handleError)
+})
 </script>
 
 <style scoped></style>
