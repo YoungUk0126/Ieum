@@ -18,13 +18,11 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 public class PillTimeResponseDto {
-    private String pillDate;
     private Long pillTime;
 
 
 //    Fetch Join을 위한 생성자
     public PillTimeResponseDto(PillTime pt ){
-        this.pillDate = pt.getPillDate().toString();
         this.pillTime = pt.getPillTakeTime();
     }
 }

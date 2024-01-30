@@ -1,7 +1,7 @@
 package com.ukcorp.ieum.pill.controller;
 
-import com.ukcorp.ieum.pill.dto.request.PillInfoRequestDto;
-import com.ukcorp.ieum.pill.dto.response.PillInfoResponseDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class PillController {
     @GetMapping("/{care-no}")
     public ResponseEntity<Map<String, Object>> getPillList(Long careNo) {
 
-        List<PillInfoResponseDto> result = pillService.getAllPillInfo(careNo);
+        List<PillInfoGetResponseDto> result = pillService.getAllPillInfo(careNo);
 
         if(result != null) {
             return handleSuccess(result);
@@ -44,7 +44,7 @@ public class PillController {
      */
     @GetMapping("/{pill-info-id}")
     public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-id") Long pillId) {
-        PillInfoResponseDto result = pillService.getPillInfo(pillId);
+        PillInfoGetResponseDto result = pillService.getPillInfo(pillId);
         if(result != null) {
             return handleSuccess(result);
         }
@@ -58,7 +58,7 @@ public class PillController {
      * 약 정보를 넣기 위한 Controller
      */
     @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoRequestDto pillInfo) {
+    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoInsertRequestDto pillInfo) {
         log.debug("==============약 정보 등록 시작===============");
         int result = pillService.insertPill(pillInfo);
 

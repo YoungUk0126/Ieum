@@ -38,6 +38,9 @@ public class PillInfo {
     @Enumerated(EnumType.STRING)
     private PillMethod pillMethod;
 
+    @Column(name = "PILL_DATE", nullable = false)
+    private String pillDate;
+
     @OneToMany(mappedBy = "pillInfo", fetch = FetchType.LAZY)
     private List<PillTime> pillTimes;
 }

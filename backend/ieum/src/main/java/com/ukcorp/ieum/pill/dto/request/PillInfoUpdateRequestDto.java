@@ -11,16 +11,13 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
-/**
- * @author : 김영욱
- * InfoRequest를 받기 위한 Dto
- */
-public class PillInfoRequestDto {
-    private Long careNo;
+public class PillInfoUpdateRequestDto {
+    private Long pillInfoNo;
     private String pillName;
     private LocalDate startDate;
     private LocalDate endDate;
     private String pillMethod;
+    private String pillDate;
     private List<PillTimeRequestDto> pillTimes;
 
 }
