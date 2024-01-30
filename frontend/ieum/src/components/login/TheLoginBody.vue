@@ -73,11 +73,15 @@
       </div>
     </div>
   </div>
+  <button @click="cookieText">쿠키 테스트</button>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { login } from '../../api/member.js'
+import VueCookies from 'vue-cookies'
+
+VueCookies.set('jwt', 'sdsdsd')
 
 const data = ref({
   member_id: '',
@@ -94,6 +98,10 @@ const loginSubmit = () => {
       console.log('fail')
     }
   )
+}
+
+const cookieText = () => {
+  console.log(VueCookies.get('jwt'))
 }
 </script>
 
