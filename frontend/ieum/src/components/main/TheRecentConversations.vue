@@ -1,23 +1,71 @@
 <template>
-  <div class="recent-message-container row mt-5">
-    <div class="col-9">
+  <div class="message-container mx-auto bg-white shadow-md rounded-md m-5">
+    <div class="grid grid-rows-3">
       <h3>최근 대화 목록</h3>
       <div class="alarm-buttons">
-        <VModal></VModal>
-        <div class="dropdown">
-          <button
-            class="btn btn-secondary dropdown-toggle alarm-btn"
-            type="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
+        <!-- <VModal></VModal> -->
+
+        <button
+          id="dropdownDefaultButton"
+          data-dropdown-toggle="dropdown"
+          class="dropdown-main-button text-white bg-green-300 hover:bg-green-400 focus:ring-2 focus:outline-none focus:bg-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-green-600 dark:hover:bg-green-300 dark:focus:ring-green-200"
+          type="button"
+        >
+          알람 종류
+          <svg
+            class="w-2.5 h-2.5 ms-3"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 6"
           >
-            알람 종류
-          </button>
-          <ul class="dropdown-menu bg-success-subtle">
-            <li><a class="dropdown-item" href="#">식사</a></li>
-            <li><a class="dropdown-item" href="#">투약 정보</a></li>
-            <li><a class="dropdown-item" href="#">취침</a></li>
-            <li><a class="dropdown-item" href="#">기념일</a></li>
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m1 1 4 4 4-4"
+            />
+          </svg>
+        </button>
+
+        <!-- Dropdown menu -->
+        <div
+          id="dropdown"
+          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
+        >
+          <ul
+            class="py-2 text-sm text-gray-700 dark:text-gray-200"
+            aria-labelledby="dropdownDefaultButton"
+          >
+            <li>
+              <a
+                href="#"
+                class="block px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >기념일</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >투약</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >식사 시간</a
+              >
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-3 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                >기상/취침</a
+              >
+            </li>
           </ul>
         </div>
       </div>
@@ -54,7 +102,7 @@
         </table>
       </div>
     </div>
-    <div class="col-1 to-whole-conv">
+    <div class="grid grid-rows-2">
       <a href="/chat">>전체 대화</a>
     </div>
   </div>
@@ -67,18 +115,16 @@ import VModal from '../modal/VModal.vue'
 </script>
 
 <style scoped>
-.recent-message-container {
-  justify-content: center;
+.message-container {
+  /* justify-content: center; */
   width: 80%;
   height: 100%;
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 200, 156, 0.1);
-  border-radius: 10px;
-  border: 1px #1de4c1 solid;
-  padding-top: 2%;
-  padding-bottom: 2%;
+  padding: 6%;
 }
 
+.dropdown-main-button {
+  --tw-ring-color: #2dffc7;
+}
 .alarm-buttons {
   display: flex;
   justify-content: flex-end;
