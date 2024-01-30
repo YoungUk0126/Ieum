@@ -68,26 +68,23 @@
         />
       </div>
       <div class="w-full border-t border-4 my-3"></div>
-      <div class="w-full text-left md:text-right items-center mb-2">
-        <p class="font-bold mb-0">이전 메세지</p>
+
+      <div class="w-1/2 text-center">
+        <button
+          type="button"
+          class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          @click="startRecording"
+        >
+          녹화시작
+        </button>
       </div>
-      <div class="w-2/3 md:w-2/3">
-        <audio id="prevVoice" controls class="w-full"></audio>
-      </div>
-      <div class="w-full border-t border-4 my-3"></div>
-      <div class="w-full text-left items-center">
-        <p class="font-bold mb-0">새로 녹음</p>
-      </div>
-      <div class="w-2/3 mt-2">
-        <audio id="newVoice" controls class="w-full"></audio>
-      </div>
-      <div class="w-1/3 text-center">
+      <div class="w-1/2 text-center">
         <button
           type="button"
           class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-          @click="record"
+          @click="stopRecording"
         >
-          녹화
+          녹화종료
         </button>
       </div>
     </div>
@@ -99,7 +96,7 @@
     <button
       type="button"
       class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-      @click="closeModal"
+      @click="editSubmit"
     >
       수정
     </button>
@@ -110,8 +107,6 @@
     >
       닫기
     </button>
-    <button @click="startRecording">녹화시작</button>
-    <button @click="stopRecording">녹화종료</button>
   </div>
 </template>
 
@@ -139,6 +134,7 @@ const closeModal = () => {
 watch(
   () => props.messageState,
   (nv, ov) => {
+    console.log(nv)
     // 깊은 복사
     editState.value = JSON.parse(JSON.stringify(nv))
   }
@@ -162,13 +158,9 @@ const constraints = {
   audio: true,
   video: true
 }
-onMounted(() => {})
-
-const record = () => {
-  recorder.value = new MediaRecorder(stream.value, {
-    mimeType: 'video/webm; codecs=vp9'
-  })
-}
+onMounted(() => {
+  editState.value = props.messageState
+})
 
 const stopRecording = () => {
   recorder.value.stop()
@@ -216,7 +208,7 @@ const startRecording = async () => {
 }
 
 const endStream = () => {
-  if (!stream.value) {
+  if (stream.value != undefined) {
     // 미디어 스트림의 트랙들 가져오기
     const tracks = stream.value.getTracks()
 
@@ -250,7 +242,9 @@ const handleError = (error) => {
 
 const editSubmit = () => {
   const formData = new FormData()
-  editState.value.message_time = datePicker.value.value
+  if (datePicker.value != undefined) {
+    editState.value.message_time = datePicker.value.value
+  }
 
   const json = JSON.stringify(editState.value)
   const formJson = new Blob([json], { type: 'application/json' })
@@ -260,6 +254,7 @@ const editSubmit = () => {
   modifyApi(
     formData,
     ({ data }) => {
+      console.log('sdsd')
       if (data.success) {
         closeModal()
       }

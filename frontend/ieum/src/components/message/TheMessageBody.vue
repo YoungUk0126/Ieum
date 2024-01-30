@@ -93,7 +93,8 @@
         </div>
       </div>
     </div>
-
+    <!--
+  
     <table class="w-full text-sm rtl:text-right text-gray-500 dark:text-gray-400 text-center">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -182,6 +183,7 @@
         </tr>
       </tbody>
     </table>
+-->
   </div>
 
   <!-- Modal toggle -->
