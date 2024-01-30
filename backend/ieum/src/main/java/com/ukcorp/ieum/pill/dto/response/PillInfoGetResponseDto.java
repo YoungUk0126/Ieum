@@ -17,10 +17,11 @@ import java.util.List;
 @ToString
 @Builder
 public class PillInfoGetResponseDto {
+    private Long pillInfoNo;
     private String pillName;
+    private Long careNo;
     private LocalDate startDate;
     private LocalDate endDate;
     private String pillMethod;
     private String pillDate;
-    private List<PillTimeResponseDto> pillTimes;
 }
