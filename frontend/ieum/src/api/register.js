@@ -9,7 +9,7 @@ function register(data, success, fail) {
 }
 
 function sendVerificationCode(data, success, fail) {
-  local.post(`${url}/api/member/send`, JSON.stringify(data)).then(success).catch(fail)
+  local.post(`${url}/api/member/auth`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function checkVerificationCode(data, success, fail) {
@@ -17,48 +17,15 @@ function checkVerificationCode(data, success, fail) {
 }
 
 function idcheck(param, success, fail) {
-  local
-    .get(`${url}/api/member/check-id/${param}`)
-    .then((response) => {
-      if (response.data && response.data.isDuplicate) {
-        fail()
-      } else {
-        success(response)
-      }
-    })
-    .catch((error) => {
-      fail(error)
-    })
+  local.get(`${url}/api/member/check-id/${param}`).then(success).catch(fail)
 }
 
 function emailcheck(data, success, fail) {
-  local
-    .post(`${url}/api/member/check-email`, JSON.stringify(data))
-    .then((response) => {
-      if (response.data && response.data.isDuplicate) {
-        fail()
-      } else {
-        success(response)
-      }
-    })
-    .catch((error) => {
-      fail(error)
-    })
+  local.post(`${url}/api/member/check-email`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function phonecheck(data, success, fail) {
-  local
-    .post(`${url}/api/member/check-phone`, JSON.stringify(data))
-    .then((response) => {
-      if (response.data && response.data.isDuplicate) {
-        fail()
-      } else {
-        success(response)
-      }
-    })
-    .catch((error) => {
-      fail(error)
-    })
+  local.post(`${url}/api/member/check-phone`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 export { register, checkVerificationCode, sendVerificationCode, idcheck, emailcheck, phonecheck }
