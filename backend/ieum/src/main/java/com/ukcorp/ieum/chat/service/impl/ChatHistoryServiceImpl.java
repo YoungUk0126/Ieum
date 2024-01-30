@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ChatHistoryServiceImpl implements ChatHistoryService {
   @Override
-  public void getChatHistory(Long careNo, Pageable pageable, ChatHIstoryRequestDto chatHIstoryRequestDto) {\
+  public void getChatHistory(Long careNo, Pageable pageable, ChatHIstoryRequestDto chatHIstoryRequestDto) {
 
   }
 }
