@@ -1,48 +1,6 @@
 <template>
   <div class="content-container">
     <div class="row">
-      <div class="dropdown mb-4">
-        <button
-          class="btn dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          알람 종류
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <div
-              class="dropdown-item"
-              dropdownId="anniv"
-              @click="changeModalBody('VModalAnniBody')"
-            >
-              기념일
-            </div>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              dropdownId="wakeandsleep"
-              @click="changeModalBody('VModalWakeandSleep')"
-              >기상/취침</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              dropdownId="injection"
-              @click="changeModalBody('VModalInjection')"
-              >투약</a
-            >
-          </li>
-          <li>
-            <a class="dropdown-item" dropdownId="meal" @click="changeModalBody('VModalMeal')"
-              >식사</a
-            >
-          </li>
-        </ul>
-      </div>
       <div class="title-input mb-4">
         <input
           type="text"

@@ -11,4 +11,4 @@ import TheNavbar from './components/common/TheNavbar.vue'
   <TheFooter></TheFooter>
 </template>
 
-<style scoped></style>
+<style></style>
