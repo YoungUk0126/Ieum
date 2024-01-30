@@ -1,6 +1,8 @@
 package com.ukcorp.ieum;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
 import lombok.extern.slf4j.Slf4j;
@@ -39,30 +41,31 @@ public class PillControllerTest {
   void testRegist() throws Exception {
 
     // 약 정보 등록 관련 테스트
-    PillInfoInsertRequestDto requestDto = new PillInfoInsertRequestDto();
-    requestDto.setCareNo(1234L);
-    requestDto.setPillName("이름");
-    requestDto.setStartDate(LocalDate.parse("2024-01-30"));
-    requestDto.setEndDate(LocalDate.parse("2024-02-29"));
-    requestDto.setPillMethod("식전");
-    requestDto.setPillDate("1111111");
-
-    List<PillTimeInsertRequestDto> pillTimes = new ArrayList<>();
-    PillTimeInsertRequestDto pillTime1 = new PillTimeInsertRequestDto();
-    pillTime1.setPillInfoNo(1L);
-    pillTime1.setPillTakeTime(90000L);
-    pillTimes.add(pillTime1);
-
-    PillTimeInsertRequestDto pillTime2 = new PillTimeInsertRequestDto();
-    pillTime2.setPillInfoNo(1L);
-    pillTime2.setPillTakeTime(140000L);
-    pillTimes.add(pillTime2);
-
-    requestDto.setPillTimes(pillTimes);
-
-    // JSON 변환
-    ObjectMapper objectMapper = new ObjectMapper();
-    String requestBody = objectMapper.writeValueAsString(requestDto);
+//    PillInfoInsertRequestDto requestDto = new PillInfoInsertRequestDto();
+//    requestDto.setCareNo(1L);
+//    requestDto.setPillName("이름");
+//    requestDto.setPillStartDate(LocalDate.parse("2024-01-30"));
+//    requestDto.setPillEndDate(LocalDate.parse("2024-02-29"));
+//    requestDto.setPillMethod("식전");
+//    requestDto.setPillDate("1111111");
+//
+//    List<PillTimeInsertRequestDto> pillTimes = new ArrayList<>();
+//    PillTimeInsertRequestDto pillTime1 = new PillTimeInsertRequestDto();
+//    pillTime1.setPillTakeTime(90000L);
+//    pillTimes.add(pillTime1);
+//
+//    PillTimeInsertRequestDto pillTime2 = new PillTimeInsertRequestDto();
+//    pillTime2.setPillTakeTime(140000L);
+//    pillTimes.add(pillTime2);
+//
+//    requestDto.setPillTimes(pillTimes);
+//
+//    // JSON 변환
+//    ObjectMapper objectMapper = new ObjectMapper();
+//    objectMapper.registerModule(new JavaTimeModule());
+//    objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+//    String requestBody = objectMapper.writeValueAsString(requestDto);
+    String requestBody = "{\"care_no\": \"1\",\"pill_name\":\"이름\",\"pill_start_date\":\"2024-01-30\",\"pill_end_date\":\"2024-02-29\",\"pill_method\":\"식전\",\"pill_date\":\"1111111\",\"pill_times\":[{\"pill_take_time\":\"90000\"},{\"pill_take_time\":\"140000\"}]}";
 
     mock.perform(post("/api/pill")
                     .content(requestBody)

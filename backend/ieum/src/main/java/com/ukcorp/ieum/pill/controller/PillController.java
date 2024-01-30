@@ -1,9 +1,7 @@
 package com.ukcorp.ieum.pill.controller;
 
-import com.ukcorp.ieum.meal.dto.response.MealGetResponseDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
-import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
@@ -58,9 +56,11 @@ public class PillController {
      * @author : 김영욱
      * 약 정보를 넣기 위한 Controller
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoInsertRequestDto pillInfo) {
-        log.debug("==============약 정보 등록 시작===============");
+        System.out.println("약 정보 등록 시작");
+        System.out.println(pillInfo.toString());
+//        System.out.println(careNo);
         try {
             pillService.insertPill(pillInfo);
             return handleSuccess("");
@@ -70,7 +70,7 @@ public class PillController {
         }
     }
 
-    @PutMapping("/")
+    @PutMapping
     public ResponseEntity<Map<String, Object>> updatePill(@RequestBody PillInfoUpdateRequestDto pillInfo) {
         log.debug("==============약 정보 수정 시작===============");
         try {

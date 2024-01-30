@@ -51,12 +51,16 @@ public class PillServiceImpl implements PillService {
       PillInfo pillInfo = PillInfo.builder()
               .pillName(pillInfoDto.getPillName())
               .careInfo(care)
-              .pillStartDate(pillInfoDto.getStartDate())
-              .pillEndDate(pillInfoDto.getEndDate())
+              .pillStartDate(pillInfoDto.getPillStartDate())
+              .pillEndDate(pillInfoDto.getPillEndDate())
 //            Enum 자동 매핑 되는지 확인할 것
               .pillMethod(PillMethod.valueOf(pillInfoDto.getPillMethod()))
               .pillDate(pillInfoDto.getPillDate())
               .build();
+
+      pillInfoRepository.save(pillInfo);
+
+      System.out.println(pillInfo.toString());
 
       List<PillTime> pillTimes = new ArrayList<>();
 
@@ -66,7 +70,6 @@ public class PillServiceImpl implements PillService {
       }
 
 //    repository로 저장하기!!!!
-      pillInfoRepository.save(pillInfo);
       pillTimeRepository.saveAll(pillTimes);
     } catch (DataIntegrityViolationException e) {
       log.debug("등록 오류!");
@@ -148,8 +151,8 @@ public class PillServiceImpl implements PillService {
               .pillInfoNo(pillInfoDto.getPillInfoNo())
               .pillName(pillInfoDto.getPillName())
               .careInfo(care)
-              .pillStartDate(pillInfoDto.getStartDate())
-              .pillEndDate(pillInfoDto.getEndDate())
+              .pillStartDate(pillInfoDto.getPillStartDate())
+              .pillEndDate(pillInfoDto.getPillEndDate())
 //            Enum 자동 매핑 되는지 확인할 것
               .pillMethod(PillMethod.valueOf(pillInfoDto.getPillMethod()))
               .pillDate(pillInfoDto.getPillDate())
