@@ -40,7 +40,7 @@
               <input
                 id="terms"
                 type="checkbox"
-                value=""
+                v-model="savedCheck"
                 class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
                 required
               />
@@ -77,7 +77,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { login } from '../../api/member.js'
 import VueCookies from 'vue-cookies'
 
@@ -88,20 +88,35 @@ const data = ref({
   password: ''
 })
 
+const savedCheck = ref(false)
+
+onMounted(() => {
+  if (VueCookies.isKey('savedId')) {
+    savedCheck.value = true
+    data.value.member_id = VueCookies.get('savedId')
+  }
+})
+
 const loginSubmit = () => {
+  VueCookies.get('jwt')
+  if (savedCheck.value) {
+    VueCookies.set('savedId', data.value.member_id)
+  } else {
+    VueCookies.remove('savedId')
+  }
   login(
     data.value,
-    ({ data }) => {
-      console.log(data)
+    (response) => {
+      if (response.status == 400) {
+      } else {
+        alert('오류!')
+      }
     },
-    () => {
+    (response) => {
+      console.log(response)
       console.log('fail')
     }
   )
-}
-
-const cookieText = () => {
-  console.log(VueCookies.get('jwt'))
 }
 </script>
 
