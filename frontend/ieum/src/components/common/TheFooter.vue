@@ -1,13 +1,29 @@
 <template>
-  <footer class="all">
-    <div class="py-3">
-      <ul class="nav justify-content-center border-bottom pb-3 mb-3">
-        <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
-        <li class="nav-item">
-          <a href="#" class="nav-link px-2 text-muted" @click="showPrivacyPolicy">개인정보처리방침</a>
-        </li>
-      </ul>
-      <p class="text-center text-muted">© 2022 Young Uk Company, Inc</p>
+  <footer class="bg-[#EBFBF7] rounded-lg shadow dark:bg-gray-900 m-4">
+    <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+      <div class="sm:flex sm:items-center sm:justify-between">
+        <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+          <img src="../../assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
+          <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white"></span>
+        </a>
+        <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+          <li>
+            <a href="#" class="hover:text-black me-4 md:me-6 text-xl">About</a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-black me-4 md:me-6 text-xl" @click="showPrivacyPolicy">Privacy Policy</a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-black me-4 md:me-6 text-xl">Licensing</a>
+          </li>
+          <li>
+            <a href="#" class="hover:text-black me-16 text-xl">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+      <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/"
+          class="hover:text-black"></a>. All Rights Reserved.</span>
     </div>
   </footer>
 </template>
