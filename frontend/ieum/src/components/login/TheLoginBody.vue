@@ -73,15 +73,16 @@
       </div>
     </div>
   </div>
-  <button @click="cookieText">쿠키 테스트</button>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { login } from '../../api/member.js'
+import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
+import swal from 'sweetalert'
 
-VueCookies.set('jwt', 'sdsdsd')
+const router = useRouter()
 
 const data = ref({
   member_id: '',
@@ -98,25 +99,37 @@ onMounted(() => {
 })
 
 const loginSubmit = () => {
-  VueCookies.get('jwt')
+  // 아이디 저장 로직
   if (savedCheck.value) {
     VueCookies.set('savedId', data.value.member_id)
   } else {
     VueCookies.remove('savedId')
   }
-  login(
-    data.value,
-    (response) => {
-      if (response.status == 400) {
-      } else {
-        alert('오류!')
-      }
-    },
-    (response) => {
-      console.log(response)
-      console.log('fail')
+
+  login(data.value, (response) => {
+    if (response.status == 400) {
+      // 각 토큰 값 쿠키로 저장
+      VueCookies.set('accessToken', response.data.accessToken)
+      VueCookies.set('refreshToken', response.data.refreshToken)
+      VueCookies.set('grantType', response.data.grantType)
+
+      router.push({ name: 'TheMainViewVue' })
+    } else {
+      swal({
+        title: '알림',
+        text: '잘못된 로그인 정보입니다',
+        icon: 'error',
+        buttons: {
+          confirm: {
+            text: '확인',
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
     }
-  )
+  })
 }
 </script>
 
