@@ -87,18 +87,25 @@ public class PillServiceImpl implements PillService {
   public List<TotalPillGetResponseDto> getAllPillInfo(Long careNo) throws Exception {
     try {
       List<PillInfo> pillInfos = pillInfoRepository.findByCareInfo_CareNo(careNo);
+//      클라이언트에게 보낼 List미리 선언
+      List<TotalPillGetResponseDto> totalPills = new ArrayList<>();
       for (PillInfo pillInfo : pillInfos) {
+//          해당 pillInfo를 DTO로 변환
+        PillInfoGetResponseDto pillInfoGetResponseDto = pillInfoMapper.pillInfoToResponseDto(pillInfo);
+//          pillInfo의 PK에 속해있는 pillTime 리스트들 받아오기
         List<PillTime> pillTimes = pillTimeRepository.findPillTimesByPillInfo_PillInfoNo(pillInfo.getPillInfoNo());
+//        pillTimeDTO List로 변환
+        List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillTimes);
+//        totalPill 리스트에 변환한 totalPillGetResponseDto를 넣어줌
+        totalPills.add(pillInfoMapper.pillInfoAndPillTimesToResponseDto(pillInfoGetResponseDto, pillTimeGetResponseDtos));
       }
+
+      return totalPills;
 
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
     }
-
-
-//        mapper로 DTO로 변환 후 리턴
-    return null;
   }
 
   @Transactional
@@ -119,9 +126,4 @@ public class PillServiceImpl implements PillService {
 
   }
 
-
-  @Override
-  public void deletePill(Long pillInfoNo) {
-    pillInfoRepository.deleteById(pillInfoNo);
-  }
 }
