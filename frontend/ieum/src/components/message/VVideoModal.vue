@@ -254,7 +254,6 @@ const editSubmit = () => {
   modifyApi(
     formData,
     ({ data }) => {
-      console.log('sdsd')
       if (data.success) {
         closeModal()
       }
