@@ -87,7 +87,7 @@
           class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
           @click="record"
         >
-          녹음
+          녹화
         </button>
       </div>
     </div>
@@ -104,13 +104,14 @@
       수정
     </button>
     <button
-      data-modal-hide="edit-modal"
       type="button"
       class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
       @click="closeModal"
     >
       닫기
     </button>
+    <button @click="startRecording">녹화시작</button>
+    <button @click="stopRecording">녹화종료</button>
   </div>
 </template>
 
@@ -130,6 +131,7 @@ const editState = ref({
 })
 
 const closeModal = () => {
+  endStream()
   modal.value.hide()
 }
 
@@ -149,21 +151,89 @@ watch(
   }
 )
 
-const video = ref(null)
+const stream = ref()
+const video = ref()
+const recorder = ref()
+const isRecording = ref(false)
+const recordedChunks = ref([])
+const recordedBlob = ref()
+const datePicker = ref()
 const constraints = {
-  audio: false,
+  audio: true,
   video: true
 }
+onMounted(() => {})
 
-const handleStream = (stream) => {
-  const videoTracks = stream.getVideoTracks()
-  console.log('Got stream with constraints:', constraints)
-  console.log(`Using video device: ${videoTracks[0].label}`)
-  stream.onremovetrack = () => {
+const record = () => {
+  recorder.value = new MediaRecorder(stream.value, {
+    mimeType: 'video/webm; codecs=vp9'
+  })
+}
+
+const stopRecording = () => {
+  recorder.value.stop()
+  endStream()
+}
+
+const startRecording = async () => {
+  await navigator.mediaDevices.getUserMedia(constraints).then(handleStream).catch(handleError)
+
+  try {
+    // MediaRecorder 초기화 및 시작
+    recorder.value = new MediaRecorder(stream.value, {
+      mimeType: 'video/webm; codecs=vp9'
+    })
+
+    recorder.value.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        // 여기에서 녹화된 데이터를 처리하거나 저장합니다.
+        recordedChunks.value.push(event.data)
+      }
+    }
+
+    recorder.value.onstop = () => {
+      // 녹화가 중지될 때 수행할 작업을 정의합니다.
+      recordedBlob.value = new Blob(recordedChunks.value, { type: 'video/webm' })
+
+      // 여기에서 녹화된 Blob 데이터를 처리하거나 저장합니다.
+      // 예를 들어, 저장할 때는 a 태그를 만들고 download 속성을 사용하여 Blob을 다운로드할 수 있습니다.
+      const downloadLink = document.createElement('a')
+      downloadLink.href = URL.createObjectURL(recordedBlob.value)
+      downloadLink.download = 'recorded-video.webm'
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      document.body.removeChild(downloadLink)
+      console.log('Recording stopped')
+
+      recordedChunks.value = []
+    }
+
+    recorder.value.start()
+    isRecording.value = true
+  } catch (error) {
+    console.error('Error accessing media devices:', error)
+  }
+}
+
+const endStream = () => {
+  if (!stream.value) {
+    // 미디어 스트림의 트랙들 가져오기
+    const tracks = stream.value.getTracks()
+
+    // 각 트랙에 대해 stop() 메서드 호출
+    tracks.forEach((track) => {
+      track.stop()
+    })
+  }
+}
+
+const handleStream = (data) => {
+  stream.value = data
+
+  stream.value.onremovetrack = () => {
     console.log('Stream ended')
   }
-  video.value.srcObject = stream
-  console.log(stream)
+  video.value.srcObject = stream.value
 }
 
 const handleError = (error) => {
@@ -178,9 +248,27 @@ const handleError = (error) => {
   }
 }
 
-onMounted(() => {
-  navigator.mediaDevices.getUserMedia(constraints).then(handleStream).catch(handleError)
-})
+const editSubmit = () => {
+  const formData = new FormData()
+  editState.value.message_time = datePicker.value.value
+
+  const json = JSON.stringify(editState.value)
+  const formJson = new Blob([json], { type: 'application/json' })
+  formData.append('data', formJson)
+  formData.append('file', recordedBlob.value, 'editFile.webm')
+
+  modifyApi(
+    formData,
+    ({ data }) => {
+      if (data.success) {
+        closeModal()
+      }
+    },
+    () => {
+      console.log('fail')
+    }
+  )
+}
 </script>
 
 <style scoped></style>
