@@ -5,6 +5,7 @@ import com.ukcorp.ieum.chat.service.ChatHistoryService;
 import com.ukcorp.ieum.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,8 @@ public class ChatHistoryController {
   @GetMapping
   public ResponseEntity getChatHistory(ChatHIstoryRequestDto chatHIstoryRequestDto, Pageable pageable) {
     Long careNo = JwtUtil.getCareNo().get();
+//    chatHistoryService.getChatHistory(careNo, pageable, chatHIstoryRequestDto);
 
-    chatHistoryService.getChatHistory(careNo, pageable, chatHIstoryRequestDto);
+    return new ResponseEntity(HttpStatus.OK);
   }
 }
