@@ -5,10 +5,12 @@ import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
+import com.ukcorp.ieum.pill.dto.request.PillTimeUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.PillTimeGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.entity.PillInfo;
+import com.ukcorp.ieum.pill.entity.PillMethod;
 import com.ukcorp.ieum.pill.entity.PillTime;
 import com.ukcorp.ieum.pill.mapper.PillInfoMapper;
 import com.ukcorp.ieum.pill.mapper.PillTimeMapper;
@@ -17,6 +19,7 @@ import com.ukcorp.ieum.pill.repository.PillTimeRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +54,7 @@ public class PillServiceImpl implements PillService {
               .pillStartDate(pillInfoDto.getStartDate())
               .pillEndDate(pillInfoDto.getEndDate())
 //            Enum 자동 매핑 되는지 확인할 것
-              .pillMethod(pillInfoDto.getPillMethod())
+              .pillMethod(PillMethod.valueOf(pillInfoDto.getPillMethod()))
               .pillDate(pillInfoDto.getPillDate())
               .build();
 
@@ -137,20 +140,58 @@ public class PillServiceImpl implements PillService {
 
   @Transactional
   @Override
-  public void updatePill(PillInfoUpdateRequestDto pillInfo) throws Exception {
+  public void updatePill(PillInfoUpdateRequestDto pillInfoDto) throws Exception {
+    try {
+      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      PillInfo pillInfo = PillInfo.builder()
+//              update라 PK추가해줌
+              .pillInfoNo(pillInfoDto.getPillInfoNo())
+              .pillName(pillInfoDto.getPillName())
+              .careInfo(care)
+              .pillStartDate(pillInfoDto.getStartDate())
+              .pillEndDate(pillInfoDto.getEndDate())
+//            Enum 자동 매핑 되는지 확인할 것
+              .pillMethod(PillMethod.valueOf(pillInfoDto.getPillMethod()))
+              .pillDate(pillInfoDto.getPillDate())
+              .build();
 
+      List<PillTime> pillTimes = new ArrayList<>();
+
+      for (PillTimeUpdateRequestDto dto : pillInfoDto.getPillTimes()) {
+        PillTime pillTime = pillTimeMapper.pillTimeUpdateRequestDtoToPillTime(dto, pillInfo);
+        pillTimes.add(pillTime);
+      }
+
+//    repository로 저장하기!!!!
+      pillInfoRepository.save(pillInfo);
+      pillTimeRepository.saveAll(pillTimes);
+    } catch (DataIntegrityViolationException e) {
+      log.debug("수정 오류!");
+      throw new Exception("수정 오류!");
+    }
   }
 
   @Transactional
   @Override
   public void deletePillInfo(Long pillInfoNo) throws Exception {
-
+    try {
+      pillTimeRepository.deleteAllByPillInfo_PillInfoNo(pillInfoNo);
+      pillInfoRepository.deleteById(pillInfoNo);
+    } catch (EmptyResultDataAccessException e) {
+      log.debug("PILL_INFO 삭제 오류");
+      throw new Exception("PILL_INFO 삭제 오류!");
+    }
   }
 
   @Transactional
   @Override
   public void deletePillTime(Long pillTimeNo) throws Exception {
-
+    try {
+      pillTimeRepository.deleteById(pillTimeNo);
+    } catch (EmptyResultDataAccessException e) {
+      log.debug("PILL_TIME 삭제 오류");
+      throw new Exception("PILL_TIME 삭제 오류!");
+    }
   }
 
 }

@@ -17,11 +17,11 @@ import lombok.*;
 public class PillTimeGetResponseDto {
     private Long pillTimeNo;
     private Long pillInfoNo;
-    private Long pillTime;
+    private Long pillTakeTime;
 
 
 //    Fetch Join을 위한 생성자
     public PillTimeGetResponseDto(PillTime pt ){
-        this.pillTime = pt.getPillTakeTime();
+        this.pillTakeTime = pt.getPillTakeTime();
     }
 }

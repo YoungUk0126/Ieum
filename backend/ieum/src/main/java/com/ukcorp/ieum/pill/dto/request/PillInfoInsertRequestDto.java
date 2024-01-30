@@ -21,7 +21,7 @@ public class PillInfoInsertRequestDto {
     private String pillName;
     private LocalDate startDate;
     private LocalDate endDate;
-    private PillMethod pillMethod;
+    private String pillMethod;
     private String pillDate;
     private List<PillTimeInsertRequestDto> pillTimes;
 

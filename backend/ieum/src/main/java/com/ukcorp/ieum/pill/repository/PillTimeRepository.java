@@ -11,5 +11,7 @@ import java.util.Optional;
 @Repository
 public interface PillTimeRepository extends JpaRepository<PillTime, Long> {
 
-    List<PillTime> findPillTimesByPillInfo_PillInfoNo(Long pillInfoNo);
+  List<PillTime> findPillTimesByPillInfo_PillInfoNo(Long pillInfoNo);
+
+  void deleteAllByPillInfo_PillInfoNo(Long pillInfoNo);
 }

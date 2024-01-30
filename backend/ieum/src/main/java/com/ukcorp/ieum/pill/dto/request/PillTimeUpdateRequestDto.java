@@ -13,5 +13,5 @@ import java.time.LocalDateTime;
 public class PillTimeUpdateRequestDto {
   private Long pillTimeNo;
   private Long pillInfoNo;
-  private LocalDateTime pillTakeTime;
+  private Long pillTakeTime;
 }
