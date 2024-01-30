@@ -1,4 +1,4 @@
-package com.ukcorp.ieum.api.entity;
+package com.ukcorp.ieum.chat.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.event.entity.Subject;
