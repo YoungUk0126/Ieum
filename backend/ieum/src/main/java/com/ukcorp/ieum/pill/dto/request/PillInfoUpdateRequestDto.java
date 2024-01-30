@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.pill.dto.request;
 
+import com.ukcorp.ieum.pill.entity.PillMethod;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ public class PillInfoUpdateRequestDto {
     private String pillName;
     private LocalDate startDate;
     private LocalDate endDate;
-    private String pillMethod;
+    private PillMethod pillMethod;
     private String pillDate;
     private List<PillTimeRequestDto> pillTimes;
 
