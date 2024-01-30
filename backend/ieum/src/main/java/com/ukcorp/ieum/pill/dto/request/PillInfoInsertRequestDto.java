@@ -23,6 +23,6 @@ public class PillInfoInsertRequestDto {
     private LocalDate endDate;
     private PillMethod pillMethod;
     private String pillDate;
-    private List<PillTimeRequestDto> pillTimes;
+    private List<PillTimeInsertRequestDto> pillTimes;
 
 }

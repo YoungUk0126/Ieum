@@ -20,7 +20,8 @@ public class PillInfo {
     @Column(name = "PILL_INFO_NO")
     private Long pillInfoNo;
 
-    @ManyToOne
+//    ManyToOne 은 default 가 eager여서 Lazy로 해야함
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CARE_NO")
     private CareInfo careInfo;
 
@@ -42,6 +43,8 @@ public class PillInfo {
     private String pillDate;
 
 //    조회 목적으로 있는 필드이므로 PillInfo Entity를 만들 때 딱히 안넣어줘도 됨
+//    casecade라는 키워드로 실제 DB에 적용하게끔 할 수 있대 - 김규현
+//    난 이해도가 부족해서 쓰지말래
     @OneToMany(mappedBy = "pillInfo", fetch = FetchType.LAZY)
     private List<PillTime> pillTimes;
 }

@@ -10,11 +10,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Builder
-/**
- * @author : 김영욱
- * TimeRequest를 받기 위한 Dto
- */
-public class PillTimeRequestDto {
-    private Long pillInfoNo;
-    private LocalDateTime pillTakeTime;
+public class PillTimeUpdateRequestDto {
+  private Long pillTimeNo;
+  private Long pillInfoNo;
+  private LocalDateTime pillTakeTime;
 }

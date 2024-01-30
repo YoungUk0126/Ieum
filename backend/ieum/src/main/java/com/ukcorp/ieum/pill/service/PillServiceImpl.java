@@ -4,28 +4,25 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
-import com.ukcorp.ieum.pill.dto.request.PillTimeRequestDto;
+import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.PillTimeGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.entity.PillInfo;
-import com.ukcorp.ieum.pill.entity.PillMethod;
 import com.ukcorp.ieum.pill.entity.PillTime;
 import com.ukcorp.ieum.pill.mapper.PillInfoMapper;
 import com.ukcorp.ieum.pill.mapper.PillTimeMapper;
 import com.ukcorp.ieum.pill.repository.PillInfoRepository;
 import com.ukcorp.ieum.pill.repository.PillTimeRepository;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 
 @Service
@@ -45,26 +42,33 @@ public class PillServiceImpl implements PillService {
 
   @Transactional
   @Override
-  public void insertPill(PillInfoInsertRequestDto pillInfoDto) {
-    CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
-    PillInfo pillInfo = PillInfo.builder()
-            .pillName(pillInfoDto.getPillName())
-            .careInfo(care)
-            .pillStartDate(pillInfoDto.getStartDate())
-            .pillEndDate(pillInfoDto.getEndDate())
+  public void insertPill(PillInfoInsertRequestDto pillInfoDto) throws Exception {
+    try {
+      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      PillInfo pillInfo = PillInfo.builder()
+              .pillName(pillInfoDto.getPillName())
+              .careInfo(care)
+              .pillStartDate(pillInfoDto.getStartDate())
+              .pillEndDate(pillInfoDto.getEndDate())
 //            Enum 자동 매핑 되는지 확인할 것
-            .pillMethod(pillInfoDto.getPillMethod())
-            .pillDate(pillInfoDto.getPillDate())
-            .build();
+              .pillMethod(pillInfoDto.getPillMethod())
+              .pillDate(pillInfoDto.getPillDate())
+              .build();
 
-    List<PillTime> pillTimes = new ArrayList<>();
+      List<PillTime> pillTimes = new ArrayList<>();
 
-    for (PillTimeRequestDto dto : pillInfoDto.getPillTimes()) {
-      PillTime pillTime = pillTimeMapper.pillTimeRequestDtoToPillTime(dto, pillInfo);
-      pillTimes.add(pillTime);
-    }
+      for (PillTimeInsertRequestDto dto : pillInfoDto.getPillTimes()) {
+        PillTime pillTime = pillTimeMapper.pillTimeInsertRequestDtoToPillTime(dto, pillInfo);
+        pillTimes.add(pillTime);
+      }
 
 //    repository로 저장하기!!!!
+      pillInfoRepository.save(pillInfo);
+      pillTimeRepository.saveAll(pillTimes);
+    } catch (DataIntegrityViolationException e) {
+      log.debug("등록 오류!");
+      throw new Exception("등록 오류!");
+    }
 
   }
   //    약 정보 넣기
