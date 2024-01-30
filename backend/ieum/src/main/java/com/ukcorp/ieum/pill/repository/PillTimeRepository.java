@@ -11,6 +11,5 @@ import java.util.Optional;
 @Repository
 public interface PillTimeRepository extends JpaRepository<PillTime, Long> {
 
-//    PillInfoNo라는 FK로 PillTime 리스트를 받아오는 메서드인데... 맞게 쓴지 모르겠음
     List<PillTime> findPillTimesByPillInfo_PillInfoNo(Long pillInfoNo);
 }

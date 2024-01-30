@@ -41,6 +41,7 @@ public class PillInfo {
     @Column(name = "PILL_DATE", nullable = false)
     private String pillDate;
 
+//    조회 목적으로 있는 필드이므로 PillInfo Entity를 만들 때 딱히 안넣어줘도 됨
     @OneToMany(mappedBy = "pillInfo", fetch = FetchType.LAZY)
     private List<PillTime> pillTimes;
 }
