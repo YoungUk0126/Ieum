@@ -5,12 +5,14 @@ import com.ukcorp.ieum.event.entity.Subject;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -30,11 +32,11 @@ public class ChatHistory {
   @Column(name = "MESSAGE_CONTENT")
   private String messageContent;
 
-  @Column(name = "FROM")
-  private Subject from;
+  @Column(name = "SPEAKER")
+  private Subject speaker;
 
-  @Column(name = "TO")
-  private Subject to;
+  @Column(name = "LISTENER")
+  private Subject listener;
 
   @Column(name = "EMOTION")
   private String emotion;
