@@ -93,7 +93,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
 
       CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
-      if (temporalEventRepository.existsById(event.getEventNo())) {
+      if (!temporalEventRepository.existsById(event.getEventNo())) {
         throw new NoSuchElementException("존재하지 않는 일정입니다.");
       }
 
