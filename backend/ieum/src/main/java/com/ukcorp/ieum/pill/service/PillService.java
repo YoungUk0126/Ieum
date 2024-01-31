@@ -11,7 +11,7 @@ public interface PillService {
 //    약 정보 등록
     void insertPill(PillInfoInsertRequestDto pillInfoDto) throws Exception;
     PillInfoJoinResponseDto getPillInfo(Long pillInfoNo) throws Exception;
-    List<PillInfoJoinResponseDto> getAllPillInfo(Long careNo) throws Exception;
+    List<PillInfoJoinResponseDto> getAllPillInfo() throws Exception;
     void updatePill(PillInfoUpdateRequestDto pillInfoDto) throws Exception;
     void deletePillInfo(Long pillInfoNo) throws Exception;
     void deletePillTime(Long pillTimeNo) throws Exception;

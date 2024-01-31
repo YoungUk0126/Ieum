@@ -2,6 +2,7 @@ package com.ukcorp.ieum.pill.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
@@ -44,7 +45,8 @@ public class PillServiceImpl implements PillService {
   @Override
   public void insertPill(PillInfoInsertRequestDto pillInfoDto) throws Exception {
     try {
-      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
       PillInfo pillInfo = PillInfo.builder()
               .pillName(pillInfoDto.getPillName())
               .careInfo(care)
@@ -91,8 +93,9 @@ public class PillServiceImpl implements PillService {
   
 //  피보호자가 등록한 약정보 리스트 조회
   @Override
-  public List<PillInfoJoinResponseDto> getAllPillInfo(Long careNo) throws Exception {
+  public List<PillInfoJoinResponseDto> getAllPillInfo() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
       List<PillInfo> pillInfos = pillInfoRepository.findByCareInfo_CareNo(careNo);
 //      클라이언트에게 보낼 List미리 선언
       List<PillInfoJoinResponseDto> pillDtos = new ArrayList<>();
@@ -111,7 +114,11 @@ public class PillServiceImpl implements PillService {
   @Override
   public void updatePill(PillInfoUpdateRequestDto pillInfoDto) throws Exception {
     try {
-      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      if(!pillInfoRepository.existsById(pillInfoDto.getPillInfoNo())){
+        throw new NoSuchElementException("존재하지 않는 약 정보입니다.");
+      }
       PillInfo pillInfo = PillInfo.builder()
 //              update라 PK추가해줌
               .pillInfoNo(pillInfoDto.getPillInfoNo())

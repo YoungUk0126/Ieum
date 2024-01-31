@@ -26,10 +26,10 @@ public class PillController {
      * 피보호자의 PK를 받아 피보호자와 관련된
      * 약 정보들을 받기 위한 Controller
      */
-    @GetMapping("/{care-no}")
-    public ResponseEntity<Map<String, Object>> getPillList(@PathVariable ("care-no") Long careNo) {
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getPillList() {
         try{
-            List<PillInfoJoinResponseDto> result = pillService.getAllPillInfo(careNo);
+            List<PillInfoJoinResponseDto> result = pillService.getAllPillInfo();
             return handleSuccess(result);
         } catch (Exception e){
             log.debug(e.getMessage());
