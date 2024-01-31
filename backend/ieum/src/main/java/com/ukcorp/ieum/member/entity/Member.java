@@ -78,4 +78,8 @@ public class Member {
         this.serialCode = code;
     }
 
+    public void updatePassword(String password) {
+        this.memberPassword = password;
+    }
+
 }

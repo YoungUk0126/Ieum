@@ -78,6 +78,13 @@ public class MemberController {
         return handleSuccess("success");
     }
 
+    @PutMapping("/password")
+    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberPasswordDto passwordDto) {
+        memberService.modifyMemberPassword(passwordDto.getPassword());
+
+        return handleSuccess("success");
+    }
+
     @DeleteMapping
     public ResponseEntity<Map<String, Object>> withdrawMember() {
         memberService.withdrawMember();
@@ -87,7 +94,6 @@ public class MemberController {
 
     @PostMapping("/auth")
     public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody @Valid PhoneRequestDto phone) {
-        log.info("Controller 진입");
         memberService.sendVerifyMessage(phone);
 
         return handleSuccess("success");

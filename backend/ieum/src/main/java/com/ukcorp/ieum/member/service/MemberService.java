@@ -15,6 +15,8 @@ public interface MemberService {
 
     void modifyMember(MemberRequestDto memberModifyDto);
 
+    void modifyMemberPassword(String memberPassword);
+
     void withdrawMember();
 
     boolean isExistsMemberId(String memberId);

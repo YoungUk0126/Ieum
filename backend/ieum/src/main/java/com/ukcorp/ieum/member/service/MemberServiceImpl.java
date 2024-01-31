@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원가입
@@ -118,6 +120,16 @@ public class MemberServiceImpl implements MemberService {
 
             updateMember.updateMember(member);
         }
+    }
+
+    @Override
+    @Transactional
+    public void modifyMemberPassword(String memberPassword) {
+        String memberId = JwtUtil.getMemberId()
+                .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
+        member.updatePassword(passwordEncoder.encode(memberPassword));
     }
 
     /**
