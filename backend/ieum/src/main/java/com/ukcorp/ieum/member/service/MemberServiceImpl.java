@@ -18,11 +18,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     @Transactional
-    public JwtToken login(MemberLoginRequestDto loginDto) {
+    public JwtToken login(MemberLoginRequestDto loginDto) throws UsernameNotFoundException {
         // username + password 를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
@@ -219,6 +219,7 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
 
+        log.info("authentication 생성 완료");
         // 인증 정보 기반으로 Token 생성
         return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);
     }
