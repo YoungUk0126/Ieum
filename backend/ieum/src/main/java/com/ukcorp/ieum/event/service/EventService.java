@@ -12,7 +12,7 @@ public interface EventService {
 
   EventGetResponseDto getEvent(Long eventNo) throws Exception;
 
-  List<EventGetResponseDto> getAllEvent(Long careNo) throws Exception;
+  List<EventGetResponseDto> getAllEvent() throws Exception;
 
   void updateEvent(EventUpdateRequestDto event) throws Exception;
 
