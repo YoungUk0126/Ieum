@@ -22,6 +22,8 @@ public class PillTimeGetResponseDto {
 
 //    Fetch Join을 위한 생성자
     public PillTimeGetResponseDto(PillTime pt ){
+        this.pillTimeNo = pt.getPillTimeNo();
+        this.pillInfoNo = pt.getPillInfo().getPillInfoNo();
         this.pillTakeTime = pt.getPillTakeTime();
     }
 }

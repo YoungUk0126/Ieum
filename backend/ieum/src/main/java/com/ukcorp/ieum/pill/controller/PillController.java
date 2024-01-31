@@ -2,7 +2,7 @@ package com.ukcorp.ieum.pill.controller;
 
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
-import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoJoinResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,10 @@ public class PillController {
      * 피보호자의 PK를 받아 피보호자와 관련된
      * 약 정보들을 받기 위한 Controller
      */
-    @GetMapping("/{care-no}")
-    public ResponseEntity<Map<String, Object>> getPillList(@PathVariable ("care-no") Long careNo) {
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getPillList() {
         try{
-            List<TotalPillGetResponseDto> result = pillService.getAllPillInfo(careNo);
+            List<PillInfoJoinResponseDto> result = pillService.getAllPillInfo();
             return handleSuccess(result);
         } catch (Exception e){
             log.debug(e.getMessage());
@@ -44,7 +44,7 @@ public class PillController {
     @GetMapping("/detail/{pill-info-no}")
     public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-no") Long pillInfoNo) {
         try {
-            TotalPillGetResponseDto result = pillService.getPillInfo(pillInfoNo);
+            PillInfoJoinResponseDto result = pillService.getPillInfo(pillInfoNo);
             return handleSuccess(result);
         } catch (Exception e) {
             log.debug(e.getMessage());
