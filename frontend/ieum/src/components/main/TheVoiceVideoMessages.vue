@@ -1,5 +1,5 @@
 <template>
-  <div class="voice-video-message-container row mt-5">
+  <div class="video-message-container mx-auto bg-white shadow-md rounded-md m-5">
     <div class="col-9">
       <h3>음성 / 영상 메세지</h3>
       <div class="col message-buttons mx-auto">
@@ -65,17 +65,10 @@
 <script setup></script>
 
 <style scoped>
-.voice-video-message-container {
-  font-family: 'Montserrat';
-  justify-content: center;
+.video-message-container {
   width: 80%;
   height: 100%;
-  background: white;
-  box-shadow: 0px 4px 8px rgba(0, 200, 156, 0.1);
-  border-radius: 10px;
-  border: 1px #1de4c1 solid;
-  padding-top: 2%;
-  padding-bottom: 2%;
+  padding: 6%;
 }
 
 .message-buttons {
