@@ -10,6 +10,7 @@ import com.ukcorp.ieum.member.dto.MemberDto;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,8 +18,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -57,7 +57,8 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public JwtToken login(LoginDto loginDto) {
+    @Transactional
+    public JwtToken login(MemberLoginRequestDto loginDto) throws UsernameNotFoundException {
         // username + password 를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
@@ -98,7 +99,8 @@ public class MemberServiceImpl implements MemberService {
     public JwtToken refreshAccessToken(String refreshToken) {
         // 유저 정보 가져오기
         String memberId = tokenProvider.getMemberId(refreshToken);
-        Member member = memberRepository.findByMemberId(memberId).get();
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
 
         // 가져온 member로 authorities 생성
         Set<GrantedAuthority> authorities = member.getAuthorities().stream()
@@ -116,6 +118,7 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication =
                 new UsernamePasswordAuthenticationToken(memberDetails, null, authorities);
 
+        log.info("authentication 생성 완료");
         // 인증 정보 기반으로 Token 생성
         return tokenProvider.refreshAccessToken(refreshToken, memberId, authentication);
     }

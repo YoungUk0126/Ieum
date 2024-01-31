@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 
@@ -36,17 +38,24 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtToken> loginMember(@RequestBody LoginDto loginDto) {
-        log.info("로그인한 회원 아이디 >> " + loginDto.getMemberId());
-        log.info("로그인한 회원 비밀번호 >> " + loginDto.getPassword());
-        JwtToken jwtToken = memberService.login(loginDto);
+    public ResponseEntity<?> loginMember(@RequestBody MemberLoginRequestDto loginDto) {
+        try {
+            JwtToken jwtToken = memberService.login(loginDto);
 
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+            // Header에  토큰 설정
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+            httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
 
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>("찾을 수 없는 회원", HttpStatus.BAD_REQUEST);
+        } catch (BadCredentialsException e) {
+            return new ResponseEntity<>("비밀번호 틀림", HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/modify")
@@ -86,15 +95,22 @@ public class MemberController {
     }
 
     @PostMapping("/refresh")
-    private ResponseEntity<JwtToken> refreshAccessToken(@RequestBody String refreshToken) {
-        JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.replaceAll("\"", ""));
+    private ResponseEntity<?> refreshAccessToken(@RequestBody RefreshRequestDto refreshToken) {
+        log.info("controller 들어온 값 >> "+ refreshToken.getRefreshToken());
+        try {
+            JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.getRefreshToken());
 
-        // Header에  토큰 설정
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
-        httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
+            // Header에  토큰 설정
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(JwtFilter.ACCESS_TOKEN_HEADER, "Bearer " + jwtToken.getAccessToken());
+            httpHeaders.add(JwtFilter.REFRESH_TOKEN_HEADER, "Bearer " + jwtToken.getRefreshToken());
 
-        return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+            return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return handleFail("실패");
     }
     
 
