@@ -54,7 +54,11 @@ public class SecurityConfig {
                         // 인증없이 접근 허용
                         .requestMatchers("/api/member/join",
                                 "/api/member/login",
-                                "/api/member/check-id/*").permitAll()
+                                "/api/member/check-id/*",
+                                "/api/member/check-email",
+                                "/api/member/check-phone",
+                                "/api/member/auth",
+                                "/api/member/verify").permitAll()
                         // 나머지 요청에 대해서는 인증 필요
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()

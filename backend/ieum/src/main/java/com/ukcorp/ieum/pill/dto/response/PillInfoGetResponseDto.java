@@ -1,6 +1,5 @@
 package com.ukcorp.ieum.pill.dto.response;
 
-import com.ukcorp.ieum.pill.dto.request.PillTimeRequestDto;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,10 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
-public class PillInfoResponseDto {
+public class PillInfoGetResponseDto {
+    private Long pillInfoNo;
     private String pillName;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private Long careNo;
+    private LocalDate pillStartDate;
+    private LocalDate pillEndDate;
     private String pillMethod;
-    private List<PillTimeResponseDto> pillTimes;
+    private String pillDate;
 }

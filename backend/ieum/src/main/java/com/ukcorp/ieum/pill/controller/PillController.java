@@ -1,7 +1,8 @@
 package com.ukcorp.ieum.pill.controller;
 
-import com.ukcorp.ieum.pill.dto.request.PillInfoRequestDto;
-import com.ukcorp.ieum.pill.dto.response.PillInfoResponseDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
+import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +27,13 @@ public class PillController {
      * 약 정보들을 받기 위한 Controller
      */
     @GetMapping("/{care-no}")
-    public ResponseEntity<Map<String, Object>> getPillList(Long careNo) {
-
-        List<PillInfoResponseDto> result = pillService.getAllPillInfo(careNo);
-
-        if(result != null) {
+    public ResponseEntity<Map<String, Object>> getPillList(@PathVariable ("care-no") Long careNo) {
+        try{
+            List<TotalPillGetResponseDto> result = pillService.getAllPillInfo(careNo);
             return handleSuccess(result);
-        }
-        else {
-            return handleError(result);
+        } catch (Exception e){
+            log.debug(e.getMessage());
+            return handleError("Fail");
         }
     }
 
@@ -42,14 +41,14 @@ public class PillController {
      * @author : 김영욱
      * 약 PK를 받아 약 상세 정보를 받기 위한 Controller
      */
-    @GetMapping("/{pill-info-id}")
-    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-id") Long pillId) {
-        PillInfoResponseDto result = pillService.getPillInfo(pillId);
-        if(result != null) {
+    @GetMapping("/detail/{pill-info-no}")
+    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-no") Long pillInfoNo) {
+        try {
+            TotalPillGetResponseDto result = pillService.getPillInfo(pillInfoNo);
             return handleSuccess(result);
-        }
-        else {
-            return handleError(result);
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
         }
     }
 
@@ -57,16 +56,53 @@ public class PillController {
      * @author : 김영욱
      * 약 정보를 넣기 위한 Controller
      */
-    @PostMapping("/")
-    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoRequestDto pillInfo) {
-        log.debug("==============약 정보 등록 시작===============");
-        int result = pillService.insertPill(pillInfo);
-
-        if(result != 0){
-            return handleSuccess(result);
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoInsertRequestDto pillInfo) {
+        System.out.println("약 정보 등록 시작");
+        System.out.println(pillInfo.toString());
+//        System.out.println(careNo);
+        try {
+            pillService.insertPill(pillInfo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
         }
-        else {
-            return handleError(result);
+    }
+
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> updatePill(@RequestBody PillInfoUpdateRequestDto pillInfo) {
+        log.debug("==============약 정보 수정 시작===============");
+        try {
+            pillService.updatePill(pillInfo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    @DeleteMapping("/{pill-info-no}")
+    public ResponseEntity<Map<String, Object>> deletePillInfo(@PathVariable("pill-info-no") Long pillInfoNo) {
+        log.debug("==============약 정보 삭제 시작===============");
+        try {
+            pillService.deletePillInfo(pillInfoNo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    @DeleteMapping("/time/{pill-time-no}")
+    public ResponseEntity<Map<String, Object>> deletePillTime(@PathVariable("pill-time-no") Long pillTimeNo) {
+        log.debug("==============약 시간 정보 삭제 시작===============");
+        try {
+            pillService.deletePillTime(pillTimeNo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
         }
     }
 

@@ -25,13 +25,13 @@ public class TemporalEventController {
   /**
    * 일정 관련 리스트 조회
    *
-   * @param careNo
+   * @param
    * @return List<TemporalEventDto>
    */
-  @GetMapping("/{careNo}")
-  public ResponseEntity<Map<String, Object>> getEvent(@PathVariable("careNo") Long careNo) {
+  @GetMapping
+  public ResponseEntity<Map<String, Object>> getEvent() {
     try {
-      List<TemporalEventResponseDto> list = temporalEventService.getList(careNo);
+      List<TemporalEventResponseDto> list = temporalEventService.getList();
       return handleSuccess(list);
     } catch (Exception exception) {
       log.debug(exception.getMessage());

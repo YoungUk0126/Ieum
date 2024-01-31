@@ -7,7 +7,7 @@ import com.ukcorp.ieum.message.dto.response.MessageResponseDto;
 import java.util.List;
 
 public interface MessageService {
-  List<MessageResponseDto> getList(Long careNo) throws Exception;
+  List<MessageResponseDto> getList() throws Exception;
 
   MessageResponseDto getDetail(Long messageNo) throws Exception;
 

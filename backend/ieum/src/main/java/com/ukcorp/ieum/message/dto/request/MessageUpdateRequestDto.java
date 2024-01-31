@@ -2,7 +2,6 @@ package com.ukcorp.ieum.message.dto.request;
 
 
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 
@@ -14,8 +13,6 @@ import java.time.LocalDate;
 @Builder
 public class MessageUpdateRequestDto {
   private Long messageNo;
-
-  private Long careNo;
 
   private String messageSender;
 
