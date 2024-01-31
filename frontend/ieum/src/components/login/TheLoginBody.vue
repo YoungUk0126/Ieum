@@ -15,7 +15,7 @@
               id="id"
               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light"
               placeholder="id"
-              v-model="data.member_id"
+              v-model="data.memberId"
               required
             />
           </div>
@@ -85,7 +85,7 @@ import swal from 'sweetalert'
 const router = useRouter()
 
 const data = ref({
-  member_id: '',
+  memberId: '',
   password: ''
 })
 
@@ -94,14 +94,14 @@ const savedCheck = ref(false)
 onMounted(() => {
   if (VueCookies.isKey('savedId')) {
     savedCheck.value = true
-    data.value.member_id = VueCookies.get('savedId')
+    data.value.memberId = VueCookies.get('savedId')
   }
 })
 
 const loginSubmit = () => {
   // 아이디 저장 로직
   if (savedCheck.value) {
-    VueCookies.set('savedId', data.value.member_id)
+    VueCookies.set('savedId', data.value.memberId)
   } else {
     VueCookies.remove('savedId')
   }

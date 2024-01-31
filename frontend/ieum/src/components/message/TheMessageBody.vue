@@ -32,26 +32,26 @@
     <div class="flex flex-wrap">
       <div
         v-for="(item, index) in items"
-        :key="item.message_no"
+        :key="item.messageNo"
         class="flex-shrink-0 min-w-100 sm:w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-5"
       >
         <div
           :class="{
-            'bg-gray-200': check(item.message_time),
-            'bg-white': !check(item.message_time)
+            'bg-gray-200': check(item.messageTime),
+            'bg-white': !check(item.messageTime)
           }"
           class="px-3 pt-8 border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700"
         >
           <div class="flex flex-col items-center pb-5">
             <img
               class="w-24 h-24 mb-3 rounded-full shadow-lg"
-              :src="'/src/assets/images/' + item.message_type + '.png'"
+              :src="'/src/assets/images/' + item.messageType + '.png'"
             />
             <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
-              {{ item.message_sender }}
+              {{ item.messageSender }}
             </h5>
-            <span class="text-sm text-gray-500 dark:text-gray-400">{{ item.message_time }}</span>
-            <template v-if="check(item.message_time)">
+            <span class="text-sm text-gray-500 dark:text-gray-400">{{ item.messageTime }}</span>
+            <template v-if="check(item.messageTime)">
               <div class="flex mt-4 md:mt-6 gap-3">
                 <button
                   type="button"
@@ -69,7 +69,7 @@
                 </button>
               </div>
             </template>
-            <template v-if="!check(item.message_time)">
+            <template v-if="!check(item.messageTime)">
               <div class="flex mt-4 md:mt-6 gap-3">
                 <button
                   type="button"
@@ -82,7 +82,7 @@
                 <button
                   type="button"
                   class="inline-flex items-center focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                  :name="item.message_no"
+                  :name="item.messageNo"
                   @click="remove()"
                 >
                   삭제
@@ -114,7 +114,7 @@
       <tbody>
         <tr
           v-for="(item, index) in items"
-          :key="item.message_no"
+          :key="item.messageNo"
           class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600"
         >
           <th
@@ -123,20 +123,20 @@
           >
             <img
               class="mx-auto"
-              v-if="item.message_type == 'video'"
+              v-if="item.messageType == 'video'"
               src="../../assets/images/video.png"
             />
             <img
               class="mx-auto"
-              v-if="item.message_type == 'voice'"
+              v-if="item.messageType == 'voice'"
               src="../../assets/images/voice.png"
             />
           </th>
           <td class="px-6 py-4">
-            {{ item.message_sender }}
+            {{ item.messageSender }}
           </td>
-          <td class="px-6 py-4">{{ item.message_time }}</td>
-          <template v-if="check(item.message_time)">
+          <td class="px-6 py-4">{{ item.messageTime }}</td>
+          <template v-if="check(item.messageTime)">
             <td class="px-6 py-4">전송완료</td>
             <td class="px-6 py-4">
               <button
@@ -157,7 +157,7 @@
               </button>
             </td>
           </template>
-          <template v-if="!check(item.message_time)">
+          <template v-if="!check(item.messageTime)">
             <td class="px-6 py-4">전송전</td>
             <td class="px-6 py-4">
               <button
@@ -173,7 +173,7 @@
               <button
                 type="button"
                 class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-                :name="item.message_no"
+                :name="item.messageNo"
                 @click="remove()"
               >
                 삭제
@@ -220,8 +220,8 @@ const careId = '1'
 const items = ref([])
 const modalType = ref(false)
 const editSelect = ref({
-  message_no: 0,
-  message_type: ''
+  messageNo: 0,
+  messageType: ''
 })
 const modal = ref()
 
@@ -280,7 +280,7 @@ const check = (date) => {
 const edit = () => {
   const item = items.value[event.target.name]
 
-  modalType.value = item.message_type === 'video'
+  modalType.value = item.messageType === 'video'
 
   editSelect.value = item
 

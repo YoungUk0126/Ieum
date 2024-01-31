@@ -35,10 +35,9 @@
       <div class="w-2/3 mb-3">
         <input
           type="text"
-          id="first_name"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="ex) 첫째딸"
-          v-model="editState.message_sender"
+          v-model="editState.messageSender"
         />
       </div>
       <div class="w-1/3 text-center md:text-right mb-3">
@@ -64,7 +63,7 @@
           type="text"
           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Select date"
-          v-model="editState.message_time"
+          v-model="editState.messageTime"
         />
       </div>
       <div class="w-full border-t border-4 my-3"></div>
@@ -118,11 +117,11 @@ const props = defineProps(['messageState', 'modal'])
 const modal = ref(props.modal)
 
 const editState = ref({
-  message_no: '',
-  care_no: '',
-  message_sender: '',
-  message_name: '',
-  message_type: ''
+  messageNo: '',
+  careNo: '',
+  messageSender: '',
+  messageName: '',
+  messageType: ''
 })
 
 const closeModal = () => {
@@ -243,7 +242,7 @@ const handleError = (error) => {
 const editSubmit = () => {
   const formData = new FormData()
   if (datePicker.value != undefined) {
-    editState.value.message_time = datePicker.value.value
+    editState.value.messageTime = datePicker.value.value
   }
 
   const json = JSON.stringify(editState.value)
