@@ -32,4 +32,5 @@ public interface PillInfoMapper {
   PillInfoGetResponseDto pillInfoToResponseDto(PillInfo pill);
 
   TotalPillGetResponseDto pillInfoAndPillTimesToResponseDto(PillInfoGetResponseDto pillInfo, List<PillTimeGetResponseDto> pillTimes);
+
 }

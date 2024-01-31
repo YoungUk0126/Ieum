@@ -64,7 +64,7 @@ public class MealServiceImpl implements MealService {
             CareInfo care = careRepository.findById(mealUpdateRequestDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
 //            수정할 끼니시간 정보가 있는지 확인
             Meal check = mealRepository.findById(mealUpdateRequestDto.getMealInfoNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 끼니시간 정보입니다."));
-            Meal meal = mealMapper.mealUpdateRequestDtoToMeal(mealUpdateRequestDto);
+            Meal meal = mealMapper.mealUpdateRequestDtoAndCareInfoToMeal(mealUpdateRequestDto, care);
 //            save로 자동 merge(update)
             mealRepository.save(meal);
 

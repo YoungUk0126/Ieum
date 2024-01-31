@@ -27,7 +27,7 @@ public class PillController {
      * 약 정보들을 받기 위한 Controller
      */
     @GetMapping("/{care-no}")
-    public ResponseEntity<Map<String, Object>> getPillList(Long careNo) {
+    public ResponseEntity<Map<String, Object>> getPillList(@PathVariable ("care-no") Long careNo) {
         try{
             List<TotalPillGetResponseDto> result = pillService.getAllPillInfo(careNo);
             return handleSuccess(result);
@@ -41,10 +41,10 @@ public class PillController {
      * @author : 김영욱
      * 약 PK를 받아 약 상세 정보를 받기 위한 Controller
      */
-    @GetMapping("/detail/{pill-info-id}")
-    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-id") Long pillId) {
+    @GetMapping("/detail/{pill-info-no}")
+    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-no") Long pillInfoNo) {
         try {
-            TotalPillGetResponseDto result = pillService.getPillInfo(pillId);
+            TotalPillGetResponseDto result = pillService.getPillInfo(pillInfoNo);
             return handleSuccess(result);
         } catch (Exception e) {
             log.debug(e.getMessage());

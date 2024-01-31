@@ -20,8 +20,8 @@ public class PillInfoGetResponseDto {
     private Long pillInfoNo;
     private String pillName;
     private Long careNo;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private LocalDate pillStartDate;
+    private LocalDate pillEndDate;
     private String pillMethod;
     private String pillDate;
 }

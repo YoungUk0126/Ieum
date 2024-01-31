@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -83,32 +84,24 @@ public class PillServiceImpl implements PillService {
   public TotalPillGetResponseDto getPillInfo(Long pillInfoNo) throws Exception {
     try {
 //        PillInfo로 받고, Null값이 넘어올 때 바로 Exception
-      PillInfo pillInfo = pillInfoRepository.findByPillInfoIdFetchJoin(pillInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 약정보입니다."));
+      PillInfo pillInfo = pillInfoRepository.findById(pillInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 약정보입니다."));
+//      System.out.println("PillInfoEntity : " + pillInfo.toString());
 //        이건 목록이 없으면 없는대로 빈 리스트 반환
       List<PillTime> pillTimes = pillTimeRepository.findPillTimesByPillInfo_PillInfoNo(pillInfoNo);
 //        리턴하기 위한 PillInfoResponseDto 선언
       PillInfoGetResponseDto pillInfoGetResponseDto = pillInfoMapper.pillInfoToResponseDto(pillInfo);
-      List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillTimes);
+//      System.out.println("PillInfoGetResponseDto : " + pillInfoGetResponseDto.toString());
+      List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillInfo.getPillTimes());
 
+      TotalPillGetResponseDto totalPillGetResponseDto = TotalPillGetResponseDto.builder()
+              .pillInfo(pillInfoGetResponseDto)
+              .pillTimes(pillTimeGetResponseDtos)
+              .build();
+//      for(PillTimeGetResponseDto dto: pillTimeGetResponseDtos) {
+//        System.out.println("pillTimeGetResponseDto : "+dto.toString());
+//      }
 
-//            Builder를 사용해 사용자에게 데이터를 전송할 DTO로 옮긴다
-//      pillInfoGetResponseDto = PillInfoGetResponseDto.builder()
-//              .pillInfoNo(pillInfo.getPillInfoNo())
-//              .careNo(pillInfo.getCareInfo().getCareNo())
-//              .pillName(pillInfo.getPillName())
-//              .startDate(pillInfo.getPillStartDate())
-//              .endDate(pillInfo.getPillEndDate())
-//              .pillMethod(pillInfo.getPillMethod().toString())
-//              .pillDate(pillInfo.getPillDate())
-//              .build();
-
-
-//      totalPillGetResponseDto = TotalPillGetResponseDto.builder()
-//              .pillInfo(pillInfoGetResponseDto)
-//              .pillTimes(pillTimeGetResponseDtos)
-//              .build();
-
-      return pillInfoMapper.pillInfoAndPillTimesToResponseDto(pillInfoGetResponseDto, pillTimeGetResponseDtos);
+      return totalPillGetResponseDto;
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
