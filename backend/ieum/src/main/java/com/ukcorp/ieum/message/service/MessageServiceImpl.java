@@ -97,7 +97,7 @@ public class MessageServiceImpl implements MessageService {
 
       CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
-      if(messageRepository.existsById(message.getMessageNo())){
+      if(!messageRepository.existsById(message.getMessageNo())){
         throw new NoSuchElementException("존재하지 않는 메세지 입니다.");
       }
 

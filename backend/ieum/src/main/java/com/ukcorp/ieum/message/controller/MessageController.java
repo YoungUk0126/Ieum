@@ -144,7 +144,7 @@ public class MessageController {
     // 업로드 날라온 파일 저장
     String fileName = name;
     if (type.equals("video")) {
-      fileName += ".mp4";
+      fileName += ".webm";
     } else {
       fileName += ".ogg";
     }
