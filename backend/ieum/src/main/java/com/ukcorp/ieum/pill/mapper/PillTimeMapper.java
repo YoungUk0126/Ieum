@@ -24,7 +24,6 @@ public interface PillTimeMapper {
   @Mapping(source = "entity", target = "pillInfo")
   PillTime pillTimeUpdateRequestDtoToPillTime(PillTimeUpdateRequestDto pillTime, PillInfo entity);
 
-  List<PillTimeGetResponseDto> pillTimesToResponseDto(List<PillTime> pillTimes);
 
 
 
