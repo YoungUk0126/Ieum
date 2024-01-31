@@ -2,6 +2,7 @@ package com.ukcorp.ieum.pill.controller;
 
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoJoinResponseDto;
 import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
@@ -44,7 +45,7 @@ public class PillController {
     @GetMapping("/detail/{pill-info-no}")
     public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-no") Long pillInfoNo) {
         try {
-            TotalPillGetResponseDto result = pillService.getPillInfo(pillInfoNo);
+            PillInfoJoinResponseDto result = pillService.getPillInfo(pillInfoNo);
             return handleSuccess(result);
         } catch (Exception e) {
             log.debug(e.getMessage());

@@ -7,6 +7,7 @@ import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoJoinResponseDto;
 import com.ukcorp.ieum.pill.dto.response.PillTimeGetResponseDto;
 import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 import com.ukcorp.ieum.pill.entity.PillInfo;
@@ -61,8 +62,6 @@ public class PillServiceImpl implements PillService {
 
       pillInfoRepository.save(pillInfo);
 
-      System.out.println(pillInfo.toString());
-
       List<PillTime> pillTimes = new ArrayList<>();
 
       for (PillTimeInsertRequestDto dto : pillInfoDto.getPillTimes()) {
@@ -81,27 +80,15 @@ public class PillServiceImpl implements PillService {
   //    약 정보 넣기
 
   @Override
-  public TotalPillGetResponseDto getPillInfo(Long pillInfoNo) throws Exception {
+  public PillInfoJoinResponseDto getPillInfo(Long pillInfoNo) throws Exception {
     try {
 //        PillInfo로 받고, Null값이 넘어올 때 바로 Exception
       PillInfo pillInfo = pillInfoRepository.findById(pillInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 약정보입니다."));
-//      System.out.println("PillInfoEntity : " + pillInfo.toString());
-//        이건 목록이 없으면 없는대로 빈 리스트 반환
-      List<PillTime> pillTimes = pillTimeRepository.findPillTimesByPillInfo_PillInfoNo(pillInfoNo);
-//        리턴하기 위한 PillInfoResponseDto 선언
-      PillInfoGetResponseDto pillInfoGetResponseDto = pillInfoMapper.pillInfoToResponseDto(pillInfo);
-//      System.out.println("PillInfoGetResponseDto : " + pillInfoGetResponseDto.toString());
-      List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillInfo.getPillTimes());
+      PillInfoJoinResponseDto pillInfoJoinResponseDto = new PillInfoJoinResponseDto(pillInfo);
 
-      TotalPillGetResponseDto totalPillGetResponseDto = TotalPillGetResponseDto.builder()
-              .pillInfo(pillInfoGetResponseDto)
-              .pillTimes(pillTimeGetResponseDtos)
-              .build();
-//      for(PillTimeGetResponseDto dto: pillTimeGetResponseDtos) {
-//        System.out.println("pillTimeGetResponseDto : "+dto.toString());
-//      }
+      System.out.println(pillInfoJoinResponseDto.toString());
 
-      return totalPillGetResponseDto;
+      return pillInfoJoinResponseDto;
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");

@@ -111,7 +111,7 @@ public class PillControllerTest {
   @DisplayName("약 정보 상세 조회")
   void testSelectDetail() throws Exception {
     // eventNo으로 해당 일정 상세 조회
-    mock.perform(get("/api/pill/detail/1"))
+    mock.perform(get("/api/pill/detail/3"))
             .andExpect(status().isOk())
             .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
   }
