@@ -18,7 +18,7 @@
       >
         1
       </span>
-      정보 입력 <span class="hidden sm:inline-flex sm:ms-2">Info</span>
+      인증 절차
       <svg
         class="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180"
         aria-hidden="true"
@@ -51,7 +51,7 @@
       >
         2
       </span>
-      인증 절차 <span class="hidden sm:inline-flex sm:ms-2">Info</span>
+      정보 수정
       <svg
         class="w-3 h-3 ms-2 sm:ms-4 rtl:rotate-180"
         aria-hidden="true"
@@ -84,11 +84,16 @@
       >
         3
       </span>
-      비밀번호 변경
+      변경 완료
     </li>
   </ol>
 
-  <router-view></router-view>
+  <router-view
+    :changeMemberInfo="changeMemberInfo"
+    :member="member"
+    :memberAuth="memberAuth"
+    :editSubmit="editSubmit"
+  ></router-view>
 </template>
 
 <script setup>
@@ -96,19 +101,41 @@ import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
 const curStep = ref(1)
+const member = ref({
+  memberNo: '',
+  memberId: '',
+  memberPhone: '',
+  memberPassword: ''
+})
+const memberAuth = ref(false)
 
 onMounted(() => {})
 
-watch(curStep.value, (nv, ov) => {
-  if (nv == 2) {
-    router.navigate('/secondStep')
-  } else if (nv == 3) {
-    router.navigate('')
-  } else {
-    router.navigate('')
+watch(
+  () => curStep.value,
+  (nv, ov) => {
+    if (nv == 2) {
+      router.replace({ name: 'TheAuthInfo' })
+    } else if (nv == 3) {
+      router.replace({ name: 'TheEndInfo' })
+    } else {
+      router.replace({ name: 'TheInputInfo' })
+    }
   }
-})
+)
+
+const changeMemberInfo = (data) => {
+  member.value.memberId = data.memberId
+  member.value.memberPhone = data.memberPhone
+  curStep.value++
+  memberAuth.value = true
+}
+
+const editSubmit = () => {
+  curStep.value++
+}
 </script>
 
 <style scoped></style>

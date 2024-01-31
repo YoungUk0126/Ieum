@@ -68,7 +68,12 @@ const router = createRouter({
         {
           path: '/secondStep',
           name: 'TheAuthInfo',
-          component: () => import('@/components/findInfo/TheAuthInfo.vue')
+          component: () => import('@/components/findInfo/TheEditInfo.vue')
+        },
+        {
+          path: '/endStep',
+          name: 'TheEndInfo',
+          component: () => import('@/components/findInfo/TheEndInfo.vue')
         }
       ]
     },
