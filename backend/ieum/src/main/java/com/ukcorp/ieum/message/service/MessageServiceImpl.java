@@ -2,6 +2,7 @@ package com.ukcorp.ieum.message.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.message.dto.request.MessageInsertRequestDto;
 import com.ukcorp.ieum.message.dto.request.MessageUpdateRequestDto;
 import com.ukcorp.ieum.message.dto.response.MessageResponseDto;
@@ -29,8 +30,10 @@ public class MessageServiceImpl implements MessageService {
   private final CareRepository careRepository;
 
   @Override
-  public List<MessageResponseDto> getList(Long careNo) throws Exception {
+  public List<MessageResponseDto> getList() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+
       List<Message> list = messageRepository.findByCareInfoCareNo(careNo);
 
       return messageMapper.MessageToMessageResponseDto(list);
@@ -70,7 +73,9 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void registMessage(MessageInsertRequestDto message) throws Exception {
     try {
-      CareInfo care = careRepository.findById(message.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
 
       Message entity = messageMapper
               .messageInsertRequestDtoAndCareInfoToMessage(message, care);
@@ -88,9 +93,13 @@ public class MessageServiceImpl implements MessageService {
   @Transactional
   public void modifyMessage(MessageUpdateRequestDto message) throws Exception {
     try {
-      CareInfo care = careRepository.findById(message.getCareNo()).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-      messageRepository.findById(message.getMessageNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 메세지입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("보호자 정보 조회 오류."));
+
+      if(!messageRepository.existsById(message.getMessageNo())){
+        throw new NoSuchElementException("존재하지 않는 메세지 입니다.");
+      }
 
       Message entity = messageMapper
               .messageUpdateRequestDtoAndCareInfoToMessage(message, care);
