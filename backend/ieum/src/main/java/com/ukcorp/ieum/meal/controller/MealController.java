@@ -23,13 +23,13 @@ public class MealController {
 
     /**
      * 피보호자의 FK로 피보호자 끼니 정보를 반환하는 기능
-     * @param careNo
+     * @param
      */
-    @GetMapping("/{care-no}")
-    public ResponseEntity<Map<String, Object>> getMeal(@PathVariable("care-no") Long careNo) {
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getMeal() {
 
         try{
-            MealGetResponseDto mealGetResponseDto = mealService.getMeal(careNo);
+            MealGetResponseDto mealGetResponseDto = mealService.getMeal();
             return handleSuccess(mealGetResponseDto);
         } catch (Exception e){
             log.debug(e.getMessage());
