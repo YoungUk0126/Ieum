@@ -17,12 +17,6 @@ function login(data, success) {
 // refresh 토큰 과정 필요
 function modifyApi(data, success) {
   localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
-  /*.catch((response) => {
-      // refresh 토큰 재발급 과정에서만 true를 return 함
-      if (fail(response)) {
-        modifyApi(data, success)
-      }
-    })*/
 }
 
 function removeApi(param, success) {

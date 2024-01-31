@@ -53,14 +53,7 @@ const fail = ({ response }) => {
       }
     })
 
-    // refresh 토큰 재발급, 발급 완료되면 이전 HTTP 다시 실행
-  } else if (response.status == 403) {
-    console.log(response)
-    refreshAccessToken()
-    console.log('재발급 완료!')
-    return true
-  } else {
-    console.log(response.status)
+  }  else {
     swal({
       title: '버그',
       text: '뭔 오류일까요..' + response.status,
