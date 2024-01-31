@@ -2,9 +2,6 @@ package com.ukcorp.ieum.pill.dto.response;
 
 import com.ukcorp.ieum.pill.entity.PillTime;
 import lombok.*;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
-import java.time.LocalDateTime;
 
 /**
  * @author : 김영욱
@@ -17,14 +14,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @ToString
 @Builder
-public class PillTimeResponseDto {
-    private String pillDate;
-    private Long pillTime;
+public class PillTimeGetResponseDto {
+    private Long pillTimeNo;
+    private Long pillInfoNo;
+    private Long pillTakeTime;
 
 
 //    Fetch Join을 위한 생성자
-    public PillTimeResponseDto(PillTime pt ){
-        this.pillDate = pt.getPillDate().toString();
-        this.pillTime = pt.getPillTakeTime();
+    public PillTimeGetResponseDto(PillTime pt ){
+        this.pillTakeTime = pt.getPillTakeTime();
     }
 }

@@ -14,7 +14,11 @@ public interface MealMapper {
     @Mapping(target = "meal.careNo", ignore = true)
     @Mapping( source = "care", target = "careInfo")
     Meal mealInsertRequestDtoAndCareInfoToMeal(MealInsertRequestDto meal, CareInfo care);
-    Meal mealUpdateRequestDtoToMeal(MealUpdateRequestDto meal);
+
+
+    @Mapping(target = "meal.careNo", ignore = true)
+    @Mapping( source = "care", target = "careInfo")
+    Meal mealUpdateRequestDtoAndCareInfoToMeal(MealUpdateRequestDto meal, CareInfo care);
 //    Meal안에 있는 careInfo라는 객체 안에 careNo를 mealGetResponseDto의 careNo에 매핑하겠다.
     @Mapping(source = "meal.careInfo.careNo", target= "careNo")
     MealGetResponseDto mealToMealGetResponseDto(Meal meal);

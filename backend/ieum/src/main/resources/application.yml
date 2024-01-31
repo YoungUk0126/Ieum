@@ -5,6 +5,7 @@ logging:
     org.hibernate.type: trace
     org.springframework.security: debug
 
+
 server:
   servlet:
     encoding:

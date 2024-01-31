@@ -1,16 +1,19 @@
 package com.ukcorp.ieum.pill.service;
 
-import com.ukcorp.ieum.pill.dto.request.PillInfoRequestDto;
-import com.ukcorp.ieum.pill.dto.response.PillInfoResponseDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
+import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
 
 import java.util.List;
 
 public interface PillService {
 
 //    약 정보 등록
-    int insertPill(PillInfoRequestDto pillInfo);
-    PillInfoResponseDto getPillInfo(Long pillInfoNo);
-    List<PillInfoResponseDto> getAllPillInfo(Long careNo);
-
-    void deletePill(Long pillInfoNo);
+    void insertPill(PillInfoInsertRequestDto pillInfoDto) throws Exception;
+    TotalPillGetResponseDto getPillInfo(Long pillInfoNo) throws Exception;
+    List<TotalPillGetResponseDto> getAllPillInfo(Long careNo) throws Exception;
+    void updatePill(PillInfoUpdateRequestDto pillInfoDto) throws Exception;
+    void deletePillInfo(Long pillInfoNo) throws Exception;
+    void deletePillTime(Long pillTimeNo) throws Exception;
 }
