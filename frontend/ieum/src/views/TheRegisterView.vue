@@ -6,14 +6,14 @@
                 <div class="col-span-2">
                     <input type="text"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="아이디를 입력해주세요." @input="check_id" v-model="userInfo.member_id" required>
+                        placeholder="아이디를 입력해주세요." @input="checkId" v-model="userInfo.memberId" required>
                 </div>
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkvalidateId">아이디
                     확인</button>
             </div>
-            <label v-if="checkidtype" class="id_incorrect">4~12자의 영문자, 숫자만 사용 가능합니다.</label>
+            <label v-if="checkidtype" class="idIncorrect">4~12자의 영문자, 숫자만 사용 가능합니다.</label>
             <label v-else>사용이 가능한 아이디입니다.</label>
         </div>
         <div id="name" class="mt-6">
@@ -23,7 +23,7 @@
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="이름을 입력해주세요." v-model="userInfo.name" @input="validateName" required>
             </div>
-            <label v-if="checknametype" class="name_incorrect">이름은 영문자, 한글만 입력 가능합니다.</label>
+            <label v-if="checknametype" class="nameIncorrect">이름은 영문자, 한글만 입력 가능합니다.</label>
             <label v-else>사용이 가능한 이름입니다.</label>
         </div>
         <div id="email" class="mt-6">
@@ -38,7 +38,7 @@
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkvalidateemail">이메일 확인</button>
             </div>
-            <label v-if="checkemailtype" class="email_incorrect">이메일 형식이 일치하지 않습니다.</label>
+            <label v-if="checkemailtype" class="emailIncorrect">이메일 형식이 일치하지 않습니다.</label>
         </div>
         <div id="password" class="mt-6 grid grid-cols-2 gap-4">
             <div>
@@ -47,7 +47,7 @@
                 <input type="password" id="password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="•••••••••" v-model="userInfo.password" @input="passwordlength" required>
-                <label v-if="checkpasswordtype" class="password_incorrect">영문, 숫자, 특수문자(~!@#$%^&*) 조합 7~16 자리로
+                <label v-if="checkpasswordtype" class="passwordIncorrect">영문, 숫자, 특수문자(~!@#$%^&*) 조합 7~16 자리로
                     작성해주세요.</label>
                 <label v-else>사용 가능한 비밀번호입니다.</label>
             </div>
@@ -58,7 +58,7 @@
                 <input type="password" id="confirm_password"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="•••••••••" v-model="password_check" @input="check_password" required>
-                <label v-if="checkpasswordrepeattype" class="passwordcheck_incorrect">일치하지 않습니다. 다시 입력해주세요.</label>
+                <label v-if="checkpasswordrepeattype" class="passwordcheckIncorrect">일치하지 않습니다. 다시 입력해주세요.</label>
             </div>
         </div>
         <div id="phone" class="mt-6">
@@ -83,7 +83,7 @@
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkvalidatephonenumber">전화번호 확인</button>
             </div>
-            <label v-if="checkphonenumbertype" class="phone_incorrect">전화번호 형식이 일치하지 않습니다.</label>
+            <label v-if="checkphonenumbertype" class="phoneIncorrect">전화번호 형식이 일치하지 않습니다.</label>
         </div>
 
         <div id="certification" class="mt-6">
@@ -128,11 +128,11 @@
 <script setup>
 import { register } from '@/api/register';
 import { checkVerificationCode } from '@/api/register';
-import { idcheck } from '@/api/register';
+import { idCheck } from '@/api/register';
 import { ref } from "vue";
 import swal from 'sweetalert';
-import { emailcheck } from '@/api/register';
-import { phonecheck } from '@/api/register';
+import { emailCheck } from '@/api/register';
+import { phoneCheck } from '@/api/register';
 import { sendVerificationCode } from '@/api/register';
 
 const showPrivacyPolicy = () => {
@@ -151,7 +151,7 @@ const policy = ref(false);
 // 약관동의를 확인을 위한 변수.
 
 const userInfo = ref({
-    "member_id": '',
+    "memberId": '',
     "password": '',
     "name": '',
     "phone": '',
@@ -193,8 +193,8 @@ const certifiedcodestate = ref(true);
 //인증상태를 담을 변수.
 
 const checkvalidateId = () => {
-    idcheck(
-        userInfo.value.member_id,
+    idCheck(
+        userInfo.value.memberId,
         ({ data }) => {
             if (data.data && data.data.isDuplicate) {
                 swal('이미 사용 중인 아이디입니다.');
@@ -212,7 +212,7 @@ const checkvalidateId = () => {
 // 아이디가 중복인지 아닌지 검사하는 메서드.
 
 const checkvalidateemail = () => {
-    emailcheck(
+    emailCheck(
         userInfo.value.email,
         ({ data }) => {
             if (data.data && data.data.isDuplicate) {
@@ -232,7 +232,7 @@ const checkvalidateemail = () => {
 // 이메일이 중복인지 아닌지 검사하는 메서드.
 
 const checkvalidatephonenumber = () => {
-    phonecheck(
+    phoneCheck(
         userInfo.value.phone,
         ({ data }) => {
             if (data.data && data.data.isDuplicate) {
@@ -291,9 +291,9 @@ const certifiedcheck = () => {
 }
 // 인증번호를 체크하는 메서드. 
 
-const check_id = () => {
+const checkId = () => {
     const validateId = /^[A-Za-z0-9]{4,12}$/;
-    checkidtype.value = !validateId.test(userInfo.value.member_id);
+    checkidtype.value = !validateId.test(userInfo.value.memberId);
     validateIdstate.value = false;
 
 }
@@ -361,12 +361,12 @@ const registerFunc = () => {
 
 
 <style scoped>
-.id_incorrect,
-.name_incorrect,
-.email_incorrect,
-.password_incorrect,
-.passwordcheck_incorrect,
-.phone_incorrect {
+.idIncorrect,
+.nameIncorrect,
+.emailIncorrect,
+.passwordIncorrect,
+.passwordcheckIncorrect,
+.phoneIncorrect {
     color: red;
 }
 </style>
