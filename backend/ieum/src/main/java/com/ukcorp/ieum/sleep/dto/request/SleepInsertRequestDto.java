@@ -13,7 +13,6 @@ import java.time.LocalTime;
 @ToString
 @Builder
 public class SleepInsertRequestDto {
-  private Long careNo;
   private Time sleepStartTime;
   private Time sleepEndTime;
 }

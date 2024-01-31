@@ -16,6 +16,4 @@ public interface CareMapper {
     @Mapping(target = "careImage", ignore = true)
     CareInfo careInsertRequestDtoToCareInfo(CareInsertRequestDto careInsertRequestDto);
 
-    @Mapping(target = "careImage", ignore = true)
-    CareInfo CareUpdateRequestDtoToCareInfo(CareUpdateRequestDto careDto);
 }

@@ -29,10 +29,10 @@ public class EventController {
    * @param careNo
    * @return List<EventGetResponseDto>
    */
-  @GetMapping("/list/{care-no}")
-  public ResponseEntity getEventList(@PathVariable("care-no") Long careNo) {
+  @GetMapping
+  public ResponseEntity getEventList() {
     try {
-      List<EventGetResponseDto> eventGetResponseDtoList = eventService.getAllEvent(careNo);
+      List<EventGetResponseDto> eventGetResponseDtoList = eventService.getAllEvent();
       return handleSuccess(eventGetResponseDtoList);
     } catch (Exception e) {
       log.debug(e.getMessage());

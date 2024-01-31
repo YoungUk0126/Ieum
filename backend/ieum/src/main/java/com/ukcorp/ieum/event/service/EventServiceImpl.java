@@ -8,6 +8,7 @@ import com.ukcorp.ieum.event.dto.response.EventGetResponseDto;
 import com.ukcorp.ieum.event.entity.RegularEvent;
 import com.ukcorp.ieum.event.mapper.EventMapper;
 import com.ukcorp.ieum.event.repository.EventRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,8 +34,9 @@ public class EventServiceImpl implements EventService {
   @Override
   public void insertEvent(EventInsertRequestDto event) throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      피보호자 정보 확인 및 피보호자 정보 받아오기
-      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
       RegularEvent entity = eventMapper
               .eventInsertRequestDtoAndCareToRegularEvent(event, care);
       eventRepository.save(entity);
@@ -58,8 +60,9 @@ public class EventServiceImpl implements EventService {
   }
 
   @Override
-  public List<EventGetResponseDto> getAllEvent(Long careNo) throws Exception {
+  public List<EventGetResponseDto> getAllEvent() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
       List<RegularEvent> list = eventRepository.findAllByCareInfo_CareNo(careNo);
       return eventMapper.RegularEventEntityToResponseDto(list);
     } catch (RuntimeException e) {
@@ -73,10 +76,13 @@ public class EventServiceImpl implements EventService {
   @Override
   public void updateEvent(EventUpdateRequestDto event) throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      피보호자 정보가 있는지 확인 및 피보호자 정보 받아오기
-      CareInfo care = careRepository.findById(event.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
 //      수정하려는 기념일 정보가 있는지 확인
-      RegularEvent check = eventRepository.findById(event.getEventNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 기념일 정보입니다."));
+      if(!eventRepository.existsById(event.getEventNo())){
+        throw new NoSuchElementException("존재하지 않는 기념일 정보입니다.");
+      }
       RegularEvent entity = eventMapper
               .EventUpdateRequestDtoAndCareInfoToRegualrEvent(event, care);
       eventRepository.save(entity);
