@@ -35,10 +35,10 @@
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
             <option selected>알람을 선택해주세요</option>
-            <option value="holyshit">기념일</option>
-            <option value="CA">투약</option>
-            <option value="FR">취침</option>
-            <option value="DE">식사</option>
+            <option value="anniversary">기념일</option>
+            <option value="medication">투약</option>
+            <option value="sleep">취침</option>
+            <option value="meal">식사</option>
           </select>
 
           <button
@@ -66,10 +66,9 @@
         </div>
         <!-- Modal body -->
         <div class="modal-body">
-          <h3>{{ selectedOption }}</h3>
           <!-- 동적으로 변경되는 내용 추가 -->
           <template v-if="selectedOption === 'alarm'">
-            <!-- 알람 내용 추가 -->
+            <p>알람을 지정해주세요.</p>
           </template>
           <template v-else-if="selectedOption === 'anniversary'">
             <VModalAnniBody></VModalAnniBody>
