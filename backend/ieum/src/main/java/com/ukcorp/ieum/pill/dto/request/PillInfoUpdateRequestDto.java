@@ -16,7 +16,6 @@ import java.util.List;
 @Builder
 public class PillInfoUpdateRequestDto {
     private Long pillInfoNo;
-    private Long careNo;
     private String pillName;
     @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate pillStartDate;

@@ -14,7 +14,6 @@ import java.time.LocalTime;
 @Builder
 public class SleepUpdateRequestDto {
   private Long sleepInfoNo;
-  private Long careNo;
   private Time sleepStartTime;
   private Time sleepEndTime;
 }

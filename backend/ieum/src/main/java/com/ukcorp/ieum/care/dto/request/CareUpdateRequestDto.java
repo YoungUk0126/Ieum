@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @Builder
 public class CareUpdateRequestDto {
     private LocalDate careBirth;
-    private Long careNo;
     private String careAddr;
     private String careName;
     private String carePhone;

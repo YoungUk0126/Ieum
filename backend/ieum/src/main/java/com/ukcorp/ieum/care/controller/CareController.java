@@ -42,11 +42,11 @@ public class CareController {
      * @param careNo
      */
 
-    @GetMapping("/{care-no}")
-    private ResponseEntity<Map<String, Object>> getCareInfo(@PathVariable("care-no") Long careNo) {
+    @GetMapping
+    private ResponseEntity<Map<String, Object>> getCareInfo() {
 
         try {
-            CareGetResponseDto careDto = careService.getCareInfo(careNo);
+            CareGetResponseDto careDto = careService.getCareInfo();
             return handleSuccess(careDto);
 
         } catch (Exception e) {
@@ -68,11 +68,11 @@ public class CareController {
         }
     }
 
-    @DeleteMapping("/{care-no}")
-    private ResponseEntity<Map<String, Object>> deleteCareInfo(@PathVariable("care-no") Long careNo) {
+    @DeleteMapping
+    private ResponseEntity<Map<String, Object>> deleteCareInfo() {
 
         try {
-            careService.deleteCareInfo(careNo);
+            careService.deleteCareInfo();
             return handleSuccess("");
 
         } catch (Exception e) {
