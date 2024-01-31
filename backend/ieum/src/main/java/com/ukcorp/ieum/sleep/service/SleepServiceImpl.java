@@ -2,6 +2,7 @@ package com.ukcorp.ieum.sleep.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.sleep.dto.request.SleepInsertRequestDto;
 import com.ukcorp.ieum.sleep.dto.request.SleepUpdateRequestDto;
 import com.ukcorp.ieum.sleep.dto.response.SleepResponseDto;
@@ -28,10 +29,11 @@ public class SleepServiceImpl implements SleepService {
   private final SleepMapper sleepMapper;
 
   @Override
-  public SleepResponseDto getSleep(Long sleepInfoNo) throws Exception {
+  public SleepResponseDto getSleep() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      조회할 데이터가 있으면 가져오고 없으면 예외 처리
-      SleepInfo sleep = sleepRepository.findById(sleepInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침 시간 데이터입니다."));
+      SleepInfo sleep = sleepRepository.findByCareInfo_CareNo(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침 시간 데이터입니다."));
       return sleepMapper.SleepInfoToResponseDto(sleep);
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
@@ -54,8 +56,9 @@ public class SleepServiceImpl implements SleepService {
   @Override
   public void registSleep(SleepInsertRequestDto sleep) throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      피보호자 정보가 있으면 가져오고 없으면 예외 처리
-      CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
       SleepInfo entity = sleepMapper
               .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep, care);
       sleepRepository.save(entity);
@@ -71,10 +74,13 @@ public class SleepServiceImpl implements SleepService {
   @Override
   public void modifySleep(SleepUpdateRequestDto sleep) throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      피보호자 정보가 있으면 가져오고 없으면 예외 처리
-      CareInfo care = careRepository.findById(sleep.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
 //      수정할 끼니시간 정보가 있으면 가져오고 없으면 예외 처리
-      SleepInfo check = sleepRepository.findById(sleep.getSleepInfoNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침시간 데이터입니다."));
+      if(!sleepRepository.existsById(sleep.getSleepInfoNo())){
+        throw new NoSuchElementException("존재하지 않는 취침 시간 정보입니다.");
+      }
       SleepInfo entity = sleepMapper
               .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep, care);
       sleepRepository.save(entity);
