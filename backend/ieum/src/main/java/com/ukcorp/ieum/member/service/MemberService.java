@@ -25,7 +25,7 @@ public interface MemberService {
 
     boolean isExistsMemberPhone(String phone);
 
-    boolean checkExistsMember(String phone);
+    boolean checkExistsMember(CheckExistDto checkMember);
 
     void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
 

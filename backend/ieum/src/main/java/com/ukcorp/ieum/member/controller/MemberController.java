@@ -152,8 +152,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-exist")
-    public ResponseEntity<Map<String, Object>> isExistMember(@RequestBody @Valid PhoneRequestDto phone) {
-        boolean isExists = memberService.checkExistsMember(phone.getPhone());
+    public ResponseEntity<Map<String, Object>> isExistMember(@RequestBody @Valid CheckExistDto checkMember) {
+        boolean isExists = memberService.checkExistsMember(checkMember);
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
             // 이미 존재하는 핸드폰 번호인 경우

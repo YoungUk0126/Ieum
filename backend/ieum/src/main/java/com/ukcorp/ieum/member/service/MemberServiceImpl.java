@@ -179,10 +179,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean checkExistsMember(String phone) {
-        String memberId = JwtUtil.getMemberId().orElseThrow(()
-                -> new UsernameNotFoundException("MEMBER NOT FOUND"));
-        return memberRepository.existsByMemberIdAndMemberPhone(memberId, phone);
+    public boolean checkExistsMember(CheckExistDto checkMember) {
+        return memberRepository
+                .existsByMemberIdAndMemberPhone(checkMember.getMemberId(), checkMember.getPhone());
     }
 
     /**
