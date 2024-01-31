@@ -36,7 +36,7 @@ public class CareController {
         try {
             String path = "src/main/resources/static";
             // 파일 저장 디렉토리 경로 (폴더 내에 프론트 프로젝트 함께 존재해야 함)
-            String uploadDir = "../"+path+"/public/";
+            String uploadDir = "./profile/";
             String randomId = UUID.randomUUID().toString();
             // 파일 저장할 경로
             String fileName = randomId + ".jpg";
