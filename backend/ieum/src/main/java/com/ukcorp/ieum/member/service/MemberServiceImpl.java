@@ -166,6 +166,13 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.existsByMemberPhone(phone);
     }
 
+    @Override
+    public boolean checkExistsMember(String phone) {
+        String memberId = JwtUtil.getMemberId().orElseThrow(()
+                -> new UsernameNotFoundException("MEMBER NOT FOUND"));
+        return memberRepository.existsByMemberIdAndMemberPhone(memberId, phone);
+    }
+
     /**
      * 핸드폰 인증 코드 발송
      *

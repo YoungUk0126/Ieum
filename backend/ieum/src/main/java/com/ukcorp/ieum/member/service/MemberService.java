@@ -23,6 +23,8 @@ public interface MemberService {
 
     boolean isExistsMemberPhone(String phone);
 
+    boolean checkExistsMember(String phone);
+
     void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
 
     boolean checkMessageCode(VerifyRequestDto verifyRequestDto);
