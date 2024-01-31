@@ -127,8 +127,6 @@ instance.interceptors.response.use(
   return instance
 }
 
-
-
 const url = 'http://localhost:8080/api/member'
 
 // Axios를 사용한 토큰 갱신 로직
@@ -145,6 +143,7 @@ async function refreshAccessToken() {
       return true;
     })
     .catch(() => {
+      window.location.href="/login"
       return false;
     })
 }
