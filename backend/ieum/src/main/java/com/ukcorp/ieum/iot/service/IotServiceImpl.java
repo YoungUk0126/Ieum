@@ -27,7 +27,7 @@ public class IotServiceImpl implements IotService {
    */
   @Override
   public boolean activeCheck(String code) {
-    SerialCode device = iotRepository.searchSerialCode(code).orElseThrow(
+    SerialCode device = iotRepository.searchBySerialCode(code).orElseThrow(
             () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
 
     if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
@@ -50,7 +50,7 @@ public class IotServiceImpl implements IotService {
             () -> new NoSuchElementException());
 
     if (!activeCheck(code)) {
-      SerialCode serialCode = iotRepository.searchSerialCode(code).orElseThrow(
+      SerialCode serialCode = iotRepository.searchBySerialCode(code).orElseThrow(
               () -> new NoSuchElementException());
 
       serialCode.updateUsableActice();  //기기 상태 활성화
@@ -77,10 +77,10 @@ public class IotServiceImpl implements IotService {
 
     if (!activeCheck(code) && activeCheck(oldCode)) {
 
-      SerialCode oldDevice = iotRepository.searchSerialCode(oldCode).orElseThrow(
+      SerialCode oldDevice = iotRepository.searchBySerialCode(oldCode).orElseThrow(
               () -> new NoSuchElementException());
 
-      SerialCode newDevice = iotRepository.searchSerialCode(code).orElseThrow(
+      SerialCode newDevice = iotRepository.searchBySerialCode(code).orElseThrow(
               () -> new NoSuchElementException());;
 
       oldDevice.updateUsableInactive(); //사용하던 기기 비활성화
