@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface IotRepository extends JpaRepository<SerialCode, Long> {
 
-    Optional<SerialCode> searchSerialCode(String serialCode);
+    Optional<SerialCode> searchBySerialCode(String serialCode);
 
 }
