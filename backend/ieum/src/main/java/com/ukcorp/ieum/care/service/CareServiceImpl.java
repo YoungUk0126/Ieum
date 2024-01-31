@@ -26,18 +26,6 @@ public class CareServiceImpl implements CareService {
   private final CareRepository careRepository;
   private final CareMapper careMapper;
 
-  @Transactional
-  @Override
-  public void insertCareInfo(CareInsertRequestDto careDto) throws Exception {
-    try {
-      CareInfo care = careMapper.careInsertRequestDtoToCareInfo(careDto);
-      careRepository.save(care);
-    } catch (DataIntegrityViolationException e) {
-      log.debug("입력 오류!");
-      throw new Exception("입력 오류!");
-    }
-  }
-
   @Override
   public CareGetResponseDto getCareInfo() throws Exception {
     try {
@@ -68,6 +56,7 @@ public class CareServiceImpl implements CareService {
               .careBirth(careDto.getCareBirth())
               .careGender(Gender.valueOf(careDto.getCareGender()))
               .carePhone(careDto.getCarePhone())
+              .careImage(careDto.getCareImage())
               .build();
       careRepository.save(care);
     } catch (DataIntegrityViolationException e) {
