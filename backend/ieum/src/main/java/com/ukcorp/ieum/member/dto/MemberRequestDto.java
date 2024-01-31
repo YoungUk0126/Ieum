@@ -11,11 +11,13 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder
-public class MemberDto {
+public class MemberRequestDto {
     @NotEmpty(message = "Member ID cannot be empty")
     private String memberId;
 
     @NotEmpty(message = "Password cannot be empty")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\\d~!@#$%^&*()+|=]{7,20}$",
+            message = "비밀번호는 영문+숫자+특수문자를 포함한 8~20자여야 합니다")
     private String password;
 
     @NotEmpty(message = "Name cannot be empty")

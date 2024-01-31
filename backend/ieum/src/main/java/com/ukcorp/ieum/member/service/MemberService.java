@@ -1,24 +1,31 @@
 package com.ukcorp.ieum.member.service;
 
-
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.LoginDto;
-import com.ukcorp.ieum.member.dto.MemberDto;
-import com.ukcorp.ieum.member.entity.Member;
+import com.ukcorp.ieum.member.dto.*;
 
 public interface MemberService {
 
-    void signup(MemberDto memberSignupDto);
+    void signup(MemberRequestDto memberSignupDto);
 
-    JwtToken login(LoginDto loginDto);
+    JwtToken login(MemberLoginRequestDto loginDto);
 
-    int modifyMember(MemberDto memberModifyDto);
+    void logout();
 
-    int deleteMember(String memberId);
+    MemberResponseDto getMemberInfo();
 
-    Member findById(String memberId);
+    void modifyMember(MemberRequestDto memberModifyDto);
+
+    void withdrawMember();
+
+    boolean isExistsMemberId(String memberId);
+
+    boolean isExistsMemberEmail(String email);
+
+    boolean isExistsMemberPhone(String phone);
+
+    void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
+
+    boolean checkMessageCode(VerifyRequestDto verifyRequestDto);
 
     JwtToken refreshAccessToken(String refreshToken);
-
-//    int updateMember(MemberDto member);
 }

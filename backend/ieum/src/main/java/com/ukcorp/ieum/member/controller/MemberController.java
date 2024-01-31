@@ -1,13 +1,12 @@
 package com.ukcorp.ieum.member.controller;
 
 import com.ukcorp.ieum.jwt.JwtFilter;
-import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.LoginDto;
-import com.ukcorp.ieum.member.dto.MemberDto;
-import com.ukcorp.ieum.member.entity.Member;
+import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,11 +29,10 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/join")
-    public ResponseEntity joinMember(@Valid @RequestBody MemberDto member) {
-
+    public ResponseEntity<Map<String, Object>> joinMember(@Valid @RequestBody MemberRequestDto member) {
         memberService.signup(member);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return handleSuccess("success");
     }
 
     @PostMapping("/login")
@@ -58,40 +56,93 @@ public class MemberController {
         }
     }
 
-    @PutMapping("/modify")
-    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberDto member) {
-        int result = memberService.modifyMember(member);
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getMemberInfo() {
+        MemberResponseDto memberInfo = memberService.getMemberInfo();
 
-        if (result != 0) {
-            return handleSuccess(result);
-        } else {
-            return handleError(result);
-        }
+        return handleSuccess(memberInfo);
     }
 
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity<Map<String, Object>> deleteMember(@PathVariable("member-id") String memberId) {
-        int result = memberService.deleteMember(memberId);
+    @GetMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logoutMember() {
+        memberService.logout();
 
-        if (result != 0) {
-            return handleSuccess(result);
-        } else {
-            return handleError(result);
-        }
+        return handleSuccess("success");
     }
 
+
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
+        memberService.modifyMember(member);
+
+        return handleSuccess("success");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> withdrawMember() {
+        memberService.withdrawMember();
+
+        return handleSuccess("success");
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody PhoneRequestDto phone) {
+        log.info("Controller 진입");
+        memberService.sendVerifyMessage(phone);
+
+        return handleSuccess("success");
+    }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody VerifyRequestDto verifyRequestDto) {
+        boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
+        if (isCorrect) {
+            return handleSuccess("success");
+        } else {
+            return handleFail("fail");
+        }
+    }
 
     @GetMapping("/check-id/{member-id}")
-    public ResponseEntity<Map<String, Object>> searchMemberById(@PathVariable("member-id") String checkId) {
-        Member result = memberService.findById(checkId);
-//        이미 아이디가 존재한다면
-        if (result != null) {
-            return handleError(0);
+    public ResponseEntity<Map<String, Object>> isDuplicatedId(@PathVariable("member-id") String checkId) {
+        boolean isExists = memberService.isExistsMemberId(checkId);
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 아이디인 경우
+            response.put("isDuplicated", true);
+        } else {
+            // 사용 가능한 아이디인 경우
+            response.put("isDuplicated", false);
         }
-//        아이디가 없다면
-        else {
-            return handleSuccess(1);
+        return handleSuccess(response);
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody EmailRequestDto emailDto) {
+        boolean isExists = memberService.isExistsMemberEmail(emailDto.getEmail());
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 이메일인 경우
+            response.put("isDuplicated", true);
+        } else {
+            // 사용 가능한 이메일인 경우
+            response.put("isDuplicated", false);
         }
+        return handleSuccess(response);
+    }
+
+    @PostMapping("/check-phone")
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody PhoneRequestDto phoneDto) {
+        boolean isExists = memberService.isExistsMemberPhone(phoneDto.getPhone());
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 핸드폰 번호인 경우
+            response.put("isDuplicated", true);
+        } else {
+            // 사용 가능한 핸드폰 번호인 경우
+            response.put("isDuplicated", false);
+        }
+        return handleSuccess(response);
     }
 
     @PostMapping("/refresh")
@@ -112,7 +163,6 @@ public class MemberController {
 
         return handleFail("실패");
     }
-    
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();
@@ -122,11 +172,19 @@ public class MemberController {
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
+    private ResponseEntity<Map<String, Object>> handleFail(Object data) {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("success", false);
+        result.put("data", data);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
+
     private ResponseEntity<Map<String, Object>> handleError(Object data) {
         Map<String, Object> result = new HashMap<>();
         result.put("success", false);
         result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
     }
 
 }

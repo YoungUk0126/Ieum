@@ -49,7 +49,7 @@ public class CareControllerTests {
 //        get
         mock.perform(get("/api/care/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CareControllerTests {
 //        delete
         mock.perform(delete("/api/care/15"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
 }

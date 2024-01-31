@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
  * @author : 김영욱
  * TimeRequest를 받기 위한 Dto
  */
-public class PillTimeRequestDto {
-    private String pillDate;
-    private LocalDateTime pillTime;
+public class PillTimeInsertRequestDto {
+    private Long pillTakeTime;
 }

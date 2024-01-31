@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.member.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.entity.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.*;
@@ -58,6 +59,23 @@ public class Member {
         auth.add("ROLE_USER");
         this.authorities = auth;
         this.careInfo = careInfo;
+        this.withdrawal = Withdrawal.ACTIVE;
+    }
+
+    public void withdrawMember() {
+        this.withdrawal = Withdrawal.INACTIVE;
+        authorities = new ArrayList<>();
+    }
+
+    public void updateMember(MemberRequestDto updateMember) {
+        this.memberPassword = updateMember.getPassword();
+        this.memberName = updateMember.getName();
+        this.memberEmail = updateMember.getEmail();
+        this.memberPhone = updateMember.getPhone();
+    }
+
+    public void updateSerialCode(String code) {
+        this.serialCode = code;
     }
 
 }

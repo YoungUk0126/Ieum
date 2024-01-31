@@ -23,11 +23,6 @@ public class PillTime {
     @JoinColumn(name = "PILL_INFO_NO")
     private PillInfo pillInfo;
 
-    //    복용 요일
-    @Column(name = "PILL_DATE")
-    @Enumerated(EnumType.STRING)
-    private PillDate pillDate;
-
     @Column(name = "PILL_TAKE_TIME")
     private Long pillTakeTime;
 }

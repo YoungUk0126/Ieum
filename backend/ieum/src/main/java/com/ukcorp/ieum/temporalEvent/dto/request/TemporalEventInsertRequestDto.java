@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @Builder
 public class TemporalEventInsertRequestDto {
 
-  private Long careNo;
-
   private String eventName;
 
   private LocalDate eventDate;
