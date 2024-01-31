@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -100,8 +100,14 @@ const curStep = ref(1)
 
 onMounted(() => {})
 
-watch(() => {
-  router.navigate('')
+watch(curStep.value, (nv, ov) => {
+  if (nv == 2) {
+    router.navigate('/secondStep')
+  } else if (nv == 3) {
+    router.navigate('')
+  } else {
+    router.navigate('')
+  }
 })
 </script>
 

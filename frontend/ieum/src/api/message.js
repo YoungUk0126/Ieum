@@ -7,7 +7,7 @@ const form = localSessionAxiosFormData()
 
 const url = 'http://localhost:8080/api/message'
 
-function getApi(param, success) {
+function getApi(success) {
   local.get(`${url}`).then(success).catch(fail)
 }
 function registApi(data, success) {

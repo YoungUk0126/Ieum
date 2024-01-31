@@ -230,15 +230,9 @@ const openModal = () => {
 }
 
 onMounted(() => {
-  getApi(
-    careId,
-    (response) => {
-      items.value = response.data.data
-    },
-    () => {
-      alert('조회 실패')
-    }
-  )
+  getApi((response) => {
+    items.value = response.data.data
+  })
   initModal()
 })
 
@@ -332,10 +326,6 @@ const removeSuccess = (id) => {
           }
         )
       }
-    },
-    // fail
-    (value) => {
-      console.log('fail')
     }
   )
 }

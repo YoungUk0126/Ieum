@@ -59,9 +59,9 @@
               </router-link>
             </div>
             <div class="w-1/2 text-end pr-4">
-              <a href="#" class="text-blue-600 hover:underline dark:text-blue-500"
-                >아이디/비밀번호 찾기</a
-              >
+              <router-link class="text-blue-600 hover:underline dark:text-blue-500" to="/findInfo">
+                아이디/비밀번호 찾기
+              </router-link>
             </div>
           </div>
 

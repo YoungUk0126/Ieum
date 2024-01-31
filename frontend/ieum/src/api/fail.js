@@ -6,7 +6,6 @@ const local = localRefreshAxios()
 const url = 'http://localhost:8080/api/member'
 
 const fail = ({ response }) => {
-  console.log(response)
   if (response.status == 500) {
     swal({
       title: '오류',
@@ -56,7 +55,9 @@ const fail = ({ response }) => {
 
     // refresh 토큰 재발급, 발급 완료되면 이전 HTTP 다시 실행
   } else if (response.status == 403) {
+    console.log(response)
     refreshAccessToken()
+    console.log('재발급 완료!')
     return true
   } else {
     console.log(response.status)
@@ -84,16 +85,10 @@ function refreshAccessToken() {
     .post(`${url}/refresh`, JSON.stringify(data))
     .then(({ data }) => {
       VueCookies.set('accessToken', data.accessToken)
+      VueCookies.set('refreshToken', data.refreshToken)
       VueCookies.set('auth', true)
     })
-    .catch((response) => {
-      console.log(response)
-      //   VueCookies.remove('accessToken')
-      //   VueCookies.remove('refreshToken')
-      //   VueCookies.set('auth', false)
-      // 로그인 페이지로 리디렉션
-      //window.location.href = '/login'
-
+    .catch(() => {
       swal({
         title: '로그인',
         text: '로그인 정보가 존재하지 않습니다',
