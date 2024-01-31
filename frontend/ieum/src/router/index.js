@@ -10,13 +10,14 @@ import TheChatViewVue from '@/views/TheChatView.vue'
 import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
 import NotFound from '@/error/NotFound.vue'
+import TheFindInfoView from '@/views/TheFindInfoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'TheMainView',
+      name: 'TheMainViewVue',
       component: TheMainViewVue
     },
     {
@@ -55,6 +56,23 @@ const router = createRouter({
       component: TheScheduleViewVue
     },
     {
+      path: '/findInfo',
+      name: 'TheFindInfoView',
+      component: TheFindInfoView,
+      children: [
+        {
+          path: '',
+          name: 'TheInputInfo',
+          component: () => import('@/components/findInfo/TheInputInfo.vue')
+        },
+        {
+          path: 'secondStep',
+          name: 'TheAuthInfo',
+          component: () => import('@/components/findInfo/TheAuthInfo.vue')
+        }
+      ]
+    },
+    {
       path: '/404',
       name: 'notFound',
       component: NotFound
@@ -63,23 +81,6 @@ const router = createRouter({
       path: '/:catchAll(.*)',
       redirect: '/404'
     }
-    // {
-    //   path: '/board',
-    //   name: 'TheBoardView',
-    //   component: TheBoardView,
-    //   children: [
-    //     {
-    //       path: 'list',
-    //       name: 'BoardList',
-    //       component: () => import('@/components/board/BoardList.vue')
-    //     },
-    //     {
-    //       path: 'detail/:articleNo',
-    //       name: 'BoardDetail',
-    //       component: () => import('@/components/board/BoardDetail.vue')
-    //     }
-    //   ]
-    // },
   ]
 })
 

@@ -54,7 +54,9 @@
           </div>
           <div class="flex mb-3">
             <div class="w-1/2 ps-4">
-              <a href="#" class="text-blue-600 hover:underline dark:text-blue-500">회원가입</a>
+              <router-link class="text-blue-600 hover:underline dark:text-blue-500" to="/register">
+                회원가입
+              </router-link>
             </div>
             <div class="w-1/2 text-end pr-4">
               <a href="#" class="text-blue-600 hover:underline dark:text-blue-500"
@@ -108,7 +110,7 @@ const loginSubmit = () => {
   }
 
   login(data.value, (response) => {
-    if (response.status == 400) {
+    if (response.status == 200) {
       // 각 토큰 값 쿠키로 저장
       VueCookies.set('accessToken', response.data.accessToken)
       VueCookies.set('refreshToken', response.data.refreshToken)

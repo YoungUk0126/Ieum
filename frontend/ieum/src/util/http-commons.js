@@ -42,11 +42,30 @@ function localSessionAxios() {
   const instance = axios.create({
     baseURL: VITE_VUE_API_URL,
     headers: {
-      'Content-Type': 'multipart/form-data',
+      'Content-Type': 'application/json;charset=utf-8',
       Authorization: token
     }
   })
   return instance
 }
 
-export { localAxios, localAxiosFormData, localSessionAxiosFormData, localSessionAxios }
+function localRefreshAxios() {
+  const token = `${VueCookies.get('grantType')} ${VueCookies.get('refreshToken')}`
+
+  const instance = axios.create({
+    baseURL: VITE_VUE_API_URL,
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      'Authorization-refresh': token
+    }
+  })
+  return instance
+}
+
+export {
+  localAxios,
+  localAxiosFormData,
+  localSessionAxiosFormData,
+  localSessionAxios,
+  localRefreshAxios
+}
