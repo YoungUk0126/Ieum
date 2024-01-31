@@ -1,55 +1,9 @@
 <template>
   <div class="content-container">
-    <!-- 총 2개의 부분으로 분리
+    <!-- 총 1개의 부분으로 분리
       * 대분류 div 태그에는 major-c 태그 부여
-    1. 알람 종류 dropdown
     2. 시각 입력부(아침, 점심, 저녁)
     -->
-    <!-- 1. 알람 종류 dropdown -->
-    <div class="major-c dropdown">
-      <div class="dropdown mb-4">
-        <button
-          class="btn dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          알람 종류
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <div
-              class="dropdown-item"
-              dropdownId="anniv"
-              @click="changeModalBody('VModalAnniBody')"
-            >
-              기념일
-            </div>
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              dropdownId="wakeandsleep"
-              @click="changeModalBody('VModalWakeandSleep')"
-              >기상/취침</a
-            >
-          </li>
-          <li>
-            <a
-              class="dropdown-item"
-              dropdownId="injection"
-              @click="changeModalBody('VModalInjection')"
-              >투약</a
-            >
-          </li>
-          <li>
-            <a class="dropdown-item" dropdownId="meal" @click="changeModalBody('VModalMeal')"
-              >식사</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
     <!-- 2-1. 시각 입력부 dropdown(아침)-->
     <div class="major-c time-input row">
       <div class="col-8">

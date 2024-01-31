@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 import VueCookies from 'vue-cookies'
 
 const { VITE_VUE_API_URL } = import.meta.env
@@ -69,3 +70,4 @@ export {
   localSessionAxios,
   localRefreshAxios
 }
+

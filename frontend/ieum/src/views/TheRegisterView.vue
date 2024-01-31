@@ -1,175 +1,372 @@
 <template>
-    <div class="register">
-        <section class="vh-100 gradient-custom">
-            <div class="container py-5 h-100">
-                <div class="row justify-content-center align-items-center h-100">
-                    <div class="col-12 col-lg-9 col-xl-7 w-100">
-                        <div class="card shadow-2-strong card-registration">
-                            <div class="card-body p-4 p-md-5">
-                                <h3 class="regi">회원가입</h3>
-                                <form>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-
-                                            <div class="form-outline">
-                                                <label class="form-label" for="firstName">아이디/ID</label>
-                                                <input type="text" id="firstName" class="form-control form-control-lg" />
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-
-                                            <div class="form-outline">
-                                                <label class="form-label" for="lastName">이름/Name</label>
-                                                <input type="text" id="lastName" class="form-control form-control-lg" />
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 d-flex align-items-center">
-
-                                            <div class="form-outline datepicker w-100">
-                                                <label for="birthdayDate" class="form-label">비밀번호/password</label>
-                                                <input type="text" class="form-control form-control-lg" id="birthdayDate" />
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-6 mb-4">
-
-                                            <div class="form-outline datepicker w-100">
-                                                <label for="birthdayDate" class="form-label">비밀번호확인/password cheak</label>
-                                                <input type="text" class="form-control form-control-lg" id="birthdayDate" />
-                                            </div>
-
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2">
-
-                                            <div class="form-outline">
-                                                <label class="form-label" for="emailAddress">휴대폰 번호/Phone Number</label>
-                                                <input type="email" id="emailAddress"
-                                                    class="form-control form-control-lg" />
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-6 pb-2 d-flex align-items-center">
-                                            <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold">인증
-                                                전송</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2 ">
-
-                                            <label class="form-label" for="emailAddress">인증번호/Certified</label>
-                                            <div class="form-outline">
-                                                <input type="email" id="emailAddress"
-                                                    class="form-control form-control-lg" />
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-6 pb-2 d-flex align-items-center">
-                                            <label class="form-label" for="firstName"></label>
-                                            <button type="button" class="btn btn-custom-primary w-35 py-2 fw-bold">인증번호
-                                                확인</button>
-                                        </div>
-                                    </div>
-
-                                    <div class="mt-1" style="text-align: center; align-items: center;">
-                                        <input type="checkbox" style="margin-right: 8px;">
-                                        <label for="myCheckbox">회원가입 시, 필요한 개인정보 수집 이용내역에 대해
-                                            동의합니다.</label>
-                                    </div>
-
-                                    <div class="mt-5 d-flex justify-content-around">
-                                        <div class="col-4 text-center">
-                                            <a href="/" class="btn btn-custom-primary btn-lg w-50 fw-bold">확인</a>
-                                        </div>
-                                        <div class="col-4 text-center">
-                                            <a href="/login" class="btn btn-custom-danger btn-lg w-50 fw-bold">취소</a>
-                                        </div>
-                                    </div>
-
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+    <div class="all mt-40 mb-40 ml-80 mr-80">
+        <div id="ID" class="mt-6">
+            <label for="ID" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">아이디/ID</label>
+            <div class="grid grid-cols-6 gap-4">
+                <div class="col-span-2">
+                    <input type="text"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="아이디를 입력해주세요." @input="check_id" v-model="userInfo.member_id" required>
                 </div>
+                <button type="button"
+                    class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="checkvalidateId">아이디
+                    확인</button>
             </div>
-        </section>
+            <label v-if="checkidtype" class="id_incorrect">4~12자의 영문자, 숫자만 사용 가능합니다.</label>
+            <label v-else>사용이 가능한 아이디입니다.</label>
+        </div>
+        <div id="name" class="mt-6">
+            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">이름/Name</label>
+            <div class="grid grid-cols-3 gap-4">
+                <input type="text" id="name"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="이름을 입력해주세요." v-model="userInfo.name" @input="validateName" required>
+            </div>
+            <label v-if="checknametype" class="name_incorrect">이름은 영문자, 한글만 입력 가능합니다.</label>
+            <label v-else>사용이 가능한 이름입니다.</label>
+        </div>
+        <div id="email" class="mt-6">
+            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
+            <div class="grid grid-cols-6 gap-4">
+                <div class="col-span-2">
+                    <input type="email" id="email"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="john@company.com" v-model="userInfo.email" @input="check_eamil" required>
+                </div>
+                <button type="button"
+                    class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="checkvalidateemail">이메일 확인</button>
+            </div>
+            <label v-if="checkemailtype" class="email_incorrect">이메일 형식이 일치하지 않습니다.</label>
+        </div>
+        <div id="password" class="mt-6 grid grid-cols-2 gap-4">
+            <div>
+                <label for="password"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호/Password</label>
+                <input type="password" id="password"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="•••••••••" v-model="userInfo.password" @input="passwordlength" required>
+                <label v-if="checkpasswordtype" class="password_incorrect">영문, 숫자, 특수문자(~!@#$%^&*) 조합 7~16 자리로
+                    작성해주세요.</label>
+                <label v-else>사용 가능한 비밀번호입니다.</label>
+            </div>
+            <div>
+                <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호
+                    확인/Password
+                    Check</label>
+                <input type="password" id="confirm_password"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="•••••••••" v-model="password_check" @input="check_password" required>
+                <label v-if="checkpasswordrepeattype" class="passwordcheck_incorrect">일치하지 않습니다. 다시 입력해주세요.</label>
+            </div>
+        </div>
+        <div id="phone" class="mt-6">
+            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">전화번호/Phone
+                Number</label>
+            <div class="grid grid-cols-6 gap-4">
 
+                <div class="relative col-span-2">
+                    <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18">
+                            <path
+                                d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
+                        </svg>
+                    </div>
+                    <input type="text" id="phone-input" aria-describedby="helper-text-explanation"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        @input=check_phone v-model="userInfo.phone" placeholder="010-3333-4444" required>
+                </div>
+
+                <button type="button"
+                    class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="checkvalidatephonenumber">전화번호 확인</button>
+            </div>
+            <label v-if="checkphonenumbertype" class="phone_incorrect">전화번호 형식이 일치하지 않습니다.</label>
+        </div>
+
+        <div id="certification" class="mt-6">
+            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">인증번호/Certified
+                Number</label>
+            <div class="grid grid-cols-6 gap-4">
+                <div class="col-span-2">
+                    <input type="text" id="last_name"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="인증번호를 입력해주세요." v-model="certifiedcode" required>
+                </div>
+                <button type="button"
+                    class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="certifiedsend">인증전송</button>
+                <button type="button"
+                    class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    @click="certifiedcheck">인증번호 확인</button>
+            </div>
+        </div>
+
+        <div id="policy" class="items-start mt-6 flex justify-center">
+            <div class="flex items-center h-5">
+                <input id="remember" type="checkbox" value=""
+                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
+                    @click="check_policy" required>
+            </div>
+            <label for="remember" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">가입 시, <a href="#"
+                    class="text-blue-600 hover:underline dark:text-blue-500" @click="showPrivacyPolicy">개인정보처리방침</a>에
+                동의합니다.</label>
+        </div>
+        <div id="final check" class="mt-6 flex justify-center gap-20">
+            <button
+                class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                @click="check_policy_agree">확인</button>
+            <button
+                class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">취소</button>
+        </div>
     </div>
 </template>
 
+
 <script setup>
+import { register } from '@/api/register';
+import { checkVerificationCode } from '@/api/register';
+import { idcheck } from '@/api/register';
+import { ref } from "vue";
+import swal from 'sweetalert';
+import { emailcheck } from '@/api/register';
+import { phonecheck } from '@/api/register';
+import { sendVerificationCode } from '@/api/register';
+
+const showPrivacyPolicy = () => {
+    swal(`이음이(영욱컴퍼니(주))는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
+  
+이 개인정보 처리방침은 2024년 1월 1일부터 적용됩니다.
+
+제1조(개인정보의 처리 목적)
+<이음이>(영욱컴퍼니(주))은(는) 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.`)
+}
+
+const password_check = ref('');
+// 비밀번호 확인을 위한 변수.
+
+const policy = ref(false);
+// 약관동의를 확인을 위한 변수.
+
+const userInfo = ref({
+    "member_id": '',
+    "password": '',
+    "name": '',
+    "phone": '',
+    "email": '',
+})
+//json형식으로 유저정보를 보내는 변수.
+
+const checkpasswordrepeattype = ref(true);
+//비밀번호와 비밀번호 확인이 동일한지 확인하는 변수.
+
+const validateIdstate = ref(false);
+//아이디가 중복인지 아닌지 검사하는 변수.
+
+const validateemailstate = ref(false);
+//이메일이 중복인지 아닌지 검사하는 변수.
+
+const validatephonestate = ref(false);
+//전화번호가 중복인지 아닌지 검사하는 변수.
+
+const checkidtype = ref(true);
+//아이디가 유효한지 검사하는 변수.
+
+const checknametype = ref(true);
+//이름이 유효한지 검사하는 변수.
+
+const checkemailtype = ref(true);
+//이메일이 유효한지 검사하는 변수.
+
+const checkphonenumbertype = ref(true);
+//전화번호가 유효한지 검사하는 변수.
+
+const checkpasswordtype = ref(true);
+//비밀번호가 유효한지 검사하는 변수.
+
+const certifiedcode = ref('');
+//인증코드를 담을 변수.
+
+const certifiedcodestate = ref(true);
+//인증상태를 담을 변수.
+
+const checkvalidateId = () => {
+    idcheck(
+        userInfo.value.member_id,
+        ({ data }) => {
+            if (data.data && data.data.isDuplicate) {
+                swal('이미 사용 중인 아이디입니다.');
+                validateIdstate.value = false;
+            }
+            else {
+                swal('사용 가능한 아이디입니다.');
+                validateIdstate.value = true;
+            }
+        },
+        () => {
+        }
+    );
+}
+// 아이디가 중복인지 아닌지 검사하는 메서드.
+
+const checkvalidateemail = () => {
+    emailcheck(
+        userInfo.value.email,
+        ({ data }) => {
+            if (data.data && data.data.isDuplicate) {
+                swal('이미 사용 중인 이메일입니다.');
+                validateIdstate.value = false;
+            }
+            else {
+                swal('사용 가능한 이메일입니다.');
+                validateIdstate.value = true;
+            }
+        },
+        () => {
+
+        }
+    );
+}
+// 이메일이 중복인지 아닌지 검사하는 메서드.
+
+const checkvalidatephonenumber = () => {
+    phonecheck(
+        userInfo.value.phone,
+        ({ data }) => {
+            if (data.data && data.data.isDuplicate) {
+                swal('이미 사용 중인 전화번호입니다.');
+                validateIdstate.value = false;
+            }
+            else {
+                swal('사용 가능한 전화번호입니다.');
+                validateIdstate.value = true;
+            }
+        },
+        () => {
+        }
+    );
+}
+// 전화번호가 중복인지 아닌지 검사하는 메서드.
+
+const check_password = () => {
+    if (password_check.value === userInfo.value.password) {
+        checkpasswordrepeattype.value = false;
+    }
+    else {
+        checkpasswordrepeattype.value = true;
+    }
+}
+//비밀번호와 비밀번호 확인이 동일한지 확인하는 메서드.
+
+const certifiedsend = () => {
+    sendVerificationCode(
+        userInfo.value.phone,
+        () => {
+        },
+        () => {
+        }
+
+    )
+}
+// 인증번호를 보내야하는 메서드.
+
+const certifiedcheck = () => {
+    checkVerificationCode(
+        userInfo.value.phone,
+        certifiedcode.value,
+        ({ data }) => {
+            if (data.data === true) {
+                certifiedcodestate.value = true;
+            } else {
+                certifiedcodestate.value = false;
+            }
+        },
+        () => {
+        }
+    );
+
+
+}
+// 인증번호를 체크하는 메서드. 
+
+const check_id = () => {
+    const validateId = /^[A-Za-z0-9]{4,12}$/;
+    checkidtype.value = !validateId.test(userInfo.value.member_id);
+    validateIdstate.value = false;
+
+}
+// 아이디가 유효한지 검사하는 메서드.
+
+
+const validateName = () => {
+    const validateName = /^[A-Za-z가-힣]+$/;
+    checknametype.value = !validateName.test(userInfo.value.name);
+}
+// 이름의 형식이 유효한지 검사하는 메서드.
+
+const check_eamil = () => {
+    const validateemail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    checkemailtype.value = !validateemail.test(userInfo.value.email)
+    validateemailstate.value = false;
+}
+// 이메일의 형식이 유효한지 검사하는 메서드.
+
+const check_phone = () => {
+    const validatephone = /^010-\d{4}-\d{4}$/;
+    checkphonenumbertype.value = !validatephone.test(userInfo.value.phone)
+    validatephonestate.value = false;
+
+}
+// 핸드폰 번호의 형식이 유효한지 검사하는 메서드.
+
+const passwordlength = () => {
+    const validatepassword = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()])[A-Za-z\d!@#$%^&*()]{7,16}$/;
+    checkpasswordtype.value = !validatepassword.test(userInfo.value.password);
+}
+// 비밀번호의 유효성 검사를 진행하는 메서드.
+
+const check_policy = () => {
+    policy.value = !policy.value;
+}
+//체크박스 여부를 확인하기 위한 메서드.
+
+const check_policy_agree = () => {
+    if (!checkidtype.value && !checknametype.value && !checkpasswordrepeattype.value && !checkemailtype.value
+        && !checkphonenumbertype.value && !checkpasswordtype.value && policy.value && certifiedcodestate.value) {
+        registerFunc();
+        swal('회원가입이 완료되었습니다.');
+    }
+    else {
+        swal('회원가입 중 오류가 발생하였습니다.')
+    }
+}
+//최종적으로 회원가입이 가능한지 모든 조건을 확인하는 메서드. 
+//각 인증 후, 상태 체크 추가해야함.
+
+const registerFunc = () => {
+    register(
+        userInfo.value,
+        () => {
+        }, () => {
+        }
+    )
+}
+//회원가입 데이터를 보내는 메서드.
+
 
 </script>
 
 
+
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap');
-
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    margin-top: 0;
-    margin-bottom: 30px;
-    font-weight: 500;
-    line-height: 1.2;
-    color: var(--bs-heading-color);
-}
-
-
-.regi {
-    color: rgb(0, 114, 94);
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.btn-custom-primary {
-    background-color: #27A791;
-    color: #fff;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-custom-danger {
-    background-color: #A4A4A4;
-    color: #fff;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-custom-primary:hover {
-    background-color: #1d7b66;
-}
-
-.btn-custom-danger:hover {
-    background-color: #8c8c8c;
-}
-
-.btn-custom-primary:hover,
-.btn-custom-danger:hover {
-    color: #fff !important;
-}
-
-.register {
-    color: rgb(0, 114, 94);
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.w-35 {
-    width: 35%;
+.id_incorrect,
+.name_incorrect,
+.email_incorrect,
+.password_incorrect,
+.passwordcheck_incorrect,
+.phone_incorrect {
+    color: red;
 }
 </style>
