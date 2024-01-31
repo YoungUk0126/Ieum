@@ -25,13 +25,13 @@ public class SleepController {
   /**
    * 취침 시간 관련 상세 정보(개별) 조회
    *
-   * @param sleepInfoNo
+   * @param
    * @return SleepResponseDto
    */
-  @GetMapping("/{sleep-info-no}")
-  public ResponseEntity<Map<String, Object>> getSleepDetail(@PathVariable("sleep-info-no") Long sleepInfoNo) {
+  @GetMapping
+  public ResponseEntity<Map<String, Object>> getSleepDetail() {
     try {
-      SleepResponseDto sleep = sleepService.getSleep(sleepInfoNo);
+      SleepResponseDto sleep = sleepService.getSleep();
       return handleSuccess(sleep);
     } catch (Exception exception) {
       log.debug(exception.getMessage());
@@ -62,7 +62,7 @@ public class SleepController {
    * @return
    */
   @PostMapping
-  public ResponseEntity<Map<String, Object>> postsEvent(@RequestBody SleepInsertRequestDto sleep) {
+  public ResponseEntity<Map<String, Object>> insertSleep(@RequestBody SleepInsertRequestDto sleep) {
     try {
       sleepService.registSleep(sleep);
       return handleSuccess("");
@@ -79,7 +79,7 @@ public class SleepController {
    * @return
    */
   @PutMapping
-  public ResponseEntity<Map<String, Object>> putsEvent(@RequestBody SleepUpdateRequestDto sleep) {
+  public ResponseEntity<Map<String, Object>> modifySleep(@RequestBody SleepUpdateRequestDto sleep) {
     try {
       sleepService.modifySleep(sleep);
       return handleSuccess("");

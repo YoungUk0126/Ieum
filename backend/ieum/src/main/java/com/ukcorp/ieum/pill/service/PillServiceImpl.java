@@ -2,17 +2,15 @@ package com.ukcorp.ieum.pill.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeInsertRequestDto;
 import com.ukcorp.ieum.pill.dto.request.PillTimeUpdateRequestDto;
-import com.ukcorp.ieum.pill.dto.response.PillInfoGetResponseDto;
-import com.ukcorp.ieum.pill.dto.response.PillTimeGetResponseDto;
-import com.ukcorp.ieum.pill.dto.response.TotalPillGetResponseDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoJoinResponseDto;
 import com.ukcorp.ieum.pill.entity.PillInfo;
 import com.ukcorp.ieum.pill.entity.PillMethod;
 import com.ukcorp.ieum.pill.entity.PillTime;
-import com.ukcorp.ieum.pill.mapper.PillInfoMapper;
 import com.ukcorp.ieum.pill.mapper.PillTimeMapper;
 import com.ukcorp.ieum.pill.repository.PillInfoRepository;
 import com.ukcorp.ieum.pill.repository.PillTimeRepository;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -38,17 +35,18 @@ public class PillServiceImpl implements PillService {
   private final PillInfoRepository pillInfoRepository;
   private final PillTimeRepository pillTimeRepository;
 
-  private final PillInfoMapper pillInfoMapper;
   private final PillTimeMapper pillTimeMapper;
 
   private final CareRepository careRepository;
 
 
+  //    약 정보 넣기
   @Transactional
   @Override
   public void insertPill(PillInfoInsertRequestDto pillInfoDto) throws Exception {
     try {
-      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
       PillInfo pillInfo = PillInfo.builder()
               .pillName(pillInfoDto.getPillName())
               .careInfo(care)
@@ -60,8 +58,6 @@ public class PillServiceImpl implements PillService {
               .build();
 
       pillInfoRepository.save(pillInfo);
-
-      System.out.println(pillInfo.toString());
 
       List<PillTime> pillTimes = new ArrayList<>();
 
@@ -78,67 +74,51 @@ public class PillServiceImpl implements PillService {
     }
 
   }
-  //    약 정보 넣기
 
+//  약정보 조회
   @Override
-  public TotalPillGetResponseDto getPillInfo(Long pillInfoNo) throws Exception {
+  public PillInfoJoinResponseDto getPillInfo(Long pillInfoNo) throws Exception {
     try {
 //        PillInfo로 받고, Null값이 넘어올 때 바로 Exception
       PillInfo pillInfo = pillInfoRepository.findById(pillInfoNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 약정보입니다."));
-//      System.out.println("PillInfoEntity : " + pillInfo.toString());
-//        이건 목록이 없으면 없는대로 빈 리스트 반환
-      List<PillTime> pillTimes = pillTimeRepository.findPillTimesByPillInfo_PillInfoNo(pillInfoNo);
-//        리턴하기 위한 PillInfoResponseDto 선언
-      PillInfoGetResponseDto pillInfoGetResponseDto = pillInfoMapper.pillInfoToResponseDto(pillInfo);
-//      System.out.println("PillInfoGetResponseDto : " + pillInfoGetResponseDto.toString());
-      List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillInfo.getPillTimes());
+      PillInfoJoinResponseDto pillInfoJoinResponseDto = new PillInfoJoinResponseDto(pillInfo);
 
-      TotalPillGetResponseDto totalPillGetResponseDto = TotalPillGetResponseDto.builder()
-              .pillInfo(pillInfoGetResponseDto)
-              .pillTimes(pillTimeGetResponseDtos)
-              .build();
-//      for(PillTimeGetResponseDto dto: pillTimeGetResponseDtos) {
-//        System.out.println("pillTimeGetResponseDto : "+dto.toString());
-//      }
-
-      return totalPillGetResponseDto;
+      return pillInfoJoinResponseDto;
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
     }
 
   }
-
+  
+//  피보호자가 등록한 약정보 리스트 조회
   @Override
-  public List<TotalPillGetResponseDto> getAllPillInfo(Long careNo) throws Exception {
+  public List<PillInfoJoinResponseDto> getAllPillInfo() throws Exception {
     try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
       List<PillInfo> pillInfos = pillInfoRepository.findByCareInfo_CareNo(careNo);
 //      클라이언트에게 보낼 List미리 선언
-      List<TotalPillGetResponseDto> totalPills = new ArrayList<>();
+      List<PillInfoJoinResponseDto> pillDtos = new ArrayList<>();
       for (PillInfo pillInfo : pillInfos) {
-//          해당 pillInfo를 DTO로 변환
-        PillInfoGetResponseDto pillInfoGetResponseDto = pillInfoMapper.pillInfoToResponseDto(pillInfo);
-//          pillInfo의 PK에 속해있는 pillTime 리스트들 받아오기
-        List<PillTime> pillTimes = pillTimeRepository.findPillTimesByPillInfo_PillInfoNo(pillInfo.getPillInfoNo());
-//        pillTimeDTO List로 변환
-        List<PillTimeGetResponseDto> pillTimeGetResponseDtos = pillTimeMapper.pillTimesToResponseDto(pillTimes);
-//        totalPill 리스트에 변환한 totalPillGetResponseDto를 넣어줌
-        totalPills.add(pillInfoMapper.pillInfoAndPillTimesToResponseDto(pillInfoGetResponseDto, pillTimeGetResponseDtos));
+        pillDtos.add(new PillInfoJoinResponseDto(pillInfo));
       }
-
-      return totalPills;
-
+      return pillDtos;
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류!");
     }
   }
 
+//  약 정보 수정
   @Transactional
   @Override
   public void updatePill(PillInfoUpdateRequestDto pillInfoDto) throws Exception {
     try {
-      CareInfo care = careRepository.findById(pillInfoDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+      if(!pillInfoRepository.existsById(pillInfoDto.getPillInfoNo())){
+        throw new NoSuchElementException("존재하지 않는 약 정보입니다.");
+      }
       PillInfo pillInfo = PillInfo.builder()
 //              update라 PK추가해줌
               .pillInfoNo(pillInfoDto.getPillInfoNo())
@@ -166,7 +146,8 @@ public class PillServiceImpl implements PillService {
       throw new Exception("수정 오류!");
     }
   }
-
+  
+//약 정보 삭제 및 약 정보에 관련된 약복용 시간도 삭제
   @Transactional
   @Override
   public void deletePillInfo(Long pillInfoNo) throws Exception {
@@ -178,7 +159,7 @@ public class PillServiceImpl implements PillService {
       throw new Exception("PILL_INFO 삭제 오류!");
     }
   }
-
+//약 복용 시간만 삭제
   @Transactional
   @Override
   public void deletePillTime(Long pillTimeNo) throws Exception {

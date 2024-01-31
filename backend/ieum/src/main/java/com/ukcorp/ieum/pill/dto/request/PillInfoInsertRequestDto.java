@@ -18,7 +18,6 @@ import java.util.List;
  * InfoRequest를 받기 위한 Dto
  */
 public class PillInfoInsertRequestDto {
-    private Long careNo;
     private String pillName;
 //    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate pillStartDate;

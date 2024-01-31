@@ -14,18 +14,14 @@ import java.util.List;
 public interface EventMapper {
 
   @Mapping(target = "eventNo", ignore = true)
-  @Mapping(target = "eventInsertRequestDto.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
   RegularEvent eventInsertRequestDtoAndCareToRegularEvent(EventInsertRequestDto eventInsertRequestDto, CareInfo care);
 
-  @Mapping(source = "event.careInfo.careNo", target = "careNo")
   EventGetResponseDto RegularEventToEventGetResponseDto(RegularEvent event);
 
-  @Mapping(target = "event.careNo", ignore = true)
   @Mapping(source = "care", target = "careInfo")
   RegularEvent EventUpdateRequestDtoAndCareInfoToRegualrEvent(EventUpdateRequestDto event, CareInfo care);
 
 
-  @Mapping(source = "event.careInfo.careNo", target = "careNo")
   List<EventGetResponseDto> RegularEventEntityToResponseDto(List<RegularEvent> event);
 }

@@ -2,6 +2,7 @@ package com.ukcorp.ieum.meal.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.meal.dto.request.MealInsertRequestDto;
 import com.ukcorp.ieum.meal.dto.request.MealUpdateRequestDto;
 import com.ukcorp.ieum.meal.dto.response.MealGetResponseDto;
@@ -28,8 +29,9 @@ public class MealServiceImpl implements MealService {
     private final MealMapper mealMapper;
 
     @Override
-    public MealGetResponseDto getMeal(Long careNo) throws Exception {
+    public MealGetResponseDto getMeal() throws Exception {
         try {
+            Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //            피보호자 PK로 끼니시간 정보 데이터를 받아옴, 없다면 Exception
             Meal meal = mealRepository.findByCareInfo_CareNo(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 끼니 시간 정보입니다."));
             return mealMapper.mealToMealGetResponseDto(meal);
@@ -44,8 +46,9 @@ public class MealServiceImpl implements MealService {
     @Override
     public void insertMeal(MealInsertRequestDto mealInsertRequestDto) throws Exception {
         try {
+            Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //            피보호자 정보가 있는지 확인 및 받아오기
-            CareInfo care = careRepository.findById(mealInsertRequestDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+            CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
             Meal meal = mealMapper.mealInsertRequestDtoAndCareInfoToMeal(mealInsertRequestDto, care);
             mealRepository.save(meal);
         } catch (DataIntegrityViolationException e) {
@@ -60,10 +63,13 @@ public class MealServiceImpl implements MealService {
     public void updateMeal(MealUpdateRequestDto mealUpdateRequestDto) throws Exception {
 
         try {
+            Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //            피보호자 정보가 있는지 확인
-            CareInfo care = careRepository.findById(mealUpdateRequestDto.getCareNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
+            CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 정보입니다."));
 //            수정할 끼니시간 정보가 있는지 확인
-            Meal check = mealRepository.findById(mealUpdateRequestDto.getMealInfoNo()).orElseThrow(() -> new NoSuchElementException("존재하지 않는 끼니시간 정보입니다."));
+            if(!mealRepository.existsById(mealUpdateRequestDto.getMealInfoNo())) {
+                throw new NoSuchElementException("존재하지 않는 끼니시간 정보입니다.");
+            }
             Meal meal = mealMapper.mealUpdateRequestDtoAndCareInfoToMeal(mealUpdateRequestDto, care);
 //            save로 자동 merge(update)
             mealRepository.save(meal);
