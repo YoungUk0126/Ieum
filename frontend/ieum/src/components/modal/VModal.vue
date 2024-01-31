@@ -115,15 +115,7 @@ import VModalInjection from './VModalInjection.vue'
 import VModalMeal from './VModalMeal.vue'
 import VModalWakeandSleep from './VModalWakeandSleep.vue'
 
-const modalId = ref('anniv')
 const selectedOption = ref('alarm')
-
-// const closeBtn = ref()
-
-// const closeModal = () => {
-//   console.log(document.getElementById('btnClose'))
-//   document.getElementById('btnClose').click()
-// }
 </script>
 
 <style scoped>

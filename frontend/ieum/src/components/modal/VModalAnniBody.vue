@@ -11,14 +11,22 @@
         />
       </div>
       <div class="calendar row mb-4">
-        <div class="calendar-box col-6">
-          <img src="@/assets/images/달력버튼.png" />
+        <div class="start-date col-6">
+          <label for="start">날짜 : </label>
+
+          <input
+            type="date"
+            id="start"
+            name="trip-start"
+            value="2025-01-01"
+            min="2018-01-01"
+            max="2100-12-31"
+          />
         </div>
+
         <div class="checkbox-box col-4">
           <input type="checkbox" class="btn btn-check" id="btncheck1" autocomplete="off" />
           <label class="btn btn-outline-secondary" for="btncheck1">매년 반복</label>
-          <div>기념일</div>
-          <component :is="currentModalComponent" />
         </div>
       </div>
     </div>
@@ -27,20 +35,6 @@
 
 <script setup>
 import { ref } from 'vue'
-// import VModalAnniBody from './VModalAnniBody.vue'
-// import VModalInjection from './VModalInjection.vue'
-// import VModalMeal from './VModalMeal.vue'
-// import VModalWakeandSleep from './VModalWakeandSleep.vue'
-const props = defineProps(['modalId'])
-
-const modalId = ref(props.modalId)
-console.log(modalId.value)
-const currentModalComponent = ref('VModalAnniBody') // 초기값은 VModalAnniBody
-
-const changeModalBody = (componentName) => {
-  currentModalComponent.value = componentName
-  console.log(currentModalComponent)
-}
 </script>
 
 <style scoped>
