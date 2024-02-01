@@ -1,9 +1,4 @@
-import { localRefreshAxios } from '@/util/http-commons'
 import swal from 'sweetalert'
-import VueCookies from 'vue-cookies'
-
-const local = localRefreshAxios()
-const url = 'http://localhost:8080/api/member'
 
 const fail = ({ response }) => {
   if (response.status == 500) {
@@ -51,16 +46,10 @@ const fail = ({ response }) => {
           closeModal: true
         }
       }
+    }).then(()=>{
+      window.location.href="/login"
     })
-
-    // refresh 토큰 재발급, 발급 완료되면 이전 HTTP 다시 실행
-  } else if (response.status == 403) {
-    console.log(response)
-    refreshAccessToken()
-    console.log('재발급 완료!')
-    return true
-  } else {
-    console.log(response.status)
+  }  else {
     swal({
       title: '버그',
       text: '뭔 오류일까요..' + response.status,
@@ -78,31 +67,5 @@ const fail = ({ response }) => {
   return false
 }
 
-// Axios를 사용한 토큰 갱신 로직
-function refreshAccessToken() {
-  const data = { refreshToken: VueCookies.get('refreshToken') }
-  local
-    .post(`${url}/refresh`, JSON.stringify(data))
-    .then(({ data }) => {
-      VueCookies.set('accessToken', data.accessToken)
-      VueCookies.set('refreshToken', data.refreshToken)
-      VueCookies.set('auth', true)
-    })
-    .catch(() => {
-      swal({
-        title: '로그인',
-        text: '로그인 정보가 존재하지 않습니다',
-        icon: 'error',
-        buttons: {
-          confirm: {
-            text: '확인',
-            visible: true,
-            className: '',
-            closeModal: true
-          }
-        }
-      })
-    })
-}
 
 export { fail }

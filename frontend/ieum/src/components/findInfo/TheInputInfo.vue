@@ -20,6 +20,7 @@
             v-model="memberInfo.memberId"
             autocomplete="given-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            :readonly="stateInfo.sendSuccess"
           />
         </div>
 
@@ -49,21 +50,33 @@
             v-model="memberInfo.memberPhone"
             aria-describedby="helper-text-explanation"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+            pattern="010-[0-9]{3}-[0-9]{4}"
             placeholder="123-456-7890"
             maxlength="13"
             required
+            :disabled="stateInfo.sendSuccess"
           />
         </div>
+
         <div class="col-span-1">
           <button
             type="button"
             class="w-2/3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            @click="sendCode"
+            :disabled="stateInfo.checkAuth"
           >
             전송
           </button>
         </div>
 
+        <div class="col-span-3 items-center" v-show="stateInfo.checkInput">
+          <div
+            class="mx-auto w-2/3 p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <span class="font-medium"> 입력되지 않은 정보가 존재합니다.</span>
+          </div>
+        </div>
         <div class="col-span-1">
           <label class="block text-center text-sm font-medium leading-6 text-gray-900"
             >인증번호</label
@@ -73,16 +86,19 @@
           <input
             type="text"
             name="memberId"
-            v-model="memberInfo.memberId"
+            v-model="authCode"
             autocomplete="given-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            :disabled="stateInfo.checkInput || stateInfo.checkAuth"
+            maxlength="6"
           />
         </div>
         <div class="col-span-1">
           <button
             type="button"
             class="w-2/3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-            @click="next"
+            @click="verifyCode"
+            :disabled="stateInfo.checkInput || stateInfo.checkAuth"
           >
             확인
           </button>
@@ -102,12 +118,23 @@
 </template>
 
 <script setup>
+import swal from 'sweetalert'
 import { ref, watch, defineProps } from 'vue'
+import { sendAuth, checkMember, verify } from '../../api/member'
+
 const props = defineProps(['changeMemberInfo'])
 
 const memberInfo = ref({
   memberId: '',
   memberPhone: ''
+})
+
+const authCode = ref('')
+
+const stateInfo = ref({
+  checkAuth: false,
+  checkInput: false,
+  sendSuccess: false
 })
 
 // 휴대폰 번호 입력 함수
@@ -124,8 +151,131 @@ watch(
 
 const next = () => {
   // 나중에 회원 조회 넣기
-  if (true) {
+  if (stateInfo.value.checkAuth) {
     props.changeMemberInfo(memberInfo.value)
+  } else {
+    swal({
+      title: '알림',
+      text: '회원 인증을 먼저 진행해주시기 바랍니다.',
+      icon: 'warning',
+      buttons: {
+        confirm: {
+          text: '확인',
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+  }
+}
+
+const verifyCode = () => {
+  if (authCode.value.length == 6) {
+    verify(
+      {
+        phone: memberInfo.value.memberPhone,
+        code: authCode.value
+      },
+      ({ data }) => {
+        if (data.success) {
+          stateInfo.value.checkAuth = true
+
+          swal({
+            title: '알림',
+            text: '인증이 완료됐습니다.',
+            icon: 'success',
+            buttons: {
+              confirm: {
+                text: '확인',
+                visible: true,
+                className: '',
+                closeModal: true
+              }
+            }
+          })
+        } else {
+          swal({
+            title: '알림',
+            text: '인증번호가 일치하지 않습니다.',
+            icon: 'error',
+            buttons: {
+              confirm: {
+                text: '확인',
+                visible: true,
+                className: '',
+                closeModal: true
+              }
+            }
+          })
+        }
+      }
+    )
+  }
+}
+
+const sendCode = () => {
+  if (memberInfo.value.memberId === '' || memberInfo.value.memberPhone.length < 13) {
+    stateInfo.value.checkInput = true
+  } else {
+    stateInfo.value.checkInput = false
+    checkMember(
+      {
+        memberId: memberInfo.value.memberId,
+        phone: memberInfo.value.memberPhone
+      },
+      ({ data }) => {
+        console.log(data.data.isExist)
+        if (data.data.isExist) {
+          sendAuth(memberInfo.value.memberPhone, ({ data }) => {
+            if (data.success) {
+              stateInfo.value.sendSuccess = true
+              swal({
+                title: '알림',
+                text: '전송이 완료됐습니다',
+                icon: 'success',
+                buttons: {
+                  confirm: {
+                    text: '확인',
+                    visible: true,
+                    className: '',
+                    closeModal: true
+                  }
+                }
+              })
+            } else {
+              swal({
+                title: '알림',
+                text: '전송에 실패했습니다',
+                icon: 'error',
+                buttons: {
+                  confirm: {
+                    text: '확인',
+                    visible: true,
+                    className: '',
+                    closeModal: true
+                  }
+                }
+              })
+            }
+          })
+        } else {
+          swal({
+            title: '알림',
+            text: '존재하지 않는 회원입니다',
+            icon: 'warning',
+            buttons: {
+              confirm: {
+                text: '확인',
+                visible: true,
+                className: '',
+                closeModal: true
+              }
+            }
+          })
+        }
+      }
+    )
   }
 }
 </script>
