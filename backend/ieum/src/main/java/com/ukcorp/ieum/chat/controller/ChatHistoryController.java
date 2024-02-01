@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/api/messages")
+@RequestMapping("/api/chat")
 @RequiredArgsConstructor
 public class ChatHistoryController {
 
