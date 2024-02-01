@@ -1,14 +1,6 @@
 package com.ukcorp.ieum.meal.controller;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -22,6 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @Slf4j
@@ -41,7 +38,6 @@ public class MealControllerTest {
     @DisplayName("약 정보 등록")
     void testInsert() throws Exception {
         MealInsertRequestDto requestDto = MealInsertRequestDto.builder()
-                .careNo(1L)
                 .mealTime1(70000L)
                 .mealTime2(120000L)
                 .mealTime3(190000L)
@@ -82,7 +78,6 @@ public class MealControllerTest {
     void testUpdate() throws Exception {
         MealUpdateRequestDto requestDto = MealUpdateRequestDto.builder()
                 .mealInfoNo(2L)
-                .careNo(1L)
                 .mealTime1(75000L)
                 .mealTime2(125000L)
                 .mealTime3(195000L)

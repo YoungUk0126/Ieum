@@ -37,5 +37,9 @@ public class CareInfo {
 
     @Column(name = "CARE_IMAGE")
     private String careImage;
+
+    @Column(name = "CARE_SERIAL")
+    private String careSerial;
+
 }
 
