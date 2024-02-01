@@ -11,8 +11,7 @@ import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
-
-const error = useRouter()
+import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,6 +77,12 @@ const router = createRouter({
           component: () => import('@/components/findInfo/TheEndInfo.vue')
         }
       ]
+    },
+    {
+      path: '/memberInfo',
+      name: 'TheMemberInfoView',
+      component: TheMemberInfoViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/404',

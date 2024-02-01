@@ -29,4 +29,8 @@ function removeApi(param, success) {
   localSession.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
-export { register, login, modifyApi, removeApi }
+function getInfo(success) {
+  localSession.get(`${url}`).then(success).catch(fail)
+}
+
+export { register, login, modifyApi, removeApi, getInfo }
