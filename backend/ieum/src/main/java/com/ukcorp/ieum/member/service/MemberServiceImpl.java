@@ -1,5 +1,9 @@
 package com.ukcorp.ieum.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ukcorp.ieum.Sms.ValidationUtil;
+import com.ukcorp.ieum.api.dto.MessageDTO;
+import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.jwt.JwtUtil;
@@ -10,7 +14,6 @@ import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.mapper.MemberMapper;
 import com.ukcorp.ieum.member.repository.MemberRepository;
-import com.ukcorp.ieum.Sms.SmsUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,6 +26,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,9 +40,10 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
 
+    private final NaverService naverService;
     private final MemberRepository memberRepository;
     private final CareRepository careRepository;
-    private final SmsUtil smsUtil;
+    private final ValidationUtil validationUtil;
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
@@ -190,10 +198,14 @@ public class MemberServiceImpl implements MemberService {
      * @param phoneRequestDto
      */
     @Override
-    public void sendVerifyMessage(PhoneRequestDto phoneRequestDto) {
+    public void sendVerifyMessage(PhoneRequestDto phoneRequestDto) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException {
         String phone = phoneRequestDto.getPhone().replaceAll("-", "");
+        String code = validationUtil.createRandomCode();
+        MessageDTO sendSms = MessageDTO.builder().to(phone)
+                .content("[이음] 아래의 인증번호를 입력해주세요\n" + code).build();
         log.info("보내는 번호 >> " + phone);
-        smsUtil.sendOne(phone);
+        log.info("보내는 코드 >> " + code);
+        naverService.sendSms(sendSms);
     }
 
     /**
@@ -205,7 +217,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean checkMessageCode(VerifyRequestDto verifyRequestDto) {
         String phone = verifyRequestDto.getPhone().replaceAll("-", "");
-        return smsUtil.verifyCode(phone, verifyRequestDto.getCode());
+        return validationUtil.verifyCode(phone, verifyRequestDto.getCode());
     }
 
     /**
