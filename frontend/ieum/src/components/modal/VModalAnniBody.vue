@@ -70,8 +70,8 @@ import swal from 'sweetalert'
 const props = defineProps(['closeModal'])
 
 const jsonData = ref({
-  event_name: '',
-  event_date: ''
+  eventName: '',
+  eventDate: ''
 })
 
 function postAlarmdata() {

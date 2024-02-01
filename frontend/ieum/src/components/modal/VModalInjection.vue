@@ -277,13 +277,13 @@ function addSchedule() {
 const props = defineProps(['closeModal'])
 
 const jsonData = ref({
-  care_no: '123',
-  pill_name: '', // 1. 약의 이름
-  start_date: '2024-01-15', // 2-1. 시작일
-  end_date: '2024-01-18', // 2-2. 끝일
-  pill_date: '0000000', // 3. 요일(1일시 활성화)
-  pill_method: '식전', // 4. 식전 / 식후
-  pill_time: '09:00:00' // 5. 시각
+  careNo: '123',
+  pillName: '', // 1. 약의 이름
+  startDate: '2024-01-15', // 2-1. 시작일
+  endDate: '2024-01-18', // 2-2. 끝일
+  pillDate: '0000000', // 3. 요일(1일시 활성화)
+  pillMethod: '식전', // 4. 식전 / 식후
+  pillTime: '09:00:00' // 5. 시각
 })
 
 function postAlarmdata() {

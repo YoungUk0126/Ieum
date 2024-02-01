@@ -105,37 +105,6 @@ const selectedOption = ref('alarm')
 const closeModal = () => {
   document.getElementById('btn-close').click()
 }
-
-// const care_no = '1'
-// const items = ref([])
-
-// const data = ref()
-
-// const changeData = (input) => {
-//   data.value = input
-// }
-
-// function postAlarmdata() {
-//   if (selectedOption.value === 'anniversary') {
-//     postEvent(care_no, (response) => {
-//       items.value = response.data.data
-//     })
-//   } else if (selectedOption.value === 'medication') {
-//     postEvent(care_no, (response) => {
-//       items.value = response.data.data
-//     })
-//   } else if (selectedOption.value === 'sleep') {
-//     postSleep(care_no, (response) => {
-//       items.value = response.data.data
-//     })
-//   } else if (selectedOption.value === 'meal') {
-//     postEvent(care_no, (response) => {
-//       items.value = response.data.data
-//     })
-//   }
-
-//   const items = []
-// }
 </script>
 
 <style scoped>
