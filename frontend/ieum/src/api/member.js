@@ -26,6 +26,10 @@ function checkMember(data, success) {
   local.post(`${url}/check-exist`, JSON.stringify(data)).then(success).catch(fail)
 }
 
+function editPassword(data, success) {
+  local.post(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
+}
+
 // refresh 토큰 과정 필요
 function modifyApi(data, success) {
   localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
@@ -35,4 +39,4 @@ function removeApi(param, success) {
   localSession.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
-export { register, login, modifyApi, removeApi, sendAuth, checkMember, verify }
+export { register, login, modifyApi, removeApi, sendAuth, checkMember, verify, editPassword }

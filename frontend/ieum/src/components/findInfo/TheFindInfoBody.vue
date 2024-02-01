@@ -97,21 +97,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { editPassword } from '../../api/member'
 
 const router = useRouter()
 
 const curStep = ref(1)
 const member = ref({
-  memberNo: '',
   memberId: '',
-  memberPhone: '',
-  memberPassword: ''
+  memberPhone: ''
 })
 const memberAuth = ref(false)
 
-onMounted(() => {})
+onMounted(() => {
+  if (curStep.value == 2) {
+    router.replace({ name: 'TheAuthInfo' })
+  } else if (curStep.value == 3) {
+    router.replace({ name: 'TheEndInfo' })
+  } else {
+    router.replace({ name: 'TheInputInfo' })
+  }
+})
 
 watch(
   () => curStep.value,
@@ -133,8 +140,18 @@ const changeMemberInfo = (data) => {
   memberAuth.value = true
 }
 
-const editSubmit = () => {
-  curStep.value++
+const editSubmit = (password) => {
+  editPassword(
+    {
+      memberId: member.value.memberId,
+      password: password
+    },
+    ({ data }) => {
+      if (data.success) {
+        curStep.value++
+      }
+    }
+  )
 }
 </script>
 
