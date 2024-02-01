@@ -14,7 +14,6 @@
                     확인</button>
             </div>
             <label v-if="checkIdType" class="idIncorrect">4~12자의 영문자, 숫자만 사용 가능합니다.</label>
-            <label v-else>사용이 가능한 아이디입니다.</label>
         </div>
         <div id="name" class="mt-6">
             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">이름/Name</label>
@@ -24,7 +23,6 @@
                     placeholder="이름을 입력해주세요." v-model="userInfo.name" @input="validateName" required>
             </div>
             <label v-if="checkNameType" class="nameIncorrect">이름은 영문자, 한글만 입력 가능합니다.</label>
-            <label v-else>사용이 가능한 이름입니다.</label>
         </div>
         <div id="email" class="mt-6">
             <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
@@ -150,6 +148,7 @@ const passwordCheck = ref('');
 const policy = ref(false);
 // 약관동의를 확인을 위한 변수.
 
+
 const userInfo = ref({
     "memberId": '',
     "password": '',
@@ -196,7 +195,7 @@ const checkValidateId = () => {
     idCheck(
         userInfo.value.memberId,
         ({ data }) => {
-            if (data.data && data.data.isDuplicate) {
+            if (data.data.isDuplicated) {
                 swal('이미 사용 중인 아이디입니다.');
                 validateIdstate.value = false;
             }
@@ -215,13 +214,13 @@ const checkValidateEmail = () => {
     emailCheck(
         userInfo.value.email,
         ({ data }) => {
-            if (data.data && data.data.isDuplicate) {
+            if (data.data.isDuplicated) {
                 swal('이미 사용 중인 이메일입니다.');
-                validateIdstate.value = false;
+                validateemailstate.value = false;
             }
             else {
                 swal('사용 가능한 이메일입니다.');
-                validateIdstate.value = true;
+                validateemailstate.value = true;
             }
         },
         () => {
@@ -235,13 +234,13 @@ const checkValidatePhoneNumber = () => {
     phoneCheck(
         userInfo.value.phone,
         ({ data }) => {
-            if (data.data && data.data.isDuplicate) {
+            if (data.data.isDuplicated) {
                 swal('이미 사용 중인 전화번호입니다.');
-                validateIdstate.value = false;
+                validatephonestate.value = false;
             }
             else {
                 swal('사용 가능한 전화번호입니다.');
-                validateIdstate.value = true;
+                validatephonestate.value = true;
             }
         },
         () => {
@@ -258,12 +257,16 @@ const checkPassword = () => {
         checkPasswordRepeatType.value = true;
     }
 }
-//비밀번호와 비밀번호 확인이 동일한지 확인하는 메서드.
+//비밀번호와 비밀번호 확인이 동일한지 확인하는 메서드. 
 
 const certifiedSend = () => {
     sendVerificationCode(
         userInfo.value.phone,
-        () => {
+        (response) => {
+            console.log(response)
+            if (response.status === 200) {
+                swal('인증번호를 보냈습니다.')
+            }
         },
         () => {
         }
@@ -334,9 +337,11 @@ const checkPolicy = () => {
 
 const checkPolicyAgree = () => {
     if (!checkIdType.value && !checkNameType.value && !checkPasswordRepeatType.value && !checkEmailType.value
-        && !checkPhoneNumberType.value && !checkPasswordType.value && policy.value && certifiedCodeState.value) {
+        && !checkPhoneNumberType.value && !checkPasswordType.value && policy.value && certifiedCodeState.value
+        && validateIdstate.value && validateemailstate.value && validatephonestate.value) {
         registerFunc();
         swal('회원가입이 완료되었습니다.');
+        console.log(userInfo.value);
     }
     else {
         swal('회원가입 중 오류가 발생하였습니다.')
@@ -348,7 +353,8 @@ const checkPolicyAgree = () => {
 const registerFunc = () => {
     register(
         userInfo.value,
-        () => {
+        (response) => {
+            console.log(response)
         }, () => {
         }
     )

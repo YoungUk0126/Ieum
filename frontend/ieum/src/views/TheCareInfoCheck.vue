@@ -66,31 +66,38 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const careInfo = ref({
-    "careNo": "123",
-    "careName": "홍길동",
-    "careGender": "male",
-    "careBirth": "1910-04-12",
-    "carePhone": "010-5555-6666",
-    "careAddr": "서울시강남구역삼동",
+    "careNo": "1",
+    "careName": "",
+    "careGender": "",
+    "careBirth": "",
+    "carePhone": "",
+    "careAddr": "",
 })
 
 const serialNumber = ref({
-    "code": "123"
+    "code": ""
 })
 
 onMounted(() => {
     beforeCareInfo()
-    beforeSerialNumber()
+    //   beforeSerialNumber()
 })
 //미리 기존 정보를 씌우기 위한 onMounted
 
 const beforeCareInfo = () => {
+    console.log("1 beforeCareInfo")
     getCareInfo(
-        careInfo.value,
         ({ data }) => {
-            careInfo.value = data.data;
+            const all = data.data;
+            careInfo.value.careNo = all.careNo;
+            careInfo.value.careName = all.careName;
+            careInfo.value.careGender = all.careGender;
+            careInfo.value.careBirth = all.careBirth;
+            careInfo.value.carePhone = all.carePhone;
+            careInfo.value.careAddr = all.careAddr;
+            console.log("sdsd")
         },
-        () => { }
+        ({ error }) => { console.log(error) }
 
     )
 }
@@ -98,9 +105,9 @@ const beforeCareInfo = () => {
 
 const beforeSerialNumber = () => {
     getSerialNumber(
-        serialNumber.value,
+        careInfo.value.careNo,
         ({ data }) => {
-            serialNumber.value = data.data;
+            serialNumber.value.code = data.code;
         },
         () => { }
     )

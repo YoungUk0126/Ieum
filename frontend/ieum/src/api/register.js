@@ -2,11 +2,12 @@ import { localAxios } from '@/util/http-commons'
 
 const local = localAxios()
 
-const url = 'ourdomain/api/member'
+const url = 'http://54.180.108.118:8080/api/member'
 
 function register(data, success, fail) {
   local.post(`${url}/join`, JSON.stringify(data)).then(success).catch(fail)
 }
+//서버로 넘어감.
 
 function sendVerificationCode(data, success, fail) {
   local.post(`${url}/auth`, JSON.stringify(data)).then(success).catch(fail)

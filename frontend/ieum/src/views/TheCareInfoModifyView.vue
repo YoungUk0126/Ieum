@@ -112,12 +112,13 @@ const beforeSerialNumber = () => {
 //미리 기존 시리얼넘버 정보를 불러오는 메서드.
 
 const updateInfo = () => {
+    console.log(checkPhone.value)
     if (checkPhone.value) {
         updateCareInfo()
         updateSerialNumber()
     }
     else {
-        swal('생년월일 전화번호 형식을 다시 확인해주세요.')
+        swal('전화번호 형식을 다시 확인해주세요.')
         return;
     }
 }
@@ -170,7 +171,7 @@ const handleFileUpload = (event) => {
 
 const checkPhoneFunction = () => {
     const validatephone = /^010-\d{4}-\d{4}$/;
-    checkPhone.value = !validatephone.test(careInfo.value.carePhone)
+    checkPhone.value = validatephone.test(careInfo.value.carePhone)
 }
 //전화번호가 유효한 형식인지 알아보는 메서드.
 
