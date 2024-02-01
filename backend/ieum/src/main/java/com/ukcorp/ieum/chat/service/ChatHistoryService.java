@@ -8,4 +8,6 @@ public interface ChatHistoryService {
 
 
   ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryRequestDto chatHIstoryRequestDto);
+
+  ChatHistoryResponseDto getChatHistoryLimit(Long careNo);
 }
