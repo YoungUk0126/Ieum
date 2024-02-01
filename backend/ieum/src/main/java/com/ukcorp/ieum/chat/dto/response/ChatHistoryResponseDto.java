@@ -14,5 +14,5 @@ public class ChatHistoryResponseDto {
 
     private List<ChatHistoryDto> contents;
     private int totalPages;
-    private int totalElements;
+    private long totalElements;
 }
