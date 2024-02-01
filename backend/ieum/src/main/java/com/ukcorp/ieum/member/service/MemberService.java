@@ -15,6 +15,8 @@ public interface MemberService {
 
     void modifyMember(MemberRequestDto memberModifyDto);
 
+    void modifyMemberPassword(String memberPassword);
+
     void withdrawMember();
 
     boolean isExistsMemberId(String memberId);
@@ -22,6 +24,8 @@ public interface MemberService {
     boolean isExistsMemberEmail(String email);
 
     boolean isExistsMemberPhone(String phone);
+
+    boolean checkExistsMember(CheckExistDto checkMember);
 
     void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
 

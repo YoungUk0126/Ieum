@@ -57,6 +57,7 @@ public class SecurityConfig {
                                 "/api/member/check-id/*",
                                 "/api/member/check-email",
                                 "/api/member/check-phone",
+                                "api/member/check-exist",
                                 "/api/member/auth",
                                 "/api/member/verify",
                                 "/error").permitAll()

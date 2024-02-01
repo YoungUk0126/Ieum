@@ -17,6 +17,9 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     boolean existsByMemberPhone(String phone);
 
+    // memberId와 memberPhone이 일치하는 회원 찾기
+    boolean existsByMemberIdAndMemberPhone(String memberId, String memberPhone);
+
     //    로그인용
     Member findByMemberIdAndMemberPassword(String loginId, String loginPassword);
 }
