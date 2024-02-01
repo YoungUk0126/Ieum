@@ -7,7 +7,7 @@ public interface MemberService {
 
     void signup(MemberRequestDto memberSignupDto);
 
-    JwtToken login(MemberLoginRequestDto loginDto);
+    JwtToken login(MemberIdPasswordDto loginDto);
 
     void logout();
 
@@ -15,7 +15,7 @@ public interface MemberService {
 
     void modifyMember(MemberRequestDto memberModifyDto);
 
-    void modifyMemberPassword(String memberPassword);
+    void modifyMemberPassword(MemberIdPasswordDto passwordDto);
 
     void withdrawMember();
 

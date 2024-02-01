@@ -36,7 +36,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginMember(@RequestBody @Valid MemberLoginRequestDto loginDto) {
+    public ResponseEntity<?> loginMember(@RequestBody @Valid MemberIdPasswordDto loginDto) {
         try {
             JwtToken jwtToken = memberService.login(loginDto);
 
@@ -79,8 +79,8 @@ public class MemberController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberPasswordDto passwordDto) {
-        memberService.modifyMemberPassword(passwordDto.getPassword());
+    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberIdPasswordDto passwordDto) {
+        memberService.modifyMemberPassword(passwordDto);
 
         return handleSuccess("success");
     }
