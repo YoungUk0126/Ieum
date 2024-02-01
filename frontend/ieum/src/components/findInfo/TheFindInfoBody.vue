@@ -100,6 +100,7 @@
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { editPassword } from '../../api/member'
+import swal from 'sweetalert'
 
 const router = useRouter()
 
@@ -149,6 +150,20 @@ const editSubmit = (password) => {
     ({ data }) => {
       if (data.success) {
         curStep.value++
+      } else {
+        swal({
+          title: '실패',
+          text: '비밀번호 변경에 실패했습니다. 잠시 후 다시 시도해주세요.',
+          icon: 'error',
+          buttons: {
+            confirm: {
+              text: '확인',
+              visible: true,
+              className: '',
+              closeModal: true
+            }
+          }
+        })
       }
     }
   )
