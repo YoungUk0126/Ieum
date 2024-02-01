@@ -204,6 +204,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("보내는 번호 >> " + phone);
         log.info("보내는 코드 >> " + code);
         naverService.sendSms(sendSms);
+        validationUtil.registCode(phone, code);
     }
 
     /**

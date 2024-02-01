@@ -102,7 +102,7 @@ public class MemberController {
         } catch (Exception e) {
             e.printStackTrace();
             log.error("메시지 보내는 중 Exception!! >> " + e.getMessage());
-            return handleError("메시지 보내는 중 오류 발생!");
+            return handleFail("메시지 보내는 중 오류 발생!");
         }
 
         return handleSuccess("success");
@@ -110,7 +110,8 @@ public class MemberController {
 
     @PostMapping("/verify")
     public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody @Valid VerifyRequestDto verifyRequestDto) {
-        boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
+
+      boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
         if (isCorrect) {
             return handleSuccess("success");
         } else {
