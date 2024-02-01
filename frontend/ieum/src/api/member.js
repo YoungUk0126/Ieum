@@ -27,7 +27,7 @@ function checkMember(data, success) {
 }
 
 function editPassword(data, success) {
-  local.post(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
+  local.put(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 // refresh 토큰 과정 필요
