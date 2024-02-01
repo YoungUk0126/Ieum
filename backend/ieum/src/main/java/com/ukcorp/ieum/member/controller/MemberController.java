@@ -5,17 +5,14 @@ import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -178,13 +175,6 @@ public class MemberController {
         result.put("success", false);
         result.put("data", data);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-    }
-
-    private ResponseEntity<Map<String, Object>> handleError(Object data) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", false);
-        result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
     }
 
 }
