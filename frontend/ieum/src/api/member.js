@@ -1,25 +1,32 @@
-// import { localAxios } from '@/util/http-commons'
+import { localAxios, localSessionAxios } from '@/util/http-commons'
+import { fail } from './fail.js'
 
-// const local = localAxios()
+const local = localAxios()
 
-// const url = 'domain'
+const localSession = localSessionAxios()
 
-// const idcheck = (param, success, fail) => {
-//   local
-//     .get(`${url}`, { params: param })
-//     .then((response) => {
-//       if (response.data && response.data.exists) {
-//         fail()
-//       } else {
-//         success()
-//       }
-//     })
-//     .catch((error) => {
-//       console.error('요청 실패:', error)
-//       fail()
-//     })
-// }
+const url = 'http://localhost:8080/api/member'
 
-// export {
-//   idcheck
-// }
+function register(data, success) {
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+}
+function login(data, success) {
+  local.post(`${url}/login`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+// refresh 토큰 과정 필요
+function modifyApi(data, success) {
+  localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+  /*.catch((response) => {
+      // refresh 토큰 재발급 과정에서만 true를 return 함
+      if (fail(response)) {
+        modifyApi(data, success)
+      }
+    })*/
+}
+
+function removeApi(param, success) {
+  localSession.delete(`${url}/${param}`).then(success).catch(fail)
+}
+
+export { register, login, modifyApi, removeApi }

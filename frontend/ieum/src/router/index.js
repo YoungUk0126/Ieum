@@ -1,18 +1,23 @@
+import { createRouter, createWebHistory } from 'vue-router'
+import VueCookies from 'vue-cookies'
+import swal from 'sweetalert'
+
 import TheMainViewVue from '@/views/TheMainView.vue'
 import TheRegisterViewVue from '@/views/TheRegisterView.vue'
 import TheCallViewVue from '@/views/TheCallView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
 import TheMessageViewVue from '@/views/TheMessageView.vue'
 import TheChatViewVue from '@/views/TheChatView.vue'
 import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
+import NotFound from '@/error/NotFound.vue'
+import TheFindInfoView from '@/views/TheFindInfoView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'TheMainView',
+      name: 'TheMainViewVue',
       component: TheMainViewVue
     },
     {
@@ -37,7 +42,8 @@ const router = createRouter({
     {
       path: '/message',
       name: 'TheMessageView',
-      component: TheMessageViewVue
+      component: TheMessageViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/chat',
@@ -48,25 +54,69 @@ const router = createRouter({
       path: '/schedule',
       name: 'TheScheduleView',
       component: TheScheduleViewVue
+    },
+    {
+      path: '/findInfo',
+      name: 'TheFindInfoView',
+      component: TheFindInfoView,
+      children: [
+        {
+          path: '',
+          name: 'TheInputInfo',
+          component: () => import('@/components/findInfo/TheInputInfo.vue')
+        },
+        {
+          path: '/secondStep',
+          name: 'TheAuthInfo',
+          component: () => import('@/components/findInfo/TheEditInfo.vue')
+        },
+        {
+          path: '/endStep',
+          name: 'TheEndInfo',
+          component: () => import('@/components/findInfo/TheEndInfo.vue')
+        }
+      ]
+    },
+    {
+      path: '/404',
+      name: 'notFound',
+      component: NotFound
+    },
+    {
+      path: '/:catchAll(.*)',
+      redirect: '/404'
     }
-    // {
-    //   path: '/board',
-    //   name: 'TheBoardView',
-    //   component: TheBoardView,
-    //   children: [
-    //     {
-    //       path: 'list',
-    //       name: 'BoardList',
-    //       component: () => import('@/components/board/BoardList.vue')
-    //     },
-    //     {
-    //       path: 'detail/:articleNo',
-    //       name: 'BoardDetail',
-    //       component: () => import('@/components/board/BoardDetail.vue')
-    //     }
-    //   ]
-    // },
   ]
+})
+
+// 세션 확인 작업
+router.beforeEach((to, from, next) => {
+  // 여기에 전역 필터링 로직을 추가
+  // 예: 로그인이 필요한 페이지에 대한 필터
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    // 사용자가 로그인되어 있지 않다면 로그인 페이지로 리디렉션
+    if (!VueCookies.get('auth')) {
+      swal({
+        title: '로그인',
+        text: '로그인 정보가 존재하지 않습니다',
+        icon: 'error',
+        buttons: {
+          confirm: {
+            text: '확인',
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
+      next({ path: '/login' })
+    } else {
+      next()
+    }
+  } else {
+    // 필터링이 필요하지 않은 경우 그냥 계속 진행
+    next()
+  }
 })
 
 export default router

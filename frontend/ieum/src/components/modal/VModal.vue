@@ -91,16 +91,17 @@
           <button
             data-modal-hide="default-modal"
             type="button"
-            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+            class="text-white bg-blue-700 hover:bg-blue-800"
+            @click="postAlarmdata"
           >
-            I accept
+            확인
           </button>
           <button
             data-modal-hide="default-modal"
             type="button"
             class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
-            Decline
+            취소
           </button>
         </div>
       </div>
@@ -109,13 +110,38 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import VModalAnniBody from './VModalAnniBody.vue'
 import VModalInjection from './VModalInjection.vue'
 import VModalMeal from './VModalMeal.vue'
 import VModalWakeandSleep from './VModalWakeandSleep.vue'
+import { postEvent } from '@/api/modalAlarms/event.js'
 
+// modal의 body 전환을 위한 변수
 const selectedOption = ref('alarm')
+
+const care_no = '1'
+const items = ref([])
+
+function postAlarmdata() {
+  if (selectedOption.value === 'anniversary') {
+    postEvent(care_no, (response) => {
+      items.value = response.data.data
+    })
+  } else if (selectedOption.value === 'medication') {
+    postEvent(care_no, (response) => {
+      items.value = response.data.data
+    })
+  } else if (selectedOption.value === 'sleep') {
+    postEvent(care_no, (response) => {
+      items.value = response.data.data
+    })
+  } else if (selectedOption.value === 'meal') {
+    postEvent(care_no, (response) => {
+      items.value = response.data.data
+    })
+  }
+}
 </script>
 
 <style scoped>
@@ -147,3 +173,4 @@ const selectedOption = ref('alarm')
   margin-right: 5%;
 }
 </style>
+@/api/modalAlarms/event.js
