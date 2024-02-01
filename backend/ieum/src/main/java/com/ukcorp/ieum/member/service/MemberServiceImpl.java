@@ -64,7 +64,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     @Transactional
-    public JwtToken login(MemberLoginRequestDto loginDto) throws UsernameNotFoundException {
+    public JwtToken login(MemberIdPasswordDto loginDto) throws UsernameNotFoundException {
         // username + password 를 기반으로 Authentication 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginDto.getMemberId(), loginDto.getPassword());
@@ -124,12 +124,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public void modifyMemberPassword(String memberPassword) {
-        String memberId = JwtUtil.getMemberId()
+    public void modifyMemberPassword(MemberIdPasswordDto passwordDto) {
+        Member member = memberRepository.findByMemberId(passwordDto.getMemberId())
                 .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
-        Member member = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
-        member.updatePassword(passwordEncoder.encode(memberPassword));
+        member.updatePassword(passwordEncoder.encode(passwordDto.getPassword()));
     }
 
     /**
