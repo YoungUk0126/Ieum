@@ -57,9 +57,10 @@ public class SecurityConfig {
                                 "/api/member/check-id/*",
                                 "/api/member/check-email",
                                 "/api/member/check-phone",
-                                "api/member/check-exist",
+                                "/api/member/check-exist",
                                 "/api/member/auth",
                                 "/api/member/verify",
+                                "/api/devices/*",
                                 "/error").permitAll()
                         // 나머지 요청에 대해서는 인증 필요
 //                        .anyRequest().permitAll()

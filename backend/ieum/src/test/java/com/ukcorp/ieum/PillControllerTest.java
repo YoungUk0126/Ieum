@@ -44,7 +44,6 @@ public class PillControllerTest {
 
     // 약 정보 등록 관련 테스트
     PillInfoInsertRequestDto requestDto = new PillInfoInsertRequestDto();
-    requestDto.setCareNo(1L);
     requestDto.setPillName("이름");
     requestDto.setPillStartDate(LocalDate.parse("2024-01-30"));
     requestDto.setPillEndDate(LocalDate.parse("2024-02-29"));
@@ -124,7 +123,6 @@ public class PillControllerTest {
     // 약 정보 등록 관련 테스트
     PillInfoUpdateRequestDto requestDto = new PillInfoUpdateRequestDto();
     requestDto.setPillInfoNo(1L);
-    requestDto.setCareNo(1L);
     requestDto.setPillName("이름 수정");
     requestDto.setPillStartDate(LocalDate.parse("2024-01-30"));
     requestDto.setPillEndDate(LocalDate.parse("2024-02-29"));

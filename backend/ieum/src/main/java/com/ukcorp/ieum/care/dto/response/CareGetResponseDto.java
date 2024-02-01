@@ -17,4 +17,5 @@ public class CareGetResponseDto {
     private String carePhone;
     private String careAddr;
     private String careImage;
+    private String careSerial;
 }
