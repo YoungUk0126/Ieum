@@ -72,11 +72,12 @@
               >
             </li>
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >로그아웃</a
+              <button
+                class="block w-full px-4 text-start py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                @click="logout"
               >
+                로그아웃
+              </button>
             </li>
           </ul>
         </div>
@@ -111,6 +112,31 @@
 
 <script setup>
 import VModal from '@/components/modal/VModal.vue'
+import VueCookies from 'vue-cookies'
+import { useRouter } from 'vue-router'
+import swal from 'sweetalert'
+const router = useRouter()
+
+const logout = () => {
+  swal({
+    title: '로그아웃',
+    text: '정상적으로 로그아웃 됐습니다.',
+    icon: 'success',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    VueCookies.remove('accessToken')
+    VueCookies.remove('refreshToken')
+    VueCookies.remove('auth')
+    router.push({ path: '/login' })
+  })
+}
 </script>
 
 <style scoped>
