@@ -16,6 +16,7 @@
             type="password"
             name="password"
             v-model="data.password"
+            @change="checkEqualFst"
             autocomplete="given-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
@@ -38,9 +39,18 @@
           <div
             class="p-4 mt-3 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
             role="alert"
-            v-show="!check"
+            v-show="!check.dup"
           >
             <span class="font-medium">비밀번호가 일치하지 않습니다</span>
+          </div>
+          <div
+            class="p-4 mt-3 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+            v-show="check.valid"
+          >
+            <span class="font-medium">
+              비밀번호는 영문+숫자+특수문자를 포함한 8~20자여야 합니다</span
+            >
           </div>
         </div>
       </div>
@@ -48,7 +58,7 @@
         <button
           type="button"
           class="w-1/2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          @click="next"
+          @click="edit"
         >
           수정
         </button>
@@ -58,8 +68,10 @@
 </template>
 
 <script setup>
-import { ref, watch, defineProps, onMounted } from 'vue'
+import { ref, defineProps, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import swal from 'sweetalert'
+
 const props = defineProps(['member', 'memberAuth', 'editSubmit'])
 
 const memberInfo = ref({
@@ -72,7 +84,10 @@ const data = ref({
   passwordCheck: ''
 })
 
-const check = ref(true)
+const check = ref({
+  dup: true,
+  valid: false
+})
 
 const router = useRouter()
 
@@ -87,15 +102,40 @@ onMounted(() => {
 // 휴대폰 번호 입력 함수
 // watch를 사용하여 phone이 변경될 때마다 처리
 const checkEqual = () => {
-  console.log('check = ' + data.value.passwordCheck)
-  console.log(data.value.password)
-
-  check.value = data.value.passwordCheck === data.value.password && data.value.password != ''
+  if (!check.value.valid) {
+    check.value.dup = data.value.passwordCheck === data.value.password && data.value.password != ''
+  }
 }
 
-const next = () => {
-  if (true) {
-    props.editSubmit(memberInfo.value)
+const checkEqualFst = () => {
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{7,20}$/
+
+  if (!regex.test(data.value.password)) {
+    check.value.valid = true
+    return
+  } else if (!check.value && data.value.passwordCheck.length > 0) {
+    check.value.dup = data.value.passwordCheck === data.value.password && data.value.password != ''
+  }
+  check.value.valid = false
+}
+
+const edit = () => {
+  if (check.value.dup && !check.value.valid) {
+    props.editSubmit(memberInfo.value, { password: data.value.password })
+  } else {
+    swal({
+      title: '알림',
+      text: '비밀번호 입력을 확인해주세요.',
+      icon: 'warning',
+      buttons: {
+        confirm: {
+          text: '확인',
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
   }
 }
 </script>
