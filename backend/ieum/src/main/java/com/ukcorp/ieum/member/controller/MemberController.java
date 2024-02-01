@@ -1,12 +1,19 @@
 package com.ukcorp.ieum.member.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
-import com.ukcorp.ieum.member.dto.*;
+import com.ukcorp.ieum.member.dto.CheckExistDto;
+import com.ukcorp.ieum.member.dto.EmailRequestDto;
+import com.ukcorp.ieum.member.dto.MemberIdPasswordDto;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberResponseDto;
+import com.ukcorp.ieum.member.dto.PhoneRequestDto;
+import com.ukcorp.ieum.member.dto.RefreshRequestDto;
+import com.ukcorp.ieum.member.dto.VerifyRequestDto;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -14,14 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/member")
@@ -86,9 +93,6 @@ public class MemberController {
   @PutMapping("/password")
   public ResponseEntity<Map<String, Object>> updateMemberPassword(
       @RequestBody @Valid MemberIdPasswordDto passwordDto) {
-    System.out.println(passwordDto.getPassword());
-    System.out.println(passwordDto.getMemberId());
-
     memberService.modifyMemberPassword(passwordDto);
 
     return handleSuccess("success");
