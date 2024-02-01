@@ -14,15 +14,25 @@ function login(data, success) {
   local.post(`${url}/login`, JSON.stringify(data)).then(success).catch(fail)
 }
 
+function sendAuth(data, success) {
+  local.post(`${url}/auth`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+function verify(data, success) {
+  local.post(`${url}/verify`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+function checkMember(data, success) {
+  local.post(`${url}/check-exist`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+function editPassword(data, success) {
+  local.post(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
+}
+
 // refresh 토큰 과정 필요
 function modifyApi(data, success) {
   localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
-  /*.catch((response) => {
-      // refresh 토큰 재발급 과정에서만 true를 return 함
-      if (fail(response)) {
-        modifyApi(data, success)
-      }
-    })*/
 }
 
 function removeApi(param, success) {
@@ -33,4 +43,14 @@ function getInfo(success) {
   localSession.get(`${url}`).then(success).catch(fail)
 }
 
-export { register, login, modifyApi, removeApi, getInfo }
+export {
+  register,
+  login,
+  modifyApi,
+  removeApi,
+  sendAuth,
+  checkMember,
+  verify,
+  editPassword,
+  getInfo
+}
