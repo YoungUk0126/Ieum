@@ -16,4 +16,5 @@ public class CareInsertRequestDto {
     private String careName;
     private String carePhone;
     private String careGender;
+    private String careSerial;
 }
