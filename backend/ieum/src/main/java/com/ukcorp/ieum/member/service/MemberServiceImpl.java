@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 회원가입
@@ -120,6 +122,16 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
+    @Override
+    @Transactional
+    public void modifyMemberPassword(String memberPassword) {
+        String memberId = JwtUtil.getMemberId()
+                .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
+        Member member = memberRepository.findByMemberId(memberId)
+                .orElseThrow(() -> new UsernameNotFoundException("MEMBER NOT FOUND"));
+        member.updatePassword(passwordEncoder.encode(memberPassword));
+    }
+
     /**
      * 회원 탈퇴
      */
@@ -164,6 +176,12 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean isExistsMemberPhone(String phone) {
         return memberRepository.existsByMemberPhone(phone);
+    }
+
+    @Override
+    public boolean checkExistsMember(CheckExistDto checkMember) {
+        return memberRepository
+                .existsByMemberIdAndMemberPhone(checkMember.getMemberId(), checkMember.getPhone());
     }
 
     /**

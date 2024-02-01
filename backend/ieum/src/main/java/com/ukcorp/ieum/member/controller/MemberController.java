@@ -29,14 +29,14 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> joinMember(@Valid @RequestBody MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> joinMember(@RequestBody @Valid MemberRequestDto member) {
         memberService.signup(member);
 
         return handleSuccess("success");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginMember(@RequestBody MemberLoginRequestDto loginDto) {
+    public ResponseEntity<?> loginMember(@RequestBody @Valid MemberLoginRequestDto loginDto) {
         try {
             JwtToken jwtToken = memberService.login(loginDto);
 
@@ -72,8 +72,15 @@ public class MemberController {
 
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberRequestDto member) {
         memberService.modifyMember(member);
+
+        return handleSuccess("success");
+    }
+
+    @PutMapping("/password")
+    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberPasswordDto passwordDto) {
+        memberService.modifyMemberPassword(passwordDto.getPassword());
 
         return handleSuccess("success");
     }
@@ -86,15 +93,14 @@ public class MemberController {
     }
 
     @PostMapping("/auth")
-    public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody PhoneRequestDto phone) {
-        log.info("Controller 진입");
+    public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody @Valid PhoneRequestDto phone) {
         memberService.sendVerifyMessage(phone);
 
         return handleSuccess("success");
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody VerifyRequestDto verifyRequestDto) {
+    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody @Valid VerifyRequestDto verifyRequestDto) {
         boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
         if (isCorrect) {
             return handleSuccess("success");
@@ -118,7 +124,7 @@ public class MemberController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody EmailRequestDto emailDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody @Valid EmailRequestDto emailDto) {
         boolean isExists = memberService.isExistsMemberEmail(emailDto.getEmail());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -132,7 +138,7 @@ public class MemberController {
     }
 
     @PostMapping("/check-phone")
-    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody PhoneRequestDto phoneDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody @Valid PhoneRequestDto phoneDto) {
         boolean isExists = memberService.isExistsMemberPhone(phoneDto.getPhone());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -141,6 +147,20 @@ public class MemberController {
         } else {
             // 사용 가능한 핸드폰 번호인 경우
             response.put("isDuplicated", false);
+        }
+        return handleSuccess(response);
+    }
+
+    @PostMapping("/check-exist")
+    public ResponseEntity<Map<String, Object>> isExistMember(@RequestBody @Valid CheckExistDto checkMember) {
+        boolean isExists = memberService.checkExistsMember(checkMember);
+        Map<String, Boolean> response = new HashMap<>();
+        if (isExists) {
+            // 이미 존재하는 핸드폰 번호인 경우
+            response.put("isExist", true);
+        } else {
+            // 사용 가능한 핸드폰 번호인 경우
+            response.put("isExist", false);
         }
         return handleSuccess(response);
     }
