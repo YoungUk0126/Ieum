@@ -25,6 +25,9 @@ public class SerialCode {
     @Enumerated(EnumType.STRING)
     private Usable usable;
 
+    @Column(name = "ENDPOOINT")
+    private String endPoint;
+
 
     public void updateUsableActice() {
         this.usable = Usable.ACTIVE;
@@ -32,5 +35,9 @@ public class SerialCode {
 
     public void updateUsableInactive() {
         this.usable = Usable.INACTIVE;
+    }
+
+    public void updateEndpoint(String endPoint) {
+        this.endPoint = endPoint;
     }
 }
