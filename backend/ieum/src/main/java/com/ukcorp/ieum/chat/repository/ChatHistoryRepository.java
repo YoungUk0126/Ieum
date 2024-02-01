@@ -10,12 +10,15 @@ import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface ChatHistoryRepository extends JpaRepository<ChatHistory, Long> {
 
-  Page<ChatHistory> findAllByCareNoOrderByChatHistoryNoAsc(Long careNo, Pageable pageable);
-  Page<ChatHistory> findAllByCareNoAndChatDateBetweenOrderByChatHistoryNoAsc(Long careNo, LocalDate startDate, LocalDate endDate, Pageable pageable);
+  Page<ChatHistory> findAllByCareInfoCareNoOrderByChatHistoryNoAsc(Long careNo, Pageable pageable);
+  Page<ChatHistory> findAllByCareInfoCareNoAndChatDateBetweenOrderByChatHistoryNoAsc(Long careNo, LocalDateTime startDate, LocalDateTime endDate, Pageable pageable);
+
+  List<ChatHistory> findTop8ByCareInfoCareNo(Long careNo);
 
 }
