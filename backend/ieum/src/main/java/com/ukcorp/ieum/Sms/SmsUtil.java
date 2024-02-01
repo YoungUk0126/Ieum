@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.Sms;
 
+import com.ukcorp.ieum.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
@@ -7,6 +8,8 @@ import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
 import net.nurigo.sdk.message.response.SingleMessageSentResponse;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -17,7 +20,6 @@ import java.time.Duration;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
 public class SmsUtil {
     @Value("${coolsms.api.key}")
     private String apiKey;
@@ -31,6 +33,12 @@ public class SmsUtil {
     private static final int CODE_LENGTH = 6;
 
     private DefaultMessageService messageService;
+
+    @Autowired
+    public SmsUtil(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
     private final RedisTemplate<String, String> redisTemplate;
 
     @PostConstruct
