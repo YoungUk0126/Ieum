@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
 import swal from 'sweetalert'
 
@@ -11,6 +11,8 @@ import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
+
+const error = useRouter()
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -108,8 +110,9 @@ router.beforeEach((to, from, next) => {
             closeModal: true
           }
         }
+      }).then(() => {
+        next({ path: '/login', replace: true })
       })
-      next({ path: '/login' })
     } else {
       next()
     }

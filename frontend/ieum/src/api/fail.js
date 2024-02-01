@@ -1,6 +1,7 @@
 import { localRefreshAxios } from '@/util/http-commons'
 import swal from 'sweetalert'
 import VueCookies from 'vue-cookies'
+import { useCounterStore } from '@/stores/counter'
 
 const local = localRefreshAxios()
 const url = 'http://localhost:8080/api/member'
@@ -55,12 +56,9 @@ const fail = ({ response }) => {
 
     // refresh 토큰 재발급, 발급 완료되면 이전 HTTP 다시 실행
   } else if (response.status == 403) {
-    console.log(response)
     refreshAccessToken()
-    console.log('재발급 완료!')
     return true
   } else {
-    console.log(response.status)
     swal({
       title: '버그',
       text: '뭔 오류일까요..' + response.status,
@@ -84,9 +82,11 @@ function refreshAccessToken() {
   local
     .post(`${url}/refresh`, JSON.stringify(data))
     .then(({ data }) => {
+      const store = useCounterStore()
       VueCookies.set('accessToken', data.accessToken)
       VueCookies.set('refreshToken', data.refreshToken)
       VueCookies.set('auth', true)
+      store.auth = false
     })
     .catch(() => {
       swal({
