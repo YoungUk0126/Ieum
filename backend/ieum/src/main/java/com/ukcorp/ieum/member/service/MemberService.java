@@ -1,7 +1,13 @@
 package com.ukcorp.ieum.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public interface MemberService {
 
@@ -27,7 +33,8 @@ public interface MemberService {
 
     boolean checkExistsMember(CheckExistDto checkMember);
 
-    void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
+    void sendVerifyMessage(PhoneRequestDto phoneRequestDto)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
 
     boolean checkMessageCode(VerifyRequestDto verifyRequestDto);
 

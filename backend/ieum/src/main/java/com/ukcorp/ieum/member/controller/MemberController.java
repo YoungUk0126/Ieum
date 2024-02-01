@@ -1,5 +1,7 @@
 package com.ukcorp.ieum.member.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
@@ -14,6 +16,10 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -91,7 +97,13 @@ public class MemberController {
 
     @PostMapping("/auth")
     public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody @Valid PhoneRequestDto phone) {
-        memberService.sendVerifyMessage(phone);
+        try {
+            memberService.sendVerifyMessage(phone);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("메시지 보내는 중 Exception!! >> " + e.getMessage());
+            return handleError("메시지 보내는 중 오류 발생!");
+        }
 
         return handleSuccess("success");
     }
@@ -164,7 +176,7 @@ public class MemberController {
 
     @PostMapping("/refresh")
     private ResponseEntity<?> refreshAccessToken(@RequestBody RefreshRequestDto refreshToken) {
-        log.info("controller 들어온 값 >> "+ refreshToken.getRefreshToken());
+        log.info("controller 들어온 값 >> " + refreshToken.getRefreshToken());
         try {
             JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.getRefreshToken());
 
