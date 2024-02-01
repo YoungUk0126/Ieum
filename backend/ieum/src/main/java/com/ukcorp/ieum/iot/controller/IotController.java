@@ -1,8 +1,10 @@
 package com.ukcorp.ieum.iot.controller;
 
+import com.ukcorp.ieum.iot.dto.request.CheckRequestDto;
 import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Check;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,16 @@ import java.util.Optional;
 public class IotController {
 
   private final IotService iotService;
+
+  @PostMapping("/iot/endpoint")
+  public ResponseEntity updateEndpoint(@RequestBody CheckRequestDto checkRequestDto) {
+    try {
+      iotService.updateEndPoint(checkRequestDto.getCode(), checkRequestDto.getEndPoint());
+      return handleSuccess();
+    } catch (Exception e) {
+      return handleError();
+    }
+  }
 
   @PostMapping
   public ResponseEntity postIotDevice(@RequestBody String code) {
