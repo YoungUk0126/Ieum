@@ -7,4 +7,6 @@ public interface IotService {
     void registSerialCode(String code, String userId);
 
     void updateSerialCode(String code, String userId);
+
+    void updateEndPoint(String code, String endPoint);
 }

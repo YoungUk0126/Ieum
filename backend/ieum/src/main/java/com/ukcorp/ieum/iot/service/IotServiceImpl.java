@@ -7,7 +7,9 @@ import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.beans.Transient;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -44,6 +46,7 @@ public class IotServiceImpl implements IotService {
    * @param userId
    */
   @Override
+  @Transactional
   public void registSerialCode(String code, String userId) {
 
     Member member = memberRepository.findByMemberId(userId).orElseThrow(
@@ -69,6 +72,7 @@ public class IotServiceImpl implements IotService {
    * @param userId
    */
   @Override
+  @Transactional
   public void updateSerialCode(String code, String userId) {
     Member member = memberRepository.findByMemberId(userId).orElseThrow(
             () -> new NoSuchElementException());
@@ -81,7 +85,7 @@ public class IotServiceImpl implements IotService {
               () -> new NoSuchElementException());
 
       SerialCode newDevice = iotRepository.searchBySerialCode(code).orElseThrow(
-              () -> new NoSuchElementException());;
+              () -> new NoSuchElementException());
 
       oldDevice.updateUsableInactive(); //사용하던 기기 비활성화
 
@@ -91,5 +95,13 @@ public class IotServiceImpl implements IotService {
     } else {
       throw new RuntimeException("기기를 변경할 수 없다");
     }
+  }
+
+  @Override
+  @Transactional
+  public void updateEndPoint(String code, String endPoint) {
+    SerialCode device = iotRepository.searchBySerialCode(code).orElseThrow(
+            () -> new NoSuchElementException());
+    device.updateEndpoint(endPoint);
   }
 }
