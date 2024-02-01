@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PhoneRequestDto {
     @NotEmpty
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "Invalid phone number format")
+    @Pattern(regexp = "^010-\\d{4}-\\d{4}$", message = "Invalid phone number format")
     String phone;
 }

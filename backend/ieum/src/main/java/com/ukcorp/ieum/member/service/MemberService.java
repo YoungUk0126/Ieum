@@ -7,13 +7,15 @@ public interface MemberService {
 
     void signup(MemberRequestDto memberSignupDto);
 
-    JwtToken login(MemberLoginRequestDto loginDto);
+    JwtToken login(MemberIdPasswordDto loginDto);
 
     void logout();
 
     MemberResponseDto getMemberInfo();
 
     void modifyMember(MemberRequestDto memberModifyDto);
+
+    void modifyMemberPassword(MemberIdPasswordDto passwordDto);
 
     void withdrawMember();
 
@@ -22,6 +24,8 @@ public interface MemberService {
     boolean isExistsMemberEmail(String email);
 
     boolean isExistsMemberPhone(String phone);
+
+    boolean checkExistsMember(CheckExistDto checkMember);
 
     void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
 

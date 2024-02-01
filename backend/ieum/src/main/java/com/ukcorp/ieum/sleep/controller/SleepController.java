@@ -102,6 +102,6 @@ public class SleepController {
     Map<String, Object> result = new HashMap<>();
     result.put("success", false);
     result.put("data", data);
-    return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
   }
 }

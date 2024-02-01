@@ -16,4 +16,5 @@ public class CareUpdateRequestDto {
     private String carePhone;
     private String careGender;
     private String careImage;
+    private String careSerial;
 }

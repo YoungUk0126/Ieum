@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -53,7 +52,7 @@ public class IotController {
   private ResponseEntity<Map<String, Object>> handleError() {
     Map<String, Object> result = new HashMap<>();
     result.put("success", false);
-    return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
 }

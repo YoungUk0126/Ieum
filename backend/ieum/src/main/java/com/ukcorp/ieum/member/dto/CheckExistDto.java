@@ -1,6 +1,5 @@
 package com.ukcorp.ieum.member.dto;
 
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
@@ -12,12 +11,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Getter
-public class VerifyRequestDto {
+public class CheckExistDto {
+
+    @NotEmpty
+    String memberId;
 
     @NotEmpty
     @Pattern(regexp = "^010-\\d{4}-\\d{4}$", message = "Invalid phone number format")
-    private String phone;
-
-    @NotEmpty
-    private String code;
+    String phone;
 }
