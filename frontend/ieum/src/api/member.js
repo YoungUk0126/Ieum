@@ -31,7 +31,7 @@ function editPassword(data, success) {
 }
 
 // refresh 토큰 과정 필요
-function modifyApi(data, success) {
+function modify(data, success) {
   localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
@@ -43,14 +43,4 @@ function getInfo(success) {
   localSession.get(`${url}`).then(success).catch(fail)
 }
 
-export {
-  register,
-  login,
-  modifyApi,
-  removeApi,
-  sendAuth,
-  checkMember,
-  verify,
-  editPassword,
-  getInfo
-}
+export { register, login, modify, removeApi, sendAuth, checkMember, verify, editPassword, getInfo }
