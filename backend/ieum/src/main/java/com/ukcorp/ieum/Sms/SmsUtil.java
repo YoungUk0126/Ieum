@@ -77,7 +77,7 @@ public class SmsUtil {
      */
     public boolean verifyCode(String phone, String code) {
         // Redis에 해당 핸드폰번호로 코드 존재하는지 확인
-        if (!redisTemplate.hasKey(phone) || redisTemplate.opsForValue().get(phone).equals(code)) {
+        if (!redisTemplate.hasKey(phone) || !redisTemplate.opsForValue().get(phone).equals(code)) {
             return false;
         }
 
