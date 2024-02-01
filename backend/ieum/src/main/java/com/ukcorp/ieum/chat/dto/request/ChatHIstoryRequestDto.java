@@ -3,6 +3,7 @@ package com.ukcorp.ieum.chat.dto.request;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,8 +12,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class ChatHIstoryRequestDto {
 
-  private LocalDate startDate;
-  private LocalDate endDate;
+  private LocalDateTime startDate;
+  private LocalDateTime endDate;
 }
 
 
