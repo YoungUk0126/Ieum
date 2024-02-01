@@ -9,8 +9,10 @@ import TheMessageViewVue from '@/views/TheMessageView.vue'
 import TheChatViewVue from '@/views/TheChatView.vue'
 import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
+import TheCareInfoModifyViewVue from '@/views/TheCareInfoModifyView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
+import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -54,6 +56,17 @@ const router = createRouter({
       path: '/schedule',
       name: 'TheScheduleView',
       component: TheScheduleViewVue
+    },
+    {
+      //정보수정페이지
+      path: '/careinfo',
+      name: 'TheCareInfoModifyView',
+      component: TheCareInfoModifyViewVue
+    },
+    {
+      path: '/carecheck',
+      name: 'TheCareInfoCheckView',
+      component: TheCareInfoCheckViewVue
     },
     {
       path: '/findInfo',
