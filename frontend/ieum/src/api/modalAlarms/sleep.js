@@ -1,9 +1,9 @@
-import { localAxios, localAxiosFormData } from '@/util/http-commons'
+import { localSessionAxios, localSessionAxiosFormData } from '@/util/http-commons'
 import { fail } from '@/api/fail.js'
 
-const local = localAxios()
+const local = localSessionAxios()
 
-const form = localAxiosFormData()
+const form = localSessionAxiosFormData()
 
 const url = 'http://localhost:5173/api/sleepMode'
 
