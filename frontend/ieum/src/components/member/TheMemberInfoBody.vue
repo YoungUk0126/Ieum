@@ -54,6 +54,46 @@
 
         <div class="col-span-1">
           <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+            >새 비밀번호</label
+          >
+        </div>
+        <div class="col-span-2">
+          <input
+            type="text"
+            name="memberId"
+            autocomplete="given-name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            v-model="password.newPwd"
+            placeholder="ieum@naver.com"
+          />
+        </div>
+        <div class="col-span-1">
+          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+            >새 비밀번호 확인</label
+          >
+        </div>
+        <div class="col-span-2">
+          <input
+            type="text"
+            name="memberId"
+            autocomplete="given-name"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            v-model="password.newPwdCheck"
+            placeholder="ieum@naver.com"
+          />
+        </div>
+
+        <div class="col-span-3 items-center" v-show="stateInfo.checkPassword">
+          <div
+            class="mx-auto w-2/3 p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            role="alert"
+          >
+            <span class="font-medium"> 비밀번호를 확인해주세요.</span>
+          </div>
+        </div>
+
+        <div class="col-span-1">
+          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
             >전화 번호</label
           >
         </div>
@@ -158,7 +198,13 @@ const stateInfo = ref({
   sendSuccess: true,
   changePhone: false,
   checkInputPhone: false,
-  validPhone: false
+  validPhone: false,
+  checkPassword: false
+})
+
+const password = ref({
+  newPwd: '',
+  newPwdCheck: ''
 })
 
 const authCode = ref('')
@@ -168,6 +214,7 @@ const authCode = ref('')
 watch(
   () => memberInfo.value.phone,
   (newValue) => {
+    stateInfo.value.checkAuth = false
     const formattedphone = newValue.replace(/\D+/g, '').replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
     memberInfo.value.phone = formattedphone
   }
@@ -181,7 +228,6 @@ watch(
   }
 )
 onMounted(() => {
-  console.log('')
   getInfo(({ data }) => {
     memberInfo.value = data.data
     prevMemberInfo.value = JSON.parse(JSON.stringify(data.data))
@@ -204,10 +250,6 @@ const verifyCode = () => {
       }
     })
   } else {
-    console.log({
-      phone: memberInfo.value.phone,
-      code: authCode.value
-    })
     verify(
       {
         phone: memberInfo.value.phone,
@@ -251,9 +293,7 @@ const verifyCode = () => {
 }
 
 const sendCode = () => {
-  if (memberInfo.value.memberId === '' || memberInfo.value.phone.length < 13) {
-    stateInfo.value.checkInput = true
-  } else {
+  if (memberInfo.value.phone !== prevMemberInfo.value.phone || memberInfo.value.phone.length > 13) {
     sendAuth(memberInfo.value.phone, ({ data }) => {
       if (data.success) {
         stateInfo.value.checkInputPhone = false
@@ -274,7 +314,7 @@ const sendCode = () => {
       } else {
         swal({
           title: '알림',
-          text: '전송에 실패했습니다',
+          text: '전송에 실패했습니다. 번호를 다시 확인해주세요',
           icon: 'error',
           buttons: {
             confirm: {
@@ -293,14 +333,63 @@ const sendCode = () => {
 const edit = () => {
   const memberForm = {
     memberId: memberInfo.value.memberId,
-    password: memberInfo.value.password,
+    password: null,
     name: memberInfo.value.name,
     phone: memberInfo.value.phone,
     email: memberInfo.value.email
   }
-  modify(memberForm, ({ data }) => {
+
+  if (password.value.newPwd.length > 0) {
+    if (!checkPassword()) {
+      swal({
+        title: '알림',
+        text: '비밀번호 입력을 확인해주세요',
+        icon: 'error',
+        buttons: {
+          confirm: {
+            text: '확인',
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
+      return
+    } else {
+      memberForm['password'] = password.value.newPwd
+    }
+  }
+
+  if (stateInfo.value.changePhone && !stateInfo.value.checkAuth) {
+    swal({
+      title: '알림',
+      text: '전화번호 인증이 필요합니다',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+    return
+  }
+
+  /*modify(memberForm, ({ data }) => {
     console.log(data)
-  })
+  })*/
+}
+
+const checkPassword = () => {
+  const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[~!@#$%^&*()+|=])[A-Za-z\d~!@#$%^&*()+|=]{7,20}$/
+
+  return (
+    password.value.newPwd.length > 0 &&
+    password.value.newPwd === password.value.newPwdCheck &&
+    regex.test(password.value.newPwd)
+  )
 }
 </script>
 

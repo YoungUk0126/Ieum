@@ -121,7 +121,6 @@ const checkEqualFst = () => {
 
 const edit = () => {
   if (check.value.dup && !check.value.valid) {
-    console.log(data.value.password)
     props.editSubmit(data.value.password)
   } else {
     swal({
