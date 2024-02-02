@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class CareGetResponseDto {
-    private Long careNo;
     private String careName;
     private String careGender;
     private LocalDate careBirth;
