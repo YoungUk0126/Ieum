@@ -91,6 +91,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/chat',
+      name: 'TheChatView',
+      component: TheChatViewVue
+    },
+    {
       path: '/404',
       name: 'notFound',
       component: NotFound
