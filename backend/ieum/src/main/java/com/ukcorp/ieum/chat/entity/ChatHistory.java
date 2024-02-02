@@ -32,9 +32,11 @@ public class ChatHistory {
   @Column(name = "MESSAGE_CONTENT")
   private String messageContent;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "SPEAKER")
   private Subject speaker;
 
+  @Enumerated(EnumType.STRING)
   @Column(name = "LISTENER")
   private Subject listener;
 
