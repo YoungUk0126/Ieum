@@ -2,11 +2,16 @@ package com.ukcorp.ieum.iot.service;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.event.repository.EventRepository;
 import com.ukcorp.ieum.iot.entity.SerialCode;
 import com.ukcorp.ieum.iot.entity.Usable;
 import com.ukcorp.ieum.iot.repository.IotRepository;
+import com.ukcorp.ieum.meal.repository.MealRepository;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
+import com.ukcorp.ieum.message.repository.MessageRepository;
+import com.ukcorp.ieum.pill.repository.PillInfoRepository;
+import com.ukcorp.ieum.sleep.repository.SleepRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +27,12 @@ public class IotServiceImpl implements IotService {
   private final IotRepository iotRepository;
 //  private final MemberRepository memberRepository;
   private final CareRepository careRepository;
+  private final PillInfoRepository pillInfoRepository;
+  private final EventRepository eventRepository;
+  private final SleepRepository sleepRepository;
+  private final MealRepository mealRepository;
+  private MessageRepository messageRepository;
+
 
   /**
    * 작성자 : 이성목
@@ -120,6 +131,11 @@ public class IotServiceImpl implements IotService {
     device.updateEndpoint(endPoint);
   }
 
+  /**
+   * 작성자 : 이성목
+   * 복용약 정보 데이터를
+   * @param careNo
+   */
   @Override
   public void sendPillDataToIot(Long careNo) {
 
