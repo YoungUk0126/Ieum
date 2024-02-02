@@ -1,7 +1,7 @@
 package com.ukcorp.ieum.chat.service.impl;
 
 import com.ukcorp.ieum.chat.dto.ChatHistoryDto;
-import com.ukcorp.ieum.chat.dto.request.ChatHIstoryRequestDto;
+import com.ukcorp.ieum.chat.dto.request.ChatHIstoryDto;
 import com.ukcorp.ieum.chat.dto.response.ChatHistoryResponseDto;
 import com.ukcorp.ieum.chat.entity.ChatHistory;
 import com.ukcorp.ieum.chat.mapper.ChatHistoryMapper;
@@ -22,10 +22,10 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
   private final ChatHistoryMapper chatHistoryMapper;
 
   @Override
-  public ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryRequestDto chatHIstoryRequestDto) {
+  public ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryDto chatHIstoryDto) {
 
     //기간검색 안함
-    if (chatHIstoryRequestDto.getStartDate() == null) {
+    if (chatHIstoryDto.getStartDate() == null) {
       Page<ChatHistory> chatHistories = chatHistoryRepository.findAllByCareInfoCareNoOrderByChatHistoryNoAsc(careNo, pageable);
       List<ChatHistoryDto> chatHistoryDtos = chatHistoryMapper.chatHistoriesToChatHistoryDto(chatHistories.getContent());
 
@@ -37,7 +37,7 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
     }
     //기간 검색
     else {
-      Page<ChatHistory> chatHistories = chatHistoryRepository.findAllByCareInfoCareNoAndChatDateBetweenOrderByChatHistoryNoAsc(careNo, chatHIstoryRequestDto.getStartDate(), chatHIstoryRequestDto.getEndDate(), pageable);
+      Page<ChatHistory> chatHistories = chatHistoryRepository.findAllByCareInfoCareNoAndChatDateBetweenOrderByChatHistoryNoAsc(careNo, chatHIstoryDto.getStartDate(), chatHIstoryDto.getEndDate(), pageable);
       List<ChatHistoryDto> chatHistoryDtos = chatHistoryMapper.chatHistoriesToChatHistoryDto(chatHistories.getContent());
 
       return ChatHistoryResponseDto.builder()
