@@ -1,13 +1,19 @@
 package com.ukcorp.ieum.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 public interface MemberService {
 
     void signup(MemberRequestDto memberSignupDto);
 
-    JwtToken login(MemberLoginRequestDto loginDto);
+    JwtToken login(MemberIdPasswordDto loginDto);
 
     void logout();
 
@@ -15,7 +21,7 @@ public interface MemberService {
 
     void modifyMember(MemberRequestDto memberModifyDto);
 
-    void modifyMemberPassword(String memberPassword);
+    void modifyMemberPassword(MemberIdPasswordDto passwordDto);
 
     void withdrawMember();
 
@@ -27,7 +33,8 @@ public interface MemberService {
 
     boolean checkExistsMember(CheckExistDto checkMember);
 
-    void sendVerifyMessage(PhoneRequestDto phoneRequestDto);
+    void sendVerifyMessage(PhoneRequestDto phoneRequestDto)
+            throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
 
     boolean checkMessageCode(VerifyRequestDto verifyRequestDto);
 

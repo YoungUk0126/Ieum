@@ -15,3 +15,5 @@ server:
 spring:
   profiles:
     default: dev
+  mvc:
+    static-path-pattern: /static/**

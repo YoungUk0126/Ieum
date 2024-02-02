@@ -2,23 +2,17 @@ package com.ukcorp.ieum.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.ukcorp.ieum.member.dto.MemberLoginRequestDto;
+import com.ukcorp.ieum.member.dto.MemberIdPasswordDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
-import com.ukcorp.ieum.member.service.MemberService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -53,7 +47,7 @@ class MemberControllerTest {
 
     @Test
     void 로그인_성공() throws Exception {
-        MemberLoginRequestDto loginMember = MemberLoginRequestDto.builder()
+        MemberIdPasswordDto loginMember = MemberIdPasswordDto.builder()
                 .memberId("test123")
                 .password("password123!!").build();
 

@@ -1,22 +1,25 @@
 package com.ukcorp.ieum.member.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.http.HttpStatus;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginMember(@RequestBody @Valid MemberLoginRequestDto loginDto) {
+    public ResponseEntity<?> loginMember(@RequestBody @Valid MemberIdPasswordDto loginDto) {
         try {
             JwtToken jwtToken = memberService.login(loginDto);
 
@@ -79,8 +82,8 @@ public class MemberController {
     }
 
     @PutMapping("/password")
-    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberPasswordDto passwordDto) {
-        memberService.modifyMemberPassword(passwordDto.getPassword());
+    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberIdPasswordDto passwordDto) {
+        memberService.modifyMemberPassword(passwordDto);
 
         return handleSuccess("success");
     }
@@ -94,7 +97,13 @@ public class MemberController {
 
     @PostMapping("/auth")
     public ResponseEntity<Map<String, Object>> sendVerifyCode(@RequestBody @Valid PhoneRequestDto phone) {
-        memberService.sendVerifyMessage(phone);
+        try {
+            memberService.sendVerifyMessage(phone);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("메시지 보내는 중 Exception!! >> " + e.getMessage());
+            return handleError("메시지 보내는 중 오류 발생!");
+        }
 
         return handleSuccess("success");
     }
@@ -167,7 +176,7 @@ public class MemberController {
 
     @PostMapping("/refresh")
     private ResponseEntity<?> refreshAccessToken(@RequestBody RefreshRequestDto refreshToken) {
-        log.info("controller 들어온 값 >> "+ refreshToken.getRefreshToken());
+        log.info("controller 들어온 값 >> " + refreshToken.getRefreshToken());
         try {
             JwtToken jwtToken = memberService.refreshAccessToken(refreshToken.getRefreshToken());
 
@@ -198,13 +207,6 @@ public class MemberController {
         result.put("success", false);
         result.put("data", data);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
-    }
-
-    private ResponseEntity<Map<String, Object>> handleError(Object data) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("success", false);
-        result.put("data", data);
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.BAD_REQUEST);
     }
 
 }
