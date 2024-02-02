@@ -129,6 +129,10 @@ router.beforeEach((to, from, next) => {
           }
         }
       }).then(() => {
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        VueCookies.remove('auth')
+
         next({ path: '/login', replace: true })
       })
     } else {

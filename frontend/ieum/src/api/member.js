@@ -1,6 +1,5 @@
 import { localAxios, localSessionAxios } from '@/util/http-commons'
 import { fail } from './fail.js'
-
 const local = localAxios()
 
 const localSession = localSessionAxios()

@@ -180,8 +180,8 @@ watch(
     stateInfo.value.changePhone = nv !== prevMemberInfo.value.phone
   }
 )
-
 onMounted(() => {
+  console.log('')
   getInfo(({ data }) => {
     memberInfo.value = data.data
     prevMemberInfo.value = JSON.parse(JSON.stringify(data.data))
