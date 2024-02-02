@@ -111,4 +111,34 @@ public class IotServiceImpl implements IotService {
             () -> new NoSuchElementException());
     device.updateEndpoint(endPoint);
   }
+
+  @Override
+  public void sendPillDataToIot(Long careNo) {
+
+  }
+
+  @Override
+  public void sendEventDateToIot(Long careNo) {
+
+  }
+
+  @Override
+  public void sendSleepDateToIot(Long careNo) {
+
+  }
+
+  @Override
+  public void sendMealDateToIot(Long careNo) {
+
+  }
+
+  @Override
+  public void sendMessageToIot(Long careNo) {
+
+  }
+
+  @Override
+  public void sendCallAlertToIot(Long careNo) {
+
+  }
 }
