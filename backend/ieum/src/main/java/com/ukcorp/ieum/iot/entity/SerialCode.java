@@ -25,9 +25,8 @@ public class SerialCode {
     @Enumerated(EnumType.STRING)
     private Usable usable;
 
-    @Column(name = "ENDPOOINT")
+    @Column(name = "ENDPOINT")
     private String endPoint;
-
 
     public void updateUsableActice() {
         this.usable = Usable.ACTIVE;
