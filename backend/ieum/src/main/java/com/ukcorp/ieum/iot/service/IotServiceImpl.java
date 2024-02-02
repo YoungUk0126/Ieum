@@ -97,6 +97,13 @@ public class IotServiceImpl implements IotService {
     }
   }
 
+  /**
+   * 작성자 : 이성목
+   *
+   * 기기 엔드포인트 저장하는 서비스 메서드
+   * @param code
+   * @param endPoint
+   */
   @Override
   @Transactional
   public void updateEndPoint(String code, String endPoint) {
