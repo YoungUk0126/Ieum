@@ -10,7 +10,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CareMapper {
 
-    @Mapping(target = "careNo", ignore = true)
     @Mapping(target = "care.careNo", ignore = true)
     CareGetResponseDto careInfoToCareGetResponseDto(CareInfo care);
 
