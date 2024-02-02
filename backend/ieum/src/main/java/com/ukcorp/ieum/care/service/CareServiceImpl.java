@@ -58,6 +58,7 @@ public class CareServiceImpl implements CareService {
               .careGender(Gender.valueOf(careDto.getCareGender()))
               .carePhone(careDto.getCarePhone())
               .careImage(careDto.getCareImage())
+              .careSerial(careDto.getCareSerial())
               .build();
       careRepository.save(care);
     } catch (DataIntegrityViolationException e) {
