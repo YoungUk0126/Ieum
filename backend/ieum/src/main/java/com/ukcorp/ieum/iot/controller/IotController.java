@@ -19,6 +19,14 @@ public class IotController {
 
   private final IotService iotService;
 
+
+  /**
+   * 작성자 : 이성목
+   *
+   * 기기로부터 엔드포인트 정보를 받아서 저장
+   * @param checkRequestDto
+   * @return
+   */
   @PostMapping("/iot/endpoint")
   public ResponseEntity updateEndpoint(@RequestBody CheckRequestDto checkRequestDto) {
     try {
@@ -29,6 +37,13 @@ public class IotController {
     }
   }
 
+  /**
+   * 작성자 : 이성목
+   *
+   * 기기 등록하고 활성화 상태로 변경
+   * @param code
+   * @return
+   */
   @PostMapping
   public ResponseEntity postIotDevice(@RequestBody String code) {
 
@@ -41,6 +56,13 @@ public class IotController {
     }
   }
 
+  /**
+   * 작성자 : 이성목
+   *
+   * 시리얼 코드 변경
+   * @param code
+   * @return
+   */
   @PutMapping
   public ResponseEntity putIotDevice(@RequestBody String code) {
     // TODO : 이음 코드 수정
