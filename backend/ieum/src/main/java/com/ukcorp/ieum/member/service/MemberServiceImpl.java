@@ -126,6 +126,9 @@ public class MemberServiceImpl implements MemberService {
             Member updateMember = memberRepository.findByMemberId(memberId)
                     .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
 
+            if (!member.getPassword().isEmpty()) {
+                updateMember.updatePassword(passwordEncoder.encode(member.getPassword()));
+            }
             updateMember.updateMember(member);
         }
     }

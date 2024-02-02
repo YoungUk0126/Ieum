@@ -69,9 +69,6 @@ public class Member {
     }
 
     public void updateMember(MemberUpdateDto updateMember) {
-        if (!updateMember.getPassword().isEmpty()) {
-            this.memberPassword = updateMember.getPassword();
-        }
         this.memberName = updateMember.getName();
         this.memberEmail = updateMember.getEmail();
         this.memberPhone = updateMember.getPhone();
