@@ -187,7 +187,7 @@ import { ref, onMounted, watch } from 'vue'
 import { getInfo } from '../../api/member.js'
 import swal from 'sweetalert'
 import { sendAuth, verify, modify } from '../../api/member'
-
+import { useRouter } from 'vue-router'
 const memberInfo = ref({})
 
 const prevMemberInfo = ref({})
@@ -208,6 +208,8 @@ const password = ref({
 })
 
 const authCode = ref('')
+
+const router = useRouter()
 
 // 휴대폰 번호 입력 함수
 // watch를 사용하여 phone이 변경될 때마다 처리
@@ -377,9 +379,25 @@ const edit = () => {
     return
   }
 
-  /*modify(memberForm, ({ data }) => {
-    console.log(data)
-  })*/
+  modify(memberForm, ({ data }) => {
+    if (data.success) {
+      router.push()
+    } else {
+      swal({
+        title: '알림',
+        text: '정보 수정에 오류가 있습니다.',
+        icon: 'error',
+        buttons: {
+          confirm: {
+            text: '확인',
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
+    }
+  })
 }
 
 const checkPassword = () => {
