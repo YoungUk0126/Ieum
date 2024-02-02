@@ -50,12 +50,15 @@ public class MemberController {
 
             return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
         } catch (UsernameNotFoundException e) {
-            return new ResponseEntity<>("찾을 수 없는 회원", HttpStatus.BAD_REQUEST);
+            log.debug("MEMBER 찾을 수 없음");
+            return handleFail("fail");
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>("비밀번호 틀림", HttpStatus.BAD_REQUEST);
+            log.debug("비밀번호 틀림");
+            return handleFail("fail");
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            log.debug("로그인 오류");
+            return handleFail("fail");
         }
     }
 
@@ -75,7 +78,7 @@ public class MemberController {
 
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberUpdateDto member) {
         memberService.modifyMember(member);
 
         return handleSuccess("success");
@@ -207,6 +210,14 @@ public class MemberController {
         result.put("success", false);
         result.put("data", data);
         return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+    }
+
+    private ResponseEntity<Map<String, Object>> handleError(Object data) {
+        Map<String, Object> result = new HashMap<>();
+
+        result.put("success", false);
+        result.put("data", data);
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 }

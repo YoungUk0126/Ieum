@@ -118,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     @Transactional
-    public void modifyMember(MemberRequestDto member) {
+    public void modifyMember(MemberUpdateDto member) {
         String memberId = JwtUtil.getMemberId()
                 .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
         if (member.getMemberId().equals(member.getMemberId())) {
@@ -126,6 +126,9 @@ public class MemberServiceImpl implements MemberService {
             Member updateMember = memberRepository.findByMemberId(memberId)
                     .orElseThrow(() -> new NoSuchElementException("MEMBER NOT FOUND"));
 
+            if (!member.getPassword().isEmpty()) {
+                updateMember.updatePassword(passwordEncoder.encode(member.getPassword()));
+            }
             updateMember.updateMember(member);
         }
     }
