@@ -78,7 +78,7 @@ public class MemberController {
 
 
     @PutMapping
-    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberUpdateDto member) {
         memberService.modifyMember(member);
 
         return handleSuccess("success");

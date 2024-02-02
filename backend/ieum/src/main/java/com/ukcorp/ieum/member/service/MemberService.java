@@ -19,7 +19,7 @@ public interface MemberService {
 
     MemberResponseDto getMemberInfo();
 
-    void modifyMember(MemberRequestDto memberModifyDto);
+    void modifyMember(MemberUpdateDto memberModifyDto);
 
     void modifyMemberPassword(MemberIdPasswordDto passwordDto);
 
