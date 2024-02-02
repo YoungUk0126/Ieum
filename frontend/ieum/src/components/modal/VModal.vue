@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import VModalAnniBody from './VModalAnniBody.vue'
 import VModalInjection from './VModalInjection.vue'
 import VModalMeal from './VModalMeal.vue'

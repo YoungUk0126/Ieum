@@ -8,7 +8,7 @@
           placeholder="제목을 입력해주세요"
           aria-label="Username"
           aria-describedby="basic-addon1"
-          v-model="jsonData.event_name"
+          v-model="jsonData.eventName"
         />
       </div>
       <div class="calendar row mb-4">
@@ -22,7 +22,7 @@
             value="2025-01-01"
             min="2018-01-01"
             max="2100-12-31"
-            v-model="jsonData.event_date"
+            v-model="jsonData.eventDate"
           />
         </div>
 
@@ -75,6 +75,8 @@ const jsonData = ref({
 })
 
 function postAlarmdata() {
+  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
+
   if (jsonData.value.title === '' || jsonData.value.date === '') {
     swal({
       title: '',
@@ -94,7 +96,10 @@ function postAlarmdata() {
     return 0
   }
 
-  postEvent(jsonData)
+  console.log(jsonData.value)
+  postEvent(jsonData.value, (response) => {
+    console.log(response)
+  })
 }
 </script>
 
@@ -152,3 +157,5 @@ function postAlarmdata() {
   border: 1px rgba(0, 0, 0, 0.1) solid;
 }
 </style>
+
+--------------------------------------------------

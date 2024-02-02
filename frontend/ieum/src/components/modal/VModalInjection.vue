@@ -1,13 +1,13 @@
 <template>
   <div class="content-container">
     <!-- 총 5개의 부분으로 분리
-      * 대분류 div 태그에는 major-c 태그 부여
-    1. 제목 입력부
-    2. 시작일/종료일 calendar
-    3. 시작/종료일 캘린더 설정
-    4. 요일 선택부
-    5. 투약 일정 정리 박스
-    -->
+        * 대분류 div 태그에는 major-c 태그 부여
+      1. 제목 입력부
+      2. 시작일/종료일 calendar
+      3. 시작/종료일 캘린더 설정
+      4. 요일 선택부
+      5. 투약 일정 정리 박스
+      -->
     <!-- 1. 약 이름 입력부 input -->
     <div class="major-c title">
       <div class="title-input mb-4">
@@ -33,7 +33,7 @@
           value="2025-01-01"
           min="2018-01-01"
           max="2100-12-31"
-          v-model="jsonData.start_date"
+          v-model="start_date"
         />
       </div>
       <div class="end-date col-6">
@@ -46,7 +46,7 @@
           value="2025-01-01"
           min="2018-01-01"
           max="2100-12-31"
-          v-model="jsonData.end_date"
+          v-model="end_date"
         />
       </div>
     </div>
@@ -54,37 +54,31 @@
     <!-- 3. 요일 선택부 -->
     <div class="major-c select-day">
       <div class="form-check form-check-inline">
-        <input
-          class="form-check-input"
-          type="checkbox"
-          id="inlineCheckbox1"
-          value="0"
-          @click="setDay(0)"
-        />
-        <label class="form-check-label" for="inlineCheckbox1">월</label>
+        <input class="form-check-input" type="checkbox" id="dayCheckbox0" @click="setDay(0)" />
+        <label class="form-check-label" for="dayCheckbox1">월</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" @click="setDay(1)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox1" @click="setDay(1)" />
         <label class="form-check-label" for="inlineCheckbox2">화</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" @click="setDay(2)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox2" @click="setDay(2)" />
         <label class="form-check-label" for="inlineCheckbox3">수</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @click="setDay(3)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox3" @click="setDay(3)" />
         <label class="form-check-label" for="inlineCheckbox1">목</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox2" @click="setDay(4)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox4" @click="setDay(4)" />
         <label class="form-check-label" for="inlineCheckbox2">금</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" @click="setDay(5)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox5" @click="setDay(5)" />
         <label class="form-check-label" for="inlineCheckbox3">토</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox3" @click="setDay(6)" />
+        <input class="form-check-input" type="checkbox" id="dayCheckbox6" @click="setDay(6)" />
         <label class="form-check-label" for="inlineCheckbox3">일</label>
       </div>
     </div>
@@ -140,39 +134,35 @@
       <button
         type="button"
         class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
-        @click="addSchedule"
+        @click="addJsonData"
       >
         일정에 추가
       </button>
     </div>
     <!-- 7. 투약 일정 -->
     <div class="major-c inject-plans">
-      <form class="inject-form">
+      <div class="inject-form">
         <div class="d-flex justify-content-between">
           <h3 class="col-4">투약 일정</h3>
-          <button class="col-2 btn btn-outline-secondary">삭제</button>
+          <button class="col-2 btn btn-outline-secondary" @click="deleteSelectedSchedules">
+            삭제
+          </button>
         </div>
         <ul class="list-group">
-          <li class="list-group-item">
-            <input class="form-check-input me-1 px-2" type="checkbox" value="" id="checkbox1" />
-            <label class="title-text" for="firstCheckbox">제목</label>
-            <label class="day-text" for="firstCheckbox">요일</label>
-            <label class="time-text" for="firstCheckbox">시각</label>
-          </li>
-          <li class="list-group-item">
-            <input class="form-check-input me-1 px-2" type="checkbox" value="" id="checkbox2" />
-            <label class="title-text" for="firstCheckbox">제목</label>
-            <label class="day-text" for="firstCheckbox">요일</label>
-            <label class="time-text" for="firstCheckbox">시각</label>
-          </li>
-          <li class="list-group-item">
-            <input class="form-check-input me-1 px-2" type="checkbox" value="" id="checkbox3" />
-            <label class="title-text" for="firstCheckbox">제목</label>
-            <label class="day-text" for="firstCheckbox">요일</label>
-            <label class="time-text" for="firstCheckbox">시각</label>
+          <li class="list-group-item" v-for="(data, index) in scheduleDatas" :key="index">
+            <input
+              class="form-check-input me-1 px-2"
+              type="checkbox"
+              :value="index"
+              id="checkbox1"
+              v-model="selectedSchedules"
+            />
+            <label class="title-text" for="firstCheckbox">{{ data[0] }}</label>
+            <label class="day-text" for="firstCheckbox">{{ data[1] }}</label>
+            <label class="time-text" for="firstCheckbox">{{ data[2] }}</label>
           </li>
         </ul>
-      </form>
+      </div>
     </div>
     <!-- Modal footer -->
     <div
@@ -200,94 +190,91 @@
 
 <script setup>
 import { ref, defineProps } from 'vue'
-import { postEvent } from '@/api/modalAlarms/event.js'
+import { postInject } from '@/api/modalAlarms/injection.js'
 import swal from 'sweetalert'
 
-// 약 이름
+// 1 약 이름
 const pill_name = ref('')
 
-// 요일 설정
-const day = ref([0, 0, 0, 0, 0, 0, 0])
+// 2 시작일 / 끝일
+const start_date = ref('')
+const end_date = ref('')
 
-function setDay(param) {
-  day.value[param] = !day.value[param]
-  console.log(day)
+// 3 요일 설정
+const day = ref(['0', '0', '0', '0', '0', '0', '0'])
+
+const setDay = (param) => {
+  if (day.value[param] === '0') {
+    day.value[param] = '1'
+  } else {
+    day.value[param] = '0'
+  }
 }
 
-// 식전, 식후 분별
-const beforeafter = ref()
+// 4 식전, 식후 분별
+const beforeafter = ref() //
 
-// 시각
+// 5. 시각
 const hour = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
 const minute = ref(Array.from({ length: 60 }, (_, i) => i))
 
-const selectedHour = ref(0) // 시
-const selectedMinute = ref(0) // 분
+const selectedHour = ref(25) // 시
+const selectedMinute = ref(25) // 분
 
-// 투약 일정에 추가
-const scheduleDatas = []
+// 6. 투약 일정에 추가
+const scheduleDatas = ref([])
+const jsonDatas = ref([])
 
-function addSchedule() {
-  const scheduleData = ['제목', '요일', '시각']
+const allElementsZero = (arr) => {
+  // 요일 입력받았는지 확인
+  return arr.every((element) => element === '0')
+}
 
-  if (pill_name.value === '') {
-    swal({
-      title: '',
-      text: '제목을 입력해주세요',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-    return
-  }
+function formatTime(hours, minutes) {
+  // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
+  const formattedHours = String(hours).padStart(2, '0')
+  const formattedMinutes = String(minutes).padStart(2, '0')
 
-  if (day.value == [0, 0, 0, 0, 0, 0, 0]) {
-    swal({
-      title: '',
-      text: '요일을 설정해주세요',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-    return
-  }
+  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
+  return `${formattedHours}:${formattedMinutes}:00`
+}
+
+const addSchedule = () => {
+  // 화면상 투약 일정에 출력을 위해 스케줄을 추가하는 함수
+  const scheduleData = ['제목', '', '시각']
 
   scheduleData[0] = pill_name.value
   scheduleData[1] = day.value
-  scheduleData[2] = `${selectedHour.value}:${selectedMinute.value}:00`
+    .reduce((acc, curr, index) => {
+      if (curr) {
+        acc.push(['월', '화', '수', '목', '금', '토', '일'][index])
+      }
+      return acc
+    }, [])
+    .join(', ')
+  scheduleData[2] = formatTime(`${selectedHour.value}`, `${selectedMinute.value}`)
 
-  scheduleDatas.push(scheduleData)
+  scheduleDatas.value.push(scheduleData)
 }
 
-// 모달 닫기
-const props = defineProps(['closeModal'])
+const addJsonData = () => {
+  const jsonData = ref({
+    pillName: pill_name.value, // 1. 약의 이름
+    startDate: start_date, // 2-1. 시작일
+    endDate: end_date, // 2-2. 끝일
+    pillDate: day.value.join(', '), // 3. 요일(1일시 활성화)
+    pillMethod: beforeafter, // 4. 식전 / 식후
+    pillTime: formatTime(`${selectedHour.value}`, `${selectedMinute.value}`) // 5. 시각
+  })
 
-const jsonData = ref({
-  careNo: '123',
-  pillName: '', // 1. 약의 이름
-  startDate: '2024-01-15', // 2-1. 시작일
-  endDate: '2024-01-18', // 2-2. 끝일
-  pillDate: '0000000', // 3. 요일(1일시 활성화)
-  pillMethod: '식전', // 4. 식전 / 식후
-  pillTime: '09:00:00' // 5. 시각
-})
+  console.log(jsonData.value)
 
-function postAlarmdata() {
-  if (jsonData.value.title === '' || jsonData.value.date === '') {
+  if (
+    // 약 이름, 투약 시작 및 끝일자를 입력하지 않은 경우
+    jsonData.value.pillName === '' ||
+    jsonData.value.startDate === '' ||
+    jsonData.value.endDate === ''
+  ) {
     swal({
       title: '',
       text: '제목 혹은 날짜를 입력해주세요',
@@ -304,9 +291,100 @@ function postAlarmdata() {
     })
 
     return 0
+  } else if (allElementsZero(day.value)) {
+    // 요일을 설정하지 않은 경우
+    swal({
+      title: '',
+      text: '요일을 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+    return
+  } else if (beforeafter.value === '') {
+    // 식전 혹은 식후를 설정하지 않은 경우
+    swal({
+      title: '',
+      text: '식전 및 식후 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+
+    return 0
+  } else if (jsonData.value.pillTime === '25:25:00') {
+    // 투약 시각을 설정하지 않은 경우
+    swal({
+      title: '',
+      text: '투약 시각을 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+
+    return 0
+  }
+  jsonDatas.value.push(jsonData.value)
+  addSchedule()
+}
+
+// 7-2 체크된 투약 일정 삭제
+// 선택된 일정을 담는 배열
+const selectedSchedules = ref([])
+
+// 투약 일정 삭제 메소드
+const deleteSelectedSchedules = () => {
+  if (selectedSchedules.value.length === 0) {
+    // 삭제할 일정이 선택되지 않은 경우
+    return
   }
 
-  postEvent(jsonData)
+  // 선택된 일정을 역순으로 정렬하여 삭제하기
+  selectedSchedules.value
+    .sort((a, b) => b - a)
+    .forEach((index) => {
+      scheduleDatas.value.splice(index, 1)
+    })
+
+  // 선택된 일정 비우기
+  selectedSchedules.value = []
+}
+
+// 모달 닫기
+const props = defineProps(['closeModal'])
+
+// 8. 확인버튼 클릭시 post
+const postAlarmdata = () => {
+  console.log(jsonDatas.value)
+  postInject(jsonDatas.value)
+    .then(() => {
+      // API 호출이 성공한 경우에만 모달을 닫습니다.
+      props.closeModal()
+    })
+    .catch((error) => {
+      console.error('API 호출 중 오류 발생:', error)
+    })
 }
 </script>
 
@@ -343,7 +421,6 @@ function postAlarmdata() {
   word-wrap: break-word;
   margin-right: 5%;
 }
-
 .close-btn {
   display: none;
 }

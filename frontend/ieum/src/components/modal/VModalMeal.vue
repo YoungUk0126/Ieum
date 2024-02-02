@@ -10,31 +10,6 @@
         <h3>아침</h3>
       </div>
       <div class="row d-flex align-items-center">
-        <div class="col-3 d-flex flex-column">
-          <div
-            class="btn-group-vertical"
-            role="group"
-            aria-label="Vertical radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio1"
-              autocomplete="off"
-              checked
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio1">오전</label>
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio2"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio2">오후</label>
-          </div>
-        </div>
         <div class="col-8 d-flex">
           <select v-model="selectedNumber" id="numberSelect">
             <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
@@ -55,31 +30,6 @@
         <h3>점심</h3>
       </div>
       <div class="row d-flex align-items-center">
-        <div class="col-3 d-flex flex-column">
-          <div
-            class="btn-group-vertical"
-            role="group"
-            aria-label="Vertical radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio3"
-              autocomplete="off"
-              checked
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio3">오전</label>
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio4"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio4">오후</label>
-          </div>
-        </div>
         <div class="col-8 d-flex">
           <select v-model="selectedNumber3" id="numberSelect">
             <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
@@ -100,31 +50,6 @@
         <h3>저녁</h3>
       </div>
       <div class="row d-flex align-items-center">
-        <div class="col-3 d-flex flex-column">
-          <div
-            class="btn-group-vertical"
-            role="group"
-            aria-label="Vertical radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio5"
-              autocomplete="off"
-              checked
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio5">오전</label>
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="vbtn-radio6"
-              autocomplete="off"
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio6">오후</label>
-          </div>
-        </div>
         <div class="col-8 d-flex">
           <select v-model="selectedNumber5" id="numberSelect">
             <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
@@ -163,24 +88,80 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const props = defineProps(['modalId'])
+import { ref, defineProps } from 'vue'
+import { postInject } from '@/api/modalAlarms/injection.js'
+import swal from 'sweetalert'
 
-const modalId = ref(props.modalId)
-const alarm_type = ref()
-const numbers1 = ref(Array.from({ length: 12 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
+// 오전
+const numbers1 = ref(Array.from({ length: 7 }, (_, i) => i + 5)) // 0부터 23까지의 숫자 배열
 const numbers2 = ref(Array.from({ length: 60 }, (_, i) => i))
-const numbers3 = ref(Array.from({ length: 12 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
+const selectedNumber = ref(25) // 초기값 설정
+const selectedNumber2 = ref(61)
+// 점심
+const numbers3 = ref(Array.from({ length: 7 }, (_, i) => i + 11)) // 0부터 23까지의 숫자 배열
 const numbers4 = ref(Array.from({ length: 60 }, (_, i) => i))
-const numbers5 = ref(Array.from({ length: 12 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
+const selectedNumber3 = ref(25) // 초기값 설정
+const selectedNumber4 = ref(61)
+// 저녁
+const numbers5 = ref(Array.from({ length: 7 }, (_, i) => i + 17)) // 0부터 23까지의 숫자 배열
 const numbers6 = ref(Array.from({ length: 60 }, (_, i) => i))
+const selectedNumber5 = ref(25) // 초기값 설정
+const selectedNumber6 = ref(61)
 
-const selectedNumber = ref(0) // 초기값 설정
-const selectedNumber2 = ref(0)
-const selectedNumber3 = ref(0) // 초기값 설정
-const selectedNumber4 = ref(0)
-const selectedNumber5 = ref(0) // 초기값 설정
-const selectedNumber6 = ref(0)
+const jsonData = ref({
+  mealTime1: '',
+  mealTime2: '',
+  mealTime3: ''
+})
+
+// 모달 닫기
+const props = defineProps(['closeModal'])
+
+function formatTime(hours, minutes) {
+  // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
+  const formattedHours = String(hours).padStart(2, '0')
+  const formattedMinutes = String(minutes).padStart(2, '0')
+
+  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
+  return `${formattedHours}${formattedMinutes}00`
+}
+
+const postAlarmdata = () => {
+  jsonData.value.mealTime1 = formatTime(selectedNumber.value, selectedNumber2.value)
+  jsonData.value.mealTime2 = formatTime(selectedNumber3.value, selectedNumber4.value)
+  jsonData.value.mealTime3 = formatTime(selectedNumber5.value, selectedNumber6.value)
+
+  if (
+    jsonData.value.mealTime1 === '256100' ||
+    jsonData.value.mealTime2 === '256100' ||
+    jsonData.value.mealTime3 === '256100'
+  ) {
+    swal({
+      title: '',
+      text: '시간을 입력해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+    return
+  }
+
+  postInject(jsonData)
+    .then(() => {
+      // API 호출이 성공한 경우에만 모달을 닫습니다.
+      props.closeModal()
+    })
+    .catch((error) => {
+      console.error('API 호출 중 오류 발생:', error)
+    })
+}
 </script>
 
 <style scoped>

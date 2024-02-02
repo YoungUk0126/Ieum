@@ -5,25 +5,25 @@ const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://localhost:5173/api/event'
+const url = 'http://54.180.108.118:8080/api/ani'
 
-function getAllEvent(care_no, success) {
-  local.get(`${url}/list/${care_no}`).then(success).catch(fail)
+function getAllEvent(param, success) {
+  local.get(`${url}/list/${param}`).then(success).catch(fail)
 }
 
-function getOneEvent(event_no, success) {
-  local.get(`${url}/detail/${event_no}`).then(success).catch(fail)
+function getOneEvent(param, success) {
+  local.get(`${url}/detail/${param}`).then(success).catch(fail)
 }
 
 function postEvent(data, success) {
-  form.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function modifyEvent(data, success) {
   form.put(`${url}`, data).then(success).catch(fail)
 }
-function deleteEvent(event_no, success) {
-  local.delete(`${url}/${event_no}`).then(success).catch(fail)
+function deleteEvent(param, success) {
+  local.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
 export { getAllEvent, getOneEvent, postEvent, modifyEvent, deleteEvent }

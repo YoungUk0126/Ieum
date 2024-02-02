@@ -1,29 +1,29 @@
-import { localAxios, localAxiosFormData } from '@/util/http-commons'
+import { localSessionAxios, localSessionAxiosFormData } from '@/util/http-commons'
 import { fail } from '@/api/fail.js'
 
 const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://localhost:5173/api/event'
+const url = 'http://54.180.108.118:8080/api/pill'
 
-function getAllEvent(care_no, success) {
-  local.get(`${url}/list/${care_no}`).then(success).catch(fail)
+function getAllInject(param, success) {
+  local.get(`${url}/${param}`).then(success).catch(fail)
 }
 
-function getOneEvent(event_no, success) {
-  local.get(`${url}/detail/${event_no}`).then(success).catch(fail)
+function getOneInject(param, success) {
+  local.get(`${url}/${param}`).then(success).catch(fail)
 }
 
-function postEvent(data, success) {
-  form.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+function postInject(data, success) {
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-function modifyEvent(data, success) {
+function modifyInject(data, success) {
   form.put(`${url}`, data).then(success).catch(fail)
 }
-function deleteEvent(event_no, success) {
-  local.delete(`${url}/${event_no}`).then(success).catch(fail)
+function deleteInject(param, success) {
+  local.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
-export { getAllEvent, getOneEvent, postEvent, modifyEvent, deleteEvent }
+export { getOneInject, getAllInject, postInject, modifyInject, deleteInject }
