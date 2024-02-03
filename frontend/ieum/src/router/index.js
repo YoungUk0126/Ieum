@@ -62,7 +62,8 @@ const router = createRouter({
       //정보수정페이지
       path: '/careinfo',
       name: 'TheCareInfoModifyView',
-      component: TheCareInfoModifyViewVue
+      component: TheCareInfoModifyViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/carecheck',
@@ -92,6 +93,11 @@ const router = createRouter({
       ]
     },
     {
+      path: '/chat',
+      name: 'TheChatView',
+      component: TheChatViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
+    },{
       path: '/memberInfo',
       name: 'TheMemberInfoView',
       component: TheMemberInfoViewVue,
@@ -133,7 +139,7 @@ router.beforeEach((to, from, next) => {
         VueCookies.remove('refreshToken')
         VueCookies.remove('auth')
 
-        next({ path: '/login', replace: true })
+        next({ path: '/login'})
       })
     } else {
       next()

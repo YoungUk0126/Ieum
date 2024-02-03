@@ -1,5 +1,5 @@
 import swal from 'sweetalert'
-
+import VueCookies from 'vue-cookies'
 const fail = ({ response }) => {
   if (response.status == 500) {
     swal({
@@ -47,6 +47,9 @@ const fail = ({ response }) => {
         }
       }
     }).then(() => {
+      VueCookies.remove('accessToken')
+      VueCookies.remove('refreshToken')
+      VueCookies.remove('auth')
       window.location.href = '/login'
     })
   } else {

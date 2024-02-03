@@ -2,9 +2,12 @@
   <nav class="bg-white shadow-md rounded-md">
     <div class="w-full flex flex-wrap items-center justify-between mx-auto p-4">
       <div class="flex">
-        <a href="http://localhost:5173/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <router-link
+          :to="{ name: 'TheMainViewVue' }"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
           <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
-        </a>
+        </router-link>
         <div
           v-show="!hide"
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
@@ -14,12 +17,11 @@
             class="flex flex-col font-bold p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
           >
             <li>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: 'TheChatView' }"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                aria-current="page"
-                >대화목록</a
-              >
+                >대화목록
+              </router-link>
             </li>
             <li>
               <a
@@ -44,7 +46,7 @@
       </div>
       <div
         v-show="!hide"
-        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
+        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-5"
       >
         <button
           type="button"
@@ -61,12 +63,6 @@
           class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
           id="user-dropdown"
         >
-          <div class="px-4 py-3">
-            <span class="block text-sm text-gray-900 dark:text-white">흑막 할배</span>
-            <span class="block text-sm text-gray-500 truncate dark:text-gray-400"
-              >name@flowbite.com</span
-            >
-          </div>
           <ul class="py-2" aria-labelledby="user-menu-button">
             <li>
               <router-link

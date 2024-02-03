@@ -113,14 +113,15 @@ const loginSubmit = () => {
   }
 
   login(data.value, (response) => {
-    if (response.status == 200) {
+    if (response.data.accessToken !== undefined) {
       // 각 토큰 값 쿠키로 저장
       VueCookies.set('accessToken', response.data.accessToken)
       VueCookies.set('refreshToken', response.data.refreshToken)
       VueCookies.set('grantType', response.data.grantType)
       VueCookies.set('auth', true)
       store.auth = true
-      router.push({ name: 'TheMainViewVue' })
+      //router.push({ name: 'TheMainViewVue' })
+      window.location.href = '/'
     } else {
       swal({
         title: '알림',
