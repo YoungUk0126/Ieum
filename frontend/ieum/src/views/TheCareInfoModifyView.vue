@@ -10,7 +10,7 @@
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">시리얼코드</label>
                 <input type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    v-model="serialNumber.code">
+                    v-model="careInfo.careSerial">
 
 
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">부모님 성함</label>
@@ -59,63 +59,50 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { serialInfoEdit } from '../api/careInfoModify';
-import { userInfoEdit } from '../api/careInfoModify';
+import { profileEdit, userInfoEdit } from '../api/careInfoModify';
 import { getCareInfo } from '../api/careInfoModify';
-import { getSerialNumber } from '../api/careInfoModify';
-import { profileEdit } from '../api/careInfoModify';
+// import { profileEdit } from '../api/careInfoModify';
 import swal from 'sweetalert';
+import router from "@/router";
 
 const careInfo = ref({
-    "careNo": "",
-    "careName": "홍길동",
-    "careGender": "male",
+    "careName": "",
+    "careGender": "",
     "careBirth": "",
     "carePhone": "",
     "careAddr": "",
+    "careSerial": "",
+    "careImage": ""
 })
 
-const serialNumber = ref({
-    "code": ""
-})
+const formData = new FormData()
 
 const checkPhone = ref(true);
 //전화번호 유효 체크 변수.
 
 onMounted(() => {
     beforeCareInfo()
-    beforeSerialNumber()
 })
 //미리 기존 정보를 씌우기 위한 onMounted
 
 const beforeCareInfo = () => {
     getCareInfo(
-        careInfo.value,
         ({ data }) => {
-            careInfo.value = data.data;
-        },
-        () => { }
+            careInfo.value = data.data
+            console.log(data.data);
+            console.log(careInfo.value);
+        }
 
     )
 }
 //미리 기존 피보호자 정보를 불러오는 메서드. 
 
-const beforeSerialNumber = () => {
-    getSerialNumber(
-        serialNumber.value,
-        ({ data }) => {
-            serialNumber.value = data.data;
-        },
-        () => { }
-    )
-}
-//미리 기존 시리얼넘버 정보를 불러오는 메서드.
-
 const updateInfo = () => {
     console.log(checkPhone.value)
     if (checkPhone.value) {
         updateCareInfo()
-        updateSerialNumber()
+        // router.push('/')
+        swal('정보가 변경되었습니다.')
     }
     else {
         swal('전화번호 형식을 다시 확인해주세요.')
@@ -126,46 +113,40 @@ const updateInfo = () => {
 //클릭했을 때, 정보를 보내는 메서드를 실행시키는 메서드.
 
 const updateCareInfo = () => {
+    console.log(careInfo.value)
     userInfoEdit(
         careInfo.value,
         () => {
+            profileEdit(
+                formData,
+                () => {
 
-        },
-        () => {
-
+                }
+            )
         }
     )
 }
+//수정된 유저의 정보를 1차적으로 보냄.
+//거기서 성공적으로 보냈으면, 서버로 데이터와 파일을 동시에 보낼거임.
 //변경된 피보호자 정보를 보내는 메서드.
 
-const updateSerialNumber = () => {
-    serialInfoEdit(
-        serialNumber.value,
-        () => {
-
-        },
-        () => {
-
-        }
-    )
-}
-//변경된 시리얼넘버를 보내는 메서드.
-
-const handleFileUpload = (event) => {
-    const fileInput = event.target;
+const handleFileUpload = () => {
+    // 이미지 정보 가져오기
+    const fileInput = document.getElementById('file_input');
     const file = fileInput.files[0];
 
-    const formData = new FormData();
-    formData.append('profileImage', file);
-    profileEdit(
-        formData,
-        () => {
-            swal('프로필 이미지가 성공적으로 업로드되었습니다.');
-        },
-        () => {
-            swal('프로필 이미지 업로드 중 오류 발생:');
-        }
-    );
+    // careImage이름 넣어주기
+    careInfo.value.careImage = file.name;
+
+    // Blob 사용해서 이미지 파일 만들기
+    const blob = new Blob([file], { type: file.type })
+    const json = JSON.stringify(careInfo.value)
+    //이거 왜..? 애초에 json인데 또 json화시켜..?
+    const formJson = new Blob([json], { type: 'application/json' })
+
+    // formData 활용해서 DTO와 file 보내기 
+    formData.append('data', formJson)
+    formData.append('file', blob, file.name)
 };
 //이미지를 수정하는 메서드.
 

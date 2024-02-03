@@ -1,5 +1,5 @@
 <template>
-    <div class="all mt-40 mb-40 ml-80 mr-80">
+    <div class="all mt-40 mb-40 ml-80 mr-80 ">
         <div id="ID" class="mt-6">
             <label for="ID" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">아이디/ID</label>
             <div class="grid grid-cols-6 gap-4">
@@ -367,12 +367,7 @@ const registerFunc = () => {
 
 
 <style scoped>
-.idIncorrect,
-.nameIncorrect,
-.emailIncorrect,
-.passwordIncorrect,
-.passwordcheckIncorrect,
-.phoneIncorrect {
-    color: red;
+.all {
+    min-width: 1024px !important;
 }
 </style>

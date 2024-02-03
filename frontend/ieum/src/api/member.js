@@ -5,7 +5,7 @@ const local = localAxios()
 
 const localSession = localSessionAxios()
 
-const url = 'http://localhost:8080/api/member'
+const url = 'http://54.180.108.118:8080/api/member'
 
 function register(data, success) {
   local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)

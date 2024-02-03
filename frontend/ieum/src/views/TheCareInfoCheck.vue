@@ -12,7 +12,7 @@
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">시리얼코드</label>
                 <input type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    v-model="serialNumber.code" disabled>
+                    v-model="careInfo.careSerial" disabled>
 
 
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">부모님 성함</label>
@@ -31,13 +31,13 @@
                 <label for="birthday" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">생년월일</label>
                 <input type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    v-model="careInfo.careBirth" @input="checkBirthFunction" disabled>
+                    v-model="careInfo.careBirth" disabled>
 
                 <label for="phoneNumber"
                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">전화번호</label>
                 <input type="text"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    @input="checkPhoneFunction" v-model="careInfo.carePhone" disabled>
+                    v-model="careInfo.carePhone" disabled>
 
                 <label for="address" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">주소</label>
                 <input type="text"
@@ -59,60 +59,35 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getCareInfo } from '../api/careInfoModify';
-import { getSerialNumber } from '../api/careInfoModify';
 import { useRouter } from 'vue-router';
 
 
 const router = useRouter();
 
 const careInfo = ref({
-    "careNo": "1",
     "careName": "",
     "careGender": "",
     "careBirth": "",
     "carePhone": "",
     "careAddr": "",
-})
-
-const serialNumber = ref({
-    "code": ""
+    "careSerial": "",
+    "careImg": ""
 })
 
 onMounted(() => {
     beforeCareInfo()
-    //   beforeSerialNumber()
 })
 //미리 기존 정보를 씌우기 위한 onMounted
 
 const beforeCareInfo = () => {
-    console.log("1 beforeCareInfo")
     getCareInfo(
         ({ data }) => {
-            const all = data.data;
-            careInfo.value.careNo = all.careNo;
-            careInfo.value.careName = all.careName;
-            careInfo.value.careGender = all.careGender;
-            careInfo.value.careBirth = all.careBirth;
-            careInfo.value.carePhone = all.carePhone;
-            careInfo.value.careAddr = all.careAddr;
-            console.log("sdsd")
-        },
-        ({ error }) => { console.log(error) }
-
+            careInfo.value = data.data
+        }
     )
 }
 //미리 기존 피보호자 정보를 불러오는 메서드. 
 
-const beforeSerialNumber = () => {
-    getSerialNumber(
-        careInfo.value.careNo,
-        ({ data }) => {
-            serialNumber.value.code = data.code;
-        },
-        () => { }
-    )
-}
-//미리 기존 시리얼넘버 정보를 불러오는 메서드.
 
 const link = () => {
     router.push('/careinfo');

@@ -5,7 +5,7 @@ const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://localhost:8080/api/message'
+const url = 'http://54.180.108.118:8080/api/message'
 
 function getApi(success) {
   local.get(`${url}`).then(success).catch(fail)
