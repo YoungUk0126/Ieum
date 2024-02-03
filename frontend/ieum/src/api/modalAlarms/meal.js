@@ -12,7 +12,7 @@ function getMeal(param, success) {
 }
 
 function postMeal(data, success) {
-  form.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function modifyMeal(data, success) {

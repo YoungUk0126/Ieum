@@ -2,7 +2,9 @@
   <div class="container mx-auto p-6">
     <!-- 1. 약 이름 입력부 input -->
     <div class="mb-8">
+      <label for="title" class="block mb-2 text-sm font-medium text-gray-700">제목</label>
       <input
+        id="title"
         type="text"
         class="p-2 w-2/5 border rounded"
         placeholder="약의 이름을 입력해주세요"
@@ -13,7 +15,7 @@
     <!-- 2. 시작일/종료일 calendar -->
     <div class="grid grid-cols-2 gap-4 mb-8">
       <div>
-        <label for="start" class="block mb-2 text-sm font-medium text-gray-600">Start date:</label>
+        <label for="start" class="block mb-2 text-sm font-medium text-gray-600">투약 시작일</label>
         <input
           type="date"
           id="start"
@@ -26,7 +28,7 @@
         />
       </div>
       <div>
-        <label for="end" class="block mb-2 text-sm font-medium text-gray-600">End date:</label>
+        <label for="end" class="block mb-2 text-sm font-medium text-gray-600">투약 종료일</label>
         <input
           type="date"
           id="end"
@@ -41,23 +43,25 @@
     </div>
 
     <!-- 3. 요일 선택부 -->
+    <label class="block mb-2 text-sm font-medium text-gray-700">요일</label>
     <div class="flex mb-8 space-x-4">
-      <div v-for="(dayCheckbox, index) in day" :key="index">
+      <div v-for="(dayCheckbox, index) in day" :key="index" id="days">
         <input
           class="form-check-input"
           type="checkbox"
           :id="'dayCheckbox' + index"
           @click="setDay(index)"
         />
-        <label class="form-check-label" :for="'dayCheckbox' + index">
+        <label class="form-check-label ml-1" :for="'dayCheckbox' + index">
           {{ ['월', '화', '수', '목', '금', '토', '일'][index] }}
         </label>
       </div>
     </div>
 
     <!-- 4. 식전/식후 입력부 dropdown -->
+    <label class="block mb-2 text-sm font-medium text-gray-700">식전/식후</label>
     <div class="mb-8">
-      <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-2">
         <input
           type="radio"
           class="btn-check"
@@ -82,12 +86,13 @@
     </div>
 
     <!-- 5. 시각 -->
+    <label class="block mb-2 text-sm font-medium text-gray-700">복용시각</label>
     <div class="flex items-center mb-8 space-x-2">
-      <select v-model="selectedHour" class="border rounded p-2">
+      <select v-model="selectedHour" class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400">
         <option v-for="num in hour" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>시</span>
-      <select v-model="selectedMinute" class="border rounded p-2">
+      <select v-model="selectedMinute" class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400">
         <option v-for="num in minute" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>분</span>
@@ -100,7 +105,7 @@
         class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
         @click="addJsonData"
       >
-        일정에 추가
+        일정 추가
       </button>
     </div>
 
@@ -108,7 +113,7 @@
     <div class="mb-8 p-8 border rounded bg-gray-300 ">
       <div class="flex justify-between mb-4">
         <h3 class="text-lg font-semibold">투약 일정</h3>
-        <button class="btn btn-outline-secondary" @click="deleteSelectedSchedules">
+        <button class="btn btn-outline-secondary px-2 py-1 rounded border border-gray-500 bg-gray-300" @click="deleteSelectedSchedules">
           삭제
         </button>
       </div>
@@ -131,12 +136,13 @@
     <!-- Modal footer -->
     <div class="flex justify-end mt-4 space-x-4">
       <button
-        type="button"
-        class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
-        @click="postAlarmdata"
-      >
-        확인
-      </button>
+          data-modal-hide="default-modal"
+          type="button"
+          class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
+          @click="postAlarmdata"
+        >
+          확인
+        </button>
       <button
         type="button"
         class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
@@ -341,6 +347,23 @@ const postAlarmdata = () => {
 
   postInject(jsonDatas.value, (response) => {
     console.log(response)
+    if (response.data.success === true) {
+      swal({
+      title: '투약 일정 알리미',
+      text: '투약 일정 등록이 완료되었습니다!',
+      icon: 'success',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+      props.closeModal()
+    }
   })
 }
 </script>

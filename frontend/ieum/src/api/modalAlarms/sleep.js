@@ -12,7 +12,7 @@ function getAllSleep(success) {
 }
 
 function postSleep(data, success) {
-  form.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function modifySleep(data, success) {

@@ -77,14 +77,14 @@
             <VModalAnniBody :closeModal="closeModal"></VModalAnniBody>
           </template>
           <template v-else-if="selectedOption === 'medication'">
-            <VModalInjection :modalId="modalId"></VModalInjection>
+            <VModalInjection :closeModal="closeModal"></VModalInjection>
           </template>
           <template v-else-if="selectedOption === 'sleep'">
-            <VModalWakeandSleep :modalId="modalId"></VModalWakeandSleep>
+            <VModalWakeandSleep :closeModal="closeModal"></VModalWakeandSleep>
             <!-- 취침 내용 추가 -->
           </template>
           <template v-else-if="selectedOption === 'meal'">
-            <VModalMeal :modalId="modalId"></VModalMeal>
+            <VModalMeal :closeModal="closeModal"></VModalMeal>
           </template>
         </div>
       </div>
