@@ -1,9 +1,15 @@
 <template>
-  <div>
-    <h1>통화 hi</h1>
+  <div class="body">
+    <TheCallBody></TheCallBody>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheCallBody from '../components/call/TheCallBody.vue'
+</script>
 
-<style scoped></style>
+<style scoped>
+.body {
+  min-height: 70vh;
+}
+</style>
