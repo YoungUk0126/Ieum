@@ -1,5 +1,8 @@
 <template>
-  <div>WebRTC 화면</div>
+  <div>
+    <video ref="localVideo" autoplay></video>
+    <video ref="remoteVideo" autoplay></video>
+  </div>
   <div
     class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
   >
@@ -89,6 +92,55 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useWebRTC } from './useWebRTC'
+
+const localVideo = ref(null)
+const remoteVideo = ref(null)
+const localStream = ref(null)
+const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
+const { localPeerConnection, remotePeerConnection } = useWebRTC(config)
+
+onMounted(() => {
+  navigator.mediaDevices
+    .getUserMedia({ video: true, audio: true })
+    .then((stream) => {
+      localStream.value = stream
+      localVideo.value.srcObject = stream
+
+      stream.getTracks().forEach((track) => localPeerConnection.addTrack(track, stream))
+
+      return localPeerConnection.createOffer()
+    })
+    .then((offer) => localPeerConnection.setLocalDescription(offer))
+    .then(() => remotePeerConnection.setRemoteDescription(localPeerConnection.localDescription))
+    .then(() => remotePeerConnection.createAnswer())
+    .then((answer) => remotePeerConnection.setLocalDescription(answer))
+    .then(() => localPeerConnection.setRemoteDescription(remotePeerConnection.localDescription))
+    .catch((error) => console.error('Error setting up localPeerConnection:', error))
+
+  remotePeerConnection.ontrack = (event) => {
+    remoteVideo.value.srcObject = event.streams[0]
+  }
+
+  localPeerConnection.onicecandidate = (event) => {
+    if (event.candidate) {
+      remotePeerConnection.addIceCandidate(event.candidate)
+    }
+  }
+
+  remotePeerConnection.onicecandidate = (event) => {
+    if (event.candidate) {
+      localPeerConnection.addIceCandidate(event.candidate)
+    }
+  }
+
+  window.onunload = () => {
+    localPeerConnection.close()
+    remotePeerConnection.close()
+  }
+})
+</script>
 
 <style scoped></style>
