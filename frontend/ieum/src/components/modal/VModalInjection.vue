@@ -1,185 +1,145 @@
 <template>
-  <div class="content-container">
-    <!-- 총 5개의 부분으로 분리
-        * 대분류 div 태그에는 major-c 태그 부여
-      1. 제목 입력부
-      2. 시작일/종료일 calendar
-      3. 시작/종료일 캘린더 설정
-      4. 요일 선택부
-      5. 투약 일정 정리 박스
-      -->
+  <div class="container mx-auto p-6">
     <!-- 1. 약 이름 입력부 input -->
-    <div class="major-c title">
-      <div class="title-input mb-4">
-        <input
-          type="text"
-          class="form-control"
-          placeholder="약의 이름을 입력해주세요"
-          aria-label="Username"
-          aria-describedby="basic-addon1"
-          v-model="pill_name"
-        />
-      </div>
+    <div class="mb-8">
+      <input
+        type="text"
+        class="p-2 w-2/5 border rounded"
+        placeholder="약의 이름을 입력해주세요"
+        v-model="pill_name"
+      />
     </div>
-    <!-- 2. 시작일/종료일 calendar -->
-    <div class="major-c start-end-calendar-date row">
-      <div class="start-date col-6">
-        <label for="start">Start date:</label>
 
+    <!-- 2. 시작일/종료일 calendar -->
+    <div class="grid grid-cols-2 gap-4 mb-8">
+      <div>
+        <label for="start" class="block mb-2 text-sm font-medium text-gray-600">Start date:</label>
         <input
           type="date"
           id="start"
-          name="trip-start"
+          name="start"
           value="2025-01-01"
           min="2018-01-01"
           max="2100-12-31"
           v-model="start_date"
+          class="w-full p-2 border rounded"
         />
       </div>
-      <div class="end-date col-6">
-        <label for="end">end date:</label>
-
+      <div>
+        <label for="end" class="block mb-2 text-sm font-medium text-gray-600">End date:</label>
         <input
           type="date"
           id="end"
-          name="trip-start"
+          name="end"
           value="2025-01-01"
           min="2018-01-01"
           max="2100-12-31"
           v-model="end_date"
+          class="w-full p-2 border rounded"
         />
       </div>
     </div>
 
     <!-- 3. 요일 선택부 -->
-    <div class="major-c select-day">
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox0" @click="setDay(0)" />
-        <label class="form-check-label" for="dayCheckbox1">월</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox1" @click="setDay(1)" />
-        <label class="form-check-label" for="inlineCheckbox2">화</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox2" @click="setDay(2)" />
-        <label class="form-check-label" for="inlineCheckbox3">수</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox3" @click="setDay(3)" />
-        <label class="form-check-label" for="inlineCheckbox1">목</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox4" @click="setDay(4)" />
-        <label class="form-check-label" for="inlineCheckbox2">금</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox5" @click="setDay(5)" />
-        <label class="form-check-label" for="inlineCheckbox3">토</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="dayCheckbox6" @click="setDay(6)" />
-        <label class="form-check-label" for="inlineCheckbox3">일</label>
+    <div class="flex mb-8 space-x-4">
+      <div v-for="(dayCheckbox, index) in day" :key="index">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          :id="'dayCheckbox' + index"
+          @click="setDay(index)"
+        />
+        <label class="form-check-label" :for="'dayCheckbox' + index">
+          {{ ['월', '화', '수', '목', '금', '토', '일'][index] }}
+        </label>
       </div>
     </div>
+
     <!-- 4. 식전/식후 입력부 dropdown -->
-    <div class="major-c time-input">
-      <div class="row d-flex align-items-center">
-        <div class="col-3 d-flex flex-column">
-          <div
-            class="btn-group-vertical"
-            role="group"
-            aria-label="Vertical radio toggle button group"
-          >
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="beforemeal"
-              autocomplete="off"
-              value="식전"
-              v-model="beforeafter"
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio1">식전</label>
-            <input
-              type="radio"
-              class="btn-check"
-              name="vbtn-radio"
-              id="aftermeal"
-              autocomplete="off"
-              value="식후"
-              v-model="beforeafter"
-            />
-            <label class="btn btn-outline-secondary" for="vbtn-radio2">식후</label>
-          </div>
-        </div>
+    <div class="mb-8">
+      <div class="flex items-center space-x-4">
+        <input
+          type="radio"
+          class="btn-check"
+          name="vbtn-radio"
+          id="beforemeal"
+          autocomplete="off"
+          value="식전"
+          v-model="beforeafter"
+        />
+        <label class="btn btn-outline-secondary" for="beforemeal">식전</label>
+        <input
+          type="radio"
+          class="btn-check"
+          name="vbtn-radio"
+          id="aftermeal"
+          autocomplete="off"
+          value="식후"
+          v-model="beforeafter"
+        />
+        <label class="btn btn-outline-secondary" for="aftermeal">식후</label>
       </div>
     </div>
+
     <!-- 5. 시각 -->
-    <div class="col-8 d-flex">
-      <select v-model="selectedHour" id="numberSelect">
-        <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
+    <div class="flex items-center mb-8 space-x-2">
+      <select v-model="selectedHour" class="border rounded p-2">
         <option v-for="num in hour" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>시</span>
-      <select v-model="selectedMinute" id="numberSelect2" class="minute-select">
-        <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
+      <select v-model="selectedMinute" class="border rounded p-2">
         <option v-for="num in minute" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>분</span>
     </div>
 
     <!-- 6. 투약 일정에 추가 -->
-    <div class="text-right">
+    <div class="text-right mb-8">
       <button
         type="button"
-        class="text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+        class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
         @click="addJsonData"
       >
         일정에 추가
       </button>
     </div>
+
     <!-- 7. 투약 일정 -->
-    <div class="major-c inject-plans">
-      <div class="inject-form">
-        <div class="d-flex justify-content-between">
-          <h3 class="col-4">투약 일정</h3>
-          <button class="col-2 btn btn-outline-secondary" @click="deleteSelectedSchedules">
-            삭제
-          </button>
-        </div>
-        <ul class="list-group">
-          <li class="list-group-item" v-for="(data, index) in scheduleDatas" :key="index">
-            <input
-              class="form-check-input me-1 px-2"
-              type="checkbox"
-              :value="index"
-              id="checkbox1"
-              v-model="selectedSchedules"
-            />
-            <label class="title-text" for="firstCheckbox">{{ data[0] }}</label>
-            <label class="day-text" for="firstCheckbox">{{ data[1] }}</label>
-            <label class="time-text" for="firstCheckbox">{{ data[2] }}</label>
-          </li>
-        </ul>
+    <div class="mb-8 p-8 border rounded bg-gray-300 ">
+      <div class="flex justify-between mb-4">
+        <h3 class="text-lg font-semibold">투약 일정</h3>
+        <button class="btn btn-outline-secondary" @click="deleteSelectedSchedules">
+          삭제
+        </button>
       </div>
+      <ul class="list-group">
+        <li class="list-group-item" v-for="(data, index) in scheduleDatas" :key="index">
+          <input
+            class="form-check-input me-1 px-2"
+            type="checkbox"
+            :value="index"
+            :id="'checkbox' + index"
+            v-model="selectedSchedules"
+          />
+          <label class="title-text pl-2 " :for="'checkbox' + index">{{ data[0] }} /</label>
+          <label class="day-text pl-2" :for="'checkbox' + index">{{ data[1] }} /</label>
+          <label class="time-text pl-2" :for="'checkbox' + index">{{ data[2] }}</label>
+        </li>
+      </ul>
     </div>
+
     <!-- Modal footer -->
-    <div
-      class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
-    >
+    <div class="flex justify-end mt-4 space-x-4">
       <button
-        data-modal-hide="default-modal"
         type="button"
-        class="text-white bg-blue-700 hover:bg-blue-800"
-        @click="[postAlarmdata(), props.closeModal()]"
+        class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
+        @click="postAlarmdata"
       >
         확인
       </button>
       <button
-        data-modal-hide="default-modal"
         type="button"
-        class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
         @click="props.closeModal"
       >
         취소
@@ -260,11 +220,12 @@ const addSchedule = () => {
 const addJsonData = () => {
   const jsonData = ref({
     pillName: pill_name.value, // 1. 약의 이름
-    startDate: start_date, // 2-1. 시작일
-    endDate: end_date, // 2-2. 끝일
-    pillDate: day.value.join(', '), // 3. 요일(1일시 활성화)
+    pillStartDate: start_date, // 2-1. 시작일
+    pillEndDate: end_date, // 2-2. 끝일
+    pillDate: day.value.join(''), // 3. 요일(1일시 활성화)
     pillMethod: beforeafter, // 4. 식전 / 식후
-    pillTime: formatTime(`${selectedHour.value}`, `${selectedMinute.value}`) // 5. 시각
+    pillTimes: [
+      {pillTime:formatTime(`${selectedHour.value}`, `${selectedMinute.value}`)}] // 5. 시각
   })
 
   console.log(jsonData.value)
@@ -345,7 +306,7 @@ const addJsonData = () => {
 
     return 0
   }
-  jsonDatas.value.push(jsonData.value)
+  jsonDatas.value = jsonData.value
   addSchedule()
 }
 
@@ -377,87 +338,13 @@ const props = defineProps(['closeModal'])
 // 8. 확인버튼 클릭시 post
 const postAlarmdata = () => {
   console.log(jsonDatas.value)
-  postInject(jsonDatas.value)
-    .then(() => {
-      // API 호출이 성공한 경우에만 모달을 닫습니다.
-      props.closeModal()
-    })
-    .catch((error) => {
-      console.error('API 호출 중 오류 발생:', error)
-    })
+
+  postInject(jsonDatas.value, (response) => {
+    console.log(response)
+  })
 }
 </script>
 
 <style scoped>
-.btn {
-  border: 1px black solid;
-}
-
-.major-c {
-  margin: 3%;
-}
-
-.modal-dialog {
-  width: 40%;
-}
-.alarm-btn,
-.register-button {
-  padding-top: 6px;
-  padding-bottom: 5.11px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background: #33a38f;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px #1de4c1 solid;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
-  color: white;
-  font-size: 16px;
-  font-family: Work Sans;
-  font-weight: 700;
-  line-height: 24px;
-  word-wrap: break-word;
-  margin-right: 5%;
-}
-.close-btn {
-  display: none;
-}
-
-.title-input {
-  width: 60%;
-}
-.register-button.font {
-  color: #f5f5f5;
-  font-size: 25px;
-  font-family: Inter;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
-.calendar-box {
-  width: 60%;
-  height: 100%;
-  margin-left: 3%;
-  padding: 0;
-  background: white;
-  border-radius: 3px;
-  border: 1px rgba(0, 0, 0, 0.1) solid;
-}
-
-.inject-form {
-  background-color: hsla(0, 0%, 83%, 1);
-  padding: 5%;
-}
-
-.minute-select {
-  margin-left: 2%;
-}
-
-.title-text,
-.day-text,
-.time-text {
-  margin-right: 10px; /* 제목 라벨 오른쪽에 10px 마진 부여 */
-}
+/* Custom styling specific to this component if needed */
 </style>

@@ -1,20 +1,17 @@
 <template>
   <div class="content-container">
-    <div class="row">
-      <div class="title-input mb-4">
+    <div class="p-4 flex flex-col items-center space-y-4">
+      <div class="w-full align-items-center ">
         <input
           type="text"
-          class="form-control"
+          class="p-2 m-3 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
           placeholder="제목을 입력해주세요"
-          aria-label="Username"
-          aria-describedby="basic-addon1"
           v-model="jsonData.eventName"
         />
       </div>
-      <div class="calendar row mb-4">
-        <div class="start-date col-6">
-          <label for="start">날짜 : </label>
-
+      <div class="w-full flex space-x-4">
+        <div class=" m-3 w-1/4">
+          <label for="start" class="block text-sm font-medium text-gray-700">날짜 :</label>
           <input
             type="date"
             id="start"
@@ -22,41 +19,39 @@
             value="2025-01-01"
             min="2018-01-01"
             max="2100-12-31"
+            class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
             v-model="jsonData.eventDate"
           />
         </div>
-
-        <div class="checkbox-box col-4">
+        <div class="m-3 mt-8  w-1/4 flex items-center">
           <input
             type="checkbox"
-            class="btn btn-check"
+            class="form-checkbox h-5 w-5 text-blue-600"
             id="btncheck1"
             autocomplete="off"
             v-model="jsonData.repeat"
           />
-          <label class="btn btn-outline-secondary" for="btncheck1">매년 반복</label>
+          <label for="btncheck1" class="ml-2 text-sm text-gray-700">매년 반복</label>
         </div>
+      </div>
 
-        <!-- Modal footer -->
-        <div
-          class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
+      <!-- Modal footer -->
+      <div class="flex ml-auto items-center mt-4 space-x-4">
+        <button
+          data-modal-hide="default-modal"
+          type="button"
+          class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
+          @click="postAlarmdata"
         >
-          <button
-            data-modal-hide="default-modal"
-            type="button"
-            class="text-white bg-blue-700 hover:bg-blue-800"
-            @click="[postAlarmdata(), props.closeModal()]"
-          >
-            확인
-          </button>
-          <button
-            type="button"
-            class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-            @click="props.closeModal"
-          >
-            취소
-          </button>
-        </div>
+          확인
+        </button>
+        <button
+          type="button"
+          class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
+          @click="props.closeModal"
+        >
+          취소
+        </button>
       </div>
     </div>
   </div>
@@ -77,7 +72,7 @@ const jsonData = ref({
 function postAlarmdata() {
   // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
 
-  if (jsonData.value.title === '' || jsonData.value.date === '') {
+  if (jsonData.value.eventName === '' || jsonData.value.eventDate === '') {
     swal({
       title: '',
       text: '제목 혹은 날짜를 입력해주세요',
@@ -100,62 +95,10 @@ function postAlarmdata() {
   postEvent(jsonData.value, (response) => {
     console.log(response)
   })
-}
+}   
 </script>
 
 <style scoped>
-.btn {
-  border: 1px black solid;
-}
-.modal-dialog {
-  width: 40%;
-}
-.alarm-btn,
-.register-button {
-  padding-top: 6px;
-  padding-bottom: 5.11px;
-  padding-left: 20px;
-  padding-right: 20px;
-  background: #33a38f;
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px #1de4c1 solid;
-  justify-content: center;
-  align-items: center;
-  display: inline-flex;
-  color: white;
-  font-size: 16px;
-  font-family: Work Sans;
-  font-weight: 700;
-  line-height: 24px;
-  word-wrap: break-word;
-  margin-right: 5%;
-}
-
-.close-btn {
-  display: none;
-}
-
-.title-input {
-  width: 60%;
-}
-.register-button.font {
-  color: #f5f5f5;
-  font-size: 25px;
-  font-family: Inter;
-  font-weight: 700;
-  word-wrap: break-word;
-}
-
-.calendar-box {
-  width: 60%;
-  height: 100%;
-  margin-left: 3%;
-  padding: 0;
-  background: white;
-  border-radius: 3px;
-  border: 1px rgba(0, 0, 0, 0.1) solid;
-}
 </style>
 
 --------------------------------------------------
