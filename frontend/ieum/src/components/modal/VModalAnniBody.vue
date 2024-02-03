@@ -1,104 +1,99 @@
 <template>
   <div class="content-container">
-    <div class="p-4 flex flex-col items-center space-y-4">
-      <div class="w-full align-items-center ">
+    <div class="row">
+      <div class="title-input mb-4">
         <input
           type="text"
-          class="p-2 m-3 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+          class="form-control"
           placeholder="제목을 입력해주세요"
-          v-model="jsonData.eventName"
+          aria-label="Username"
+          aria-describedby="basic-addon1"
         />
       </div>
-      <div class="w-full flex space-x-4">
-        <div class=" m-3 w-1/4">
-          <label for="start" class="block text-sm font-medium text-gray-700">날짜 :</label>
-          <input
-            type="date"
-            id="start"
-            name="trip-start"
-            value="2025-01-01"
-            min="2018-01-01"
-            max="2100-12-31"
-            class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-            v-model="jsonData.eventDate"
-          />
+      <div class="calendar row mb-4">
+        <div class="calendar-box col-6">
+          <img src="@/assets/images/달력버튼.png" />
         </div>
-        <div class="m-3 mt-8  w-1/4 flex items-center">
-          <input
-            type="checkbox"
-            class="form-checkbox h-5 w-5 text-blue-600"
-            id="btncheck1"
-            autocomplete="off"
-            v-model="jsonData.repeat"
-          />
-          <label for="btncheck1" class="ml-2 text-sm text-gray-700">매년 반복</label>
+        <div class="checkbox-box col-4">
+          <input type="checkbox" class="btn btn-check" id="btncheck1" autocomplete="off" />
+          <label class="btn btn-outline-secondary" for="btncheck1">매년 반복</label>
+          <div>기념일</div>
+          <component :is="currentModalComponent" />
         </div>
-      </div>
-
-      <!-- Modal footer -->
-      <div class="flex ml-auto items-center mt-4 space-x-4">
-        <button
-          data-modal-hide="default-modal"
-          type="button"
-          class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
-          @click="postAlarmdata"
-        >
-          확인
-        </button>
-        <button
-          type="button"
-          class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-          @click="props.closeModal"
-        >
-          취소
-        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
-import { postEvent } from '@/api/modalAlarms/event.js'
-import swal from 'sweetalert'
+import { ref } from 'vue'
+// import VModalAnniBody from './VModalAnniBody.vue'
+// import VModalInjection from './VModalInjection.vue'
+// import VModalMeal from './VModalMeal.vue'
+// import VModalWakeandSleep from './VModalWakeandSleep.vue'
+const props = defineProps(['modalId'])
 
-const props = defineProps(['closeModal'])
+const modalId = ref(props.modalId)
+console.log(modalId.value)
+const currentModalComponent = ref('VModalAnniBody') // 초기값은 VModalAnniBody
 
-const jsonData = ref({
-  eventName: '',
-  eventDate: ''
-})
-
-function postAlarmdata() {
-  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
-
-  if (jsonData.value.eventName === '' || jsonData.value.eventDate === '') {
-    swal({
-      title: '',
-      text: '제목 혹은 날짜를 입력해주세요',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-
-    return 0
-  }
-
-  console.log(jsonData.value)
-  postEvent(jsonData.value, (response) => {
-    console.log(response)
-  })
-}   
+const changeModalBody = (componentName) => {
+  currentModalComponent.value = componentName
+  console.log(currentModalComponent)
+}
 </script>
 
 <style scoped>
-</style>
+.btn {
+  border: 1px black solid;
+}
+.modal-dialog {
+  width: 40%;
+}
+.alarm-btn,
+.register-button {
+  padding-top: 6px;
+  padding-bottom: 5.11px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: #33a38f;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px #1de4c1 solid;
+  justify-content: center;
+  align-items: center;
+  display: inline-flex;
+  color: white;
+  font-size: 16px;
+  font-family: Work Sans;
+  font-weight: 700;
+  line-height: 24px;
+  word-wrap: break-word;
+  margin-right: 5%;
+}
 
---------------------------------------------------
+.close-btn {
+  display: none;
+}
+
+.title-input {
+  width: 60%;
+}
+.register-button.font {
+  color: #f5f5f5;
+  font-size: 25px;
+  font-family: Inter;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.calendar-box {
+  width: 60%;
+  height: 100%;
+  margin-left: 3%;
+  padding: 0;
+  background: white;
+  border-radius: 3px;
+  border: 1px rgba(0, 0, 0, 0.1) solid;
+}
+</style>

@@ -19,15 +19,16 @@
             <input
               type="radio"
               class="btn-check"
-              name="vbtn-radio-wake"
-              id="vbtn-radio"
+              name="vbtn-radio"
+              id="vbtn-radio1"
               autocomplete="off"
+              checked
             />
-            <label class="btn btn-outline-secondary" for="vbtn-radio">오전</label>
+            <label class="btn btn-outline-secondary" for="vbtn-radio1">오전</label>
             <input
               type="radio"
               class="btn-check"
-              name="vbtn-radio-wake"
+              name="vbtn-radio"
               id="vbtn-radio2"
               autocomplete="off"
             />
@@ -63,7 +64,7 @@
             <input
               type="radio"
               class="btn-check"
-              name="vbtn-radio-sleep"
+              name="vbtn-radio"
               id="vbtn-radio3"
               autocomplete="off"
               checked
@@ -72,7 +73,7 @@
             <input
               type="radio"
               class="btn-check"
-              name="vbtn-radio-sleep"
+              name="vbtn-radio"
               id="vbtn-radio4"
               autocomplete="off"
             />
@@ -93,92 +94,24 @@
         </div>
       </div>
     </div>
-    <!-- Modal footer -->
-    <div
-      class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600"
-    >
-      <button
-        data-modal-hide="default-modal"
-        type="button"
-        class="text-white bg-blue-700 hover:bg-blue-800"
-        @click="postAlarmdata"
-      >
-        확인
-      </button>
-      <button
-        data-modal-hide="default-modal"
-        type="button"
-        class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-      >
-        취소
-      </button>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
-import { postSleep } from '@/api/modalAlarms/sleep.js'
-import swal from 'sweetalert'
+import { ref } from 'vue'
+const props = defineProps(['modalId'])
 
+const modalId = ref(props.modalId)
+const alarm_type = ref()
 const numbers1 = ref(Array.from({ length: 12 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
 const numbers2 = ref(Array.from({ length: 60 }, (_, i) => i))
 const numbers3 = ref(Array.from({ length: 12 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
 const numbers4 = ref(Array.from({ length: 60 }, (_, i) => i))
 
-const selectedNumber = ref(25) // 초기값 설정
-const selectedNumber2 = ref(61)
-const selectedNumber3 = ref(25) // 초기값 설정
-const selectedNumber4 = ref(61)
-
-// 모달 닫기
-const props = defineProps(['closeModal'])
-
-const jsonData = ref({
-  startTime: '',
-  endTime: ''
-})
-
-function formatTime(hours, minutes) {
-  // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
-  const formattedHours = String(hours).padStart(2, '0')
-  const formattedMinutes = String(minutes).padStart(2, '0')
-
-  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
-  return `${formattedHours}${formattedMinutes}00`
-}
-
-const postAlarmdata = () => {
-  jsonData.value.startTime = formatTime(selectedNumber.value, selectedNumber2.value)
-  jsonData.value.endTime = formatTime(selectedNumber3.value, selectedNumber4.value)
-
-  if (jsonData.value.startTime === '25:61:00' || jsonData.value.endTime === '25:61:00') {
-    swal({
-      title: '',
-      text: '시간을 입력해주세요',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-    return
-  }
-
-  postSleep(jsonData.value)
-    .then(() => {
-      // API 호출이 성공한 경우에만 모달을 닫습니다.
-      props.closeModal()
-    })
-    .catch((error) => {
-      console.error('API 호출 중 오류 발생:', error)
-    })
-}
+const selectedNumber = ref(0) // 초기값 설정
+const selectedNumber2 = ref(0)
+const selectedNumber3 = ref(0) // 초기값 설정
+const selectedNumber4 = ref(0)
 </script>
 
 <style scoped>
