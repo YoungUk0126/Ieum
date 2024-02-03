@@ -1,5 +1,5 @@
 import swal from 'sweetalert'
-
+import VueCookies from 'vue-cookies'
 const fail = ({ response }) => {
   if (response.status == 500) {
     swal({
@@ -46,10 +46,13 @@ const fail = ({ response }) => {
           closeModal: true
         }
       }
-    }).then(()=>{
-      window.location.href="/login"
+    }).then(() => {
+      VueCookies.remove('accessToken')
+      VueCookies.remove('refreshToken')
+      VueCookies.remove('auth')
+      window.location.href = '/login'
     })
-  }  else {
+  } else {
     swal({
       title: '버그',
       text: '뭔 오류일까요..' + response.status,
@@ -66,6 +69,5 @@ const fail = ({ response }) => {
   }
   return false
 }
-
 
 export { fail }

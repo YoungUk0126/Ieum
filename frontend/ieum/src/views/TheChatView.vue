@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <h1>전체 대화 목록</h1>
+  <div class="w-2/3 mx-auto">
+    <TheChatBody></TheChatBody>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import TheChatBody from '../components/chat/TheChatBody.vue'
+</script>
 
 <style scoped></style>

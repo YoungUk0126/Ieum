@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
 import swal from 'sweetalert'
 
@@ -12,6 +12,7 @@ import TheLoginViewVue from '@/views/TheLoginView.vue'
 import TheCareInfoModifyViewVue from '@/views/TheCareInfoModifyView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
+import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
 import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
 
 const router = createRouter({
@@ -61,7 +62,8 @@ const router = createRouter({
       //정보수정페이지
       path: '/careinfo',
       name: 'TheCareInfoModifyView',
-      component: TheCareInfoModifyViewVue
+      component: TheCareInfoModifyViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/carecheck',
@@ -89,6 +91,17 @@ const router = createRouter({
           component: () => import('@/components/findInfo/TheEndInfo.vue')
         }
       ]
+    },
+    {
+      path: '/chat',
+      name: 'TheChatView',
+      component: TheChatViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
+    },{
+      path: '/memberInfo',
+      name: 'TheMemberInfoView',
+      component: TheMemberInfoViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/404',
@@ -121,8 +134,13 @@ router.beforeEach((to, from, next) => {
             closeModal: true
           }
         }
+      }).then(() => {
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        VueCookies.remove('auth')
+
+        next({ path: '/login'})
       })
-      next({ path: '/login' })
     } else {
       next()
     }

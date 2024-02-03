@@ -84,8 +84,11 @@ import { login } from '../../api/member.js'
 import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
 import swal from 'sweetalert'
+import { useCounterStore } from '@/stores/counter'
 
 const router = useRouter()
+
+const store = useCounterStore()
 
 const data = ref({
   memberId: '',
@@ -110,13 +113,15 @@ const loginSubmit = () => {
   }
 
   login(data.value, (response) => {
-    if (response.status == 200) {
+    if (response.data.accessToken !== undefined) {
       // 각 토큰 값 쿠키로 저장
       VueCookies.set('accessToken', response.data.accessToken)
       VueCookies.set('refreshToken', response.data.refreshToken)
       VueCookies.set('grantType', response.data.grantType)
       VueCookies.set('auth', true)
-      router.push({ name: 'TheMainViewVue' })
+      store.auth = true
+      //router.push({ name: 'TheMainViewVue' })
+      window.location.href = '/'
     } else {
       swal({
         title: '알림',
