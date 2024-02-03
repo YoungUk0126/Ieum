@@ -1,6 +1,5 @@
 import { localAxios, localSessionAxios } from '@/util/http-commons'
 import { fail } from './fail.js'
-
 const local = localAxios()
 
 const localSession = localSessionAxios()
@@ -27,11 +26,11 @@ function checkMember(data, success) {
 }
 
 function editPassword(data, success) {
-  local.post(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
+  local.put(`${url}/password`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 // refresh 토큰 과정 필요
-function modifyApi(data, success) {
+function modify(data, success) {
   localSession.put(`${url}`, JSON.stringify(data)).then(success).catch(fail)
 }
 
@@ -39,4 +38,8 @@ function removeApi(param, success) {
   localSession.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
-export { register, login, modifyApi, removeApi, sendAuth, checkMember, verify, editPassword }
+function getInfo(success) {
+  localSession.get(`${url}`).then(success).catch(fail)
+}
+
+export { register, login, modify, removeApi, sendAuth, checkMember, verify, editPassword, getInfo }

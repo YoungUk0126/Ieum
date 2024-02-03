@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
 import swal from 'sweetalert'
 
@@ -12,6 +12,7 @@ import TheLoginViewVue from '@/views/TheLoginView.vue'
 import TheCareInfoModifyViewVue from '@/views/TheCareInfoModifyView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
+import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
 import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
 
 const router = createRouter({
@@ -91,6 +92,12 @@ const router = createRouter({
       ]
     },
     {
+      path: '/memberInfo',
+      name: 'TheMemberInfoView',
+      component: TheMemberInfoViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
+    },
+    {
       path: '/404',
       name: 'notFound',
       component: NotFound
@@ -121,8 +128,13 @@ router.beforeEach((to, from, next) => {
             closeModal: true
           }
         }
+      }).then(() => {
+        VueCookies.remove('accessToken')
+        VueCookies.remove('refreshToken')
+        VueCookies.remove('auth')
+
+        next({ path: '/login', replace: true })
       })
-      next({ path: '/login' })
     } else {
       next()
     }

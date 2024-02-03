@@ -6,6 +6,7 @@
           <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
         </a>
         <div
+          v-show="!hide"
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-user"
         >
@@ -41,7 +42,10 @@
           </ul>
         </div>
       </div>
-      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <div
+        v-show="!hide"
+        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse"
+      >
         <button
           type="button"
           class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -65,18 +69,20 @@
           </div>
           <ul class="py-2" aria-labelledby="user-menu-button">
             <li>
-              <a
-                href="#"
+              <router-link
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >내 정보</a
+                :to="{ name: 'TheMemberInfoView' }"
               >
+                내정보
+              </router-link>
             </li>
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >로그아웃</a
+              <button
+                class="block w-full px-4 text-start py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                @click="logout"
               >
+                로그아웃
+              </button>
             </li>
           </ul>
         </div>
@@ -110,7 +116,60 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from 'vue'
 import VModal from '@/components/modal/VModal.vue'
+import VueCookies from 'vue-cookies'
+import { useRouter } from 'vue-router'
+import swal from 'sweetalert'
+import { useCounterStore } from '@/stores/counter'
+
+const router = useRouter()
+
+const store = useCounterStore()
+
+const hide = ref(!store.auth)
+
+onMounted(() => {
+  if (VueCookies.get('auth')) {
+    hide.value = false
+    store.auth = true
+  }
+})
+
+watch(
+  () => store.auth,
+  () => {
+    if (VueCookies.get('auth')) {
+      hide.value = false
+    } else {
+      hide.value = true
+    }
+  },
+  { deep: true }
+)
+
+const logout = () => {
+  swal({
+    title: '로그아웃',
+    text: '정상적으로 로그아웃 됐습니다.',
+    icon: 'success',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    VueCookies.remove('accessToken')
+    VueCookies.remove('refreshToken')
+    VueCookies.remove('auth')
+    store.auth = false
+    hide.value = true
+    router.push({ path: '/login' })
+  })
+}
 </script>
 
 <style scoped>

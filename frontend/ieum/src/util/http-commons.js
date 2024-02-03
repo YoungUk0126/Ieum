@@ -37,7 +37,6 @@ function localSessionAxiosFormData() {
   return instance
 }
 
-
 function localSessionAxios() {
   const token = `${VueCookies.get('grantType')} ${VueCookies.get('accessToken')}`
 
@@ -50,38 +49,40 @@ function localSessionAxios() {
   })
 
   // instance에 response intercepter 추가
-  instance.interceptors.response.use( 
-    // 2xx 의 요청이 올때 처리  
-      (response)=>{
-    
+  instance.interceptors.response.use(
+    // 2xx 의 요청이 올때 처리
+    (response) => {
       // 응답 데이터가 있는 작업 수행
-      return response;
-    }, 
+      return response
+    },
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거함
-    async (error)=>{
+    async (error) => {
       // response 해체
-      const {config, response : {status}} = error;
-  
+      const {
+        config,
+        response: { status }
+      } = error
+
       // 토큰이 만료된 요청일 경우
-      if(status === 403){
-          const originRequest = config;
+      if (status === 403) {
+        const originRequest = config
 
-          await refreshAccessToken()
+        await refreshAccessToken()
 
-          // 새로운 토큰으로 이전 요청을 복제하여 다시 시도
-          const newToken = `${VueCookies.get('grantType')} ${VueCookies.get('accessToken')}`;
-          originRequest.headers.Authorization = newToken;
+        // 새로운 토큰으로 이전 요청을 복제하여 다시 시도
+        const newToken = `${VueCookies.get('grantType')} ${VueCookies.get('accessToken')}`
+        originRequest.headers.Authorization = newToken
 
-          return axios(originRequest)
+        return axios(originRequest)
       }
-    
+
       // 요청을 수행하기전 config 수행 전에 error
-      return Promise.reject(error);
-    })
+      return Promise.reject(error)
+    }
+  )
 
   return instance
 }
-
 
 function localRefreshAxios() {
   const token = `${VueCookies.get('grantType')} ${VueCookies.get('refreshToken')}`
@@ -94,35 +95,38 @@ function localRefreshAxios() {
     }
   })
 
-// instance에 response intercepter 추가
-instance.interceptors.response.use( 
-  // 2xx 의 요청이 올때 처리  
-    (response)=>{
-  
-    // 응답 데이터가 있는 작업 수행
-    return response;
-  }, 
-  // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거함
-  async (error)=>{
-    // response 해체
-    const {config, response : {status}} = error;
+  // instance에 response intercepter 추가
+  instance.interceptors.response.use(
+    // 2xx 의 요청이 올때 처리
+    (response) => {
+      // 응답 데이터가 있는 작업 수행
+      return response
+    },
+    // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거함
+    async (error) => {
+      // response 해체
+      const {
+        config,
+        response: { status }
+      } = error
 
-    // 토큰이 만료된 요청일 경우
-    if(status === 403){
-        const originRequest = config;
+      // 토큰이 만료된 요청일 경우
+      if (status === 403) {
+        const originRequest = config
 
         await refreshAccessToken()
 
         // 새로운 토큰으로 이전 요청을 복제하여 다시 시도
-        const newToken = `${VueCookies.get('grantType')} ${VueCookies.get('accessToken')}`;
-        originRequest.headers.Authorization = newToken;
+        const newToken = `${VueCookies.get('grantType')} ${VueCookies.get('accessToken')}`
+        originRequest.headers.Authorization = newToken
 
         return axios(originRequest)
+      }
+
+      // 요청을 수행하기전 config 수행 전에 error
+      return Promise.reject(error)
     }
-  
-    // 요청을 수행하기전 config 수행 전에 error
-    return Promise.reject(error);
-  })
+  )
 
   return instance
 }
@@ -140,11 +144,11 @@ async function refreshAccessToken() {
       VueCookies.set('accessToken', data.accessToken)
       VueCookies.set('refreshToken', data.refreshToken)
       VueCookies.set('auth', true)
-      return true;
+      return true
     })
     .catch(() => {
-      window.location.href="/login"
-      return false;
+      window.location.href = '/login'
+      return false
     })
 }
 
@@ -155,4 +159,3 @@ export {
   localSessionAxios,
   localRefreshAxios
 }
-
