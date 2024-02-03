@@ -44,11 +44,22 @@
 
     <!-- 3. 요일 선택부 -->
     <label class="block mb-2 text-sm font-medium text-gray-700">요일</label>
-    <div class="flex mb-8 space-x-4">
+    <ul class="mb-8 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+      <li v-for="(dayCheckbox, index) in day" :key="index" id="days" class=" flex items-center ps-3 w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
+        <input :id="'dayCheckbox' + index" 
+        type="checkbox" 
+        class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"  
+        @click="setDay(index)">
+        <label :for="'dayCheckbox' + index"  class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+          {{ ['월', '화', '수', '목', '금', '토', '일'][index] }} 
+        </label>
+      </li>
+    </ul>
+    <!-- <div class="flex mb-8 space-x-4">
       <div v-for="(dayCheckbox, index) in day" :key="index" id="days">
         <input
           class="form-check-input"
-          type="checkbox"
+          type="checkbox2"
           :id="'dayCheckbox' + index"
           @click="setDay(index)"
         />
@@ -56,7 +67,7 @@
           {{ ['월', '화', '수', '목', '금', '토', '일'][index] }}
         </label>
       </div>
-    </div>
+    </div> -->
 
     <!-- 4. 식전/식후 입력부 dropdown -->
     <label class="block mb-2 text-sm font-medium text-gray-700">식전/식후</label>
@@ -103,7 +114,7 @@
       <button
         type="button"
         class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-        @click="addJsonData"
+        @click="addPillTime"
       >
         일정 추가
       </button>
@@ -159,6 +170,7 @@ import { ref, defineProps } from 'vue'
 import { postInject } from '@/api/modalAlarms/injection.js'
 import swal from 'sweetalert'
 
+
 // 1 약 이름
 const pill_name = ref('')
 
@@ -177,8 +189,9 @@ const setDay = (param) => {
   }
 }
 
+
 // 4 식전, 식후 분별
-const beforeafter = ref() //
+const beforeafter = ref() 
 
 // 5. 시각
 const hour = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
@@ -189,7 +202,7 @@ const selectedMinute = ref(25) // 분
 
 // 6. 투약 일정에 추가
 const scheduleDatas = ref([])
-const jsonDatas = ref([])
+
 
 const allElementsZero = (arr) => {
   // 요일 입력받았는지 확인
@@ -223,24 +236,27 @@ const addSchedule = () => {
   scheduleDatas.value.push(scheduleData)
 }
 
-const addJsonData = () => {
-  const jsonData = ref({
+
+
+const jsonData = ref({
     pillName: pill_name.value, // 1. 약의 이름
     pillStartDate: start_date, // 2-1. 시작일
     pillEndDate: end_date, // 2-2. 끝일
-    pillDate: day.value.join(''), // 3. 요일(1일시 활성화)
+    pillDate: ref(day.value.join('')), // 3. 요일(1일시 활성화)
     pillMethod: beforeafter, // 4. 식전 / 식후
-    pillTimes: [
-      {pillTime:formatTime(`${selectedHour.value}`, `${selectedMinute.value}`)}] // 5. 시각
+    pillTimes: [] // 5. 시각
   })
 
-  console.log(jsonData.value)
 
-  if (
+const checkJson = (data) => {
+  console.log(day.value)
+  console.log(jsonData.value)
+  console.log(data.value)
+if (
     // 약 이름, 투약 시작 및 끝일자를 입력하지 않은 경우
-    jsonData.value.pillName === '' ||
-    jsonData.value.startDate === '' ||
-    jsonData.value.endDate === ''
+    data.value.pillName === '' ||
+    data.value.startDate === '' ||
+    data.value.endDate === ''
   ) {
     swal({
       title: '',
@@ -274,7 +290,7 @@ const addJsonData = () => {
         }
       }
     })
-    return
+    return 0
   } else if (beforeafter.value === '') {
     // 식전 혹은 식후를 설정하지 않은 경우
     swal({
@@ -293,7 +309,7 @@ const addJsonData = () => {
     })
 
     return 0
-  } else if (jsonData.value.pillTime === '25:25:00') {
+  } else if (param.value.pillTime === '25:25:00') {
     // 투약 시각을 설정하지 않은 경우
     swal({
       title: '',
@@ -312,8 +328,64 @@ const addJsonData = () => {
 
     return 0
   }
-  jsonDatas.value = jsonData.value
-  addSchedule()
+
+  return 1
+}
+
+
+const addPillTime = () => {
+  const pillTimeData = ref(formatTime(`${selectedHour.value}`, `${selectedMinute.value}`))
+  const jsonPillTime = ref(
+    {pillTime:''}
+  )
+
+  if (pillTimeData.value === '25:25:00') {
+    // 투약 시각을 설정하지 않은 경우
+    swal({
+      title: '',
+      text: '투약 시각을 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+
+    return 0
+
+  } else if (pillTimeData.value in jsonData.value.pillTimes) {
+    // 투약 시각이 중복되는 경우
+    swal({
+      title: '',
+      text: '투약 시각이 중복되었습니다!',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+
+    return 0
+  }
+
+  jsonPillTime.value.pillTime = pillTimeData.value
+
+  console.log(1)
+  jsonData.value.pillTimes.push(jsonPillTime)
+  if (checkJson(jsonData.value)) {
+    addSchedule()
+  }
+
 }
 
 // 7-2 체크된 투약 일정 삭제
@@ -343,29 +415,32 @@ const props = defineProps(['closeModal'])
 
 // 8. 확인버튼 클릭시 post
 const postAlarmdata = () => {
-  console.log(jsonDatas.value)
+  console.log(jsonData.value)
 
-  postInject(jsonDatas.value, (response) => {
-    console.log(response)
-    if (response.data.success === true) {
-      swal({
-      title: '투약 일정 알리미',
-      text: '투약 일정 등록이 완료되었습니다!',
-      icon: 'success',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
+  if (checkJson(jsonData.value)) {
+    postInject(jsonData.value, (response) => {
+      console.log(response)
+      if (response.data.success === true) {
+        swal({
+        title: '투약 일정 알리미',
+        text: '투약 일정 등록이 완료되었습니다!',
+        icon: 'success',
+        buttons: {
+          confirm: {
+            text: '확인',
+            value: false,
+            visible: true,
+            className: '',
+            closeModal: true
+          }
         }
+      })
+        props.closeModal()
       }
     })
-      props.closeModal()
-    }
-  })
+  }
 }
+
 </script>
 
 <style scoped>
