@@ -141,14 +141,16 @@ async function refreshAccessToken() {
   await reset
     .post(`${url}/refresh`, JSON.stringify(data))
     .then(({ data }) => {
-      VueCookies.set('accessToken', data.accessToken)
-      VueCookies.set('refreshToken', data.refreshToken)
-      VueCookies.set('auth', true)
-      return true
+      if(data.accessToken !== undefined){
+        VueCookies.set('accessToken', data.accessToken)
+        VueCookies.set('refreshToken', data.refreshToken)
+        VueCookies.set('auth', true)
+      }
     })
     .catch(() => {
-      window.location.href = '/login'
-      return false
+      VueCookies.remove('accessToken', data.accessToken)
+      VueCookies.remove('refreshToken', data.refreshToken)
+      VueCookies.remove('auth', true)
     })
 }
 
