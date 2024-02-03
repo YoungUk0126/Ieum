@@ -31,10 +31,18 @@
               >
             </li>
             <li>
+              <router-link
+                :to="{ name: 'TheScheduleView' }"
+                href="#"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >일정</router-link
+              >
+            </li>
+            <li>
               <a
                 href="#"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >일정</a
+                >화상통화</a
               >
             </li>
             <li>
@@ -118,6 +126,7 @@ import VueCookies from 'vue-cookies'
 import { useRouter } from 'vue-router'
 import swal from 'sweetalert'
 import { useCounterStore } from '@/stores/counter'
+import TheScheduleView from '@/views/TheScheduleView.vue'
 
 const router = useRouter()
 
