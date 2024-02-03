@@ -39,10 +39,17 @@
               >
             </li>
             <li>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: 'TheCallView' }"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >화상통화</a
+                >화상통화</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheMessageView' }"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >메세지</router-link
               >
             </li>
             <li>
