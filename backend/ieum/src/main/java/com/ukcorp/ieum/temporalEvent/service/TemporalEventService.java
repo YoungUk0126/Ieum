@@ -9,6 +9,8 @@ import java.util.List;
 public interface TemporalEventService {
   List<TemporalEventResponseDto> getList() throws Exception;
 
+  List<TemporalEventResponseDto> getListMonth(int year, int month) throws Exception;
+
   TemporalEventResponseDto getDetail(Long eventNo) throws Exception;
 
   void deleteEvent(Long eventNo) throws Exception;
