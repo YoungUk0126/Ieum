@@ -120,7 +120,8 @@ const loginSubmit = () => {
       VueCookies.set('grantType', response.data.grantType)
       VueCookies.set('auth', true)
       store.auth = true
-      router.push({ name: 'TheMainViewVue' })
+      //router.push({ name: 'TheMainViewVue' })
+      window.location.href = '/'
     } else {
       swal({
         title: '알림',

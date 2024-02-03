@@ -137,7 +137,7 @@ router.beforeEach((to, from, next) => {
         VueCookies.remove('refreshToken')
         VueCookies.remove('auth')
 
-        next({ path: '/login', replace: true })
+        next({ path: '/login'})
       })
     } else {
       next()

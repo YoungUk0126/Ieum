@@ -148,9 +148,9 @@ async function refreshAccessToken() {
       }
     })
     .catch(() => {
-      VueCookies.remove('accessToken', data.accessToken)
-      VueCookies.remove('refreshToken', data.refreshToken)
-      VueCookies.remove('auth', true)
+      VueCookies.remove('accessToken')
+      VueCookies.remove('refreshToken')
+      VueCookies.remove('auth')
     })
 }
 
