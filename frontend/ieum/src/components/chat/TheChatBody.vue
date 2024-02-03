@@ -85,7 +85,7 @@
               </div>
             </td>
             <td class="px-6 py-4">
-              {{ chat.date }}
+              {{ changeDateFormat(chat.date) }}
             </td>
           </tr>
         </tbody>
@@ -253,6 +253,17 @@ const nextPage = () => {
     pages.value.curPage++
     changePage(pages.value.curPage)
   }
+}
+
+const changeDateFormat = (value) => {
+  const dateObject = new Date(value)
+  const formattedDate = `${dateObject.getFullYear()}-${padZero(dateObject.getMonth() + 1)}-${padZero(dateObject.getDate())} ${padZero(dateObject.getHours())}:${padZero(dateObject.getMinutes())}`
+  return formattedDate
+}
+
+// 0을 붙이는 보조 함수
+function padZero(value) {
+  return String(value).padStart(2, '0')
 }
 </script>
 
