@@ -84,8 +84,11 @@ import { login } from '../../api/member.js'
 import { useRouter } from 'vue-router'
 import VueCookies from 'vue-cookies'
 import swal from 'sweetalert'
+import { useCounterStore } from '@/stores/counter'
 
 const router = useRouter()
+
+const store = useCounterStore()
 
 const data = ref({
   memberId: '',
@@ -116,6 +119,7 @@ const loginSubmit = () => {
       VueCookies.set('refreshToken', response.data.refreshToken)
       VueCookies.set('grantType', response.data.grantType)
       VueCookies.set('auth', true)
+      store.auth = true
       router.push({ name: 'TheMainViewVue' })
     } else {
       swal({

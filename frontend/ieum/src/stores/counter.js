@@ -9,5 +9,7 @@ export const useCounterStore = defineStore('counter', () => {
     count.value++
   }
 
-  return { count, doubleCount, increment }
+  const auth = ref(false)
+
+  return { count, doubleCount, increment, auth }
 })

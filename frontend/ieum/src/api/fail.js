@@ -46,10 +46,10 @@ const fail = ({ response }) => {
           closeModal: true
         }
       }
-    }).then(()=>{
-      window.location.href="/login"
+    }).then(() => {
+      window.location.href = '/login'
     })
-  }  else {
+  } else {
     swal({
       title: '버그',
       text: '뭔 오류일까요..' + response.status,
@@ -66,6 +66,5 @@ const fail = ({ response }) => {
   }
   return false
 }
-
 
 export { fail }
