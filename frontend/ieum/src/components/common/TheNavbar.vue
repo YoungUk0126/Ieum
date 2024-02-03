@@ -14,12 +14,11 @@
             class="flex flex-col font-bold p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
           >
             <li>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: 'TheChatView' }"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                aria-current="page"
-                >대화목록</a
-              >
+                >대화목록
+              </router-link>
             </li>
             <li>
               <a

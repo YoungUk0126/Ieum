@@ -113,7 +113,7 @@ const loginSubmit = () => {
   }
 
   login(data.value, (response) => {
-    if (response.status == 200) {
+    if (response.data.accessToken !== undefined) {
       // 각 토큰 값 쿠키로 저장
       VueCookies.set('accessToken', response.data.accessToken)
       VueCookies.set('refreshToken', response.data.refreshToken)

@@ -5,7 +5,7 @@
         class="flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
       >
         <label for="table-search" class="sr-only">Search</label>
-        <div class="relative">
+        <div class="relative w-full">
           <div class="w-2/3 mb-3 relative max-w-sm">
             <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
               <svg
@@ -21,19 +21,11 @@
               </svg>
             </div>
             <input
-              datepicker
-              datepicker-autohide
-              datepicker-format="yyyy-mm-dd"
-              type="text"
+              type="date"
+              id="datepicker"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               placeholder="Select date"
-              v-model.lazy="selectedDate"
-              ref="datePicker"
-              @select="
-                {
-                  ;(e) => console.log(e.target.value)
-                }
-              "
+              v-model="datePicker"
             />
           </div>
         </div>
@@ -101,8 +93,8 @@
       <nav aria-label="Page navigation example">
         <ul class="flex items-center -space-x-px h-8 text-sm">
           <li>
-            <a
-              href="#"
+            <button
+              @click="prevPage"
               class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span class="sr-only">Previous</span>
@@ -121,7 +113,7 @@
                   d="M5 1 1 5l4 4"
                 />
               </svg>
-            </a>
+            </button>
           </li>
 
           <li
@@ -150,8 +142,8 @@
             </button>
           </li>
           <li>
-            <a
-              href="#"
+            <button
+              @click="nextPage"
               class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
             >
               <span class="sr-only">Next</span>
@@ -170,7 +162,7 @@
                   d="m1 9 4-4-4-4"
                 />
               </svg>
-            </a>
+            </button>
           </li>
         </ul>
       </nav>
@@ -181,7 +173,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { getList } from '../../api/chat.js'
-import Datepicker from 'flowbite-datepicker/Datepicker'
+
 const lobotProfile = '/src/assets/images/ieum.png'
 const careProfile = '/src/assets/images/영욱이.png'
 
@@ -190,6 +182,7 @@ const happyEmotion = '/src/assets/images/happy.png'
 const commonEmotion = '/src/assets/images/common.png'
 
 const datePicker = ref()
+
 const pages = ref({
   totalPages: 10,
   totalElements: 0,
@@ -198,32 +191,7 @@ const pages = ref({
   endDate: '2022-02-02'
 })
 
-const list = ref([
-  {
-    id: 'sdds',
-    speaker: '할아버지',
-    listener: '이음이',
-    message: '안녕!!',
-    emotion: 'common',
-    date: '2020-04-04'
-  },
-  {
-    id: 'sdds',
-    speaker: '이음이',
-    listener: '할아버지',
-    message: '안녕!!',
-    emotion: 'happy',
-    date: '2020-04-04'
-  },
-  {
-    id: 'sdds',
-    speaker: '할아버지',
-    listener: '이음이',
-    message: '안녕!!',
-    emotion: 'sad',
-    date: '2020-04-04'
-  }
-])
+const list = ref([])
 
 onMounted(() => {
   let today = new Date()
@@ -231,7 +199,7 @@ onMounted(() => {
   let month = today.getMonth() + 1 // 월
   let day = today.getDate() // 날짜
   const curDate = `${year}-0${month}-01`
-
+  datePicker.value = curDate
   pages.value.startDate = curDate
   pages.value.endDate = curDate
   changePage(1)
@@ -240,11 +208,17 @@ onMounted(() => {
 watch(
   () => datePicker.value,
   (nv) => {
-    if (nv.value !== '') {
-      console.log(datePicker.value)
+    if (nv !== '') {
       pages.value.startDate = datePicker.value
       pages.value.endDate = datePicker.value
       changePage(1)
+    } else {
+      let today = new Date()
+      let year = today.getFullYear() // 년도
+      let month = today.getMonth() + 1 // 월
+      let day = today.getDate() // 날짜
+      const curDate = `${year}-0${month}-01`
+      datePicker.value = curDate
     }
   },
   { deep: true }
@@ -276,10 +250,10 @@ const prevPage = () => {
 
 const nextPage = () => {
   if (pages.value.curPage < pages.value.totalPages) {
-    pages.value.curPage--
+    pages.value.curPage++
     changePage(pages.value.curPage)
   }
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped></style>
