@@ -132,8 +132,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
-import UserVideo from './VUserVideo.vue'
-import { createToken, createSession } from '@/api/call'
+import UserVideo from '../call/VUserVideo.vue'
+import { createToken, createSessionCare } from '@/api/call'
 
 const OV = ref()
 const session = ref()
@@ -208,7 +208,7 @@ const updateMainVideoStreamManager = (stream) => {
 }
 
 const getToken = async (id) => {
-  const sessionId = await createSession(id)
+  const sessionId = await createSessionCare(id)
   return await createToken(sessionId)
 }
 

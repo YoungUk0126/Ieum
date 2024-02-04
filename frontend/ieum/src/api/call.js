@@ -1,33 +1,30 @@
+import { localAxios, localSessionAxios } from '@/util/http-commons'
 
-import axios from 'axios'
+const url = 'http://localhost:8080/'
 
-const APPLICATION_SERVER_URL = 'http://localhost:8080/'
+const localSession = localSessionAxios()
 
-const createSession = async (sessionId) => {
+const local = localAxios()
 
-  const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions',
-    { customSessionId: sessionId },
-    {
-      headers: { 'Content-Type': 'application/json' }
-    }
-  )
+// 피보호자 접속시 시리얼번호
+const createSessionCare = async (serialNo) => {
+  const response =  await local.post(`${url}api/sessions/care`, JSON.stringify({customSessionId: serialNo}))
+  return response.data
+}
+// 보호자 세션 접속
+const createSession = async () => {
+  const response =  await localSession.post(`${url}api/sessions`)
   return response.data
 }
 
 const createToken = async (sessionId) => {
-  const response = await axios.post(
-    APPLICATION_SERVER_URL + 'api/sessions/connections/' + sessionId,
-    {},
-    {
-      headers: { 'Content-Type': 'application/json' }
-    }
-  )
+  const response =  await localSession.post(`${url}api/sessions/connections/${sessionId}`)
   return response.data
 }
 
 export {
   createSession,
-    createToken
+  createToken,
+  createSessionCare
 };
 
