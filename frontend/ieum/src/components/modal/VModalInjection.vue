@@ -50,7 +50,7 @@
         type="checkbox" 
         class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"  
         @click="setDay(index)">
-        <label :for="'dayCheckbox' + index"  class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
+        <label :for="'dayCheckbox' + index"  class="form-check-label w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
           {{ ['월', '화', '수', '목', '금', '토', '일'][index] }} 
         </label>
       </li>
@@ -80,7 +80,7 @@
           id="beforemeal"
           autocomplete="off"
           value="식전"
-          v-model="beforeafter"
+          v-model="beforeAfter"
         />
         <label class="btn btn-outline-secondary" for="beforemeal">식전</label>
         <input
@@ -90,7 +90,7 @@
           id="aftermeal"
           autocomplete="off"
           value="식후"
-          v-model="beforeafter"
+          v-model="beforeAfter"
         />
         <label class="btn btn-outline-secondary" for="aftermeal">식후</label>
       </div>
@@ -114,7 +114,7 @@
       <button
         type="button"
         class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-        @click="addPillTime"
+        @click="addSchedule"
       >
         일정 추가
       </button>
@@ -128,8 +128,9 @@
           삭제
         </button>
       </div>
-      <ul class="list-group">
-        <li class="list-group-item" v-for="(data, index) in scheduleDatas" :key="index">
+      <ul class="list-group space-y-3">
+        <li class="list-group-item p-2 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+        v-for="(data, index) in scheduleDatas" :key="index">
           <input
             class="form-check-input me-1 px-2"
             type="checkbox"
@@ -174,9 +175,14 @@ import swal from 'sweetalert'
 // 1 약 이름
 const pill_name = ref('')
 
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+
 // 2 시작일 / 끝일
 const start_date = ref('')
 const end_date = ref('')
+
+//--------------------------------------------------------------------------------------------------------------------------------------
 
 // 3 요일 설정
 const day = ref(['0', '0', '0', '0', '0', '0', '0'])
@@ -189,78 +195,47 @@ const setDay = (param) => {
   }
 }
 
+//--------------------------------------------------------------------------------------------------------------------------------------
 
 // 4 식전, 식후 분별
-const beforeafter = ref() 
+const beforeAfter = ref() 
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+
 
 // 5. 시각
 const hour = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
 const minute = ref(Array.from({ length: 60 }, (_, i) => i))
 
 const selectedHour = ref(25) // 시
-const selectedMinute = ref(25) // 분
+const selectedMinute = ref(61) // 분
 
-// 6. 투약 일정에 추가
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+// 6 투약 일정에 추가
 const scheduleDatas = ref([])
 
 
+// 6-1 요일 입력 체크
 const allElementsZero = (arr) => {
-  // 요일 입력받았는지 확인
   return arr.every((element) => element === '0')
 }
 
-function formatTime(hours, minutes) {
-  // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
-  const formattedHours = String(hours).padStart(2, '0')
-  const formattedMinutes = String(minutes).padStart(2, '0')
-
-  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
-  return `${formattedHours}:${formattedMinutes}:00`
-}
-
-const addSchedule = () => {
-  // 화면상 투약 일정에 출력을 위해 스케줄을 추가하는 함수
-  const scheduleData = ['제목', '', '시각']
-
-  scheduleData[0] = pill_name.value
-  scheduleData[1] = day.value
-    .reduce((acc, curr, index) => {
-      if (curr) {
-        acc.push(['월', '화', '수', '목', '금', '토', '일'][index])
-      }
-      return acc
-    }, [])
-    .join(', ')
-  scheduleData[2] = formatTime(`${selectedHour.value}`, `${selectedMinute.value}`)
-
-  scheduleDatas.value.push(scheduleData)
-}
-
-
-
-const jsonData = ref({
-    pillName: pill_name.value, // 1. 약의 이름
-    pillStartDate: start_date, // 2-1. 시작일
-    pillEndDate: end_date, // 2-2. 끝일
-    pillDate: ref(day.value.join('')), // 3. 요일(1일시 활성화)
-    pillMethod: beforeafter, // 4. 식전 / 식후
-    pillTimes: [] // 5. 시각
-  })
-
-
-const checkJson = (data) => {
+// 6-2 데이터 체크
+const checkInputDatas = () => {
   console.log(day.value)
-  console.log(jsonData.value)
-  console.log(data.value)
+  console.log(scheduleDatas.value)
+
+
 if (
     // 약 이름, 투약 시작 및 끝일자를 입력하지 않은 경우
-    data.value.pillName === '' ||
-    data.value.startDate === '' ||
-    data.value.endDate === ''
+    pill_name.value === '' ||
+    start_date.value === '' ||
+    end_date.value === ''
   ) {
     swal({
       title: '',
-      text: '제목 혹은 날짜를 입력해주세요',
+      text: '제목 혹은 투약 기간을 설정해주세요',
       icon: 'error',
       buttons: {
         confirm: {
@@ -274,7 +249,24 @@ if (
     })
 
     return 0
-  } else if (allElementsZero(day.value)) {
+  } else if (start_date.value > end_date.value) {
+    // 투약 시작일이 투약 종료일보다 늦는 경우
+    swal({
+      title: '',
+      text: '투약 시작일과 투약 종료일을 정확히 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
+    return 0
+  }else if (allElementsZero(day.value)) {
     // 요일을 설정하지 않은 경우
     swal({
       title: '',
@@ -291,7 +283,7 @@ if (
       }
     })
     return 0
-  } else if (beforeafter.value === '') {
+  } else if (!beforeAfter.value) {
     // 식전 혹은 식후를 설정하지 않은 경우
     swal({
       title: '',
@@ -309,7 +301,7 @@ if (
     })
 
     return 0
-  } else if (param.value.pillTime === '25:25:00') {
+  } else if (selectedHour.value === 25 || selectedMinute.value === 61) {
     // 투약 시각을 설정하지 않은 경우
     swal({
       title: '',
@@ -326,6 +318,23 @@ if (
       }
     })
 
+    return 0
+  } else if (scheduleDatas.value.length >= 3) {
+    // 투약 일정이 3개 이상인 경우
+    swal({
+      title: '',
+      text: '투약 일정은 복용 시각별로 3개 이하로 설정해주세요',
+      icon: 'error',
+      buttons: {
+        confirm: {
+          text: '확인',
+          value: false,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    })
     return 0
   }
 
@@ -333,66 +342,88 @@ if (
 }
 
 
-const addPillTime = () => {
+// 6-3 투약 일정 format
+const addSchedule = () => {
+  if (checkInputDatas()) {
+    const scheduleData = ['제목', '', '시각']
+
+    scheduleData[0] = pill_name.value
+    scheduleData[1] = day.value
+      .reduce((acc, curr, index) => {
+        if (curr === '1') {
+          acc.push(['월', '화', '수', '목', '금', '토', '일'][index])
+        }
+        return acc
+      }, [])
+      .join(', ')
+    scheduleData[2] = formatTime(`${selectedHour.value}`, `${selectedMinute.value}`)
+
+    scheduleDatas.value.push(scheduleData)
+  }
+  
+}
+
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+// 7 jsonData
+
+// 7-2 시각의 형태를 jsonFile의 데이터 형태로 변경
+const formatTime = (hours, minutes) => {
+  // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
+  const formattedHours = String(hours).padStart(2, '0')
+  const formattedMinutes = String(minutes).padStart(2, '0')
+
+  // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
+  return `${formattedHours}:${formattedMinutes}:00`
+}
+
+
+// 7-3 약 시각들 추가
+const addPillTime = (jsondata) => {
   const pillTimeData = ref(formatTime(`${selectedHour.value}`, `${selectedMinute.value}`))
   const jsonPillTime = ref(
     {pillTime:''}
   )
+  const scheduleDataPillTimes = new Set()
+  console.log(jsondata)
 
-  if (pillTimeData.value === '25:25:00') {
-    // 투약 시각을 설정하지 않은 경우
-    swal({
-      title: '',
-      text: '투약 시각을 설정해주세요',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-
-    return 0
-
-  } else if (pillTimeData.value in jsonData.value.pillTimes) {
-    // 투약 시각이 중복되는 경우
-    swal({
-      title: '',
-      text: '투약 시각이 중복되었습니다!',
-      icon: 'error',
-      buttons: {
-        confirm: {
-          text: '확인',
-          value: false,
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    })
-
-    return 0
+  for (let schedule in scheduleDatas.value) { // scheduleData의 복용시각만 저장
+    scheduleDataPillTimes.add(schedule[2])
   }
 
-  jsonPillTime.value.pillTime = pillTimeData.value
-
-  console.log(1)
-  jsonData.value.pillTimes.push(jsonPillTime)
-  if (checkJson(jsonData.value)) {
-    addSchedule()
-  }
-
+  for (let time in scheduleDataPillTimes){
+    if (time === '25:25:00') {
+  // 투약 시각을 설정하지 않은 경우
+      swal({
+        title: '',
+        text: '투약 시각을 설정해주세요',
+        icon: 'error',
+        buttons: {
+          confirm: {
+            text: '확인',
+            value: false,
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
+      return 0
+    }
 }
 
-// 7-2 체크된 투약 일정 삭제
+  jsonPillTime.value.pillTime = pillTimeData.value
+  jsondata.value.pillTimes.push(jsonPillTime.value)
+  return 1
+  }
+  
+
+// 7-4 체크된 투약 일정 삭제
 // 선택된 일정을 담는 배열
 const selectedSchedules = ref([])
 
-// 투약 일정 삭제 메소드
+
 const deleteSelectedSchedules = () => {
   if (selectedSchedules.value.length === 0) {
     // 삭제할 일정이 선택되지 않은 경우
@@ -410,14 +441,22 @@ const deleteSelectedSchedules = () => {
   selectedSchedules.value = []
 }
 
-// 모달 닫기
-const props = defineProps(['closeModal'])
-
-// 8. 확인버튼 클릭시 post
+// 7-5 확인버튼 클릭시 post
 const postAlarmdata = () => {
-  console.log(jsonData.value)
 
-  if (checkJson(jsonData.value)) {
+  const jsonData = ref({
+    "pillName": pill_name, // 1. 약의 이름
+    "pillStartDate": start_date, // 2-1. 시작일
+    "pillEndDate": end_date, // 2-2. 끝일
+    "pillDate": day.value.join(''), // 3. 요일(1일시 활성화)
+    "pillMethod": beforeAfter, // 4. 식전 / 식후
+    "pillTimes": [] // 5. 시각
+  })
+
+  if (addPillTime(jsonData)) {
+
+    console.log(jsonData.value)
+    
     postInject(jsonData.value, (response) => {
       console.log(response)
       if (response.data.success === true) {
@@ -441,6 +480,11 @@ const postAlarmdata = () => {
   }
 }
 
+
+//--------------------------------------------------------------------------------------------------------------------------------------
+
+// 8. 모달 닫기
+const props = defineProps(['closeModal'])
 </script>
 
 <style scoped>
