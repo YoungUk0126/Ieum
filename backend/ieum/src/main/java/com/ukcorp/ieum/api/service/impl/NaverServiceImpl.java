@@ -57,8 +57,8 @@ public class NaverServiceImpl implements NaverService {
   public SmsResponseDTO sendSms(MessageDTO messageDto)
           throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
     log.debug("[+] 메세지 전송 시작");
-
-    HttpHeaders headers = naverConfig.getSmsHttpHeaders();
+    Long time = System.currentTimeMillis();
+    HttpHeaders headers = naverConfig.getSmsHttpHeaders(time);
 
     List<MessageDTO> messages = new ArrayList<>();
     messages.add(messageDto);

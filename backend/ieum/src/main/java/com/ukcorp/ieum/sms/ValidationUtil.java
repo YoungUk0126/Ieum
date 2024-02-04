@@ -23,6 +23,17 @@ public class ValidationUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+    public boolean registCode(String phone, String code) {
+      try{
+        // 핸드폰번호 + 코드 Redis에 저장
+        redisTemplate.opsForValue()
+            .set(phone, code, Duration.ofSeconds(3 * 60));
+        return true;
+      }catch (Exception e){
+        log.debug(e.getMessage());
+        return false;
+      }
+    }
 
     /**
      * 문자로 받은 코드 인증

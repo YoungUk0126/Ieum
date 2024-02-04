@@ -34,6 +34,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -207,6 +208,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("보내는 번호 >> " + phone);
         log.info("보내는 코드 >> " + code);
         naverService.sendSms(sendSms);
+        validationUtil.registCode(phone, code);
     }
 
     /**
