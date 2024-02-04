@@ -2,10 +2,14 @@
   <nav class="bg-white shadow-md rounded-md">
     <div class="w-full flex flex-wrap items-center justify-between mx-auto p-4">
       <div class="flex">
-        <a href="http://localhost:5173/" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <router-link
+          :to="{ name: 'TheMainViewVue' }"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
           <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
-        </a>
+        </router-link>
         <div
+          v-show="!hide"
           class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
           id="navbar-user"
         >
@@ -13,12 +17,11 @@
             class="flex flex-col font-bold p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
           >
             <li>
-              <a
-                href="#"
+              <router-link
+                :to="{ name: 'TheChatView' }"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                aria-current="page"
-                >대화목록</a
-              >
+                >대화목록
+              </router-link>
             </li>
             <li>
               <a
@@ -41,7 +44,10 @@
           </ul>
         </div>
       </div>
-      <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+      <div
+        v-show="!hide"
+        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-5"
+      >
         <button
           type="button"
           class="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
@@ -57,26 +63,22 @@
           class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
           id="user-dropdown"
         >
-          <div class="px-4 py-3">
-            <span class="block text-sm text-gray-900 dark:text-white">흑막 할배</span>
-            <span class="block text-sm text-gray-500 truncate dark:text-gray-400"
-              >name@flowbite.com</span
-            >
-          </div>
           <ul class="py-2" aria-labelledby="user-menu-button">
             <li>
-              <a
-                href="#"
+              <router-link
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >내 정보</a
+                :to="{ name: 'TheMemberInfoView' }"
               >
+                내정보
+              </router-link>
             </li>
             <li>
-              <a
-                href="#"
-                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >로그아웃</a
+              <button
+                class="block w-full px-4 text-start py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                @click="logout"
               >
+                로그아웃
+              </button>
             </li>
           </ul>
         </div>
@@ -110,7 +112,60 @@
 </template>
 
 <script setup>
+import { ref, watch, onMounted } from 'vue'
 import VModal from '@/components/modal/VModal.vue'
+import VueCookies from 'vue-cookies'
+import { useRouter } from 'vue-router'
+import swal from 'sweetalert'
+import { useCounterStore } from '@/stores/counter'
+
+const router = useRouter()
+
+const store = useCounterStore()
+
+const hide = ref(!store.auth)
+
+onMounted(() => {
+  if (VueCookies.get('auth')) {
+    hide.value = false
+    store.auth = true
+  }
+})
+
+watch(
+  () => store.auth,
+  () => {
+    if (VueCookies.get('auth')) {
+      hide.value = false
+    } else {
+      hide.value = true
+    }
+  },
+  { deep: true }
+)
+
+const logout = () => {
+  swal({
+    title: '로그아웃',
+    text: '정상적으로 로그아웃 됐습니다.',
+    icon: 'success',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    VueCookies.remove('accessToken')
+    VueCookies.remove('refreshToken')
+    VueCookies.remove('auth')
+    store.auth = false
+    hide.value = true
+    router.push({ path: '/login' })
+  })
+}
 </script>
 
 <style scoped>

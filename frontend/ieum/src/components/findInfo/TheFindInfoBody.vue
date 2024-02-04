@@ -142,6 +142,7 @@ const changeMemberInfo = (data) => {
 }
 
 const editSubmit = (password) => {
+  console.log(member.value.memberId + ' password =' + password)
   editPassword(
     {
       memberId: member.value.memberId,
