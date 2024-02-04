@@ -11,4 +11,5 @@ public interface CareRepository extends JpaRepository<CareInfo, Long> {
 
   boolean existsByCarePhone(String phone);
   Optional<CareInfo> findCareInfoByCareSerial(String careSerial);
+  Optional<CareInfo> findCareInfoByCareNo(Long careNo);
 }
