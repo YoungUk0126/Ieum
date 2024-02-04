@@ -1,4 +1,4 @@
-package com.ukcorp.ieum.event.entity;
+package com.ukcorp.ieum.chat.entity;
 
 public enum Subject {
 
