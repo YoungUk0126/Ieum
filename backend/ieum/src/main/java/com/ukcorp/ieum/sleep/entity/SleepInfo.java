@@ -25,9 +25,9 @@ public class SleepInfo {
   private CareInfo careInfo;
 
   @Column(name = "SLEEP_START_TIME")
-  private Time sleepStartTime;
+  private Long sleepStartTime;
 
   @Column(name = "SLEEP_END_TIME")
-  private Time sleepEndTime;
+  private Long sleepEndTime;
 }
 

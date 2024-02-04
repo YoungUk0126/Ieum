@@ -16,6 +16,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.NoSuchElementException;
 
 @Slf4j
@@ -34,7 +35,24 @@ public class SleepServiceImpl implements SleepService {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      조회할 데이터가 있으면 가져오고 없으면 예외 처리
       SleepInfo sleep = sleepRepository.findByCareInfo_CareNo(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 취침 시간 데이터입니다."));
-      return sleepMapper.SleepInfoToResponseDto(sleep);
+
+      Long start = sleep.getSleepStartTime();
+      Long end = sleep.getSleepEndTime();
+
+      long sH = start / 3600;
+      start %= 3600;
+      long sM = start / 60;
+
+      long eH = end / 3600;
+      end %= 3600;
+      long eM = end / 60;
+      return SleepResponseDto.builder()
+              .sleepInfoNo(sleep.getSleepInfoNo())
+              .careNo(sleep.getCareInfo().getCareNo())
+              .sleepStartTime(LocalTime.of((int) sH, (int) sM, 0))
+              .sleepEndTime(LocalTime.of((int) eH, (int) eM, 0))
+              .build();
+//      return sleepMapper.SleepInfoToResponseDto(sleep);
     } catch (RuntimeException e) {
       log.debug("조회하는데 오류가 있습니다");
       throw new Exception("조회 오류");
@@ -59,8 +77,13 @@ public class SleepServiceImpl implements SleepService {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo가 없어요"));
 //      피보호자 정보가 있으면 가져오고 없으면 예외 처리
       CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
-      SleepInfo entity = sleepMapper
-              .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep, care);
+//      SleepInfo entity = sleepMapper
+//              .sleepInsertRequestDtoAndCareInfoToSleepInfo(sleep, care);
+      SleepInfo entity = SleepInfo.builder()
+              .careInfo(care)
+              .sleepStartTime(sleep.getSleepStartTime().getHour() * 3600L + sleep.getSleepStartTime().getMinute() * 60L)
+              .sleepEndTime(sleep.getSleepEndTime().getHour() * 3600L + sleep.getSleepEndTime().getMinute() * 60L)
+              .build();
       sleepRepository.save(entity);
 
     } catch (DataIntegrityViolationException e) {
@@ -81,8 +104,14 @@ public class SleepServiceImpl implements SleepService {
       if(!sleepRepository.existsById(sleep.getSleepInfoNo())){
         throw new NoSuchElementException("존재하지 않는 취침 시간 정보입니다.");
       }
-      SleepInfo entity = sleepMapper
-              .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep, care);
+//      SleepInfo entity = sleepMapper
+//              .sleepUpdateRequestDtoAndCareInfoToSleepInfo(sleep, care);
+      SleepInfo entity = SleepInfo.builder()
+              .careInfo(care)
+              .sleepStartTime(sleep.getSleepStartTime().getHour() * 3600L + sleep.getSleepStartTime().getMinute() * 60L)
+              .sleepEndTime(sleep.getSleepEndTime().getHour() * 3600L + sleep.getSleepEndTime().getMinute() * 60L)
+              .build();
+      sleepRepository.save(entity);
       sleepRepository.save(entity);
 
     } catch (DataIntegrityViolationException e) {
