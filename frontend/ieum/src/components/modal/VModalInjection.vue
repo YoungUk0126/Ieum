@@ -44,14 +44,26 @@
 
     <!-- 3. 요일 선택부 -->
     <label class="block mb-2 text-sm font-medium text-gray-700">요일</label>
-    <ul class="mb-8 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
-      <li v-for="(dayCheckbox, index) in day" :key="index" id="days" class=" flex items-center ps-3 w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
-        <input :id="'dayCheckbox' + index" 
-        type="checkbox" 
-        class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"  
-        @click="setDay(index)">
-        <label :for="'dayCheckbox' + index"  class="form-check-label w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
-          {{ ['월', '화', '수', '목', '금', '토', '일'][index] }} 
+    <ul
+      class="mb-8 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+    >
+      <li
+        v-for="(dayCheckbox, index) in day"
+        :key="index"
+        id="days"
+        class="flex items-center ps-3 w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600"
+      >
+        <input
+          :id="'dayCheckbox' + index"
+          type="checkbox"
+          class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300"
+          @click="setDay(index)"
+        />
+        <label
+          :for="'dayCheckbox' + index"
+          class="form-check-label w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+        >
+          {{ ['월', '화', '수', '목', '금', '토', '일'][index] }}
         </label>
       </li>
     </ul>
@@ -99,11 +111,17 @@
     <!-- 5. 시각 -->
     <label class="block mb-2 text-sm font-medium text-gray-700">복용시각</label>
     <div class="flex items-center mb-8 space-x-2">
-      <select v-model="selectedHour" class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400">
+      <select
+        v-model="selectedHour"
+        class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+      >
         <option v-for="num in hour" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>시</span>
-      <select v-model="selectedMinute" class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400">
+      <select
+        v-model="selectedMinute"
+        class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+      >
         <option v-for="num in minute" :key="num" :value="num">{{ num }}</option>
       </select>
       <span>분</span>
@@ -121,16 +139,22 @@
     </div>
 
     <!-- 7. 투약 일정 -->
-    <div class="mb-8 p-8 border rounded bg-gray-300 ">
+    <div class="mb-8 p-8 border rounded bg-gray-300">
       <div class="flex justify-between mb-4">
         <h3 class="text-lg font-semibold">투약 일정</h3>
-        <button class="btn btn-outline-secondary px-2 py-1 rounded border border-gray-500 bg-gray-300" @click="deleteSelectedSchedules">
+        <button
+          class="btn btn-outline-secondary px-2 py-1 rounded border border-gray-500 bg-gray-300"
+          @click="deleteSelectedSchedules"
+        >
           삭제
         </button>
       </div>
       <ul class="list-group space-y-3">
-        <li class="list-group-item p-2 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-        v-for="(data, index) in scheduleDatas" :key="index">
+        <li
+          class="list-group-item p-2 items-center text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          v-for="(data, index) in scheduleDatas"
+          :key="index"
+        >
           <input
             class="form-check-input me-1 px-2"
             type="checkbox"
@@ -138,7 +162,7 @@
             :id="'checkbox' + index"
             v-model="selectedSchedules"
           />
-          <label class="title-text pl-2 " :for="'checkbox' + index">{{ data[0] }} /</label>
+          <label class="title-text pl-2" :for="'checkbox' + index">{{ data[0] }} /</label>
           <label class="day-text pl-2" :for="'checkbox' + index">{{ data[1] }} /</label>
           <label class="time-text pl-2" :for="'checkbox' + index">{{ data[2] }}</label>
         </li>
@@ -148,13 +172,13 @@
     <!-- Modal footer -->
     <div class="flex justify-end mt-4 space-x-4">
       <button
-          data-modal-hide="default-modal"
-          type="button"
-          class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
-          @click="postAlarmdata"
-        >
-          확인
-        </button>
+        data-modal-hide="default-modal"
+        type="button"
+        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
+        @click="postAlarmdata"
+      >
+        확인
+      </button>
       <button
         type="button"
         class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
@@ -171,12 +195,10 @@ import { ref, defineProps } from 'vue'
 import { postInject } from '@/api/modalAlarms/injection.js'
 import swal from 'sweetalert'
 
-
 // 1 약 이름
 const pill_name = ref('')
 
 //--------------------------------------------------------------------------------------------------------------------------------------
-
 
 // 2 시작일 / 끝일
 const start_date = ref('')
@@ -198,10 +220,9 @@ const setDay = (param) => {
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 // 4 식전, 식후 분별
-const beforeAfter = ref() 
+const beforeAfter = ref()
 
 //--------------------------------------------------------------------------------------------------------------------------------------
-
 
 // 5. 시각
 const hour = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
@@ -210,11 +231,15 @@ const minute = ref(Array.from({ length: 60 }, (_, i) => i))
 const selectedHour = ref(25) // 시
 const selectedMinute = ref(61) // 분
 
+const isValidTimeFormat = (timeString) => {
+  // 시간 형식 확인을 위한 정규표현식
+  const timeRegex = /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/
+  return timeRegex.test(timeString)
+}
 //--------------------------------------------------------------------------------------------------------------------------------------
 
 // 6 투약 일정에 추가
 const scheduleDatas = ref([])
-
 
 // 6-1 요일 입력 체크
 const allElementsZero = (arr) => {
@@ -223,11 +248,7 @@ const allElementsZero = (arr) => {
 
 // 6-2 데이터 체크
 const checkInputDatas = () => {
-  console.log(day.value)
-  console.log(scheduleDatas.value)
-
-
-if (
+  if (
     // 약 이름, 투약 시작 및 끝일자를 입력하지 않은 경우
     pill_name.value === '' ||
     start_date.value === '' ||
@@ -266,7 +287,7 @@ if (
       }
     })
     return 0
-  }else if (allElementsZero(day.value)) {
+  } else if (allElementsZero(day.value)) {
     // 요일을 설정하지 않은 경우
     swal({
       title: '',
@@ -341,7 +362,6 @@ if (
   return 1
 }
 
-
 // 6-3 투약 일정 format
 const addSchedule = () => {
   if (checkInputDatas()) {
@@ -360,9 +380,7 @@ const addSchedule = () => {
 
     scheduleDatas.value.push(scheduleData)
   }
-  
 }
-
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 
@@ -378,23 +396,20 @@ const formatTime = (hours, minutes) => {
   return `${formattedHours}:${formattedMinutes}:00`
 }
 
-
 // 7-3 약 시각들 추가
 const addPillTime = (jsondata) => {
   const pillTimeData = ref(formatTime(`${selectedHour.value}`, `${selectedMinute.value}`))
-  const jsonPillTime = ref(
-    {pillTime:''}
-  )
+  const jsonPillTime = ref({ pillTime: '' })
   const scheduleDataPillTimes = new Set()
-  console.log(jsondata)
 
-  for (let schedule in scheduleDatas.value) { // scheduleData의 복용시각만 저장
+  for (let schedule in scheduleDatas.value) {
+    // scheduleData의 복용시각만 저장
     scheduleDataPillTimes.add(schedule[2])
   }
 
-  for (let time in scheduleDataPillTimes){
-    if (time === '25:25:00') {
-  // 투약 시각을 설정하지 않은 경우
+  for (let time in scheduleDataPillTimes) {
+    if (isValidTimeFormat(time)) {
+      // 투약 시각을 설정하지 않은 경우
       swal({
         title: '',
         text: '투약 시각을 설정해주세요',
@@ -411,18 +426,16 @@ const addPillTime = (jsondata) => {
       })
       return 0
     }
-}
+  }
 
   jsonPillTime.value.pillTime = pillTimeData.value
   jsondata.value.pillTimes.push(jsonPillTime.value)
   return 1
-  }
-  
+}
 
 // 7-4 체크된 투약 일정 삭제
 // 선택된 일정을 담는 배열
 const selectedSchedules = ref([])
-
 
 const deleteSelectedSchedules = () => {
   if (selectedSchedules.value.length === 0) {
@@ -443,43 +456,37 @@ const deleteSelectedSchedules = () => {
 
 // 7-5 확인버튼 클릭시 post
 const postAlarmdata = () => {
-
   const jsonData = ref({
-    "pillName": pill_name, // 1. 약의 이름
-    "pillStartDate": start_date, // 2-1. 시작일
-    "pillEndDate": end_date, // 2-2. 끝일
-    "pillDate": day.value.join(''), // 3. 요일(1일시 활성화)
-    "pillMethod": beforeAfter, // 4. 식전 / 식후
-    "pillTimes": [] // 5. 시각
+    pillName: pill_name, // 1. 약의 이름
+    pillStartDate: start_date, // 2-1. 시작일
+    pillEndDate: end_date, // 2-2. 끝일
+    pillDate: day.value.join(''), // 3. 요일(1일시 활성화)
+    pillMethod: beforeAfter, // 4. 식전 / 식후
+    pillTimes: [] // 5. 시각
   })
 
   if (addPillTime(jsonData)) {
-
-    console.log(jsonData.value)
-    
     postInject(jsonData.value, (response) => {
-      console.log(response)
       if (response.data.success === true) {
         swal({
-        title: '투약 일정 알리미',
-        text: '투약 일정 등록이 완료되었습니다!',
-        icon: 'success',
-        buttons: {
-          confirm: {
-            text: '확인',
-            value: false,
-            visible: true,
-            className: '',
-            closeModal: true
+          title: '투약 일정 알리미',
+          text: '투약 일정 등록이 완료되었습니다!',
+          icon: 'success',
+          buttons: {
+            confirm: {
+              text: '확인',
+              value: false,
+              visible: true,
+              className: '',
+              closeModal: true
+            }
           }
-        }
-      })
+        })
         props.closeModal()
       }
     })
   }
 }
-
 
 //--------------------------------------------------------------------------------------------------------------------------------------
 
