@@ -1,20 +1,33 @@
-/*
-import { localAxios } from "@/util/http-commons";
 
-const local = localAxios();
+import axios from 'axios'
 
-const url = "/example"
+const APPLICATION_SERVER_URL = 'http://localhost:8080/'
 
-function example1(param, success, fail) {
-  local.get(`${url}`, { params: param }).then(success).catch(fail);
+const createSession = async (sessionId) => {
+
+  const response = await axios.post(
+    APPLICATION_SERVER_URL + 'api/sessions',
+    { customSessionId: sessionId },
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+  return response.data
 }
-function example2(data, success, fail) {
-  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+
+const createToken = async (sessionId) => {
+  const response = await axios.post(
+    APPLICATION_SERVER_URL + 'api/sessions/connections/' + sessionId,
+    {},
+    {
+      headers: { 'Content-Type': 'application/json' }
+    }
+  )
+  return response.data
 }
 
 export {
-    example1,
-    example2
+  createSession,
+    createToken
 };
 
-*/

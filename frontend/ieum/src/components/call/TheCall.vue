@@ -1,7 +1,42 @@
 <template>
-  <div>
-    <video ref="localVideo" autoplay></video>
-    <video ref="remoteVideo" autoplay></video>
+  <div id="main-container" class="call-body w-2/3 mx-auto">
+    <div id="join" v-if="!session">
+      <div id="img-div"></div>
+      <div id="join-dialog" class="jumbotron vertical-center">
+        <h1>방 참여하기</h1>
+        <div class="form-group">
+          <p>
+            <label>참가자 이름</label>
+            <input v-model="myUserName" class="form-control" type="text" required />
+          </p>
+          <p>
+            <label>방 번호</label>
+            <input v-model="mySessionId" class="form-control" type="text" required />
+          </p>
+          <p class="text-center">
+            <button class="btn btn-lg btn-success" @click="joinSession">Join!</button>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div id="session" v-if="session">
+      <div id="session-header">
+        <h1 id="session-title">{{ mySessionId }}</h1>
+      </div>
+      <div id="main-video" class="col-md-6">
+        <UserVideo :stream-manager="mainStreamManager" />
+      </div>
+      <div id="video-container" class="col-md-6">
+        <UserVideo :stream-manager="publisher" @click="updateMainVideoStreamManager(publisher)" />
+        <UserVideo
+          v-for="sub in subscribers"
+          :key="sub.stream.connection.connectionId"
+          :stream-manager="sub"
+          @click="updateMainVideoStreamManager(sub)"
+        />
+      </div>
+    </div>
   </div>
   <div
     class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
@@ -11,6 +46,7 @@
         data-tooltip-target="tooltip-microphone"
         type="button"
         class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        @click="muteAudio"
       >
         <svg
           class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -38,6 +74,7 @@
         data-tooltip-target="tooltip-camera"
         type="button"
         class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        @click="enableVideo"
       >
         <svg
           class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
@@ -64,6 +101,7 @@
         data-tooltip-target="tooltip-feedback"
         type="button"
         class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        @click="leaveSession"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -94,53 +132,121 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useWebRTC } from './useWebRTC'
+import { OpenVidu } from 'openvidu-browser'
+import UserVideo from './VUserVideo.vue'
+import { createToken, createSession } from '@/api/call'
 
-const localVideo = ref(null)
-const remoteVideo = ref(null)
-const localStream = ref(null)
-const config = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
-const { localPeerConnection, remotePeerConnection } = useWebRTC(config)
+const OV = ref()
+const session = ref()
+const mainStreamManager = ref()
+const subscribers = ref([])
+const mySessionId = ref('SessionA')
+const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
+const videoState = ref(true)
+const audioState = ref(true)
+
+const joinSession = () => {
+  OV.value = new OpenVidu()
+  session.value = OV.value.initSession()
+
+  session.value.on('streamCreated', ({ stream }) => {
+    const subscriber = session.value.subscribe(stream)
+    subscribers.value.push(subscriber)
+  })
+
+  session.value.on('streamDestroyed', ({ stream }) => {
+    const index = subscribers.value.indexOf(stream.streamManager, 0)
+    if (index >= 0) {
+      subscribers.value.splice(index, 1)
+    }
+  })
+
+  session.value.on('exception', ({ exception }) => {
+    console.warn(exception)
+  })
+
+  getToken(mySessionId.value).then((token) => {
+    session.value
+      .connect(token, { clientData: myUserName.value })
+      .then(() => {
+        let publisher = OV.value.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          resolution: '640x480',
+          frameRate: 30,
+          insertMode: 'APPEND',
+          mirror: false
+        })
+
+        mainStreamManager.value = publisher
+        publisher = mainStreamManager.value
+
+        session.value.publish(publisher)
+      })
+      .catch((error) => {
+        console.log('There was an error connecting to the session:', error.code, error.message)
+      })
+  })
+
+  window.addEventListener('beforeunload', leaveSession)
+}
+
+const leaveSession = () => {
+  if (session.value) session.value.disconnect()
+
+  session.value = undefined
+  mainStreamManager.value = undefined
+  subscribers.value = []
+  OV.value = undefined
+
+  window.removeEventListener('beforeunload', leaveSession)
+}
+
+const updateMainVideoStreamManager = (stream) => {
+  if (mainStreamManager.value === stream) return
+  mainStreamManager.value = stream
+}
+
+const getToken = async (mySessionId) => {
+  const sessionId = await createSession(mySessionId)
+  return await createToken(sessionId)
+}
 
 onMounted(() => {
-  navigator.mediaDevices
-    .getUserMedia({ video: true, audio: true })
-    .then((stream) => {
-      localStream.value = stream
-      localVideo.value.srcObject = stream
-
-      stream.getTracks().forEach((track) => localPeerConnection.addTrack(track, stream))
-
-      return localPeerConnection.createOffer()
-    })
-    .then((offer) => localPeerConnection.setLocalDescription(offer))
-    .then(() => remotePeerConnection.setRemoteDescription(localPeerConnection.localDescription))
-    .then(() => remotePeerConnection.createAnswer())
-    .then((answer) => remotePeerConnection.setLocalDescription(answer))
-    .then(() => localPeerConnection.setRemoteDescription(remotePeerConnection.localDescription))
-    .catch((error) => console.error('Error setting up localPeerConnection:', error))
-
-  remotePeerConnection.ontrack = (event) => {
-    remoteVideo.value.srcObject = event.streams[0]
-  }
-
-  localPeerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      remotePeerConnection.addIceCandidate(event.candidate)
-    }
-  }
-
-  remotePeerConnection.onicecandidate = (event) => {
-    if (event.candidate) {
-      localPeerConnection.addIceCandidate(event.candidate)
-    }
-  }
-
   window.onunload = () => {
-    localPeerConnection.close()
-    remotePeerConnection.close()
+    if (session.value) session.value.disconnect()
+    session.value = undefined
   }
 })
+
+const muteAudio = () => {
+  // true to unmute the audio track, false to mute it
+  if (audioState.value) {
+    audioState.value = false
+    mainStreamManager.value.publishAudio(false)
+  } else {
+    audioState.value = true
+    mainStreamManager.value.publishAudio(true)
+  }
+}
+
+const enableVideo = () => {
+  // true to enable the video track, false to disable it
+  if (videoState.value) {
+    videoState.value = false
+    mainStreamManager.value.publishVideo(false)
+  } else {
+    videoState.value = true
+    mainStreamManager.value.publishVideo(true)
+  }
+  console.log(mainStreamManager.value)
+}
 </script>
 
-<style scoped></style>
+<style>
+.call-body {
+  min-height: 60vh;
+}
+</style>
