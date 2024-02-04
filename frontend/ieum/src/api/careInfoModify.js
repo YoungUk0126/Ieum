@@ -5,25 +5,21 @@ const localSession = localSessionAxios()
 
 const localSessionFormData = localSessionAxiosFormData()
 
-const url = 'http://54.180.108.118:8080/api'
+// const url = 'http://54.180.108.118:8080/api'
 
-function serialInfoEdit(data, success) {
-  localSession.put(`${url}/devices`, JSON.stringify(data)).then(success).catch(fail)
-}
+const url = 'http://localhost:8080/api'
+// 로컬로 돌릴 때
+
 function userInfoEdit(data, success) {
-  localSession.put(`${url}/care`, JSON.stringify(data)).then(success).catch(fail)
+  localSession.put(`${url}/care`, data).then(success).catch(fail)
 }
 
 function getCareInfo(success) {
   localSession.get(`${url}/care`).then(success).catch(fail)
 }
 
-function getSerialNumber(success) {
-  localSession.get(`${url}/devices`).then(success).catch(fail)
-}
-
 function profileEdit(data, success) {
-  localSessionFormData.put(`${url}/profile`, data).then(success).catch(fail)
+  localSessionFormData.put(`${url}/care`, data).then(success).catch(fail)
 }
 
-export { serialInfoEdit, userInfoEdit, getCareInfo, getSerialNumber, profileEdit }
+export { userInfoEdit, getCareInfo, profileEdit }
