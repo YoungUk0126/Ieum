@@ -2,6 +2,8 @@ import { localAxios } from '@/util/http-commons'
 
 const local = localAxios()
 
+// const url = 'http://54.180.108.118:8080/api/member'
+
 const url = 'http://localhost:8080/api/member'
 
 function register(data, success, fail) {
