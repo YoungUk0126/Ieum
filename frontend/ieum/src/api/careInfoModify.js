@@ -11,7 +11,7 @@ const url = 'http://localhost:8080/api'
 // 로컬로 돌릴 때
 
 function userInfoEdit(data, success) {
-  localSession.put(`${url}/care`, JSON.stringify(data)).then(success).catch(fail)
+  localSession.put(`${url}/care`, data).then(success).catch(fail)
 }
 
 function getCareInfo(success) {
@@ -19,7 +19,7 @@ function getCareInfo(success) {
 }
 
 function profileEdit(data, success) {
-  localSessionFormData.put(`${url}/profile`, data).then(success).catch(fail)
+  localSessionFormData.put(`${url}/care`, data).then(success).catch(fail)
 }
 
 export { userInfoEdit, getCareInfo, profileEdit }

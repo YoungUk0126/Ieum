@@ -15,7 +15,7 @@
               </router-link>
             </li>
             <li>
-              <a href="/carecheck"
+              <a href="#"
                 class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600">부모님
                 정보</a>
             </li>
