@@ -1,17 +1,21 @@
 <template>
   <div class="content-container">
     <div class="p-4 flex flex-col items-center space-y-4">
-      <div class="w-full align-items-center ">
-        <input
-          type="text"
-          class="p-2 m-3 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-          placeholder="제목을 입력해주세요"
-          v-model="jsonData.eventName"
-        />
+      <div class="w-full flex space-x-4">
+        <div class="m-3 w-1/4">
+          <label for="title" class="block mb-2 text-sm font-medium text-gray-700">제목:</label>
+          <input
+            type="text"
+            id="title"
+            class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+            placeholder="제목을 입력해주세요"
+            v-model="jsonData.eventName"
+          />
+        </div>
       </div>
       <div class="w-full flex space-x-4">
-        <div class=" m-3 w-1/4">
-          <label for="start" class="block text-sm font-medium text-gray-700">날짜 :</label>
+        <div class="m-3 w-1/4">
+          <label for="date" class="block mb-2 text-sm font-medium text-gray-700">날짜:</label>
           <input
             type="date"
             id="start"
@@ -23,16 +27,6 @@
             v-model="jsonData.eventDate"
           />
         </div>
-        <div class="m-3 mt-8  w-1/4 flex items-center">
-          <input
-            type="checkbox"
-            class="form-checkbox h-5 w-5 text-blue-600"
-            id="btncheck1"
-            autocomplete="off"
-            v-model="jsonData.repeat"
-          />
-          <label for="btncheck1" class="ml-2 text-sm text-gray-700">매년 반복</label>
-        </div>
       </div>
 
       <!-- Modal footer -->
@@ -40,7 +34,7 @@
         <button
           data-modal-hide="default-modal"
           type="button"
-          class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
+          class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
           @click="postAlarmdata"
         >
           확인
@@ -91,14 +85,28 @@ function postAlarmdata() {
     return 0
   }
 
-  console.log(jsonData.value)
   postEvent(jsonData.value, (response) => {
-    console.log(response)
+    if (response.data.success === true) {
+      swal({
+        title: '기념일 알리미',
+        text: '기념일 등록이 완료되었습니다!',
+        icon: 'success',
+        buttons: {
+          confirm: {
+            text: '확인',
+            value: false,
+            visible: true,
+            className: '',
+            closeModal: true
+          }
+        }
+      })
+      props.closeModal()
+    }
   })
-}   
+}
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
 
 --------------------------------------------------
