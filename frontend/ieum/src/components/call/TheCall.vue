@@ -209,6 +209,7 @@ const updateMainVideoStreamManager = (stream) => {
 
 const getToken = async (id) => {
   const sessionId = await createSession(id)
+  console.log(sessionId)
   return await createToken(sessionId)
 }
 

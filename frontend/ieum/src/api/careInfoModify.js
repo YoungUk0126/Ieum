@@ -5,7 +5,7 @@ const localSession = localSessionAxios()
 
 const localSessionFormData = localSessionAxiosFormData()
 
-const url = `http://i10a303.p.ssafy.io:8080/api`
+const url = `https://i10a303.p.ssafy.io:443/api`
 
 function userInfoEdit(data, success) {
   localSession.put(`${url}/care`, data).then(success).catch(fail)
