@@ -265,7 +265,6 @@ const certifiedSend = () => {
     sendVerificationCode(
         userInfo.value.phone,
         (response) => {
-            console.log(response)
             if (response.status === 200) {
                 swal('인증번호를 보냈습니다.')
             }

@@ -91,6 +91,9 @@ const checkPhone = ref(true);
 const validatePhoneState = ref(false);
 //전화번호 중복 상태 체크 변수.
 
+const imageUploadState = ref(false);
+//이미지가 업로드 되어 있는지 확인하기 위한 변수.
+
 onMounted(() => {
     beforeCareInfo()
 })
@@ -110,7 +113,6 @@ const updateInfo = () => {
     if (checkPhone.value && validatePhoneState.value) {
         updateCareInfo()
         router.push('/')
-        swal('정보가 변경되었습니다.')
     }
     else {
         swal('전화번호 확인을 다시 시도해주세요.')
@@ -124,11 +126,21 @@ const updateCareInfo = () => {
     const json = JSON.stringify(careInfo.value)
     const formJson = new Blob([json], { type: 'application/json' })
     formData.append('data', formJson)
-    formData.append('file', blob.value, file.value.name)
+    if (imageUploadState.value) {
+        formData.append('file', blob.value, file.value.name)
+    }
+    else {
+        formData.append('file', null, null)
+    }
     profileEdit(
         formData,
-        () => {
-
+        (response) => {
+            if (response.status === 200) {
+                swal('정보가 변경되었습니다.')
+            }
+        },
+        (error) => {
+            swal(error)
         }
     )
 
@@ -150,6 +162,9 @@ const handleFileUpload = () => {
 
     // Blob 사용해서 이미지 파일 만들기
     blob.value = new Blob([file.value], { type: file.value.type })
+
+    imageUploadState.value = true;
+    //이미지를 업로드했을 때, true로 변경.
 };
 //이미지를 수정하는 메서드.
 
