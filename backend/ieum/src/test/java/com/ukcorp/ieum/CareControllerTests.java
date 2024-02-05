@@ -9,8 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,7 +32,9 @@ public class CareControllerTests {
     @Test
     @DisplayName("피보호자 정보 등록")
     void testInsert() throws Exception {
-        String requestBody = "{\"care_birth\": \"1945-01-01\", \"care_addr\": \"서울시송파구마천동\", \"care_name\": \"김옥지\", \"care_phone\" : \"010-1234-5678\", \"care_gender\" : \"FEMALE\"}";
+
+        String requestBody = "{\"careBirth\": \"1945-01-01\", \"careAddr\": \"서울시송파구마천동\", \"careName\": \"김옥지\", \"carePhone\" : \"010-1234-5678\", \"careGender\" : \"FEMALE\"}";
+
 //        post
         mock.perform(post("/api/care")
                         .content(requestBody)
@@ -49,7 +49,7 @@ public class CareControllerTests {
 //        get
         mock.perform(get("/api/care/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CareControllerTests {
 //        delete
         mock.perform(delete("/api/care/15"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
 }
