@@ -14,6 +14,7 @@ import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
 import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
 import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
+import TheAlarmViewVue from '@/views/TheAlarmView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -97,11 +98,17 @@ const router = createRouter({
       name: 'TheChatView',
       component: TheChatViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },{
+    },
+    {
       path: '/memberInfo',
       name: 'TheMemberInfoView',
       component: TheMemberInfoViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
+    },
+    {
+      path: '/alarm',
+      name: 'TheAlarmView',
+      component: TheAlarmViewVue
     },
     {
       path: '/404',
@@ -139,7 +146,7 @@ router.beforeEach((to, from, next) => {
         VueCookies.remove('refreshToken')
         VueCookies.remove('auth')
 
-        next({ path: '/login'})
+        next({ path: '/login' })
       })
     } else {
       next()
