@@ -217,9 +217,6 @@ const checkValidateId = () => {
                 swal('사용 가능한 아이디입니다.')
                 validateIdstate.value = true
             }
-        },
-        (error) => {
-            console.log(error)
         }
     )
 }
@@ -236,9 +233,6 @@ const checkValidateEmail = () => {
                 swal('사용 가능한 이메일입니다.')
                 validateemailstate.value = true
             }
-        },
-        (error) => {
-            console.log(error)
         }
     )
 }
@@ -255,9 +249,6 @@ const checkValidatePhoneNumber = () => {
                 swal('사용 가능한 전화번호입니다.')
                 validatephonestate.value = true
             }
-        },
-        (error) => {
-            console.log(error)
         }
     )
 }
@@ -277,12 +268,12 @@ const certifiedSend = () => {
         sendVerificationCode(
             userInfo.value.phone,
             (response) => {
-                if (response.status === 200) {
+                if (response.data.success) {
                     swal('인증번호를 보냈습니다.')
                 }
-            },
-            (error) => {
-                console.log(error)
+                else {
+                    swal('전화번호를 확인해주세요.')
+                }
             }
         )
     }
@@ -376,11 +367,13 @@ const checkPolicyAgree = () => {
 const registerFunc = () => {
     register(
         userInfo.value,
-        () => {
-            swal('회원가입이 완료되었습니다.')
-        },
-        (error) => {
-            swal(error)
+        (response) => {
+            if (response.data.success) {
+                swal('회원가입이 완료되었습니다.')
+            }
+            else {
+                swal('회원가입 중 오류가 발생하였습니다.')
+            }
         }
     )
 }

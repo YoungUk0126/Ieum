@@ -130,17 +130,17 @@ const updateCareInfo = () => {
         formData.append('file', blob.value, file.value.name)
     }
     else {
-        formData.append('file', null, null)
+        formData.append('file', null)
     }
     profileEdit(
         formData,
         (response) => {
-            if (response.status === 200) {
+            if (response.data.success) {
                 swal('정보가 변경되었습니다.')
             }
-        },
-        (error) => {
-            swal(error)
+            else {
+                swal('정보 변경 중 오류가 발생하였습니다.')
+            }
         }
     )
 
