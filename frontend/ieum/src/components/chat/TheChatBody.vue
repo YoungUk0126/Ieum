@@ -53,7 +53,7 @@
             >
               <img
                 class="w-5 h-5 rounded-full"
-                :src="chat.speaker === '이음이' ? lobotProfile : careProfile"
+                :src="chat.speaker === 'AI' ? lobotProfile : careProfile"
                 alt="Jese image"
               />
               <div class="ps-3">
