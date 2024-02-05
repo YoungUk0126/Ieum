@@ -198,7 +198,7 @@ const checkPasswordType = ref(true)
 const certifiedCode = ref('')
 //인증코드를 담을 변수.
 
-const certifiedCodeState = ref(true)
+const certifiedCodeState = ref(false)
 //인증상태를 담을 변수.
 
 const checkValidateId = () => {
@@ -269,8 +269,7 @@ const certifiedSend = () => {
             if (response.status === 200) {
                 swal('인증번호를 보냈습니다.')
             }
-        },
-        () => { }
+        }
     )
 }
 // 인증번호를 보내야하는 메서드.
@@ -285,8 +284,7 @@ const certifiedCheck = () => {
             } else {
                 certifiedCodeState.value = false
             }
-        },
-        () => { }
+        }
     )
 }
 // 인증번호를 체크하는 메서드.

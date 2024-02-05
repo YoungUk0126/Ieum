@@ -22,4 +22,8 @@ function profileEdit(data, success) {
   localSessionFormData.put(`${url}/care`, data).then(success).catch(fail)
 }
 
-export { userInfoEdit, getCareInfo, profileEdit }
+function phoneCheck(data, success) {
+  localSession.post(`${url}/care/check-phone`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+export { userInfoEdit, getCareInfo, profileEdit, phoneCheck }
