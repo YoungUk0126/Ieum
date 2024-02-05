@@ -1,12 +1,14 @@
 package com.ukcorp.ieum.api.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukcorp.ieum.api.config.NaverConfig;
 import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.dto.SmsRequestDTO;
 import com.ukcorp.ieum.api.dto.SmsResponseDTO;
 import com.ukcorp.ieum.api.service.NaverService;
+import com.ukcorp.ieum.chat.dto.EmotionDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,6 +23,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -135,6 +138,56 @@ public class NaverServiceImpl implements NaverService {
       return response.toString();
     } catch (Exception e) {
       log.debug("[+] STT 실패\n" + e.getMessage());
+      return "Fail";
+    }
+  }
+
+  @Override
+  public String getEmotion(EmotionDto content) {
+    log.debug("[+] Naver 감정 분석 시작");
+    try {
+      // 감정분석을 위한 Connection 객체 생성
+      HttpURLConnection conn = naverConfig.getEmotionHttpURLConnection();
+
+      // OutputStream으로 Post 파라미터 전송
+      ObjectMapper objectMapper = new ObjectMapper();
+      String request = objectMapper.writeValueAsString(content);
+      log.info("객체를 string으로 변환한 결과 값 >> " + request);
+      try (OutputStream outputStream = conn.getOutputStream()) {
+        outputStream.write(request.getBytes(StandardCharsets.UTF_8));
+      }
+
+      // HTTP 응답 받기
+      int responseCode = conn.getResponseCode();
+      log.info("응답 코드 >> " + responseCode);
+      if (responseCode == 200) { // 정상 호출
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+          StringBuilder response = new StringBuilder();
+          String inputLine;
+          while ((inputLine = br.readLine()) != null) {
+            response.append(inputLine);
+          }
+          log.info("stringbuilder >> " + response.toString());
+
+          // JSON 파싱
+          JsonNode rootNode = objectMapper.readTree(response.toString());
+          JsonNode sentimentNode = rootNode.path("document").path("sentiment");
+          if (!sentimentNode.isMissingNode()) {
+            String sentimentValue = sentimentNode.asText();
+            log.debug("[+] 감정 분석 성공: " + sentimentValue);
+            log.info("[+] 감정 분석 성공: " + sentimentValue);
+            return sentimentValue;
+          } else {
+            log.error("[+] document.sentiment 값을 찾을 수 없습니다.");
+            return "Fail";
+          }
+        }
+      } else { // 오류 발생
+        throw new Exception("호출 오류!!");
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      log.error("[+] 감정 분석 실패", e);
       return "Fail";
     }
   }

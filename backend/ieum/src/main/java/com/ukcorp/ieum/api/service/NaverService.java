@@ -10,6 +10,8 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
+
+import com.ukcorp.ieum.chat.dto.EmotionDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,4 +29,6 @@ public interface NaverService {
       throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException;
 
   String getSTT(MultipartFile file);
+
+  String getEmotion(EmotionDto content);
 }
