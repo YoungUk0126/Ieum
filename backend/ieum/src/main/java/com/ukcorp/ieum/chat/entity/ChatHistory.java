@@ -1,7 +1,6 @@
 package com.ukcorp.ieum.chat.entity;
 
 import com.ukcorp.ieum.care.entity.CareInfo;
-import com.ukcorp.ieum.event.entity.Subject;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

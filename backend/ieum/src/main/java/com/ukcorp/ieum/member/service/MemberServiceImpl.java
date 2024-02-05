@@ -1,7 +1,7 @@
 package com.ukcorp.ieum.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ukcorp.ieum.Sms.ValidationUtil;
+import com.ukcorp.ieum.sms.ValidationUtil;
 import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.care.entity.CareInfo;
