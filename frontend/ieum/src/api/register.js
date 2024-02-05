@@ -3,9 +3,9 @@ import { fail } from './fail.js'
 
 const local = localAxios()
 
-// const url = 'http://54.180.108.118:8080/api/member'
+const url = 'http://i10a303.p.ssafy.io:8080/api/member'
 
-const url = 'http://localhost:8080/api/member'
+// const url = 'http://localhost:8080/api/member'
 
 function register(data, success) {
   local.post(`${url}/join`, JSON.stringify(data)).then(success).catch(fail)

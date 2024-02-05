@@ -143,6 +143,7 @@ import swal from 'sweetalert'
 import { emailCheck } from '@/api/register'
 import { phoneCheck } from '@/api/register'
 import { sendVerificationCode } from '@/api/register'
+import { useRouter } from 'vue-router';
 
 const showPrivacyPolicy = () => {
     swal(`이음이(영욱컴퍼니(주))는 「개인정보 보호법」 제30조에 따라 정보주체의 개인정보를 보호하고 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 하기 위하여 다음과 같이 개인정보 처리방침을 수립·공개합니다.
@@ -152,6 +153,8 @@ const showPrivacyPolicy = () => {
   제1조(개인정보의 처리 목적)
   <이음이>(영욱컴퍼니(주))은(는) 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.`)
 }
+
+const router = useRouter();
 
 const passwordCheck = ref('')
 // 비밀번호 확인을 위한 변수.
@@ -167,6 +170,8 @@ const userInfo = ref({
     email: ''
 })
 //json형식으로 유저정보를 보내는 변수.
+
+
 
 const checkPasswordRepeatType = ref(true)
 //비밀번호와 비밀번호 확인이 동일한지 확인하는 변수.
@@ -213,7 +218,9 @@ const checkValidateId = () => {
                 validateIdstate.value = true
             }
         },
-        () => { }
+        (error) => {
+            console.log(error)
+        }
     )
 }
 // 아이디가 중복인지 아닌지 검사하는 메서드.
@@ -230,7 +237,9 @@ const checkValidateEmail = () => {
                 validateemailstate.value = true
             }
         },
-        () => { }
+        (error) => {
+            console.log(error)
+        }
     )
 }
 // 이메일이 중복인지 아닌지 검사하는 메서드.
@@ -247,7 +256,9 @@ const checkValidatePhoneNumber = () => {
                 validatephonestate.value = true
             }
         },
-        () => { }
+        (error) => {
+            console.log(error)
+        }
     )
 }
 // 전화번호가 중복인지 아닌지 검사하는 메서드.
@@ -262,26 +273,38 @@ const checkPassword = () => {
 //비밀번호와 비밀번호 확인이 동일한지 확인하는 메서드.
 
 const certifiedSend = () => {
-    sendVerificationCode(
-        userInfo.value.phone,
-        (response) => {
-            if (response.status === 200) {
-                swal('인증번호를 보냈습니다.')
+    if (validatephonestate.value) {
+        sendVerificationCode(
+            userInfo.value.phone,
+            (response) => {
+                if (response.status === 200) {
+                    swal('인증번호를 보냈습니다.')
+                }
+            },
+            (error) => {
+                console.log(error)
             }
-        }
-    )
+        )
+    }
+    else {
+        swal('중복이 아닌 전화번호를 입력해주세요.')
+    }
 }
 // 인증번호를 보내야하는 메서드.
 
 const certifiedCheck = () => {
     checkVerificationCode(
-        userInfo.value.phone,
-        certifiedCode.value,
-        ({ data }) => {
-            if (data.success === true) {
+        {
+            "phone": userInfo.value.phone,
+            "code": certifiedCode.value
+        },
+        (response) => {
+            if (response.data.success) {
                 certifiedCodeState.value = true
+                swal('인증번호가 확인되었습니다.')
             } else {
                 certifiedCodeState.value = false
+                swal('인증번호를 다시 확인해주세요.')
             }
         }
     )
@@ -341,8 +364,8 @@ const checkPolicyAgree = () => {
         validatephonestate.value
     ) {
         registerFunc()
-        swal('회원가입이 완료되었습니다.')
-        console.log(userInfo.value)
+        swal('회원가입이 완료되었습니다. 로그인 해주세요.')
+        router.push('/');
     } else {
         swal('회원가입 중 오류가 발생하였습니다.')
     }
@@ -353,10 +376,12 @@ const checkPolicyAgree = () => {
 const registerFunc = () => {
     register(
         userInfo.value,
-        (response) => {
-            console.log(response)
+        () => {
+            swal('회원가입이 완료되었습니다.')
         },
-        () => { }
+        (error) => {
+            swal(error)
+        }
     )
 }
 //회원가입 데이터를 보내는 메서드.
@@ -365,15 +390,6 @@ const registerFunc = () => {
 <style scoped>
 .all {
     min-width: 1024px !important;
-}
-
-.idIncorrect,
-.nameIncorrect,
-.emailIncorrect,
-.passwordIncorrect,
-.passwordcheckIncorrect,
-.phoneIncorrect {
-    color: red;
 }
 </style>
   

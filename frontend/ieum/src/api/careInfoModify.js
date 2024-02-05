@@ -5,9 +5,9 @@ const localSession = localSessionAxios()
 
 const localSessionFormData = localSessionAxiosFormData()
 
-// const url = 'http://54.180.108.118:8080/api'
+const url = 'http://i10a303.p.ssafy.io:8080/api'
 
-const url = 'http://localhost:8080/api'
+// const url = 'http://localhost:8080/api'
 // 로컬로 돌릴 때
 
 function userInfoEdit(data, success) {
