@@ -3,6 +3,7 @@ package com.ukcorp.ieum.api.config;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -57,8 +58,7 @@ public class NaverConfig {
      * Sms 사용을 위한 HttpHeaders 생성
      * @return HttpHeaders
      */
-    public HttpHeaders getSmsHttpHeaders() throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
-        Long time = System.currentTimeMillis();
+    public HttpHeaders getSmsHttpHeaders(Long time) throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("x-ncp-apigw-timestamp", time.toString());

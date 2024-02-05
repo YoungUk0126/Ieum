@@ -1,14 +1,11 @@
 package com.ukcorp.ieum.meal.controller;
 
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.ukcorp.ieum.meal.dto.request.MealInsertRequestDto;
+import com.ukcorp.ieum.meal.dto.request.MealUpdateRequestDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @Slf4j
@@ -35,13 +37,26 @@ public class MealControllerTest {
     @Test
     @DisplayName("약 정보 등록")
     void testInsert() throws Exception {
-        String requestBody = "{\"care_no\": \"1\", \"meal_time1\": \"90000\", \"meal_time2\": \"140000\", \"meal_time3\": \"210000\"}";
+        MealInsertRequestDto requestDto = MealInsertRequestDto.builder()
+                .mealTime1(70000L)
+                .mealTime2(120000L)
+                .mealTime3(190000L)
+                .build();
+
+        //    // JSON 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+
+//        String requestBody = "{\"care_no\": \"1\", \"meal_time1\": \"90000\", \"meal_time2\": \"140000\", \"meal_time3\": \"210000\"}";
 
         mock.perform(post("/api/meal")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
@@ -55,19 +70,33 @@ public class MealControllerTest {
 //        get
         mock.perform(get("/api/meal/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 
     @Test
     @DisplayName("약 정보 수정")
     void testUpdate() throws Exception {
-        String requestBody = "{\"care_no\": \"1\", \"meal_info_no\": \"1\", \"meal_time1\": \"90000\", \"meal_time2\": \"130000\", \"meal_time3\": \"200000\"}";
+        MealUpdateRequestDto requestDto = MealUpdateRequestDto.builder()
+                .mealInfoNo(2L)
+                .mealTime1(75000L)
+                .mealTime2(125000L)
+                .mealTime3(195000L)
+                .build();
+
+        //    // JSON 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        String requestBody = objectMapper.writeValueAsString(requestDto);
+
+//        String requestBody = "{\"care_no\": \"1\", \"meal_info_no\": \"1\", \"meal_time1\": \"90000\", \"meal_time2\": \"130000\", \"meal_time3\": \"200000\"}";
 
         mock.perform(put("/api/meal")
                         .content(requestBody)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
+
     }
 
     @Test
@@ -76,7 +105,7 @@ public class MealControllerTest {
 //        delete
         mock.perform(delete("/api/meal/1"))
                 .andExpect(status().isOk())
-                .andExpect((content().contentType(MediaType.APPLICATION_JSON))).andDo(print());
+                .andExpect((content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))).andDo(print());
     }
 }
 

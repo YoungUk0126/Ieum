@@ -37,5 +37,12 @@ public class CareInfo {
 
     @Column(name = "CARE_IMAGE")
     private String careImage;
+
+    @Column(name = "CARE_SERIAL")
+    private String careSerial;
+
+    public void updateSerialCode(String code) {
+        this.careSerial = code;
+    }
 }
 

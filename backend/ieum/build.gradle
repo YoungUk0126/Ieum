@@ -34,6 +34,10 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'com.google.cloud:google-cloud-texttospeech:2.34.0'
 
+//	jackson에서 더 이상 java8 이상의 데이터 타입을 지원 안해줘서 넣어주는 의존성
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
 	// aws s3
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
@@ -55,6 +59,13 @@ dependencies {
 
 	// redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// coolSMS
+	implementation 'net.nurigo:sdk:4.3.0'
+
+  // https://mvnrepository.com/artifact/org.apache.httpcomponents.client5/httpclient5
+  implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
+
 }
 
 tasks.named('test') {
