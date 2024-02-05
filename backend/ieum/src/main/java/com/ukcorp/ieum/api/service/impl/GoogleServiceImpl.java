@@ -2,12 +2,12 @@ package com.ukcorp.ieum.api.service.impl;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.ukcorp.ieum.api.service.GoogleService;
-
-import java.io.FileInputStream;
 import com.google.cloud.texttospeech.v1.*;
+import com.ukcorp.ieum.api.service.GoogleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.io.FileInputStream;
 
 /**
  * Google Service 구현체
@@ -49,6 +49,7 @@ public class GoogleServiceImpl implements GoogleService {
       VoiceSelectionParams voice =
               VoiceSelectionParams.newBuilder()
                       .setLanguageCode("ko-KR")
+                      .setName("ko-KR-Standard-D")
                       .setSsmlGender(SsmlVoiceGender.FEMALE)
                       .build();
       // 오디오 설정으로 인코딩은 기본 LINEAR16

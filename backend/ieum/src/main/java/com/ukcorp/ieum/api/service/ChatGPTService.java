@@ -18,6 +18,6 @@ public interface ChatGPTService {
 
     List<Map<String, Object>> modelList();
 
-    Map<String, Object> prompt(String message);
+    String prompt(String message);
 
 }

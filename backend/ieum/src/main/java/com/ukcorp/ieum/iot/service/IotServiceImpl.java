@@ -5,14 +5,10 @@ import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.iot.entity.SerialCode;
 import com.ukcorp.ieum.iot.entity.Usable;
 import com.ukcorp.ieum.iot.repository.IotRepository;
-import com.ukcorp.ieum.member.entity.Member;
-import com.ukcorp.ieum.member.repository.MemberRepository;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +34,22 @@ public class IotServiceImpl implements IotService {
       return true;
     }
     return false;
+  }
+
+  /**
+   * 해당 careNo에 해당하는 기기 시리얼 번호 확인
+   * @param code
+   * @return
+   */
+  @Override
+  public String getSerialCode(Long careNo) {
+    SerialCode device = iotRepository.findById(careNo).orElseThrow(
+        () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
+
+    if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
+      return device.getSerialCode();
+    }
+    return null;
   }
 
   /**
