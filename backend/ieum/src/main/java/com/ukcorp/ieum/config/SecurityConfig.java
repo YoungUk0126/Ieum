@@ -65,6 +65,7 @@ public class SecurityConfig {
                                 "/api/sessions/**",
                                 "/api/sessions/*",
                                 "/api/sessions",
+                                "/api/ieum/*",
                                 "/error").permitAll()
                         // 나머지 요청에 대해서는 인증 필요
 //                        .anyRequest().permitAll()
