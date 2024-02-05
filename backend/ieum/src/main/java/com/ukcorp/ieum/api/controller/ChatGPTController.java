@@ -1,11 +1,12 @@
 package com.ukcorp.ieum.api.controller;
 
 import com.ukcorp.ieum.api.service.ChatGPTService;
-import java.util.HashMap;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,14 +18,11 @@ import java.util.Map;
  * @since : 01/19/24
  */
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/api/chatGpt")
 public class ChatGPTController {
 
     private final ChatGPTService chatGPTService;
-
-    public ChatGPTController(ChatGPTService chatGPTService) {
-        this.chatGPTService = chatGPTService;
-    }
 
     /**
      * [API] ChatGPT 모델 리스트를 조회합니다.
@@ -48,7 +46,7 @@ public class ChatGPTController {
     @PostMapping("/prompt")
     public ResponseEntity<Map<String,Object>> selectPrompt(@RequestBody String message) {
       try{
-        Map<String, Object> result = chatGPTService.prompt(message);
+        String result = chatGPTService.prompt(message);
         return handleSuccess(result);
       }catch (Exception e){
         return handleFail(e.getMessage());
