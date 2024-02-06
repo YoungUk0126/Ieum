@@ -10,13 +10,17 @@ class Article(models.Model): # models 모듈의 Model 클래스(model의 모든 
 '''    
 class Pill(models.Model):
     pillName = models.CharField(max_length=50)
-    pillStartDate = models.DateField(auto_now=False, auto_now_add=False)
-    pillEndDate = models.DateField(auto_now=False, auto_now_add=False)
+    pillStartDate = models.JSONField()
+    pillEndDate = models.JSONField()
     pillDate = models.CharField(max_length=8)
     pillMethod = models.CharField(max_length=20)
-    pillTimes = models.JSONField()
 
 
+class PillTimes(models.Model):
+    pill = models.ForeignKey('Pill', on_delete=models.CASCADE)
+    pillTakeTime = models.IntegerField()
+    
+    
 class Meal(models.Model):
     mealTime1 = models.IntegerField()
     mealTime2 = models.IntegerField()
@@ -25,7 +29,7 @@ class Meal(models.Model):
 
 class Event(models.Model):
     eventName = models.CharField(max_length=50)
-    eventDate = models.DateField()
+    eventDate = models.JSONField()
 
 
 class Sleep(models.Model):
