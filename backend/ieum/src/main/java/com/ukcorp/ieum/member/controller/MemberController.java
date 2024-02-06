@@ -1,12 +1,14 @@
 package com.ukcorp.ieum.member.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.jwt.JwtFilter;
 import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.*;
 import com.ukcorp.ieum.member.service.MemberServiceImpl;
 import jakarta.validation.Valid;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -14,14 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/member")
@@ -32,7 +34,8 @@ public class MemberController {
     private final MemberServiceImpl memberService;
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Object>> joinMember(@RequestBody @Valid MemberRequestDto member) {
+    public ResponseEntity<Map<String, Object>> joinMember(
+            @RequestBody @Valid MemberRequestDto member) {
         memberService.signup(member);
 
         return handleSuccess("success");
@@ -50,15 +53,12 @@ public class MemberController {
 
             return new ResponseEntity<>(jwtToken, httpHeaders, HttpStatus.OK);
         } catch (UsernameNotFoundException e) {
-            log.debug("MEMBER 찾을 수 없음");
-            return handleFail("fail");
+            return new ResponseEntity<>("찾을 수 없는 회원", HttpStatus.BAD_REQUEST);
         } catch (BadCredentialsException e) {
-            log.debug("비밀번호 틀림");
-            return handleFail("fail");
+            return new ResponseEntity<>("비밀번호 틀림", HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             e.printStackTrace();
-            log.debug("로그인 오류");
-            return handleFail("fail");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -69,14 +69,6 @@ public class MemberController {
         return handleSuccess(memberInfo);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity<Map<String, Object>> logoutMember() {
-        memberService.logout();
-
-        return handleSuccess("success");
-    }
-
-
     @PutMapping
     public ResponseEntity<Map<String, Object>> updateMember(@RequestBody @Valid MemberUpdateDto member) {
         memberService.modifyMember(member);
@@ -84,16 +76,17 @@ public class MemberController {
         return handleSuccess("success");
     }
 
-    @PutMapping("/password")
-    public ResponseEntity<Map<String, Object>> updateMemberPassword(@RequestBody @Valid MemberIdPasswordDto passwordDto) {
-        memberService.modifyMemberPassword(passwordDto);
+    @GetMapping("/logout")
+    public ResponseEntity<Map<String, Object>> logoutMember() {
+        memberService.logout();
 
         return handleSuccess("success");
     }
 
-    @DeleteMapping
-    public ResponseEntity<Map<String, Object>> withdrawMember() {
-        memberService.withdrawMember();
+    @PutMapping("/password")
+    public ResponseEntity<Map<String, Object>> updateMemberPassword(
+            @RequestBody @Valid MemberIdPasswordDto passwordDto) {
+        memberService.modifyMemberPassword(passwordDto);
 
         return handleSuccess("success");
     }
@@ -111,8 +104,17 @@ public class MemberController {
         return handleSuccess("success");
     }
 
+    @DeleteMapping
+    public ResponseEntity<Map<String, Object>> withdrawMember() {
+        memberService.withdrawMember();
+
+        return handleSuccess("success");
+    }
+
     @PostMapping("/verify")
-    public ResponseEntity<Map<String, Object>> verifyCode(@RequestBody @Valid VerifyRequestDto verifyRequestDto) {
+    public ResponseEntity<Map<String, Object>> verifyCode(
+            @RequestBody @Valid VerifyRequestDto verifyRequestDto) {
+
         boolean isCorrect = memberService.checkMessageCode(verifyRequestDto);
         if (isCorrect) {
             return handleSuccess("success");
@@ -122,7 +124,8 @@ public class MemberController {
     }
 
     @GetMapping("/check-id/{member-id}")
-    public ResponseEntity<Map<String, Object>> isDuplicatedId(@PathVariable("member-id") String checkId) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedId(
+            @PathVariable("member-id") String checkId) {
         boolean isExists = memberService.isExistsMemberId(checkId);
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -136,7 +139,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-email")
-    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(@RequestBody @Valid EmailRequestDto emailDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedEmail(
+            @RequestBody @Valid EmailRequestDto emailDto) {
         boolean isExists = memberService.isExistsMemberEmail(emailDto.getEmail());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -150,7 +154,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-phone")
-    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(@RequestBody @Valid PhoneRequestDto phoneDto) {
+    public ResponseEntity<Map<String, Object>> isDuplicatedPhone(
+            @RequestBody @Valid PhoneRequestDto phoneDto) {
         boolean isExists = memberService.isExistsMemberPhone(phoneDto.getPhone());
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -164,7 +169,8 @@ public class MemberController {
     }
 
     @PostMapping("/check-exist")
-    public ResponseEntity<Map<String, Object>> isExistMember(@RequestBody @Valid CheckExistDto checkMember) {
+    public ResponseEntity<Map<String, Object>> isExistMember(
+            @RequestBody @Valid CheckExistDto checkMember) {
         boolean isExists = memberService.checkExistsMember(checkMember);
         Map<String, Boolean> response = new HashMap<>();
         if (isExists) {
@@ -195,6 +201,7 @@ public class MemberController {
 
         return handleFail("실패");
     }
+
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();

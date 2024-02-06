@@ -1,27 +1,14 @@
 package com.ukcorp.ieum.chat.service.impl;
 
-import com.ukcorp.ieum.care.entity.CareInfo;
-import com.ukcorp.ieum.chat.dto.ChatHistoryDto;
-import com.ukcorp.ieum.chat.dto.request.ChatHIstoryRequestDto;
-import com.ukcorp.ieum.chat.dto.response.ChatHistoryResponseDto;
 import com.ukcorp.ieum.chat.entity.ChatHistory;
 import com.ukcorp.ieum.chat.repository.ChatHistoryRepository;
 import com.ukcorp.ieum.chat.service.ChatHistoryService;
-import lombok.RequiredArgsConstructor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ChatHistoryServiceImplTest {

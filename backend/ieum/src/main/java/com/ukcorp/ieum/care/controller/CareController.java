@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.care.controller;
 
 import com.ukcorp.ieum.care.dto.request.CareInsertRequestDto;
+import com.ukcorp.ieum.care.dto.request.CarePhoneRequestDto;
 import com.ukcorp.ieum.care.dto.request.CareUpdateRequestDto;
 import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
 import com.ukcorp.ieum.care.service.CareServiceImpl;
@@ -28,7 +29,6 @@ import java.util.UUID;
 @Slf4j
 public class CareController {
 
-
   private final CareServiceImpl careService;
 
   public static void uploadImage(
@@ -41,7 +41,6 @@ public class CareController {
     String fileName = name + ".jpg";
     Path filePath = Paths.get(uploadDir, fileName);
     file.transferTo(filePath); // 파일 다운로드
-
   }
 
   @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -94,6 +93,19 @@ public class CareController {
     }
   }
 
+  @PostMapping("/check-phone")
+  private ResponseEntity<Map<String, Object>> checkDuplicatedPhone(@RequestBody CarePhoneRequestDto phoneDto) {
+      boolean isExists = careService.isExistsMemberPhone(phoneDto);
+      Map<String, Boolean> response = new HashMap<>();
+      if (isExists) {
+          // 이미 존재하는 핸드폰 번호인 경우
+          response.put("isDuplicated", true);
+      } else {
+          // 사용 가능한 핸드폰 번호인 경우
+          response.put("isDuplicated", false);
+      }
+      return handleSuccess(response);
+  }
 
   private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
     Map<String, Object> result = new HashMap<>();

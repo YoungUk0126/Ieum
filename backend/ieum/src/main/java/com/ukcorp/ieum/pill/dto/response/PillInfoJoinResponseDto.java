@@ -18,7 +18,6 @@ import java.util.List;
 public class PillInfoJoinResponseDto {
   private Long pillInfoNo;
   private String pillName;
-  private Long careNo;
   private LocalDate pillStartDate;
   private LocalDate pillEndDate;
   private String pillMethod;
@@ -28,7 +27,6 @@ public class PillInfoJoinResponseDto {
   public PillInfoJoinResponseDto(PillInfo pillInfo) {
     this.pillInfoNo = pillInfo.getPillInfoNo();
     this.pillName = pillInfo.getPillName();
-    this.careNo = pillInfo.getCareInfo().getCareNo();
     this.pillStartDate = pillInfo.getPillStartDate();
     this.pillEndDate = pillInfo.getPillEndDate();
     this.pillMethod = pillInfo.getPillMethod().toString();

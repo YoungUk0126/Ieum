@@ -9,6 +9,8 @@ import com.ukcorp.ieum.temporalEvent.dto.response.TemporalEventResponseDto;
 import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
 import com.ukcorp.ieum.temporalEvent.mapper.TemporalEventMapper;
 import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,6 +37,22 @@ public class TemporalEventServiceImpl implements TemporalEventService {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
       List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
+
+      return temporalEventMapper.TemporalEventEntityToResponseDto(list);
+    } catch (RuntimeException e) {
+      log.debug("조회하는데 오류가 있습니다");
+      throw new Exception("조회 오류!");
+    }
+  }
+
+  @Override
+  public List<TemporalEventResponseDto> getListMonth(int year, int month) throws Exception {
+    try {
+      Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+
+      List<TemporalEvent> list = temporalEventRepository.findByCareInfo_CareNoAndEventDateBetween(careNo,
+          LocalDate.of(year, month, 1),  // 연-월의 시작일
+          LocalDate.of(year, month, YearMonth.of(year, month).atEndOfMonth().getDayOfMonth()));
 
       return temporalEventMapper.TemporalEventEntityToResponseDto(list);
     } catch (RuntimeException e) {

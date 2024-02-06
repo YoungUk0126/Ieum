@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.care.service;
 
 import com.ukcorp.ieum.care.dto.request.CareInsertRequestDto;
+import com.ukcorp.ieum.care.dto.request.CarePhoneRequestDto;
 import com.ukcorp.ieum.care.dto.request.CareUpdateRequestDto;
 import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
 import com.ukcorp.ieum.care.entity.CareInfo;
@@ -57,6 +58,7 @@ public class CareServiceImpl implements CareService {
               .careGender(Gender.valueOf(careDto.getCareGender()))
               .carePhone(careDto.getCarePhone())
               .careImage(careDto.getCareImage())
+              .careSerial(careDto.getCareSerial())
               .build();
       careRepository.save(care);
     } catch (DataIntegrityViolationException e) {
@@ -76,5 +78,10 @@ public class CareServiceImpl implements CareService {
       log.debug("삭제 오류!");
       throw new Exception("삭제 오류!");
     }
+  }
+
+  @Override
+  public boolean isExistsMemberPhone(CarePhoneRequestDto phoneDto) {
+    return careRepository.existsByCarePhone(phoneDto.getPhone());
   }
 }

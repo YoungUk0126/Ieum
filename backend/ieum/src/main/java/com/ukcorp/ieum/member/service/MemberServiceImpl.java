@@ -1,7 +1,7 @@
 package com.ukcorp.ieum.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ukcorp.ieum.Sms.ValidationUtil;
+import com.ukcorp.ieum.sms.ValidationUtil;
 import com.ukcorp.ieum.api.dto.MessageDTO;
 import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.care.entity.CareInfo;
@@ -33,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor
@@ -207,6 +208,7 @@ public class MemberServiceImpl implements MemberService {
         log.info("보내는 번호 >> " + phone);
         log.info("보내는 코드 >> " + code);
         naverService.sendSms(sendSms);
+        validationUtil.registCode(phone, code);
     }
 
     /**

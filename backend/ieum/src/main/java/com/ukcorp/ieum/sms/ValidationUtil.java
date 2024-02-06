@@ -1,17 +1,11 @@
-package com.ukcorp.ieum.Sms;
+package com.ukcorp.ieum.sms;
 
 import lombok.extern.slf4j.Slf4j;
-import net.nurigo.sdk.NurigoApp;
-import net.nurigo.sdk.message.model.Message;
-import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
-import net.nurigo.sdk.message.response.SingleMessageSentResponse;
-import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.security.SecureRandom;
 import java.time.Duration;
 
@@ -30,6 +24,17 @@ public class ValidationUtil {
 
     private final RedisTemplate<String, String> redisTemplate;
 
+    public boolean registCode(String phone, String code) {
+      try{
+        // 핸드폰번호 + 코드 Redis에 저장
+        redisTemplate.opsForValue()
+            .set(phone, code, Duration.ofSeconds(3 * 60));
+        return true;
+      }catch (Exception e){
+        log.debug(e.getMessage());
+        return false;
+      }
+    }
 
     /**
      * 문자로 받은 코드 인증
