@@ -74,7 +74,8 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendEventDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
         List<RegularEvent> allByCareInfoCareNo = eventRepository.findAllByCareInfo_CareNo(careNo);
 
         String serial = careInfo.getCareSerial();
