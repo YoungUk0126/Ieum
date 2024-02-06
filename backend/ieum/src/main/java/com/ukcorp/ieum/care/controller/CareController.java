@@ -50,7 +50,10 @@ public class CareController {
   ) {
 
     try {
-      uploadImage(careDto.getCareImage(), file);
+//      파일이 Null값이 아니면 이미지 업로드
+      if(file != null) {
+        uploadImage(careDto.getCareImage(), file);
+      }
       careService.updateCareInfo(careDto);
       return handleSuccess(careDto);
 
