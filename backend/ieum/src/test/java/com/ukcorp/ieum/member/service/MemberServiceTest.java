@@ -1,12 +1,11 @@
 package com.ukcorp.ieum.member.service;
 
-import com.ukcorp.ieum.Sms.ValidationUtil;
+import com.ukcorp.ieum.sms.ValidationUtil;
 import com.ukcorp.ieum.api.service.NaverService;
 import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.jwt.TokenProvider;
-import com.ukcorp.ieum.jwt.dto.JwtToken;
 import com.ukcorp.ieum.member.dto.MemberIdPasswordDto;
 import com.ukcorp.ieum.member.dto.MemberRequestDto;
 import com.ukcorp.ieum.member.dto.MemberResponseDto;
