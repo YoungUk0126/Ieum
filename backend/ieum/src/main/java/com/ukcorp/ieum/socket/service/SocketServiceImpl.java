@@ -28,6 +28,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +51,8 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendPillDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
         List<PillInfo> byCareInfoCareNo = pillInfoRepository.findByCareInfo_CareNo(careNo);
 
         String serial = careInfo.getCareSerial();
