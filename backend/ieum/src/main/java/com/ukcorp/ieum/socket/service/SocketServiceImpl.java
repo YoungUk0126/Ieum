@@ -34,7 +34,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SocketServiceImpl implements SocketService {
 
-//    private final ChannelTopic topic;
+    //    private final ChannelTopic topic;
     private final RedisPublisher redisPublisher;
 
     private final CareRepository careRepository;
@@ -118,8 +118,10 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendMealDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
-        Meal meal = mealRepository.findByCareInfo_CareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+        Meal meal = mealRepository.findByCareInfo_CareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEAL"));
 
         ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
 
@@ -131,7 +133,6 @@ public class SocketServiceImpl implements SocketService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
