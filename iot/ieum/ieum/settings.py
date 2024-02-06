@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'parser'
+    'parser',
+    'django_apscheduler', # 스케줄러 lib
+    'django_crontab', # 스케줄러 크론표기용 lib
 ]
 
 MIDDLEWARE = [
@@ -76,6 +78,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ieum.wsgi.application'
 
+CRONJOBS = [
+    ('분 시 일 월 해','appName,fileName,functionName'),
+    ('* * * * *','appName,fileName,functionName'),
+   ...
+]
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
