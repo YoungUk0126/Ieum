@@ -560,5 +560,7 @@ src/main/resources/application-dev.yml
 
 .idea/*
 
+src/main/resources/AN-keystore.p12
+src/main/resources/application-local.yml
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
