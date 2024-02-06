@@ -99,12 +99,14 @@ const router = createRouter({
       name: 'TheChatView',
       component: TheChatViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },{
+    },
+    {
       path: '/memberInfo',
       name: 'TheMemberInfoView',
       component: TheMemberInfoViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },{
+    },
+    {
       //화상통화 페이지
       path: '/calltest',
       name: 'TheCareCallViewVue',
@@ -146,7 +148,7 @@ router.beforeEach((to, from, next) => {
         VueCookies.remove('refreshToken')
         VueCookies.remove('auth')
 
-        next({ path: '/login'})
+        next({ path: '/login' })
       })
     } else {
       next()

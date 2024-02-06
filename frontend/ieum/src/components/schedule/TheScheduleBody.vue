@@ -1,13 +1,63 @@
 <template>
   <div class="mt-5 mb-5">
+
+    <!-- Modal toggle -->
+    <button data-modal-target="static-modal" data-modal-toggle="static-modal"
+      class="Iblock text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 mb-5"
+      type="button">
+      일정 추가
+    </button>
+
+    <!-- Main modal -->
+    <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
+      class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      <div class="relative p-4 w-full max-w-2xl max-h-full">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+              일정 추가
+            </h3>
+            <button type="button"
+              class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              data-modal-hide="static-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+              </svg>
+              <span class="sr-only">Close modal</span>
+            </button>
+          </div>
+          <!-- Modal body -->
+          <div class="p-4 md:p-5 space-y-4">
+            <label for="scheduleDate" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6">일정
+              날짜</label>
+            <input type="date"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              v-model="eventInfo.eventDate">
+          </div>
+          <div class="mr-5 ml-5 mb-7">
+            <label for="name" class="block text-sm font-medium text-gray-900 dark:text-white mt-4 mb-4">일정 이름</label>
+            <input type="text"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              v-model="eventInfo.eventName">
+
+          </div>
+          <!-- Modal footer -->
+          <div class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
+            <button data-modal-hide="static-modal" type="button"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              @click="addEventFunction">추가</button>
+            <button data-modal-hide="static-modal" type="button"
+              class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">취소</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="datepicker border">
-      <Calendar
-        v-model="date"
-        :attributes="attributes"
-        @didMove="loadSchedule"
-        @dayclick="click"
-        expanded
-      >
+      <Calendar v-model="date" :attributes="attributes" @didMove="loadSchedule" @dayclick="click" expanded>
         <template #footer> </template>
       </Calendar>
     </div>
@@ -18,55 +68,15 @@
           <div class="mt-3 d-flex">
             <div class="content">{{ item }}</div>
             <div class="col-2 text-center">
-              <a href="#" class="btn btn-custom-primary btn-lg w-50 fw-bold">수정</a>
+
             </div>
             <div class="col-2 text-center">
-              <a href="#" class="btn btn-custom-danger btn-lg w-50 fw-bold">삭제</a>
+              <a href="#" class="btn btn-custom-danger btn-lg w-50 fw-bold" @click="deleteEventFunction(item.eventNo)">일정
+                삭제</a>
             </div>
           </div>
         </div>
       </div>
-      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead
-          class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400"
-        >
-          <tr>
-            <th scope="col" class="px-6 py-3 rounded-s-lg">일정 내용</th>
-            <th scope="col" class="px-6 py-3 text-center">수정</th>
-            <th scope="col" class="px-6 py-3 text-center rounded-e-lg">삭제</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="bg-white dark:bg-gray-800">
-            <th
-              scope="row"
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-            >
-              <input
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value="Apple MacBook Pro 17"
-              />
-            </th>
-            <td class="px-6 py-4 text-center">
-              <button
-                type="button"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                @click="edit"
-              >
-                수정
-              </button>
-            </td>
-            <td class="px-6 py-4 text-center">
-              <button
-                type="button"
-                class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
-              >
-                삭제
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
@@ -74,11 +84,69 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { Calendar } from 'v-calendar'
-import { getList } from '../../api/schedule.js'
+import { getList, addSchedule, modifySchedule, deleteSchedule } from '../../api/schedule.js'
+import swal from 'sweetalert';
 import 'v-calendar/style.css'
+// import { useRouter } from 'vue-router';
 
 const date = ref(new Date())
 const schedule = ref([])
+// const router = useRouter();
+
+const eventInfo = ref({
+  "eventName": "",
+  "eventDate": ""
+})
+
+const addEventFunction = () => {
+  addSchedule(
+    eventInfo.value,
+    (response) => {
+      if (response.data.success) {
+        swal('일정이 추가되었습니다.')
+        getApi(date.value.getFullYear(), date.value.getMonth() + 1)
+      }
+      else {
+        swal('일정 형식을 다시 한 번 확인해주세요.')
+      }
+
+    }
+  )
+}
+
+const modifyEventFunction = () => {
+  modifySchedule(
+    todos.value,
+    (response) => {
+      if (response.data.success) {
+        swal('일정이 변경되었습니다.')
+        getApi(date.value.getFullYear(), date.value.getMonth() + 1)
+      }
+      else {
+        swal('일정형식을 다시 확인해주세요.')
+      }
+
+    }
+  )
+
+
+}
+//아직 못함...
+
+const deleteEventFunction = (item) => {
+  deleteSchedule(
+    item,
+    ({ data }) => {
+      if (data.success) {
+        swal('일정이 삭제되었습니다.')
+        getApi(date.value.getFullYear(), date.value.getMonth() + 1)
+      }
+      else {
+        swal('일정 삭제 중 오류가 발견되었습니다.')
+      }
+    }
+  )
+}
 
 onMounted(() => {
   date.value.setHours(9, 0, 0, 0)
@@ -128,7 +196,7 @@ const getApi = (year, month) => {
     data.data.forEach((element) => {
       todos.value.push({
         description: element.eventName,
-        isComplete: false,
+        // isComplete: false,
         dates: new Date(element.eventDate),
         color: 'orange',
         eventNo: element.eventNo
