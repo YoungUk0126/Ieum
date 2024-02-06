@@ -20,4 +20,5 @@ public interface ChatGPTService {
 
     String prompt(String message);
 
+    String prompt(String message, Long careNo);
 }

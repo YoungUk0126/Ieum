@@ -41,7 +41,7 @@ public class IeumAPIController {
             // stt String 값 보호자 -> 이음이 메시지로 저장
             chatHistoryService.saveMemberChat(stt, memberEmotion, careNo);
 
-            String chat = chatGPTService.prompt(stt);
+            String chat = chatGPTService.prompt(stt, careNo);
 
             // chatGPT로 만든 text의 감정 분석
             String ieumEmotion = naverService.getEmotion(EmotionDto.builder().content(chat).build());
