@@ -1,31 +1,32 @@
 import { localAxios } from '@/util/http-commons'
+import { fail } from './fail.js'
 
 const local = localAxios()
 
 const url = `https://i10a303.p.ssafy.io:443/api/member`
 
-function register(data, success, fail) {
+function register(data, success) {
   local.post(`${url}/join`, JSON.stringify(data)).then(success).catch(fail)
 }
 //서버로 넘어감.
 
-function sendVerificationCode(data, success, fail) {
+function sendVerificationCode(data, success) {
   local.post(`${url}/auth`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-function checkVerificationCode(data, success, fail) {
+function checkVerificationCode(data, success) {
   local.post(`${url}/verify`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-function idCheck(param, success, fail) {
+function idCheck(param, success) {
   local.get(`${url}/check-id/${param}`).then(success).catch(fail)
 }
 
-function emailCheck(data, success, fail) {
+function emailCheck(data, success) {
   local.post(`${url}/check-email`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-function phoneCheck(data, success, fail) {
+function phoneCheck(data, success) {
   local.post(`${url}/check-phone`, JSON.stringify(data)).then(success).catch(fail)
 }
 
