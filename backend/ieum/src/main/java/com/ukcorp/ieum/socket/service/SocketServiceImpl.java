@@ -98,11 +98,12 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendSleepDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
-        SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+        SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND SLEEP INFO"));
 
         ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
-
 
         Content content = new Content();
         SleepResponseDto sleepResponseDto = sleepSocketMapper.InfoToDto(sleepInfo);
