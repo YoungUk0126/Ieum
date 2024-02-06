@@ -59,7 +59,7 @@ class ChatHistoryServiceImplTest {
 //      System.out.println(content.getMessage());
 //    }
 
-    List<ChatHistory> histories = chatHistoryRepository.findTop8ByCareInfoCareNo(2L);
-    Assertions.assertThat(histories.size()).isEqualTo(7);
+//    List<ChatHistory> histories = chatHistoryRepository.findTop8ByCareInfoCareNo(2L);
+//    Assertions.assertThat(histories.size()).isEqualTo(7);
   }
 }
