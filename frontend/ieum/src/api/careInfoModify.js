@@ -5,7 +5,9 @@ const localSession = localSessionAxios()
 
 const localSessionFormData = localSessionAxiosFormData()
 
-// const url = 'http://54.180.108.118:8080/api'
+const endpoint = 'i10a303.p.ssafy.io'
+
+const url2 = `http://${endpoint}:8080/api/message`
 
 const url = 'http://localhost:8080/api'
 // 로컬로 돌릴 때

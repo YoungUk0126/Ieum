@@ -5,7 +5,9 @@ const local = localAxios()
 
 const localSession = localSessionAxios()
 
-const url = 'http://localhost:8080/api/chat'
+const endpoint = 'i10a303.p.ssafy.io'
+
+const url = `http://${endpoint}:8080/api/chat`
 
 function getList(param, success) {
   localSession.get(`${url}`, { params: param }).then(success).catch(fail)

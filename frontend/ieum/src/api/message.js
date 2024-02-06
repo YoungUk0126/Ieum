@@ -5,7 +5,9 @@ const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://54.180.108.118:8080/api/message'
+const endpoint = 'i10a303.p.ssafy.io'
+
+const url = `http://${endpoint}:8080/api/message`
 
 function getApi(success) {
   local.get(`${url}`).then(success).catch(fail)

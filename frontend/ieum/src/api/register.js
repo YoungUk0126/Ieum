@@ -2,9 +2,9 @@ import { localAxios } from '@/util/http-commons'
 
 const local = localAxios()
 
-// const url = 'http://54.180.108.118:8080/api/member'
+const endpoint = 'i10a303.p.ssafy.io'
 
-const url = 'http://localhost:8080/api/member'
+const url = `http://${endpoint}:8080/api/member`
 
 function register(data, success, fail) {
   local.post(`${url}/join`, JSON.stringify(data)).then(success).catch(fail)
