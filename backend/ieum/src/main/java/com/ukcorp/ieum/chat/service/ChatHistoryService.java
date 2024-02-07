@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface ChatHistoryService {
 
+    Long getCareNoBySerial(String serial);
+
     ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryDto chatHIstoryDto);
 
     ChatHistoryResponseDto getChatHistoryLimit(Long careNo);

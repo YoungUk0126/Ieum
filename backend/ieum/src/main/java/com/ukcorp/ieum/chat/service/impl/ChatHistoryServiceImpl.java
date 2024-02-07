@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +30,12 @@ public class ChatHistoryServiceImpl implements ChatHistoryService {
     private final ChatHistoryRepository chatHistoryRepository;
     private final ChatHistoryMapper chatHistoryMapper;
     private final CareRepository careRepository;
+
+    @Override
+    public Long getCareNoBySerial(String serial) {
+        return careRepository.findCareInfoByCareSerial(serial)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO")).getCareNo();
+    }
 
     @Override
     public ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryDto chatHIstoryDto) {
