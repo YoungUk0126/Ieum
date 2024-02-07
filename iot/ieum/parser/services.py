@@ -1,7 +1,7 @@
-import json
 from .models import *
 from datetime import datetime
-
+from api.services import *
+import json
 
 def parser(data):
     jsonObj = json.loads(data)
@@ -57,10 +57,15 @@ def parser(data):
             pill.pillEndDate = datetime.strptime(pillEndDate[:-1],'%Y-%m-%d')
             pill.save()
 
-
             for times in list.get("pillTimes"):
                 pilltime = PillTime.objects.create(pill=pill, pillTime=times.get("pillTakeTime"))
                 pilltime.save()
-    else:
-        print("type : " + jsonObj.get("type"))
-        print("content : " + jsonObj.get("content"))
+
+    elif(jsonObj.get("type") == "Chat"):
+        source = jsonObj.get("content")
+        chat(source)
+
+    elif(jsonObj.get("type") == "Fire"):
+        source = jsonObj.get("content")
+        tts(source)
+        # fire()
