@@ -1,29 +1,6 @@
 <template>
   <div id="main-container" class="call-body w-2/3 mx-auto">
-    <div id="join" v-if="!session">
-      <div id="img-div"></div>
-      <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>방 참여하기</h1>
-        <div class="form-group">
-          <p>
-            <label>참가자 이름</label>
-            <input v-model="myUserName" class="form-control" type="text" required />
-          </p>
-          <p>
-            <label>방 번호</label>
-            <input v-model="mySessionId" class="form-control" type="text" required />
-          </p>
-          <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession">Join!</button>
-          </p>
-        </div>
-      </div>
-    </div>
-
     <div id="session" v-if="session">
-      <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
-      </div>
       <div id="video-container">
         <template v-if="who">
           <UserVideo
@@ -53,8 +30,14 @@
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
-        type="button"
-        class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          {
+            'bg-gray-100': audioState,
+            'bg-red-500': !audioState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': audioState
+          }
+        ]"
         @click="muteAudio"
       >
         <svg
@@ -69,7 +52,7 @@
           />
           <path d="M9 0H7a3 3 0 0 0-3 3v5a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3Z" />
         </svg>
-        <span class="sr-only">음소거</span>
+        <span class="sr-only">{{ audioState ? '음소거 해제' : '음소거' }}</span>
       </button>
       <div
         id="tooltip-microphone"
@@ -82,7 +65,14 @@
       <button
         data-tooltip-target="tooltip-camera"
         type="button"
-        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          {
+            'bg-gray-100': videoState,
+            'bg-red-500': !videoState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': videoState
+          }
+        ]"
         @click="enableVideo"
       >
         <svg
@@ -96,7 +86,7 @@
             d="M11 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm8.585 1.189a.994.994 0 0 0-.9-.138l-2.965.983a1 1 0 0 0-.685.949v8a1 1 0 0 0 .675.946l2.965 1.02a1.013 1.013 0 0 0 1.032-.242A1 1 0 0 0 20 12V2a1 1 0 0 0-.415-.811Z"
           />
         </svg>
-        <span class="sr-only">화면 끄기</span>
+        <span class="sr-only">{{ audioState ? '화면 켜기' : '화면 끄기' }}</span>
       </button>
       <div
         id="tooltip-camera"
@@ -151,7 +141,6 @@ const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
 const subscribers = ref([])
-const mySessionId = ref('SessionA')
 const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
 const videoState = ref(true)
 const audioState = ref(true)
@@ -178,7 +167,7 @@ const joinSession = () => {
     console.warn(exception)
   })
 
-  getToken(mySessionId.value).then((token) => {
+  getToken().then((token) => {
     session.value
       .connect(token, { clientData: myUserName.value })
       .then(() => {
@@ -224,12 +213,13 @@ const updateMainVideoStreamManager = (stream) => {
   }
 }
 
-const getToken = async (id) => {
-  const sessionId = await createSession(id)
+const getToken = async () => {
+  const sessionId = await createSession()
   return await createToken(sessionId)
 }
 
 onMounted(() => {
+  joinSession()
   window.onunload = () => {
     if (session.value) session.value.disconnect()
     session.value = undefined
