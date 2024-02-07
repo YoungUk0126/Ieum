@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_apscheduler', # 스케줄러 lib
     'parser',
     'django_crontab', # 스케줄러 크론표기용 lib
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,7 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}

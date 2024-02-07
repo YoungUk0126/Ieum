@@ -1,4 +1,5 @@
 """
+클라이언트의 요청을 url 형태로 받아내는 곳. 어떤 url이냐에 따라 호출하는 곳이 달라짐. 
 URL configuration for ieum project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -14,10 +15,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('/', include('parser.urls'))
+    path('/', include('parser.urls')),
 ]
