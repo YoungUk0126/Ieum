@@ -1,11 +1,11 @@
 <template>
   <div class="body">
-    <TheCall></TheCall>
+    <TheCareCall></TheCareCall>
   </div>
 </template>
 
 <script setup>
-import TheCall from '../components/call/TheCall.vue'
+import TheCareCall from '../components/callCare/TheCareCall.vue'
 </script>
 
 <style scoped>

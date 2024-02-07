@@ -8,6 +8,56 @@
         >
           <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
         </router-link>
+        <div
+          v-show="!hide"
+          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
+          id="navbar-user"
+        >
+          <ul
+            class="flex flex-col font-bold p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
+          >
+            <li>
+              <router-link
+                :to="{ name: 'TheChatView' }"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >대화목록
+              </router-link>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >부모님 정보</a
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheScheduleView' }"
+                href="#"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >일정</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheCallView' }"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >화상통화</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheMessageView' }"
+                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                >메세지</router-link
+              >
+            </li>
+            <li>
+              <!-- Main modal -->
+              <VModal></VModal>
+            </li>
+          </ul>
+        </div>
       </div>
       <div
         v-show="!hide"
@@ -83,6 +133,7 @@ import VueCookies from 'vue-cookies'
 import { useRouter } from 'vue-router'
 import swal from 'sweetalert'
 import { useCounterStore } from '@/stores/counter'
+import TheScheduleView from '@/views/TheScheduleView.vue'
 
 const router = useRouter()
 

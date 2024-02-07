@@ -4,9 +4,7 @@ const local = localAxios()
 
 const localSession = localSessionAxios()
 
-const endpoint = 'i10a303.p.ssafy.io'
-
-const url = `http://${endpoint}:8080/api/member`
+const url = `https://i10a303.p.ssafy.io:443/api/member`
 
 function register(data, success) {
   local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)

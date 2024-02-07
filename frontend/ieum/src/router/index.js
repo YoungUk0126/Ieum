@@ -16,6 +16,8 @@ import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
 import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
 import TheAlarmViewVue from '@/views/TheAlarmView.vue'
 
+import TheCareCallViewVue from '@/views/TheCareCallView.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -104,6 +106,11 @@ const router = createRouter({
       name: 'TheMemberInfoView',
       component: TheMemberInfoViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
+    },{
+      //화상통화 페이지
+      path: '/calltest',
+      name: 'TheCareCallViewVue',
+      component: TheCareCallViewVue
     },
     {
       path: '/alarm',

@@ -64,13 +64,16 @@
           v-model="editState.messageTime"
         />
       </div>
-      <div class="w-full border-t border-4 my-3"></div>
-      <div class="w-full text-left md:text-right items-center mb-2">
-        <p class="font-bold mb-0">이전 메세지</p>
-      </div>
-      <div class="w-2/3 md:w-2/3">
-        <audio id="prevVoice" controls class="w-full"></audio>
-      </div>
+      <!--
+        <div class="w-full border-t border-4 my-3"></div>
+        <div class="w-full text-left md:text-right items-center mb-2">
+          <p class="font-bold mb-0">이전 메세지</p>
+        </div>
+        <div class="w-2/3 md:w-2/3">
+          <audio id="prevVoice" controls class="w-full"></audio>
+        </div>
+
+      -->
       <div class="w-full border-t border-4 my-3"></div>
       <div class="w-full text-left items-center">
         <p class="font-bold mb-0">새로 녹음</p>

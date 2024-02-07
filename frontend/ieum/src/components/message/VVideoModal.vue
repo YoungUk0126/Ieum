@@ -27,7 +27,9 @@
   </div>
   <!-- Modal body -->
   <div class="p-4 md:p-5 space-y-4">
-    <video ref="video" autoplay />
+    <video ref="video" autoplay controls>
+      <source ref="videoSave" type="video/webm" />
+    </video>
     <div class="flex flex-wrap items-center">
       <div class="w-1/3 text-center md:text-right mb-3">
         <p class="font-bold mb-0">발신자</p>
@@ -115,7 +117,7 @@ import { modifyApi } from '@/api/message'
 
 const props = defineProps(['messageState', 'modal'])
 const modal = ref(props.modal)
-
+const videoSave = ref()
 const editState = ref({
   messageNo: '',
   careNo: '',
@@ -152,7 +154,7 @@ const recorder = ref()
 const isRecording = ref(false)
 const recordedChunks = ref([])
 const recordedBlob = ref()
-const datePicker = ref()
+
 const constraints = {
   audio: true,
   video: true
@@ -195,7 +197,8 @@ const startRecording = async () => {
       downloadLink.click()
       document.body.removeChild(downloadLink)
       console.log('Recording stopped')
-
+      // Set the src attribute of the video tag to the URL of the recorded video
+      videoSave.value.src = URL.createObjectURL(recordedBlob.value)
       recordedChunks.value = []
     }
 

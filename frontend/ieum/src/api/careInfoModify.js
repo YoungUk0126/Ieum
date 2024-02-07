@@ -5,12 +5,7 @@ const localSession = localSessionAxios()
 
 const localSessionFormData = localSessionAxiosFormData()
 
-const endpoint = 'i10a303.p.ssafy.io'
-
-const url2 = `http://${endpoint}:8080/api/message`
-
-const url = 'http://localhost:8080/api'
-// 로컬로 돌릴 때
+const url = `https://i10a303.p.ssafy.io:443/api`
 
 function userInfoEdit(data, success) {
   localSession.put(`${url}/care`, data).then(success).catch(fail)
@@ -24,4 +19,8 @@ function profileEdit(data, success) {
   localSessionFormData.put(`${url}/care`, data).then(success).catch(fail)
 }
 
-export { userInfoEdit, getCareInfo, profileEdit }
+function phoneCheck(data, success) {
+  localSession.post(`${url}/care/check-phone`, JSON.stringify(data)).then(success).catch(fail)
+}
+
+export { userInfoEdit, getCareInfo, profileEdit, phoneCheck }

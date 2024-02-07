@@ -1,20 +1,28 @@
-/*
-import { localAxios } from "@/util/http-commons";
+import { localAxios, localSessionAxios } from '@/util/http-commons'
 
-const local = localAxios();
+const url = `https://i10a303.p.ssafy.io:443`
 
-const url = "/example"
+const localSession = localSessionAxios()
 
-function example1(param, success, fail) {
-  local.get(`${url}`, { params: param }).then(success).catch(fail);
+const local = localAxios()
+
+// 피보호자 접속시 시리얼번호
+const createSessionCare = async (serialNo) => {
+  const response = await local.post(
+    `${url}/api/sessions/care`,
+    JSON.stringify({ customSessionId: serialNo })
+  )
+  return response.data
 }
-function example2(data, success, fail) {
-  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+// 보호자 세션 접속
+const createSession = async () => {
+  const response = await localSession.post(`${url}/api/sessions`)
+  return response.data
 }
 
-export {
-    example1,
-    example2
-};
+const createToken = async (sessionId) => {
+  const response = await localSession.post(`${url}/api/sessions/connections/${sessionId}`)
+  return response.data
+}
 
-*/
+export { createSession, createToken, createSessionCare }
