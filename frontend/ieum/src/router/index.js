@@ -106,7 +106,8 @@ const router = createRouter({
       name: 'TheMemberInfoView',
       component: TheMemberInfoViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },{
+    },
+    {
       //화상통화 페이지
       path: '/calltest',
       name: 'TheCareCallViewVue',

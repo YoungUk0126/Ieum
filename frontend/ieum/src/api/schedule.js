@@ -10,4 +10,16 @@ function getList(year, month, success) {
   localSession.get(`${url}/${year}/${month}`).then(success).catch(fail)
 }
 
-export { getList }
+function addSchedule(data, success) {
+  localSession.post(`${url}`, data).then(success).catch(fail)
+}
+
+function modifySchedule(data, success) {
+  localSession.put(`${url}`, data).then(success).catch(fail)
+}
+
+function deleteSchedule(param, success) {
+  localSession.delete(`${url}/${param}`).then(success).catch(fail)
+}
+
+export { getList, addSchedule, modifySchedule, deleteSchedule }
