@@ -27,10 +27,11 @@ public class IeumAPIController {
     private final ChatGPTService chatGPTService;
     private final ChatHistoryService chatHistoryService;
 
-    @PostMapping("/{care-no}")
-    public ResponseEntity<byte[]> getSTT(@PathVariable("care-no") Long careNo,
+    @PostMapping("/{serial}")
+    public ResponseEntity<byte[]> getSTT(@PathVariable("serial") String serial,
                                          @RequestParam("file") MultipartFile file) {
         try {
+            Long careNo = chatHistoryService.getCareNoBySerial(serial);
             String stt = naverService.getSTT(file);
             if (stt.equals("Fail")) {
                 throw new Exception("STT 실패");
