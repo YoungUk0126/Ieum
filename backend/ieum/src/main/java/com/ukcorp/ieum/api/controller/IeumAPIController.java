@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.api.controller;
 
+import com.ukcorp.ieum.api.dto.TextRequestDto;
 import com.ukcorp.ieum.api.service.ChatGPTService;
 import com.ukcorp.ieum.api.service.GoogleService;
 import com.ukcorp.ieum.api.service.NaverService;
@@ -26,6 +27,26 @@ public class IeumAPIController {
     private final NaverService naverService;
     private final ChatGPTService chatGPTService;
     private final ChatHistoryService chatHistoryService;
+
+    @PostMapping("/speak")
+    public ResponseEntity<byte[]> testToSpeech(@RequestBody TextRequestDto text) {
+        try {
+            byte[] audioData = googleService.convertTextToSpeech(text.getText());
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "output.mp3");
+
+            // Http response로 mp3 파일 전송
+            return new ResponseEntity<>(audioData, headers, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "output.mp3");
+
+            return new ResponseEntity<>(null, headers, HttpStatus.OK);
+        }
+    }
 
     @PostMapping("/{serial}")
     public ResponseEntity<byte[]> getSTT(@PathVariable("serial") String serial,
