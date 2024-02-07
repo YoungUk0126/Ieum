@@ -43,8 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'parser',
     'django_apscheduler', # 스케줄러 lib
+    'parser',
     'django_crontab', # 스케줄러 크론표기용 lib
 ]
 
@@ -78,11 +78,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ieum.wsgi.application'
 
-CRONJOBS = [
-    ('분 시 일 월 해','appName,fileName,functionName'),
-    ('* * * * *','appName,fileName,functionName'),
-   ...
-]
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
+
+SCHEDULER_DEFAULT = True # apps.py 참고
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

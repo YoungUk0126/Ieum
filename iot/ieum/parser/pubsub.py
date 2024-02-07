@@ -1,8 +1,19 @@
 import redis
-import webbrowser
 from .services import parser
+
+redis_client = redis.Redis(host='localhost', port=6379)
+def publish(channel, type, content):
+    while True:
+        # type = input()
+        # content = input()
+        message = '{"type": "' + type + '", "content":"' + content + '"}'
+        print(message)
+        redis_client.publish(channel, message)
+
 def subscribe(topic):
+    
     redis_client = redis.Redis(host='70.12.240.1', port=6379)
+
     pubsub = redis_client.pubsub()
     pubsub.subscribe(topic)
     for message in pubsub.listen():
