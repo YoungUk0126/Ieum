@@ -22,6 +22,42 @@
           <div class="w-2 h-2 bg-green-500 rounded-full"></div>
           <div class="text-green-700 text-base font-normal">최근 대화 내역: 1일전</div>
         </div>
+        <div class="flex">
+          <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
+            <ul
+              class="p-8 flex flex-col font-bold md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
+            >
+              <li>
+                <router-link
+                  :to="{ name: 'TheChatView' }"
+                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                  >대화목록
+                </router-link>
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'TheCareInfoCheckView' }"
+                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                  >부모님 정보</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'TheScheduleView' }"
+                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                  >일정</router-link
+                >
+              </li>
+              <li>
+                <router-link
+                  :to="{ name: 'TheAlarmView' }"
+                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
+                  >알람</router-link
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>

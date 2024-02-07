@@ -6,7 +6,7 @@
     class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
     type="button"
   >
-    알람
+    알람 등록
   </button>
 
   <!-- Modal -->

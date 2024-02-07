@@ -1,8 +1,6 @@
 <template>
   <div class="content-container mx-auto">
     <TheProfile></TheProfile>
-    <TheRecentConversations></TheRecentConversations>
-    <TheVoiceVideoMessages></TheVoiceVideoMessages>
     <router-view></router-view>
   </div>
 </template>

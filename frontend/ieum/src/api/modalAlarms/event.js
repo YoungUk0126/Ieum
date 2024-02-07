@@ -5,7 +5,9 @@ const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://54.180.108.118:8080/api/ani'
+const endpoint = 'i10a303.p.ssafy.io'
+
+const url = `http://${endpoint}:8080/api/ani`
 
 function getAllEvent(param, success) {
   local.get(`${url}/list/${param}`).then(success).catch(fail)

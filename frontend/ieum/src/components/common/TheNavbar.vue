@@ -128,7 +128,7 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import VModal from '@/components/modal/VModal.vue'
+import VModal from '@/components/Alarm/VModal.vue'
 import VueCookies from 'vue-cookies'
 import { useRouter } from 'vue-router'
 import swal from 'sweetalert'

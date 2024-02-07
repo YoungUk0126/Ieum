@@ -5,7 +5,9 @@ const local = localSessionAxios()
 
 const form = localSessionAxiosFormData()
 
-const url = 'http://54.180.108.118:8080/api/meal'
+const endpoint = 'i10a303.p.ssafy.io'
+
+const url = `http://${endpoint}:8080/api/meal`
 
 function getMeal(param, success) {
   local.get(`${url}/${param}`).then(success).catch(fail)
