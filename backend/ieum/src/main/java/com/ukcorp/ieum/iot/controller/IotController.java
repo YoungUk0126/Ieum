@@ -4,6 +4,7 @@ import com.ukcorp.ieum.iot.dto.SerialRequestDto;
 import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +40,12 @@ public class IotController {
      */
     @PostMapping
     public ResponseEntity postIotDevice(@RequestBody String code) {
-
         String userId = JwtUtil.getMemberId().get();
         try {
             iotService.registSerialCode(code, userId);
             return handleSuccess();
         } catch (Exception e) {
+            e.printStackTrace();
             return handleError();
         }
     }
@@ -67,6 +68,7 @@ public class IotController {
             iotService.updateSerialCode(code, userId);
             return handleSuccess();
         } catch (Exception e) {
+            e.printStackTrace();
             return handleError();
         }
     }
