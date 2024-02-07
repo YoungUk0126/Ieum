@@ -61,3 +61,6 @@ def parser(data):
             for times in list.get("pillTimes"):
                 pilltime = PillTime.objects.create(pill=pill, pillTime=times.get("pillTakeTime"))
                 pilltime.save()
+    else:
+        print("type : " + jsonObj.get("type"))
+        print("content : " + jsonObj.get("content"))
