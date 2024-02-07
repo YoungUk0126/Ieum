@@ -1,5 +1,4 @@
 import redis
-import webbrowser
 from .services import parser
 
 redis_client = redis.Redis(host='localhost', port=6379)
