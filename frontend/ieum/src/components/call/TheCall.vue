@@ -134,14 +134,16 @@ import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
 import UserMainVideo from './VUserMainVideo.vue'
-
+import swal from 'sweetalert'
 import { createToken, createSession } from '@/api/call'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
 const subscribers = ref([])
-const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
 const videoState = ref(true)
 const audioState = ref(true)
 const pub = ref()
@@ -169,7 +171,7 @@ const joinSession = () => {
 
   getToken().then((token) => {
     session.value
-      .connect(token, { clientData: myUserName.value })
+      .connect(token)
       .then(() => {
         let publisher = OV.value.initPublisher(undefined, {
           audioSource: undefined,
@@ -204,6 +206,21 @@ const leaveSession = () => {
   OV.value = undefined
 
   window.removeEventListener('beforeunload', leaveSession)
+  swal({
+    title: '종료',
+    text: '통화가 종료되었습니다.',
+    icon: 'info',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    router.push({ name: 'TheMainViewVue' })
+  })
 }
 
 const updateMainVideoStreamManager = (stream) => {
@@ -220,6 +237,7 @@ const getToken = async () => {
 
 onMounted(() => {
   joinSession()
+
   window.onunload = () => {
     if (session.value) session.value.disconnect()
     session.value = undefined
