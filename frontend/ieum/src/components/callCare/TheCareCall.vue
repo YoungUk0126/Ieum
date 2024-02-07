@@ -140,7 +140,7 @@
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '../call/VUserVideo.vue'
-import { createToken, createSessionCare } from '@/api/call'
+import { createToken, createSessionCare } from '@/api/call.js'
 import UserMainVideo from '../call/VUserMainVideo.vue'
 const OV = ref()
 const session = ref()

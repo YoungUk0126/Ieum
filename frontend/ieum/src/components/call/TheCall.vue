@@ -135,7 +135,7 @@ import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
 import UserMainVideo from './VUserMainVideo.vue'
 import swal from 'sweetalert'
-import { createToken, createSession } from '@/api/call'
+import { createToken, createSession } from '@/api/call.js'
 
 import { useRouter } from 'vue-router'
 const router = useRouter()
@@ -156,6 +156,11 @@ const joinSession = () => {
   session.value.on('streamCreated', ({ stream }) => {
     const subscriber = session.value.subscribe(stream)
     subscribers.value.push(subscriber)
+
+    subscriber.on('streamPlaying', (event) => {
+      console.log(event.target.stream.streamManager)
+      updateMainVideoStreamManager(event.target.stream.streamManager)
+    })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
