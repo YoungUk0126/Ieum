@@ -42,7 +42,7 @@
           />
         </template>
       </div>
-      <div id="main-video" class="col-md-6 w-full">
+      <div class="col-md-6 w-full">
         <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
     </div>
@@ -220,16 +220,12 @@ const leaveSession = () => {
 const updateMainVideoStreamManager = (stream) => {
   if (mainStreamManager.value !== stream) {
     who.value = !who.value
-    console.log('들어옴')
-    console.log(mainStreamManager.value)
-    console.log(stream)
     mainStreamManager.value = stream
   }
 }
 
 const getToken = async (id) => {
   const sessionId = await createSession(id)
-  console.log(sessionId)
   return await createToken(sessionId)
 }
 
@@ -255,12 +251,11 @@ const enableVideo = () => {
   // true to enable the video track, false to disable it
   if (videoState.value) {
     videoState.value = false
-    mainStreamManager.value.publishVideo(false)
+    pub.value.publishVideo(false)
   } else {
     videoState.value = true
-    mainStreamManager.value.publishVideo(true)
+    pub.value.publishVideo(true)
   }
-  console.log(mainStreamManager.value)
 }
 </script>
 
