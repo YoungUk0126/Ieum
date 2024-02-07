@@ -24,16 +24,26 @@
       <div id="session-header">
         <h1 id="session-title">{{ mySessionId }}</h1>
       </div>
-      <div id="main-video" class="col-md-6">
-        <UserVideo :stream-manager="mainStreamManager" />
+      <div id="video-container">
+        <template v-if="who">
+          <UserVideo
+            class="col-md-6 w-full"
+            :stream-manager="pub"
+            @click="updateMainVideoStreamManager(pub)"
+          />
+        </template>
+        <template v-if="!who">
+          <UserVideo
+            v-for="sub in subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            class="col-md-6 w-full"
+            @click="updateMainVideoStreamManager(sub)"
+          />
+        </template>
       </div>
-      <div id="video-container" class="col-md-6">
-        <UserVideo
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
+      <div id="main-video" class="col-md-6 w-full">
+        <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
     </div>
   </div>
@@ -133,6 +143,8 @@
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
+import UserMainVideo from './VUserMainVideo.vue'
+
 import { createToken, createSession } from '@/api/call'
 
 const OV = ref()
@@ -143,6 +155,8 @@ const mySessionId = ref('SessionA')
 const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
 const videoState = ref(true)
 const audioState = ref(true)
+const pub = ref()
+const who = ref(false)
 
 const joinSession = () => {
   OV.value = new OpenVidu()
@@ -175,14 +189,14 @@ const joinSession = () => {
           publishVideo: true,
           resolution: '640x480',
           frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
+          insertMode: 'REPLACE',
+          mirror: true
         })
 
         mainStreamManager.value = publisher
-        publisher = mainStreamManager.value
+        pub.value = mainStreamManager.value
 
-        session.value.publish(publisher)
+        session.value.publish(pub.value)
       })
       .catch((error) => {
         console.log('There was an error connecting to the session:', error.code, error.message)
@@ -204,7 +218,13 @@ const leaveSession = () => {
 }
 
 const updateMainVideoStreamManager = (stream) => {
-  if (mainStreamManager.value === stream) return (mainStreamManager.value = stream)
+  if (mainStreamManager.value !== stream) {
+    who.value = !who.value
+    console.log('들어옴')
+    console.log(mainStreamManager.value)
+    console.log(stream)
+    mainStreamManager.value = stream
+  }
 }
 
 const getToken = async (id) => {
