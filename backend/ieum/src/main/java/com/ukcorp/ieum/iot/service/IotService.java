@@ -1,12 +1,24 @@
 package com.ukcorp.ieum.iot.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 public interface IotService {
 
-  boolean activeCheck(String code);
+    void sendFireSms(String serial) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
 
-  void registSerialCode(String code, String userId);
+    void checkInfo(String serial);
 
-  void updateSerialCode(String code, String userId);
+    boolean activeCheck(String code);
 
-  String getSerialCode(Long careNo);
+    void registSerialCode(String code, String userId);
+
+    void updateSerialCode(String code, String userId);
+
+    String getSerialCode(Long careNo);
+
 }

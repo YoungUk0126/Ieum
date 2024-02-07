@@ -74,6 +74,10 @@ public class Member {
         this.memberPhone = updateMember.getPhone();
     }
 
+    public void updateSerial(String serial) {
+        this.serialCode = serial;
+    }
+
     public void updateSerialCode(String code) {
         this.serialCode = code;
     }
