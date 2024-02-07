@@ -1,5 +1,5 @@
 <template>
-  <div id="main-container" class="call-body w-2/3 mx-auto">
+  <div class="call-body w-full mx-auto mt-4">
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
