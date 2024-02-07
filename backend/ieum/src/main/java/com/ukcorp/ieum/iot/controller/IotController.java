@@ -30,7 +30,18 @@ public class IotController {
         }
     }
 
-    @PostMapping("/check")
+    @PostMapping("/check-info")
+    public ResponseEntity<Map<String, Object>> checkInfo(@RequestBody SerialRequestDto serial) {
+        try {
+            iotService.checkInfo(serial.getSerial());
+            return handleSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return handleError();
+        }
+    }
+
+    @PostMapping("/check-device")
     public ResponseEntity<Map<String, Object>> checkDevice(@RequestBody SerialRequestDto serial) {
         try {
             iotService.activeCheck(serial.getSerial());

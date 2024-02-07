@@ -11,6 +11,8 @@ public interface IotService {
 
     void sendFireSms(String serial) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
 
+    void checkInfo(String serial);
+
     boolean activeCheck(String code);
 
     void registSerialCode(String code, String userId);

@@ -17,6 +17,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 
+import com.ukcorp.ieum.socket.service.SocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,8 @@ public class IotServiceImpl implements IotService {
     private final IotRepository iotRepository;
     private final MemberRepository memberRepository;
     private final CareRepository careRepository;
+
+    private final SocketService socketService;
     private final NaverService naverService;
 
     /**
@@ -44,6 +47,18 @@ public class IotServiceImpl implements IotService {
                 .content("[이음] 보호자의 자택에 화재가 발생했습니다").build();
 
         naverService.sendSms(sendMessage);
+    }
+
+    @Override
+    public void checkInfo(String serial) {
+        CareInfo careInfo = careRepository.findCareInfoByCareSerial(serial)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+        Long careNo = careInfo.getCareNo();
+
+        socketService.sendMealDataToIot(careNo);
+        socketService.sendSleepDataToIot(careNo);
+        socketService.sendEventDataToIot(careNo);
+        socketService.sendPillDataToIot(careNo);
     }
 
 
