@@ -17,10 +17,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -46,24 +46,7 @@ public class IotServiceImpl implements IotService {
 
         naverService.sendSms(sendMessage);
     }
-
-    /**
-     * 작성자 : 이성목
-     * 해당 디바이스가 사용 중인지 확인
-     *
-     * @param code
-     * @return
-     */
-    @Override
-    public boolean activeCheck(String code) {
-        SerialCode device = iotRepository.searchBySerialCode(code).orElseThrow(
-                () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
-
-        if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
-            return true;
-        }
-        return false;
-    }
+    
 
     /**
      * 해당 careNo에 해당하는 기기 시리얼 번호 확인

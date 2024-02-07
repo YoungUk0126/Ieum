@@ -40,6 +40,23 @@ public class TemporalEventController {
   }
 
   /**
+   * 일정 관련 리스트 조회
+   *
+   * @param
+   * @return List<TemporalEventDto>
+   */
+  @GetMapping("/{year}/{month}")
+  public ResponseEntity<Map<String, Object>> getEventMonth(@PathVariable("year") int year,@PathVariable("month") int month) {
+    try {
+      List<TemporalEventResponseDto> list = temporalEventService.getListMonth(year, month);
+      return handleSuccess(list);
+    } catch (Exception exception) {
+      log.debug(exception.getMessage());
+      return handleFail("Fail");
+    }
+  }
+
+  /**
    * 일정 관련 상세 정보(개별) 조회
    *
    * @param eventNo

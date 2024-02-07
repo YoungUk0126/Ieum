@@ -15,6 +15,6 @@ import java.time.LocalTime;
 public class SleepResponseDto {
   private Long sleepInfoNo;
   private Long careNo;
-  private Time sleepStartTime;
-  private Time sleepEndTime;
+  private LocalTime sleepStartTime;
+  private LocalTime sleepEndTime;
 }

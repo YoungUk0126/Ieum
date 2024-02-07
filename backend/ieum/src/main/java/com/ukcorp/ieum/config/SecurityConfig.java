@@ -62,10 +62,14 @@ public class SecurityConfig {
                                 "/api/member/verify",
                                 "/api/member/password",
                                 "/api/devices/*",
+                                "/api/sessions/**",
+                                "/api/sessions/*",
+                                "/api/sessions",
                                 "/error").permitAll()
                         // 나머지 요청에 대해서는 인증 필요
 //                        .anyRequest().permitAll()
                         .anyRequest().authenticated()
+
                 )
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정

@@ -57,8 +57,8 @@ public class NaverServiceImpl implements NaverService {
   public SmsResponseDTO sendSms(MessageDTO messageDto)
           throws UnsupportedEncodingException, NoSuchAlgorithmException, InvalidKeyException, JsonProcessingException, URISyntaxException {
     log.debug("[+] 메세지 전송 시작");
-
-    HttpHeaders headers = naverConfig.getSmsHttpHeaders();
+    Long time = System.currentTimeMillis();
+    HttpHeaders headers = naverConfig.getSmsHttpHeaders(time);
 
     List<MessageDTO> messages = new ArrayList<>();
     messages.add(messageDto);
@@ -89,7 +89,7 @@ public class NaverServiceImpl implements NaverService {
   /**
    * STT 로직
    *
-   * @param MultipartFile
+   * @param file
    * @return String
    */
   @Override
@@ -110,6 +110,7 @@ public class NaverServiceImpl implements NaverService {
         outputStream.write(buffer, 0, bytesRead);
       }
       outputStream.flush();
+      outputStream.close();
       inputStream.close();
       
       // HTTP 응답 받기
@@ -129,19 +130,19 @@ public class NaverServiceImpl implements NaverService {
       }
       br.close();
       log.debug("[+] STT 성공");
+      conn.disconnect();
 
       return response.toString();
     } catch (Exception e) {
       log.debug("[+] STT 실패\n" + e.getMessage());
+      return "Fail";
     }
-    log.debug("[+] STT 실패");
-    return "Fail";
   }
 
   /**
    * MultipartFile to File 메서드
    *
-   * @param MultipartFile
+   * @param file
    * @return File
    */
   private File convertMultiPartToFile(MultipartFile file) throws Exception {
