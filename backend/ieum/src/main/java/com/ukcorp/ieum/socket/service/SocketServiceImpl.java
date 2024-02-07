@@ -28,12 +28,13 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class SocketServiceImpl implements SocketService {
 
-//    private final ChannelTopic topic;
+    //    private final ChannelTopic topic;
     private final RedisPublisher redisPublisher;
 
     private final CareRepository careRepository;
@@ -50,7 +51,8 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendPillDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
         List<PillInfo> byCareInfoCareNo = pillInfoRepository.findByCareInfo_CareNo(careNo);
 
         String serial = careInfo.getCareSerial();
@@ -72,7 +74,8 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendEventDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
         List<RegularEvent> allByCareInfoCareNo = eventRepository.findAllByCareInfo_CareNo(careNo);
 
         String serial = careInfo.getCareSerial();
@@ -95,11 +98,12 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendSleepDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
-        SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+        SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND SLEEP INFO"));
 
         ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
-
 
         Content content = new Content();
         SleepResponseDto sleepResponseDto = sleepSocketMapper.InfoToDto(sleepInfo);
@@ -114,8 +118,10 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendMealDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo).get();
-        Meal meal = mealRepository.findByCareInfo_CareNo(careNo).get();
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+        Meal meal = mealRepository.findByCareInfo_CareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEAL"));
 
         ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
 
@@ -127,7 +133,6 @@ public class SocketServiceImpl implements SocketService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     @Override
