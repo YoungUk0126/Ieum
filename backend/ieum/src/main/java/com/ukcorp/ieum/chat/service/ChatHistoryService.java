@@ -6,8 +6,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface ChatHistoryService {
 
+    ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryDto chatHIstoryDto);
 
-  ChatHistoryResponseDto getChatHistory(Long careNo, Pageable pageable, ChatHIstoryDto chatHIstoryDto);
+    ChatHistoryResponseDto getChatHistoryLimit(Long careNo);
 
-  ChatHistoryResponseDto getChatHistoryLimit(Long careNo);
+    void saveIeumChat(String message, String emotion, Long careNo);
+
+    void saveMemberChat(String message, String emotion, Long careNo);
 }

@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.chat.mapper;
 
 import com.ukcorp.ieum.chat.dto.ChatHistoryDto;
+import com.ukcorp.ieum.chat.dto.ChatHistorySaveDto;
 import com.ukcorp.ieum.chat.entity.ChatHistory;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
@@ -18,8 +19,10 @@ public interface ChatHistoryMapper {
     @Mapping(target = "date", source = "chatDate")
     ChatHistoryDto chatHistoryToChatHistoryDto(ChatHistory chatHistory);
 
-
     @IterableMapping(qualifiedByName = "chatHistoryToChatHistoryDto")
     List<ChatHistoryDto> chatHistoriesToChatHistoryDto(List<ChatHistory> chatHistories);
+
+    @Mapping(target = "chatHistoryNo", ignore = true)
+    ChatHistory chatHistorySaveDtoToChatHistory(ChatHistorySaveDto saveDto);
 
 }

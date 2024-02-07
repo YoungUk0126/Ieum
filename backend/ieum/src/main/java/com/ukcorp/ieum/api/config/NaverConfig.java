@@ -55,6 +55,25 @@ public class NaverConfig {
     }
 
     /**
+     * 메시지 감정분석을 위한 HttpUrlConnection 연결
+     * @return HttpURLConnection
+     * @throws IOException
+     */
+    public HttpURLConnection getEmotionHttpURLConnection() throws IOException {
+        String apiURL = "https://naveropenapi.apigw.ntruss.com/sentiment-analysis/v1/analyze";
+        URL url = new URL(apiURL);
+
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setUseCaches(false);
+        conn.setDoOutput(true);
+        conn.setDoInput(true);
+        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", ttsId);
+        conn.setRequestProperty("X-NCP-APIGW-API-KEY", ttsSecret);
+        return conn;
+    }
+
+    /**
      * Sms 사용을 위한 HttpHeaders 생성
      * @return HttpHeaders
      */
