@@ -240,10 +240,10 @@ const muteAudio = () => {
   // true to unmute the audio track, false to mute it
   if (audioState.value) {
     audioState.value = false
-    mainStreamManager.value.publishAudio(false)
+    pub.value.publishAudio(false)
   } else {
     audioState.value = true
-    mainStreamManager.value.publishAudio(true)
+    pub.value.publishAudio(true)
   }
 }
 
