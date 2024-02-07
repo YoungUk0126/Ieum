@@ -1,14 +1,14 @@
 import redis
 from .services import parser
-from ieum.keys import get_key
 
 redis_client = redis.Redis(host='localhost', port=6379)
-
-def publish():
+def publish(channel, type, content):
     while True:
-        message = input()
-        redis_client.publish(get_key("SERIAL_CODE"), message)
-
+        # type = input()
+        # content = input()
+        message = '{"type": "' + type + '", "content":"' + content + '"}'
+        print(message)
+        redis_client.publish(channel, message)
 
 def subscribe(topic):
     pubsub = redis_client.pubsub()
