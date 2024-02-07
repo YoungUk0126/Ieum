@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'django_apscheduler', # 스케줄러 lib
     'parser',
     'django_crontab', # 스케줄러 크론표기용 lib

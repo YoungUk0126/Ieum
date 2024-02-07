@@ -1,0 +1,42 @@
+[
+  {
+    "model": "Pill",
+    "pk": 3,
+    "fields": {
+      "pillName": "감기약",
+      "pillStartDate": [2024, 2, 1],
+      "pillEndDate": [2024, 2, 20],
+      "pillDate": "11010100",
+      "pillMethod": "식전"
+    }
+  },
+
+  {
+    "model": "Pill",
+    "pk": 4,
+    "fields": {
+      "pillName": "감기약",
+      "pillStartDate": [2024, 2, 1],
+      "pillEndDate": [2024, 2, 20],
+      "pillDate": "11010100",
+      "pillMethod": "식전"
+    }
+  },
+  {
+    "model": "Meal",
+    "fields": { "mealTime1": 56400, "mealTime2": 43200, "mealTime3": 61200 }
+  },
+  {
+    "model": "Event",
+    "fields": {
+      "list": [
+        { "eventName": "결혼기념일", "eventDate": [2024, 2, 7] },
+        { "eventName": "생일", "eventDate": [2024, 3, 16] }
+      ]
+    }
+  },
+  {
+    "model": "Sleep",
+    "fields": { "sleepStartTime": 50000, "sleepEndTime": 56400 }
+  }
+]
