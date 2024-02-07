@@ -30,6 +30,17 @@ public class IotController {
         }
     }
 
+    @PostMapping("/check")
+    public ResponseEntity<Map<String, Object>> checkDevice(@RequestBody SerialRequestDto serial) {
+        try {
+            iotService.activeCheck(serial.getSerial());
+            return handleSuccess();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return handleError();
+        }
+    }
+
     /**
      * 작성자 : 이성목
      * <p>
