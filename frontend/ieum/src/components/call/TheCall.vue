@@ -158,7 +158,6 @@ const joinSession = () => {
     subscribers.value.push(subscriber)
 
     subscriber.on('streamPlaying', (event) => {
-      console.log(event.target.stream.streamManager)
       updateMainVideoStreamManager(event.target.stream.streamManager)
     })
   })
@@ -167,6 +166,10 @@ const joinSession = () => {
     const index = subscribers.value.indexOf(stream.streamManager, 0)
     if (index >= 0) {
       subscribers.value.splice(index, 1)
+      if (mainStreamManager.value == stream.streamManager) {
+        mainStreamManager.value = pub.value
+        who.value = false
+      }
     }
   })
 

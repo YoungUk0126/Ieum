@@ -160,12 +160,20 @@ const joinSession = () => {
   session.value.on('streamCreated', ({ stream }) => {
     const subscriber = session.value.subscribe(stream)
     subscribers.value.push(subscriber)
+
+    subscriber.on('streamPlaying', (event) => {
+      updateMainVideoStreamManager(event.target.stream.streamManager)
+    })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
     const index = subscribers.value.indexOf(stream.streamManager, 0)
     if (index >= 0) {
       subscribers.value.splice(index, 1)
+      if (mainStreamManager.value == stream.streamManager) {
+        mainStreamManager.value = pub.value
+        who.value = false
+      }
     }
   })
 
