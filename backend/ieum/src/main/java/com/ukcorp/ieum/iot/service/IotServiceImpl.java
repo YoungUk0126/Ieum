@@ -17,7 +17,6 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.NoSuchElementException;
 
-import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,12 +45,30 @@ public class IotServiceImpl implements IotService {
 
         naverService.sendSms(sendMessage);
     }
-    
+
+
+    /**
+     * 작성자 : 이성목
+     * 해당 디바이스가 사용 중인지 확인
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public boolean activeCheck(String code) {
+        SerialCode device = iotRepository.searchBySerialCode(code).orElseThrow(
+                () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
+
+        if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 해당 careNo에 해당하는 기기 시리얼 번호 확인
      *
-     * @param code
+     * @param careNo
      * @return
      */
     @Override
@@ -104,8 +121,8 @@ public class IotServiceImpl implements IotService {
     @Override
     @Transactional
     public void updateSerialCode(String code, String userId) {
-//    Member member = memberRepository.findByMemberId(userId).orElseThrow(
-//            () -> new NoSuchElementException());
+        Member member = memberRepository.findByMemberId(userId).orElseThrow(
+                () -> new NoSuchElementException());
 
         CareInfo careInfo = careRepository.findCareInfoByCareSerial(code).orElseThrow(
                 () -> new NoSuchElementException());
@@ -125,6 +142,7 @@ public class IotServiceImpl implements IotService {
 
             careInfo.updateSerialCode(code);  //기기 정보 업데이트
             newDevice.updateUsableActice();   //새 기기 활성화
+            member.updateSerial(code);
 
         } else {
             throw new RuntimeException("기기를 변경할 수 없다");
