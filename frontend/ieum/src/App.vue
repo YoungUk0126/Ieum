@@ -1,18 +1,12 @@
 <script setup>
-import TheFooter from './components/common/TheFooter.vue'
-import TheNavbar from './components/common/TheNavbar.vue'
+import TheHeader from './components/common/TheHeader.vue'
 </script>
 
 <template>
   <div class="body">
-    <TheNavbar></TheNavbar>
+    <TheHeader></TheHeader>
+    <div style="height: 96px"></div>
     <router-view></router-view>
   </div>
-  <TheFooter></TheFooter>
 </template>
-
-<style scoped>
-.body {
-  min-width: 550px;
-}
-</style>
+<style scoped></style>
