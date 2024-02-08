@@ -2,7 +2,6 @@ from .models import Event, Meal, Pill, PillTime, Sleep
 from rest_framework import serializers
 
 
-
 class EventListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
@@ -13,29 +12,36 @@ class MealListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meal
         fields = '__all__'
-        
 
-class PillSerializer(serializers.ModelSerializer):
-    class PillTimeSerializer(serializers.ModelSerializer):
+
+class PillTimeSerializer(serializers.ModelSerializer):
+    class PillListSerializer(serializers.ModelSerializer):
         class Meta:
             model = Pill
             fields = '__all__'
     
-    article = ArticleSerializer(read_only=True)
+    # override
+    pill = PillListSerializer(read_only=True)
     
     class Meta:
-        model = Comment
+        model = PillTime
         fields = '__all__'
         
         
-        
-        
-class ArticleSerializer(serializers.ModelSerializer):
-    comment_set = CommentSerializer(many=True, read_only=True)
-    comment_count = serializers.IntegerField(source='comment_set.count', read_only=True)
-    
+class PillListSerializer(serializers.ModelSerializer):
+    pilltime_set = PillTimeSerializer(many=True, read_only=True)
+   
     class Meta:
-        model = Article
+        model = Pill
         fields = '__all__'
+        
+
+class SleepListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sleep
+        fields = '__all__'
+        
+        
+
 
 

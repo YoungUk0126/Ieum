@@ -1,12 +1,11 @@
-import json
 from .models import *
-from datetime import datetime
+import json
+import datetime
 
+def parser(request):
+    jsonObj = json.loads(request)
 
-def parser(data):
-    jsonObj = json.loads(data)
-
-    if(jsonObj.get("type") == "Event"):
+    if jsonObj.get("type") == "Event":
         Event.objects.all().delete()
         jsonArr = jsonObj.get("content").get("list")
         for list in jsonArr:
@@ -17,6 +16,7 @@ def parser(data):
                 eventDate += (str(date) + '-')
             event.eventDate = datetime.strptime(eventDate[:-1],'%Y-%m-%d')
             event.save()
+    
 
     elif(jsonObj.get("type") == "Sleep"):
         Sleep.objects.all().delete()

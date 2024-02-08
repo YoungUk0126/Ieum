@@ -9,15 +9,8 @@ import datetime
 
 scheduler = BackgroundScheduler()
 
-# 1. 데이터를 가져옴
 
-
-# 2. 받은 데이터를 파싱하는 작업
-def get_data():
-    parser()
-    
-
-def update_data():
+def update_data(requests):
     # db 내의 데이터의 시각과 대조하여 같은 시각이 되면 정보를 전송
 
     # 현재 시각을 로컬 시간대로 변환
@@ -38,32 +31,27 @@ def update_data():
     time_to_seconds_format = (current_hour * 3600) + (current_minute * 60) + (current_second)
     print(time_to_seconds_format)
 
-    # 데이터베이스에서 시각 관련 데이터 조회
-    event_data = Event.objects.filter(eventDate=current_date)
-    meal_data = Meal.objects.filter(Q(mealTime1=time_to_seconds_format) | Q(mealTime2=time_to_seconds_format,) | Q(mealTime3=time_to_seconds_format))
-    pill_ids = PillTime.objects.filter(pillTime=time_to_seconds_format).values_list('pill_id', flat=True)
-    sleep_data = Sleep.objects.filter(Q(sleepStartTime=time_to_seconds_format) | Q(sleepEndTime=time_to_seconds_format) )
 
-    # 조회된 데이터에 대한 작업 수행
-    for item in event_data:
-        # 작업 수행 예시: 데이터 출력
-        print(item)
-    # 조회된 데이터에 대한 작업 수행
-    for item in meal_data:
-        # 작업 수행 예시: 데이터 출력
-        print(item)
+    total_data = {
+        "event" : event_data,
+        "meal" : meal_data,
+        "pill" : pill_ids,
+        "sleep" : sleep_data
+    }
     
-    # 조회된 데이터에 대한 작업 수행
-    for item in pill_ids:
-        # 작업 수행 예시: 데이터 출력
-        print(item)
-        
-    # 조회된 데이터에 대한 작업 수행
-    for item in sleep_data:
-        # 작업 수행 예시: 데이터 출력
-        print(item)
+    url = "https://example.com/endpoint"  # 대상 URL
+    
+    event_data = Event.objects.all()
+    # meal_data = Meal.objects.latest('id')
+    # pill_ids = PillTime.objects.filter(pillTime=time_to_seconds_format).values_list('pill_id', flat=True)
+    # sleep_data = Sleep.objects.latest('id')
+    meal_data = Meal.objects.all()
+    pill_ids = PillTime.objects.all()
+    sleep_data = Sleep.objects.all()
 
-    
+    response = requests.post(url, json=total_data)  # JSON 데이터를 포함한 POST 요청 보내기
+
+    print(response.status_code)  # 응답 상태 코드 확인
 
 
 # 스케줄링 작업 등록
