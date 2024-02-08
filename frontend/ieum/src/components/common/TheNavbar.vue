@@ -1,6 +1,6 @@
 <template>
   <nav class="bg-white shadow-md rounded-md">
-    <div class="w-full flex flex-wrap items-center justify-between mx-auto p-4">
+    <div class="w-full flex flex-wrap items-center justify-between mx-auto p-4 min-w-80">
       <div class="flex">
         <router-link
           :to="{ name: 'TheMainViewVue' }"
@@ -8,56 +8,6 @@
         >
           <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
         </router-link>
-        <div
-          v-show="!hide"
-          class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
-          id="navbar-user"
-        >
-          <ul
-            class="flex flex-col font-bold p-4 md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
-          >
-            <li>
-              <router-link
-                :to="{ name: 'TheChatView' }"
-                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >대화목록
-              </router-link>
-            </li>
-            <li>
-              <a
-                href="#"
-                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >부모님 정보</a
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'TheScheduleView' }"
-                href="#"
-                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >일정</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'TheCallView' }"
-                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >화상통화</router-link
-              >
-            </li>
-            <li>
-              <router-link
-                :to="{ name: 'TheMessageView' }"
-                class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                >메세지</router-link
-              >
-            </li>
-            <li>
-              <!-- Main modal -->
-              <VModal></VModal>
-            </li>
-          </ul>
-        </div>
       </div>
       <div
         v-show="!hide"
@@ -95,32 +45,45 @@
                 로그아웃
               </button>
             </li>
+
+            <li>
+              <router-link
+                :to="{ name: 'TheChatView' }"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >대화목록
+              </router-link>
+            </li>
+            <li>
+              <a
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >부모님 정보</a
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheScheduleView' }"
+                href="#"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >일정</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheCallView' }"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >화상통화</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheMessageView' }"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >메세지</router-link
+              >
+            </li>
           </ul>
         </div>
-        <button
-          data-collapse-toggle="navbar-user"
-          type="button"
-          class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-user"
-          aria-expanded="false"
-        >
-          <span class="sr-only">Open main menu</span>
-          <svg
-            class="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
-        </button>
       </div>
     </div>
   </nav>
@@ -128,12 +91,10 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue'
-import VModal from '@/components/Alarm/VModal.vue'
 import VueCookies from 'vue-cookies'
 import { useRouter } from 'vue-router'
 import swal from 'sweetalert'
 import { useCounterStore } from '@/stores/counter'
-import TheScheduleView from '@/views/TheScheduleView.vue'
 
 const router = useRouter()
 
@@ -190,5 +151,20 @@ const logout = () => {
 nav {
   background-color: hsl(146, 100%, 97%);
   font-family: Gowun Dodum;
+}
+
+/* 미디어 쿼리를 사용하여 모바일 장치에 대한 스타일 지정 */
+@media only screen and (max-width: 768px) {
+  /* 모바일 화면에 적용되는 스타일 */
+  .w-full {
+    width: 100%;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .hidden {
+    display: none;
+  }
+  /* 필요한 다른 스타일들을 여기에 추가할 수 있습니다 */
 }
 </style>
