@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import VOvVideo from './VOvVideo.vue'
+import VOvVideo from './VOvMainVideo.vue'
 import { ref, computed, watch } from 'vue'
 const props = defineProps(['streamManager'])
 const streamManager = ref(props.streamManager)

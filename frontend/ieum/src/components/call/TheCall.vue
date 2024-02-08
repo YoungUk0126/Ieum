@@ -1,39 +1,26 @@
 <template>
-  <div id="main-container" class="call-body w-2/3 mx-auto">
-    <div id="join" v-if="!session">
-      <div id="img-div"></div>
-      <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>방 참여하기</h1>
-        <div class="form-group">
-          <p>
-            <label>참가자 이름</label>
-            <input v-model="myUserName" class="form-control" type="text" required />
-          </p>
-          <p>
-            <label>방 번호</label>
-            <input v-model="mySessionId" class="form-control" type="text" required />
-          </p>
-          <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession">Join!</button>
-          </p>
-        </div>
-      </div>
-    </div>
-
+  <div class="call-body w-full mx-auto mt-4">
     <div id="session" v-if="session">
-      <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
+      <div id="video-container">
+        <template v-if="who">
+          <UserVideo
+            class="col-md-6 w-full"
+            :stream-manager="pub"
+            @click="updateMainVideoStreamManager(pub)"
+          />
+        </template>
+        <template v-if="!who">
+          <UserVideo
+            v-for="sub in subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            class="col-md-6 w-full"
+            @click="updateMainVideoStreamManager(sub)"
+          />
+        </template>
       </div>
-      <div id="main-video" class="col-md-6">
-        <UserVideo :stream-manager="mainStreamManager" />
-      </div>
-      <div id="video-container" class="col-md-6">
-        <UserVideo
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
+      <div class="col-md-6 w-full">
+        <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
     </div>
   </div>
@@ -43,8 +30,14 @@
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
-        type="button"
-        class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          {
+            'bg-gray-100': audioState,
+            'bg-red-500': !audioState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': audioState
+          }
+        ]"
         @click="muteAudio"
       >
         <svg
@@ -59,7 +52,7 @@
           />
           <path d="M9 0H7a3 3 0 0 0-3 3v5a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3Z" />
         </svg>
-        <span class="sr-only">음소거</span>
+        <span class="sr-only">{{ audioState ? '음소거 해제' : '음소거' }}</span>
       </button>
       <div
         id="tooltip-microphone"
@@ -72,7 +65,14 @@
       <button
         data-tooltip-target="tooltip-camera"
         type="button"
-        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          {
+            'bg-gray-100': videoState,
+            'bg-red-500': !videoState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': videoState
+          }
+        ]"
         @click="enableVideo"
       >
         <svg
@@ -86,7 +86,7 @@
             d="M11 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm8.585 1.189a.994.994 0 0 0-.9-.138l-2.965.983a1 1 0 0 0-.685.949v8a1 1 0 0 0 .675.946l2.965 1.02a1.013 1.013 0 0 0 1.032-.242A1 1 0 0 0 20 12V2a1 1 0 0 0-.415-.811Z"
           />
         </svg>
-        <span class="sr-only">화면 끄기</span>
+        <span class="sr-only">{{ audioState ? '화면 켜기' : '화면 끄기' }}</span>
       </button>
       <div
         id="tooltip-camera"
@@ -133,16 +133,21 @@
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
-import { createToken, createSession } from '@/api/call'
+import UserMainVideo from './VUserMainVideo.vue'
+import swal from 'sweetalert'
+import { createToken, createSession } from '@/api/call.js'
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
 const subscribers = ref([])
-const mySessionId = ref('SessionA')
-const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
 const videoState = ref(true)
 const audioState = ref(true)
+const pub = ref()
+const who = ref(false)
 
 const joinSession = () => {
   OV.value = new OpenVidu()
@@ -151,12 +156,20 @@ const joinSession = () => {
   session.value.on('streamCreated', ({ stream }) => {
     const subscriber = session.value.subscribe(stream)
     subscribers.value.push(subscriber)
+
+    subscriber.on('streamPlaying', (event) => {
+      updateMainVideoStreamManager(event.target.stream.streamManager)
+    })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
     const index = subscribers.value.indexOf(stream.streamManager, 0)
     if (index >= 0) {
       subscribers.value.splice(index, 1)
+      if (mainStreamManager.value == stream.streamManager) {
+        mainStreamManager.value = pub.value
+        who.value = false
+      }
     }
   })
 
@@ -164,9 +177,9 @@ const joinSession = () => {
     console.warn(exception)
   })
 
-  getToken(mySessionId.value).then((token) => {
+  getToken().then((token) => {
     session.value
-      .connect(token, { clientData: myUserName.value })
+      .connect(token)
       .then(() => {
         let publisher = OV.value.initPublisher(undefined, {
           audioSource: undefined,
@@ -175,14 +188,14 @@ const joinSession = () => {
           publishVideo: true,
           resolution: '640x480',
           frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
+          insertMode: 'REPLACE',
+          mirror: true
         })
 
         mainStreamManager.value = publisher
-        publisher = mainStreamManager.value
+        pub.value = mainStreamManager.value
 
-        session.value.publish(publisher)
+        session.value.publish(pub.value)
       })
       .catch((error) => {
         console.log('There was an error connecting to the session:', error.code, error.message)
@@ -201,19 +214,38 @@ const leaveSession = () => {
   OV.value = undefined
 
   window.removeEventListener('beforeunload', leaveSession)
+  swal({
+    title: '종료',
+    text: '통화가 종료되었습니다.',
+    icon: 'info',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    router.push({ name: 'TheMainViewVue' })
+  })
 }
 
 const updateMainVideoStreamManager = (stream) => {
-  if (mainStreamManager.value === stream) return (mainStreamManager.value = stream)
+  if (mainStreamManager.value !== stream) {
+    who.value = !who.value
+    mainStreamManager.value = stream
+  }
 }
 
-const getToken = async (id) => {
-  const sessionId = await createSession(id)
-  console.log(sessionId)
+const getToken = async () => {
+  const sessionId = await createSession()
   return await createToken(sessionId)
 }
 
 onMounted(() => {
+  joinSession()
+
   window.onunload = () => {
     if (session.value) session.value.disconnect()
     session.value = undefined
@@ -224,10 +256,10 @@ const muteAudio = () => {
   // true to unmute the audio track, false to mute it
   if (audioState.value) {
     audioState.value = false
-    mainStreamManager.value.publishAudio(false)
+    pub.value.publishAudio(false)
   } else {
     audioState.value = true
-    mainStreamManager.value.publishAudio(true)
+    pub.value.publishAudio(true)
   }
 }
 
@@ -235,12 +267,11 @@ const enableVideo = () => {
   // true to enable the video track, false to disable it
   if (videoState.value) {
     videoState.value = false
-    mainStreamManager.value.publishVideo(false)
+    pub.value.publishVideo(false)
   } else {
     videoState.value = true
-    mainStreamManager.value.publishVideo(true)
+    pub.value.publishVideo(true)
   }
-  console.log(mainStreamManager.value)
 }
 </script>
 

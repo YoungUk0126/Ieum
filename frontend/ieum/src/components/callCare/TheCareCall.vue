@@ -21,19 +21,26 @@
     </div>
 
     <div id="session" v-if="session">
-      <div id="session-header">
-        <h1 id="session-title">{{ mySessionId }}</h1>
+      <div id="video-container">
+        <template v-if="who">
+          <UserVideo
+            class="col-md-6 w-full"
+            :stream-manager="pub"
+            @click="updateMainVideoStreamManager(pub)"
+          />
+        </template>
+        <template v-if="!who">
+          <UserVideo
+            v-for="sub in subscribers"
+            :key="sub.stream.connection.connectionId"
+            :stream-manager="sub"
+            class="col-md-6 w-full"
+            @click="updateMainVideoStreamManager(sub)"
+          />
+        </template>
       </div>
-      <div id="main-video" class="col-md-6">
-        <UserVideo :stream-manager="mainStreamManager" />
-      </div>
-      <div id="video-container" class="col-md-6">
-        <UserVideo
-          v-for="sub in subscribers"
-          :key="sub.stream.connection.connectionId"
-          :stream-manager="sub"
-          @click="updateMainVideoStreamManager(sub)"
-        />
+      <div class="col-md-6 w-full">
+        <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
     </div>
   </div>
@@ -133,8 +140,8 @@
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '../call/VUserVideo.vue'
-import { createToken, createSessionCare } from '@/api/call'
-
+import { createToken, createSessionCare } from '@/api/call.js'
+import UserMainVideo from '../call/VUserMainVideo.vue'
 const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
@@ -143,6 +150,8 @@ const mySessionId = ref('SessionA')
 const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
 const videoState = ref(true)
 const audioState = ref(true)
+const pub = ref()
+const who = ref(false)
 
 const joinSession = () => {
   OV.value = new OpenVidu()
@@ -151,12 +160,20 @@ const joinSession = () => {
   session.value.on('streamCreated', ({ stream }) => {
     const subscriber = session.value.subscribe(stream)
     subscribers.value.push(subscriber)
+
+    subscriber.on('streamPlaying', (event) => {
+      updateMainVideoStreamManager(event.target.stream.streamManager)
+    })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
     const index = subscribers.value.indexOf(stream.streamManager, 0)
     if (index >= 0) {
       subscribers.value.splice(index, 1)
+      if (mainStreamManager.value == stream.streamManager) {
+        mainStreamManager.value = pub.value
+        who.value = false
+      }
     }
   })
 
@@ -180,7 +197,7 @@ const joinSession = () => {
         })
 
         mainStreamManager.value = publisher
-        publisher = mainStreamManager.value
+        pub.value = mainStreamManager.value
 
         session.value.publish(publisher)
       })
@@ -204,9 +221,11 @@ const leaveSession = () => {
 }
 
 const updateMainVideoStreamManager = (stream) => {
-  if (mainStreamManager.value === stream) return (mainStreamManager.value = stream)
+  if (mainStreamManager.value !== stream) {
+    who.value = !who.value
+    mainStreamManager.value = stream
+  }
 }
-
 const getToken = async (id) => {
   const sessionId = await createSessionCare(id)
   return await createToken(sessionId)
@@ -223,10 +242,10 @@ const muteAudio = () => {
   // true to unmute the audio track, false to mute it
   if (audioState.value) {
     audioState.value = false
-    mainStreamManager.value.publishAudio(false)
+    pub.value.publishAudio(false)
   } else {
     audioState.value = true
-    mainStreamManager.value.publishAudio(true)
+    pub.value.publishAudio(true)
   }
 }
 
@@ -234,12 +253,11 @@ const enableVideo = () => {
   // true to enable the video track, false to disable it
   if (videoState.value) {
     videoState.value = false
-    mainStreamManager.value.publishVideo(false)
+    pub.value.publishVideo(false)
   } else {
     videoState.value = true
-    mainStreamManager.value.publishVideo(true)
+    pub.value.publishVideo(true)
   }
-  console.log(mainStreamManager.value)
 }
 </script>
 

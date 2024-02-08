@@ -24,7 +24,8 @@ const router = createRouter({
     {
       path: '/',
       name: 'TheMainViewVue',
-      component: TheMainViewVue
+      component: TheMainViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       //회원가입 페이지
@@ -42,7 +43,8 @@ const router = createRouter({
       //화상통화 페이지
       path: '/call',
       name: 'TheCallView',
-      component: TheCallViewVue
+      component: TheCallViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     //전체 대화 페이지
     {
@@ -54,12 +56,14 @@ const router = createRouter({
     {
       path: '/chat',
       name: 'TheChatView',
-      component: TheChatViewVue
+      component: TheChatViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/schedule',
       name: 'TheScheduleView',
-      component: TheScheduleViewVue
+      component: TheScheduleViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       //정보수정페이지
@@ -71,7 +75,8 @@ const router = createRouter({
     {
       path: '/carecheck',
       name: 'TheCareInfoCheckView',
-      component: TheCareInfoCheckViewVue
+      component: TheCareInfoCheckViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/findInfo',
@@ -116,7 +121,8 @@ const router = createRouter({
     {
       path: '/alarm',
       name: 'TheAlarmView',
-      component: TheAlarmViewVue
+      component: TheAlarmViewVue,
+      meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
       path: '/404',
