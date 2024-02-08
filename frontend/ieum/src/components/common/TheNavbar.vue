@@ -1,17 +1,17 @@
 <template>
   <nav class="bg-white shadow-md rounded-md">
-    <div class="w-full flex flex-wrap items-center justify-between mx-auto p-4 min-w-80">
+    <div class="w-full flex flex-wrap items-center justify-between mx-auto p-2">
       <div class="flex">
         <router-link
           :to="{ name: 'TheMainViewVue' }"
           class="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <img src="@/assets/images/logo.png" class="h-16" alt="Flowbite Logo" />
+          <img src="@/assets/images/logo.png" class="h-12" alt="Flowbite Logo" />
         </router-link>
       </div>
       <div
         v-show="!hide"
-        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-5"
+        class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse mr-2"
       >
         <button
           type="button"
@@ -21,8 +21,7 @@
           data-dropdown-toggle="user-dropdown"
           data-dropdown-placement="bottom"
         >
-          <span class="sr-only">Open user menu</span>
-          <img class="w-12 h-12 rounded-full" src="@/assets/images/영욱이.png" alt="user photo" />
+          <img class="w-10 h-10 rounded-full" src="@/assets/images/영욱이.png" alt="user photo" />
         </button>
         <div
           class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
@@ -80,6 +79,13 @@
                 :to="{ name: 'TheMessageView' }"
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >메세지</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'TheAlarmView' }"
+                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >알람</router-link
               >
             </li>
           </ul>
@@ -157,6 +163,7 @@ nav {
 @media only screen and (max-width: 768px) {
   /* 모바일 화면에 적용되는 스타일 */
   .w-full {
+    min-width: 320px;
     width: 100%;
   }
   .flex-wrap {
