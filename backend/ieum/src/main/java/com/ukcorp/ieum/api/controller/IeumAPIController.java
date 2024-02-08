@@ -1,5 +1,6 @@
 package com.ukcorp.ieum.api.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ukcorp.ieum.api.dto.TextRequestDto;
 import com.ukcorp.ieum.api.service.ChatGPTService;
 import com.ukcorp.ieum.api.service.GoogleService;
@@ -27,6 +28,7 @@ public class IeumAPIController {
     private final NaverService naverService;
     private final ChatGPTService chatGPTService;
     private final ChatHistoryService chatHistoryService;
+    private final ObjectMapper objectMapper;
 
     @PostMapping("/speak")
     public ResponseEntity<byte[]> testToSpeech(@RequestBody TextRequestDto text) {
@@ -54,14 +56,17 @@ public class IeumAPIController {
         try {
             Long careNo = chatHistoryService.getCareNoBySerial(serial);
             String stt = naverService.getSTT(file);
+
+            TextRequestDto sttText = objectMapper.readValue(stt, TextRequestDto.class);
             if (stt.equals("Fail")) {
                 throw new Exception("STT 실패");
             }
 
             // stt로 받은 text의 감정 분석
-            String memberEmotion = naverService.getEmotion(EmotionDto.builder().content(stt).build());
+            String memberEmotion = naverService.getEmotion(EmotionDto.builder()
+                    .content(sttText.getText()).build());
             // stt String 값 보호자 -> 이음이 메시지로 저장
-            chatHistoryService.saveMemberChat(stt, memberEmotion, careNo);
+            chatHistoryService.saveMemberChat(sttText.getText(), memberEmotion, careNo);
 
             String chat = chatGPTService.prompt(stt, careNo);
 
