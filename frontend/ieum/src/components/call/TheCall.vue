@@ -25,13 +25,13 @@
     </div>
   </div>
   <div
-    class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+    class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
         :class="[
-          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
           {
             'bg-gray-100': audioState,
             'bg-red-500': !audioState,
@@ -41,7 +41,7 @@
         @click="muteAudio"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -66,7 +66,7 @@
         data-tooltip-target="tooltip-camera"
         type="button"
         :class="[
-          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800',
+          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
           {
             'bg-gray-100': videoState,
             'bg-red-500': !videoState,
@@ -76,7 +76,7 @@
         @click="enableVideo"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -99,7 +99,7 @@
       <button
         data-tooltip-target="tooltip-feedback"
         type="button"
-        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none dark:bg-gray-600 dark:hover:bg-gray-800"
         @click="leaveSession"
       >
         <svg
@@ -107,7 +107,7 @@
           width="16"
           height="16"
           fill="currentColor"
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           viewBox="0 0 16 16"
         >
           <path
