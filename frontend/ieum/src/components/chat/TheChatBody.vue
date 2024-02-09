@@ -174,12 +174,12 @@
 import { ref, onMounted, watch } from 'vue'
 import { getList } from '../../api/chat.js'
 
-const lobotProfile = '/src/assets/images/ieum.png'
-const careProfile = '/src/assets/images/영욱이.png'
+const lobotProfile = '/assets/images/ieum.png'
+const careProfile = '/assets/images/영욱이.png'
 
-const sadEmotion = '/src/assets/images/sad.png'
-const happyEmotion = '/src/assets/images/happy.png'
-const commonEmotion = '/src/assets/images/common.png'
+const sadEmotion = '/assets/images/sad.png'
+const happyEmotion = '/assets/images/happy.png'
+const commonEmotion = '/assets/images/common.png'
 
 const datePicker = ref()
 

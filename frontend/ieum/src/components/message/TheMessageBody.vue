@@ -45,7 +45,7 @@
           <div class="flex flex-col items-center pb-5">
             <img
               class="w-24 h-24 mb-3 rounded-full shadow-lg"
-              :src="'/src/assets/images/' + item.messageType + '.png'"
+              :src="'@/assets/images/' + item.messageType + '.png'"
             />
             <h5 class="mb-1 text-xl font-medium text-gray-900 dark:text-white">
               {{ item.messageSender }}
