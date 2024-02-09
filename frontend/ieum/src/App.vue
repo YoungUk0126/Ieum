@@ -10,8 +10,20 @@ import TheHeader from './components/common/TheHeader.vue'
     <router-view></router-view>
   </div>
 </template>
-<<<<<<< HEAD
-
-=======
->>>>>>> d697eeccc2d324fcd7359f3b32c737d576001902
-<style scoped></style>
+<style scoped>
+/* 미디어 쿼리를 사용하여 모바일 장치에 대한 스타일 지정 */
+@media only screen and (max-width: 768px) {
+  /* 모바일 화면에 적용되는 스타일 */
+  .w-full {
+    min-width: 320px;
+    width: 100%;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+  .hidden {
+    display: none;
+  }
+  /* 필요한 다른 스타일들을 여기에 추가할 수 있습니다 */
+}
+</style>
