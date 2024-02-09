@@ -9,21 +9,15 @@
       <div class="row d-flex align-items-center">
         <div class="col-3 d-flex flex-column"></div>
         <div class="col-8 d-flex">
-          <select
+          <input
             v-model="selectedNumber"
-            id="numberSelect1"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers1" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">시</span>
-          <select
+          <input
             v-model="selectedNumber2"
-            id="numberSelect2"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers2" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">분</span>
         </div>
       </div>
@@ -36,21 +30,15 @@
       </div>
       <div class="row d-flex align-items-center mb-4">
         <div class="col-8 d-flex">
-          <select
+          <input
             v-model="selectedNumber3"
-            id="numberSelect3"
-            class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers3" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">시</span>
-          <select
+          <input
             v-model="selectedNumber4"
-            id="numberSelect4"
-            class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers4" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">분</span>
         </div>
       </div>
@@ -82,15 +70,13 @@ import { ref, defineProps } from 'vue'
 import { postSleep } from '@/api/modalAlarms/sleep.js'
 import swal from 'sweetalert'
 
-const numbers1 = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
-const numbers2 = ref(Array.from({ length: 60 }, (_, i) => i))
-const numbers3 = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
-const numbers4 = ref(Array.from({ length: 60 }, (_, i) => i))
+// 1. 사용자 입력받기
 
-const selectedNumber = ref(25) // 초기값 설정
-const selectedNumber2 = ref(61)
-const selectedNumber3 = ref(25) // 초기값 설정
-const selectedNumber4 = ref(61)
+// 1-1 사용자 입력값
+const selectedNumber = ref() // 초기값 설정
+const selectedNumber2 = ref()
+const selectedNumber3 = ref() // 초기값 설정
+const selectedNumber4 = ref()
 
 // 모달 닫기
 const props = defineProps(['closeModal'])
@@ -99,6 +85,10 @@ const jsonData = ref({
   sleepStartTime: '',
   sleepEndTime: ''
 })
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// 2. json format으로 변경 후 post
 
 function formatTime(hours, minutes) {
   // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
@@ -131,7 +121,6 @@ const postAlarmdata = () => {
     return
   }
 
-  console.log(jsonData.value)
   postSleep(jsonData.value, (response) => {
     console.log(response)
     if (response.data.success === true) {

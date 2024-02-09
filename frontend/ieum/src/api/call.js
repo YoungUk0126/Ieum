@@ -1,6 +1,6 @@
 import { localAxios, localSessionAxios } from '@/util/http-commons'
 
-const url = `https://i10a303.p.ssafy.io:443`
+const url = `https://i10a303.p.ssafy.io:443/openvidu`
 
 const localSession = localSessionAxios()
 

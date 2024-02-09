@@ -3,12 +3,12 @@
     <div class="p-4 flex flex-col items-center space-y-4">
       <div class="w-full flex space-x-4">
         <div class="m-3 w-1/4">
-          <label for="title" class="block mb-2 text-sm font-medium text-gray-700">제목:</label>
+          <label for="title" class="block mb-2 text-sm font-medium text-gray-700"></label>
           <input
             type="text"
             id="title"
             class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-            placeholder="제목을 입력해주세요"
+            placeholder="기념일을 입력해주세요"
             v-model="jsonData.eventName"
           />
         </div>
@@ -23,7 +23,7 @@
             value="2025-01-01"
             min="2018-01-01"
             max="2100-12-31"
-            class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+            class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
             v-model="jsonData.eventDate"
           />
         </div>

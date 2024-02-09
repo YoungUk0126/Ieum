@@ -24,6 +24,7 @@ function postEvent(data, success) {
 function modifyEvent(data, success) {
   form.put(`${url}`, data).then(success).catch(fail)
 }
+
 function deleteEvent(param, success) {
   local.delete(`${url}/${param}`).then(success).catch(fail)
 }

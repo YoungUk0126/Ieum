@@ -11,23 +11,15 @@
       </div>
       <div class="row d-flex align-items-center">
         <div class="col-8 d-flex">
-          <select
-            v-model="selectedNumber"
-            id="numberSelect"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers1" :key="num" :value="num">{{ num }}</option>
-          </select>
+          <input
+            v-model="selectedNumber1"
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">시</span>
-          <select
+          <input
             v-model="selectedNumber2"
-            id="numberSelect2"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 59까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers2" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">분</span>
         </div>
       </div>
@@ -39,23 +31,15 @@
       </div>
       <div class="row d-flex align-items-center">
         <div class="col-8 d-flex">
-          <select
+          <input
             v-model="selectedNumber3"
-            id="numberSelect"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers3" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">시</span>
-          <select
+          <input
             v-model="selectedNumber4"
-            id="numberSelect2"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 59까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers4" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">분</span>
         </div>
       </div>
@@ -67,23 +51,15 @@
       </div>
       <div class="row d-flex align-items-center">
         <div class="col-8 d-flex">
-          <select
+          <input
             v-model="selectedNumber5"
-            id="numberSelect"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 12까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers5" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">시</span>
-          <select
+          <input
             v-model="selectedNumber6"
-            id="numberSelect2"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <!-- 0부터 59까지의 숫자를 반복하여 option 엘리먼트 생성 -->
-            <option v-for="num in numbers6" :key="num" :value="num">{{ num }}</option>
-          </select>
+            class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+          />
           <span class="ml-2 mr-2">분</span>
         </div>
       </div>
@@ -115,20 +91,16 @@ import { postMeal } from '@/api/modalAlarms/meal.js'
 import swal from 'sweetalert'
 
 // 오전
-const numbers1 = ref(Array.from({ length: 7 }, (_, i) => i + 5)) // 0부터 23까지의 숫자 배열
-const numbers2 = ref(Array.from({ length: 60 }, (_, i) => i))
-const selectedNumber = ref(25) // 초기값 설정
-const selectedNumber2 = ref(61)
+const selectedNumber = ref() // 초기값 설정
+const selectedNumber2 = ref()
+
 // 점심
-const numbers3 = ref(Array.from({ length: 7 }, (_, i) => i + 11)) // 0부터 23까지의 숫자 배열
-const numbers4 = ref(Array.from({ length: 60 }, (_, i) => i))
-const selectedNumber3 = ref(25) // 초기값 설정
-const selectedNumber4 = ref(61)
+const selectedNumber3 = ref() // 초기값 설정
+const selectedNumber4 = ref()
+
 // 저녁
-const numbers5 = ref(Array.from({ length: 7 }, (_, i) => i + 17)) // 0부터 23까지의 숫자 배열
-const numbers6 = ref(Array.from({ length: 60 }, (_, i) => i))
-const selectedNumber5 = ref(25) // 초기값 설정
-const selectedNumber6 = ref(61)
+const selectedNumber5 = ref() // 초기값 설정
+const selectedNumber6 = ref()
 
 const jsonData = ref({
   mealTime1: '',
@@ -175,7 +147,6 @@ const postAlarmdata = () => {
     return
   }
 
-  console.log(jsonData.value)
   postMeal(jsonData.value, (response) => {
     console.log(response)
     if (response.data.success === true) {
