@@ -1,20 +1,25 @@
-/*
-import { localAxios } from "@/util/http-commons";
+import { localSessionAxios } from '@/util/http-commons'
+import { fail } from './fail.js'
 
-const local = localAxios();
+const localSession = localSessionAxios()
 
-const url = "/example"
+const url = `https://i10a303.p.ssafy.io:443/api/event`
 
-function example1(param, success, fail) {
-  local.get(`${url}`, { params: param }).then(success).catch(fail);
-}
-function example2(data, success, fail) {
-  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+// refresh 토큰 과정 필요
+function getList(year, month, success) {
+  localSession.get(`${url}/${year}/${month}`).then(success).catch(fail)
 }
 
-export {
-    example1,
-    example2
-};
+function addSchedule(data, success) {
+  localSession.post(`${url}`, data).then(success).catch(fail)
+}
 
-*/
+function modifySchedule(data, success) {
+  localSession.put(`${url}`, data).then(success).catch(fail)
+}
+
+function deleteSchedule(param, success) {
+  localSession.delete(`${url}/${param}`).then(success).catch(fail)
+}
+
+export { getList, addSchedule, modifySchedule, deleteSchedule }
