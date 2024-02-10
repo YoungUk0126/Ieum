@@ -1,13 +1,6 @@
 <template>
   <div class="profile-container bg-white shadow-md rounded-md m-5">
     <div class="grid grid-cols-1 md:grid-cols-2">
-      <div class="md:text-center">
-        <img
-          src="@/assets/images/영욱이.png"
-          class="w-16 md:w-1/15 mx-auto my-5 rounded-full profile-img1"
-          alt="영욱이 프로필 이미지"
-        />
-      </div>
       <div class="flex flex-col justify-center px-4 md:px-8 py-4">
         <div class="flex items-center space-x-4">
           <img

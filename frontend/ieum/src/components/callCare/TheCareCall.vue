@@ -1,25 +1,5 @@
 <template>
   <div id="main-container" class="call-body w-2/3 mx-auto">
-    <div id="join" v-if="!session">
-      <div id="img-div"></div>
-      <div id="join-dialog" class="jumbotron vertical-center">
-        <h1>방 참여하기</h1>
-        <div class="form-group">
-          <p>
-            <label>참가자 이름</label>
-            <input v-model="myUserName" class="form-control" type="text" required />
-          </p>
-          <p>
-            <label>방 번호</label>
-            <input v-model="mySessionId" class="form-control" type="text" required />
-          </p>
-          <p class="text-center">
-            <button class="btn btn-lg btn-success" @click="joinSession">Join!</button>
-          </p>
-        </div>
-      </div>
-    </div>
-
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
@@ -152,6 +132,9 @@ const videoState = ref(true)
 const audioState = ref(true)
 const pub = ref()
 const who = ref(false)
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
+const route = useRoute()
 
 const joinSession = () => {
   OV.value = new OpenVidu()
@@ -236,6 +219,19 @@ onMounted(() => {
     if (session.value) session.value.disconnect()
     session.value = undefined
   }
+  if (route.query.serial === undefined) {
+    window.close()
+  } else {
+    joinSession(route.query.serial)
+  }
+})
+
+// 네비게이션 가드를 사용하여 네비게이션 이벤트를 감지합니다.
+router.beforeEach((to, from, next) => {
+  // 세션 연결을 종료시키기
+  if (session.value) session.value.disconnect()
+  session.value = undefined
+  next()
 })
 
 const muteAudio = () => {
