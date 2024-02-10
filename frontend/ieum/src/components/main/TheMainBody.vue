@@ -10,7 +10,9 @@
             <div>
               <img src="@/assets/images/call.png" class="w-16 h-16" />
             </div>
-            <div class="flex items-center">영상 통화</div>
+            <div class="flex items-center">
+              <router-link :to="{ name: 'TheCallView' }"> 영상 통화 </router-link>
+            </div>
           </div>
         </button>
       </div>
@@ -23,7 +25,9 @@
             <div>
               <img src="@/assets/images/chat.png" class="w-10 h-10" />
             </div>
-            <div class="flex items-center">대화 목록</div>
+            <div class="flex items-center">
+              <router-link :to="{ name: 'TheChatView' }"> 대화 목록 </router-link>
+            </div>
           </div>
         </button>
       </div>
@@ -57,6 +61,9 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useRouter } from 'vue-router'
+const router = useRouter()
+</script>
 
 <style scoped></style>
