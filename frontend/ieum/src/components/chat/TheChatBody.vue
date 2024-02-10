@@ -47,7 +47,7 @@
       <div class="flex items-center gap-5">
         <div class="w-full flex items-end gap-2.5 justify-center">
           <div
-            class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
+            class="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
           >
             <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white text-center">
               대화 내용이 존재하지 않아요
@@ -58,11 +58,11 @@
     </template>
     <template v-if="list.length > 0">
       <template v-for="(chat, index) in list" :key="index">
-        <div class="flex items-start gap-5" v-if="chat.speaker === 'AI'">
+        <div class="flex items-start gap-5 px-5" v-if="chat.speaker === 'AI'">
           <div class="w-full flex items-end gap-2.5 justify-center">
-            <img class="w-8 h-8 rounded-full" src="@/assets/images/ieum.png" alt="Jese image" />
+            <img class="w-11 h-11 rounded-full" src="@/assets/images/ieum.png" alt="Jese image" />
             <div
-              class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
+              class="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
             >
               <div class="flex items-center space-x-2 rtl:space-x-reverse">
                 <span class="text-sm font-semibold text-gray-900 dark:text-white">이음이</span>
@@ -76,10 +76,10 @@
             </div>
           </div>
         </div>
-        <div class="flex items-start gap-5" v-if="chat.speaker !== 'AI'">
+        <div class="flex items-start gap-5 px-5" v-if="chat.speaker !== 'AI'">
           <div class="w-full flex items-end gap-2.5 justify-center">
             <div
-              class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
+              class="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
             >
               <div class="flex items-center space-x-2 rtl:space-x-reverse">
                 <span class="text-sm font-semibold text-gray-900 dark:text-white">어르신</span>
@@ -91,7 +91,7 @@
                 {{ chat.message }}
               </p>
             </div>
-            <img class="w-8 h-8 rounded-full" src="@/assets/images/care.png" alt="Jese image" />
+            <img class="w-11 h-11 rounded-full" src="@/assets/images/care.png" alt="Jese image" />
           </div>
         </div>
       </template>
