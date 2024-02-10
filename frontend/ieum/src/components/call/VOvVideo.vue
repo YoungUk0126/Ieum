@@ -1,5 +1,5 @@
 <template>
-  <video ref="videoElement" autoplay class="w-screen-20 fix-profile min-w-32" />
+  <video ref="videoElement" autoplay muted class="w-screen-20 fix-profile min-w-32" />
 </template>
 
 <script setup>

@@ -11,17 +11,16 @@
         </template>
         <template v-if="!who">
           <UserVideo
-            v-for="sub in subscribers"
-            :key="sub.stream.connection.connectionId"
-            :stream-manager="sub"
+            :stream-manager="subscriber"
             class="col-md-6 w-full"
-            @click="updateMainVideoStreamManager(sub)"
+            @click="updateMainVideoStreamManager(subscriber)"
           />
         </template>
       </div>
       <div class="col-md-6 w-full">
         <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
+      <video ref="soundRef" autoplay class="hidden"></video>
     </div>
   </div>
   <div
@@ -141,33 +140,42 @@ const router = useRouter()
 const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
-const subscribers = ref([])
-const videoState = ref(true)
-const audioState = ref(true)
+const subscriber = ref()
 const pub = ref()
 const who = ref(false)
+const videoState = ref(true)
+const audioState = ref(true)
+const soundRef = ref()
+
+onMounted(() => {
+  joinSession()
+
+  window.onunload = () => {
+    if (session.value) session.value.disconnect()
+    session.value = undefined
+  }
+})
 
 const joinSession = () => {
   OV.value = new OpenVidu()
   session.value = OV.value.initSession()
 
   session.value.on('streamCreated', ({ stream }) => {
-    const subscriber = session.value.subscribe(stream)
-    subscribers.value.push(subscriber)
+    // 구독은 상대방 즉 care에 대한 스트림을 관리함
+    subscriber.value = session.value.subscribe(stream)
 
-    subscriber.on('streamPlaying', (event) => {
+    // 어떤 화면이든 소리를 듣기 위한 soundRef 추가시켜주기
+    subscriber.value.addVideoElement(soundRef.value)
+
+    subscriber.value.on('streamPlaying', (event) => {
       updateMainVideoStreamManager(event.target.stream.streamManager)
     })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
-    const index = subscribers.value.indexOf(stream.streamManager, 0)
-    if (index >= 0) {
-      subscribers.value.splice(index, 1)
-      if (mainStreamManager.value == stream.streamManager) {
-        mainStreamManager.value = pub.value
-        who.value = false
-      }
+    if (mainStreamManager.value == stream.streamManager) {
+      mainStreamManager.value = pub.value
+      who.value = false
     }
   })
 
@@ -191,9 +199,8 @@ const joinSession = () => {
         })
 
         mainStreamManager.value = publisher
-        pub.value = mainStreamManager.value
-
-        session.value.publish(pub.value)
+        pub.value = publisher
+        session.value.publish(publisher)
       })
       .catch((error) => {
         console.log('There was an error connecting to the session:', error.code, error.message)
@@ -204,29 +211,30 @@ const joinSession = () => {
 }
 
 const leaveSession = () => {
-  if (session.value) session.value.disconnect()
+  if (session.value) {
+    session.value.disconnect()
 
-  session.value = undefined
-  mainStreamManager.value = undefined
-  subscribers.value = []
-  OV.value = undefined
+    session.value = undefined
+    mainStreamManager.value = undefined
+    subscriber.value = undefined
+    OV.value = undefined
 
-  window.removeEventListener('beforeunload', leaveSession)
-  swal({
-    title: '종료',
-    text: '통화가 종료되었습니다.',
-    icon: 'info',
-    buttons: {
-      confirm: {
-        text: '확인',
-        visible: true,
-        className: '',
-        closeModal: true
+    swal({
+      title: '종료',
+      text: '통화가 종료되었습니다.',
+      icon: 'info',
+      buttons: {
+        confirm: {
+          text: '확인',
+          visible: true,
+          className: '',
+          closeModal: true
+        }
       }
-    }
-  }).then(() => {
-    router.push({ name: 'TheMainViewVue' })
-  })
+    }).then(() => {
+      router.push({ name: 'TheMainViewVue' })
+    })
+  }
 }
 
 const updateMainVideoStreamManager = (stream) => {
@@ -240,15 +248,6 @@ const getToken = async () => {
   const sessionId = await createSession()
   return await createToken(sessionId)
 }
-
-onMounted(() => {
-  joinSession()
-
-  window.onunload = () => {
-    if (session.value) session.value.disconnect()
-    session.value = undefined
-  }
-})
 
 // 네비게이션 가드를 사용하여 네비게이션 이벤트를 감지합니다.
 router.beforeEach((to, from, next) => {

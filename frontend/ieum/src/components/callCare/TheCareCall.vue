@@ -1,5 +1,5 @@
 <template>
-  <div id="main-container" class="call-body w-2/3 mx-auto">
+  <div class="call-body w-full mx-auto mt-4">
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
@@ -11,31 +11,36 @@
         </template>
         <template v-if="!who">
           <UserVideo
-            v-for="sub in subscribers"
-            :key="sub.stream.connection.connectionId"
-            :stream-manager="sub"
+            :stream-manager="subscriber"
             class="col-md-6 w-full"
-            @click="updateMainVideoStreamManager(sub)"
+            @click="updateMainVideoStreamManager(subscriber)"
           />
         </template>
       </div>
       <div class="col-md-6 w-full">
         <UserMainVideo :stream-manager="mainStreamManager" />
       </div>
+      <video ref="soundRef" autoplay class="hidden"></video>
     </div>
   </div>
   <div
-    class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600"
+    class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
-        type="button"
-        class="p-2.5 group bg-gray-100 rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
+          {
+            'bg-gray-100': audioState,
+            'bg-red-500': !audioState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': audioState
+          }
+        ]"
         @click="muteAudio"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -46,7 +51,7 @@
           />
           <path d="M9 0H7a3 3 0 0 0-3 3v5a3 3 0 0 0 3 3h2a3 3 0 0 0 3-3V3a3 3 0 0 0-3-3Z" />
         </svg>
-        <span class="sr-only">음소거</span>
+        <span class="sr-only">{{ audioState ? '음소거 해제' : '음소거' }}</span>
       </button>
       <div
         id="tooltip-microphone"
@@ -59,11 +64,18 @@
       <button
         data-tooltip-target="tooltip-camera"
         type="button"
-        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        :class="[
+          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
+          {
+            'bg-gray-100': videoState,
+            'bg-red-500': !videoState,
+            'dark:bg-gray-600 dark:hover:bg-gray-800': videoState
+          }
+        ]"
         @click="enableVideo"
       >
         <svg
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="currentColor"
@@ -73,7 +85,7 @@
             d="M11 0H2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2Zm8.585 1.189a.994.994 0 0 0-.9-.138l-2.965.983a1 1 0 0 0-.685.949v8a1 1 0 0 0 .675.946l2.965 1.02a1.013 1.013 0 0 0 1.032-.242A1 1 0 0 0 20 12V2a1 1 0 0 0-.415-.811Z"
           />
         </svg>
-        <span class="sr-only">화면 끄기</span>
+        <span class="sr-only">{{ audioState ? '화면 켜기' : '화면 끄기' }}</span>
       </button>
       <div
         id="tooltip-camera"
@@ -86,7 +98,7 @@
       <button
         data-tooltip-target="tooltip-feedback"
         type="button"
-        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-800 dark:bg-gray-600 dark:hover:bg-gray-800"
+        class="p-2.5 bg-gray-100 group rounded-full hover:bg-gray-200 me-4 focus:outline-none dark:bg-gray-600 dark:hover:bg-gray-800"
         @click="leaveSession"
       >
         <svg
@@ -94,7 +106,7 @@
           width="16"
           height="16"
           fill="currentColor"
-          class="w-4 h-4 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
+          class="w-11 h-11 text-gray-500 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white"
           viewBox="0 0 16 16"
         >
           <path
@@ -120,99 +132,21 @@
 import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserVideo from '../call/VUserVideo.vue'
-import { createToken, createSessionCare } from '@/api/call.js'
 import UserMainVideo from '../call/VUserMainVideo.vue'
-const OV = ref()
-const session = ref()
-const mainStreamManager = ref()
-const subscribers = ref([])
-const mySessionId = ref('SessionA')
-const myUserName = ref('Participant' + Math.floor(Math.random() * 100))
-const videoState = ref(true)
-const audioState = ref(true)
-const pub = ref()
-const who = ref(false)
+import swal from 'sweetalert'
+import { createToken, createSessionCare } from '@/api/call.js'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
-
-const joinSession = () => {
-  OV.value = new OpenVidu()
-  session.value = OV.value.initSession()
-
-  session.value.on('streamCreated', ({ stream }) => {
-    const subscriber = session.value.subscribe(stream)
-    subscribers.value.push(subscriber)
-
-    subscriber.on('streamPlaying', (event) => {
-      updateMainVideoStreamManager(event.target.stream.streamManager)
-    })
-  })
-
-  session.value.on('streamDestroyed', ({ stream }) => {
-    const index = subscribers.value.indexOf(stream.streamManager, 0)
-    if (index >= 0) {
-      subscribers.value.splice(index, 1)
-      if (mainStreamManager.value == stream.streamManager) {
-        mainStreamManager.value = pub.value
-        who.value = false
-      }
-    }
-  })
-
-  session.value.on('exception', ({ exception }) => {
-    console.warn(exception)
-  })
-
-  getToken(mySessionId.value).then((token) => {
-    session.value
-      .connect(token, { clientData: myUserName.value })
-      .then(() => {
-        let publisher = OV.value.initPublisher(undefined, {
-          audioSource: undefined,
-          videoSource: undefined,
-          publishAudio: true,
-          publishVideo: true,
-          resolution: '640x480',
-          frameRate: 30,
-          insertMode: 'APPEND',
-          mirror: false
-        })
-
-        mainStreamManager.value = publisher
-        pub.value = mainStreamManager.value
-
-        session.value.publish(publisher)
-      })
-      .catch((error) => {
-        console.log('There was an error connecting to the session:', error.code, error.message)
-      })
-  })
-
-  window.addEventListener('beforeunload', leaveSession)
-}
-
-const leaveSession = () => {
-  if (session.value) session.value.disconnect()
-
-  session.value = undefined
-  mainStreamManager.value = undefined
-  subscribers.value = []
-  OV.value = undefined
-
-  window.removeEventListener('beforeunload', leaveSession)
-}
-
-const updateMainVideoStreamManager = (stream) => {
-  if (mainStreamManager.value !== stream) {
-    who.value = !who.value
-    mainStreamManager.value = stream
-  }
-}
-const getToken = async (id) => {
-  const sessionId = await createSessionCare(id)
-  return await createToken(sessionId)
-}
+const OV = ref()
+const session = ref()
+const mainStreamManager = ref()
+const subscriber = ref()
+const pub = ref()
+const who = ref(false)
+const videoState = ref(true)
+const audioState = ref(true)
+const soundRef = ref()
 
 onMounted(() => {
   window.onunload = () => {
@@ -225,6 +159,99 @@ onMounted(() => {
     joinSession(route.query.serial)
   }
 })
+
+const joinSession = (serial) => {
+  OV.value = new OpenVidu()
+  session.value = OV.value.initSession()
+
+  session.value.on('streamCreated', ({ stream }) => {
+    // 구독은 상대방 즉 care에 대한 스트림을 관리함
+    subscriber.value = session.value.subscribe(stream)
+
+    // 어떤 화면이든 소리를 듣기 위한 soundRef 추가시켜주기
+    subscriber.value.addVideoElement(soundRef.value)
+
+    subscriber.value.on('streamPlaying', (event) => {
+      updateMainVideoStreamManager(event.target.stream.streamManager)
+    })
+  })
+
+  session.value.on('streamDestroyed', ({ stream }) => {
+    if (mainStreamManager.value == stream.streamManager) {
+      mainStreamManager.value = pub.value
+      who.value = false
+    }
+  })
+
+  session.value.on('exception', ({ exception }) => {
+    console.warn(exception)
+  })
+
+  getToken(serial).then((token) => {
+    session.value
+      .connect(token)
+      .then(() => {
+        let publisher = OV.value.initPublisher(undefined, {
+          audioSource: undefined,
+          videoSource: undefined,
+          publishAudio: true,
+          publishVideo: true,
+          resolution: '640x480',
+          frameRate: 30,
+          insertMode: 'REPLACE',
+          mirror: true
+        })
+
+        mainStreamManager.value = publisher
+        pub.value = publisher
+        session.value.publish(publisher)
+      })
+      .catch((error) => {
+        console.log('There was an error connecting to the session:', error.code, error.message)
+      })
+  })
+
+  window.addEventListener('beforeunload', leaveSession)
+}
+
+const leaveSession = () => {
+  if (session.value) {
+    session.value.disconnect()
+
+    session.value = undefined
+    mainStreamManager.value = undefined
+    subscriber.value = undefined
+    OV.value = undefined
+
+    swal({
+      title: '종료',
+      text: '통화가 종료되었습니다.',
+      icon: 'info',
+      buttons: {
+        confirm: {
+          text: '확인',
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      }
+    }).then(() => {
+      router.push({ name: 'TheMainViewVue' })
+    })
+  }
+}
+
+const updateMainVideoStreamManager = (stream) => {
+  if (mainStreamManager.value !== stream) {
+    who.value = !who.value
+    mainStreamManager.value = stream
+  }
+}
+
+const getToken = async (serial) => {
+  const sessionId = await createSessionCare(serial)
+  return await createToken(sessionId)
+}
 
 // 네비게이션 가드를 사용하여 네비게이션 이벤트를 감지합니다.
 router.beforeEach((to, from, next) => {
