@@ -24,13 +24,13 @@
     </div>
   </div>
   <div
-    class="z-50 grid w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
+    class="z-50 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
         :class="[
-          'p-2.5 group rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
+          'p-2.5 group rounded-full me-4',
           {
             'bg-gray-100': audioState,
             'bg-red-500': !audioState,
@@ -65,7 +65,7 @@
         data-tooltip-target="tooltip-camera"
         type="button"
         :class="[
-          'p-2.5 rounded-full hover:bg-gray-200 me-4 focus:outline-none ',
+          'p-2.5 rounded-full  me-4 ',
           {
             'bg-gray-100': videoState,
             'bg-red-500': !videoState,
@@ -259,6 +259,7 @@ router.beforeEach((to, from, next) => {
 
 const muteAudio = () => {
   // true to unmute the audio track, false to mute it
+  window.blur()
   if (audioState.value) {
     audioState.value = false
     pub.value.publishAudio(false)
