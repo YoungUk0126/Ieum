@@ -1,9 +1,9 @@
 <template>
   <div class="mt-8 text-center">
-    <h1 class="text-4xl font-black text-gray-900 dark:text-white">이음이 대화 내역</h1>
+    <h1 class="text-4xl font-extrabold text-gray-500 dark:text-white">이음이 대화 내역</h1>
   </div>
   <div
-    class="flex items-center justify-between mt-5 flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900"
+    class="flex items-center justify-between mt-5 flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 pl-3 bg-white dark:bg-gray-900"
   >
     <label for="table-search" class="sr-only">Search</label>
     <div class="relative w-full">
@@ -39,43 +39,59 @@
         {{ pages.startDate }}
       </span>
     </div>
-    <template v-for="(chat, index) in list" :key="index">
-      <div class="flex items-start gap-5" v-if="chat.speaker === 'AI'">
-        <div class="w-full flex items-end gap-2.5 justify-center">
-          <img class="w-8 h-8 rounded-full" src="@/assets/images/ieum.png" alt="Jese image" />
-          <div
-            class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
-          >
-            <div class="flex items-center space-x-2 rtl:space-x-reverse">
-              <span class="text-sm font-semibold text-gray-900 dark:text-white">이음이</span>
-              <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
-                changeDateFormat(chat.date)
-              }}</span>
-            </div>
-            <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
-              {{ chat.message }}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="flex items-start gap-5" v-if="chat.speaker !== 'AI'">
+
+    <template v-if="list.length == 0">
+      <div class="flex items-center gap-5">
         <div class="w-full flex items-end gap-2.5 justify-center">
           <div
             class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
           >
-            <div class="flex items-center space-x-2 rtl:space-x-reverse">
-              <span class="text-sm font-semibold text-gray-900 dark:text-white">어르신</span>
-              <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
-                changeDateFormat(chat.date)
-              }}</span>
-            </div>
-            <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
-              {{ chat.message }}
+            <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white text-center">
+              대화 내용이 존재하지 않아요
             </p>
           </div>
-          <img class="w-8 h-8 rounded-full" src="@/assets/images/care.png" alt="Jese image" />
         </div>
       </div>
+    </template>
+    <template v-if="list.length > 0">
+      <template v-for="(chat, index) in list" :key="index">
+        <div class="flex items-start gap-5" v-if="chat.speaker === 'AI'">
+          <div class="w-full flex items-end gap-2.5 justify-center">
+            <img class="w-8 h-8 rounded-full" src="@/assets/images/ieum.png" alt="Jese image" />
+            <div
+              class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
+            >
+              <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">이음이</span>
+                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
+                  changeDateFormat(chat.date)
+                }}</span>
+              </div>
+              <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
+                {{ chat.message }}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-start gap-5" v-if="chat.speaker !== 'AI'">
+          <div class="w-full flex items-end gap-2.5 justify-center">
+            <div
+              class="flex flex-col w-full max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
+            >
+              <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">어르신</span>
+                <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
+                  changeDateFormat(chat.date)
+                }}</span>
+              </div>
+              <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
+                {{ chat.message }}
+              </p>
+            </div>
+            <img class="w-8 h-8 rounded-full" src="@/assets/images/care.png" alt="Jese image" />
+          </div>
+        </div>
+      </template>
     </template>
 
     <!-- 
@@ -225,13 +241,6 @@
 import { ref, onMounted, watch } from 'vue'
 import { getList } from '../../api/chat.js'
 
-const lobotProfile = '/assets/images/ieum.png'
-const careProfile = '/assets/images/영욱이.png'
-
-const sadEmotion = '/assets/images/sad.png'
-const happyEmotion = '/assets/images/happy.png'
-const commonEmotion = '/assets/images/common.png'
-
 const datePicker = ref()
 
 const pages = ref({
@@ -248,8 +257,10 @@ onMounted(() => {
   let today = new Date()
   let year = today.getFullYear() // 년도
   let month = today.getMonth() + 1 // 월
+  if (month < 10) month = '0' + month
   let day = today.getDate() // 날짜
-  const curDate = `${year}-0${month}-01`
+  if (day < 10) day = '0' + day
+  const curDate = `${year}-${month}-${day}`
   datePicker.value = curDate
   pages.value.startDate = curDate
   pages.value.endDate = curDate
