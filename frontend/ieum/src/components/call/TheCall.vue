@@ -136,10 +136,8 @@ import UserVideo from './VUserVideo.vue'
 import UserMainVideo from './VUserMainVideo.vue'
 import swal from 'sweetalert'
 import { createToken, createSession } from '@/api/call.js'
-
 import { useRouter } from 'vue-router'
 const router = useRouter()
-
 const OV = ref()
 const session = ref()
 const mainStreamManager = ref()
@@ -250,6 +248,14 @@ onMounted(() => {
     if (session.value) session.value.disconnect()
     session.value = undefined
   }
+})
+
+// 네비게이션 가드를 사용하여 네비게이션 이벤트를 감지합니다.
+router.beforeEach((to, from, next) => {
+  // 세션 연결을 종료시키기
+  if (session.value) session.value.disconnect()
+  session.value = undefined
+  next()
 })
 
 const muteAudio = () => {

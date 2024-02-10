@@ -114,7 +114,7 @@ const router = createRouter({
     },
     {
       //화상통화 페이지
-      path: '/calltest',
+      path: '/callcare',
       name: 'TheCareCallViewVue',
       component: TheCareCallViewVue
     },
