@@ -1,7 +1,9 @@
 package com.ukcorp.ieum.temporalEvent.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -19,5 +21,6 @@ public class TemporalEventResponseDto {
 
   private String eventName;
 
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDate eventDate;
 }
