@@ -1,94 +1,68 @@
 <template>
-  <div id="all" class="flex justify-center">
-    <div id="grid" class="grid grid-cols-9 gap-4 mb-96 mt-64">
-      <div id="image" class="col-span-3 w-60">
-        <img src="@/assets/images/영욱이.png" alt="Your Image" class="w-full h-full object-cover" />
-      </div>
-      <div id="profile" class="col-span-3 w-60">
-        <label
-          for="sirial code"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >시리얼코드</label
-        >
-        <input
+  <div class="all">
+    <div id="image" class="flex justify-center mt-24 ml-6 mb-24">
+        <img src="@/assets/images/ieum.png" alt="Your Image" class="w-1/3 h-1/3" />
+    </div>
+    <div id="name" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="name" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성함</label>
+      <input
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="careInfo.careSerial"
-          disabled
-        />
-
-        <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >부모님 성함</label
-        >
-        <input
-          type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           v-model="careInfo.careName"
           disabled
         />
-
-        <label
-          for="gneder"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >성별</label
-        >
-        <input
+    </div>
+    <div id="code" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="code" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">코드</label>
+      <input
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="careInfo.careGender"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          v-model="careInfo.careSerial"
           disabled
         />
-      </div>
-
-      <div id="profile2" class="col-span-3 w-60">
-        <label
-          for="birthday"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >생년월일</label
-        >
-        <input
+    </div>
+    <div id="birthDay" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="birthDay" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">생일</label>
+      <input
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="careInfo.careBirth"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          v-model="careInfo.careSerial"
           disabled
         />
-
-        <label
-          for="phoneNumber"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >전화번호</label
-        >
-        <input
+    </div>
+    <div id="phone" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="phone" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">번호</label>
+      <input
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           v-model="careInfo.carePhone"
           disabled
         />
-
-        <label
-          for="address"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-6"
-          >주소</label
-        >
-        <input
+    </div>
+    <div id="gender" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="gender" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성별</label>
+      <input
           type="text"
-          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          v-model="careInfo.careGender"
+          disabled
+        />
+    </div>
+    <div id="address" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="address" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">주소</label>
+      <input
+          type="text"
+          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           v-model="careInfo.careAddr"
           disabled
         />
-      </div>
-
-      <div id="editButton" class="col-end-10">
-        <button
-          type="button"
-          class="px-6 py-3.5 text-base font-medium text-white bg-gray-800 hover:bg-black focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          @click="link"
-        >
-          수정
-        </button>
-      </div>
+    </div>
+    <div class="flex justify-center ml-6 mt-20 ml-4">
+      <button type="button" class="edit px-14 py-3.5 text-3xl font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      @click="link">수정하기</button>
     </div>
   </div>
+
 </template>
 
 <script setup>
@@ -126,4 +100,20 @@ const link = () => {
 //피보호자 정보 수정 페이지로 이동시키는 메서드
 </script>
 
-<style scoped></style>
+<style scoped>
+.all {
+    min-width: 680px !important;
+    min-height: 560px !important;
+    max-width: 680px !important;
+    max-height: 985px !important;
+}
+
+.edit{
+  background-color: #8FF9F9;
+  color: #707070;
+}
+
+.color{
+  color: #707070;
+}
+</style>

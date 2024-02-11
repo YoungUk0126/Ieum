@@ -1,9 +1,9 @@
 <template>
-    <div class="all mt-40 mb-40 ml-80 mr-80">
+    <div class="all mt-40 mb-40 ml-6 mr-2">
         <div id="ID" class="mt-6">
-            <label for="ID" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">아이디/ID</label>
+            <label for="ID" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold ">아이디/ID</label>
             <div class="grid grid-cols-6 gap-4">
-                <div class="col-span-2">
+                <div class="col-span-3">
                     <input type="text"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="아이디를 입력해주세요." @input="checkId" v-model="userInfo.memberId" required />
@@ -11,24 +11,24 @@
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkValidateId">
-                    아이디 확인
+                    <span class="text-xs">아이디 확인</span>
                 </button>
             </div>
             <label v-if="checkIdType" class="idIncorrect">4~12자의 영문자, 숫자만 사용 가능합니다.</label>
         </div>
-        <div id="name" class="mt-6">
-            <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">이름/Name</label>
-            <div class="grid grid-cols-3 gap-4">
+        <div id="name" class="mt-8">
+            <label for="name" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">이름/Name</label>
+            <div class="grid grid-cols-2 gap-4">
                 <input type="text" id="name"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
                     placeholder="이름을 입력해주세요." v-model="userInfo.name" @input="validateName" required />
             </div>
-            <label v-if="checkNameType" class="nameIncorrect">이름은 영문자, 한글만 입력 가능합니다.</label>
+            <label v-if="checkNameType" class="nameIncorrect mt-2">이름은 영문자, 한글만 입력 가능합니다.</label>
         </div>
-        <div id="email" class="mt-6">
-            <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email address</label>
+        <div id="email" class="mt-8">
+            <label for="email" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">이메일/email</label>
             <div class="grid grid-cols-6 gap-4">
-                <div class="col-span-2">
+                <div class="col-span-3">
                     <input type="email" id="email"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="john@company.com" v-model="userInfo.email" @input="checkEmail" required />
@@ -36,62 +36,53 @@
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkValidateEmail">
-                    이메일 확인
+                    <span class="text-xs">이메일 확인</span>
                 </button>
             </div>
             <label v-if="checkEmailType" class="emailIncorrect">이메일 형식이 일치하지 않습니다.</label>
         </div>
-        <div id="password" class="mt-6 grid grid-cols-2 gap-4">
+        <div id="password" class="mt-8 grid grid-cols-2 gap-4">
             <div>
                 <label for="password"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호/Password</label>
+                    class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">비밀번호/Password</label>
                 <input type="password" id="password"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
                     placeholder="•••••••••" v-model="userInfo.password" @input="passwordLength" required />
                 <label v-if="checkPasswordType" class="passwordIncorrect">영문, 숫자, 특수문자(~!@#$%^&*) 조합 7~16 자리로
                     작성해주세요.</label>
                 <label v-else>사용 가능한 비밀번호입니다.</label>
             </div>
             <div>
-                <label for="confirm_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">비밀번호
+                <label for="confirm_password" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">비밀번호
                     확인/Password Check</label>
                 <input type="password" id="confirm_password"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
                     placeholder="•••••••••" v-model="passwordCheck" @input="checkPassword" required />
                 <label v-if="checkPasswordRepeatType" class="passwordcheckIncorrect">일치하지 않습니다. 다시 입력해주세요.</label>
             </div>
         </div>
-        <div id="phone" class="mt-6">
-            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">전화번호/Phone
-                Number</label>
+        <div id="phone" class="mt-8">
+            <label for="phone" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">전화번호/phone Number</label>
             <div class="grid grid-cols-6 gap-4">
-                <div class="relative col-span-2">
-                    <div class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none">
-                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 19 18">
-                            <path
-                                d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
-                        </svg>
-                    </div>
-                    <input type="text" id="phone-input" aria-describedby="helper-text-explanation"
-                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        @input="checkPhone" v-model="userInfo.phone" placeholder="010-3333-4444" required />
+                <div class="col-span-3">
+                    <input type="text" id="phone"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="john@company.com" v-model="userInfo.phone" @input="checkPhone" required />
                 </div>
-
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="checkValidatePhoneNumber">
-                    전화번호 확인
+                    <span class="text-xs2">전화번호확인</span>
                 </button>
             </div>
             <label v-if="checkPhoneNumberType" class="phoneIncorrect">전화번호 형식이 일치하지 않습니다.</label>
         </div>
 
-        <div id="certification" class="mt-6">
-            <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">인증번호/Certified
+        <div id="certification" class="mt-8">
+            <label for="last_name" class="block mb-2 text-lg text-gray-900 dark:text-white font-bold">인증번호/Certified
                 Number</label>
             <div class="grid grid-cols-6 gap-4">
-                <div class="col-span-2">
+                <div class="col-span-3">
                     <input type="text" id="last_name"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="인증번호를 입력해주세요." v-model="certifiedCode" required />
@@ -99,17 +90,17 @@
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="certifiedSend">
-                    인증전송
+                    <span class="text-xs">인증전송</span>
                 </button>
                 <button type="button"
                     class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                     @click="certifiedCheck">
-                    인증번호 확인
+                    <span class="text-xs2">인증번호확인</span>
                 </button>
             </div>
         </div>
 
-        <div id="policy" class="items-start mt-6 flex justify-center">
+        <div id="policy" class="items-start mt-8 flex justify-center">
             <div class="flex items-center h-5">
                 <input id="remember" type="checkbox" value=""
                     class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800"
@@ -120,14 +111,14 @@
                     @click="showPrivacyPolicy">개인정보처리방침</a>에
                 동의합니다.</label>
         </div>
-        <div id="final check" class="mt-6 flex justify-center gap-20">
+        <div id="final check" class="mt-8 flex justify-center gap-20">
             <button
-                class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                class="accept text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
                 @click="checkPolicyAgree">
                 확인
             </button>
             <button
-                class="text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                class="deny text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
                 취소
             </button>
         </div>
@@ -382,7 +373,38 @@ const registerFunc = () => {
   
 <style scoped>
 .all {
-    min-width: 1024px !important;
+    min-width: 680px !important;
+    min-height: 560px !important;
+    max-width: 680px !important;
+    max-height: 985px !important;
 }
+
+.text-xs{
+    font-size: 9.5px;
+}
+
+.text-xs2{
+    font-size: 8.5px;
+}
+
+.accept{
+    background-color: #8FF9F9;
+    color: #707070;
+}
+
+.deny{
+    background-color: #FBEBEB;
+    color: #707070;
+}
+
+.idIncorrect,
+.emailIncorrect,
+.passwordIncorrect,
+.passwordcheckIncorrect,
+.nameIncorrect,
+.phoneIncorrect{
+    font-size: 16px;
+    
+}
+
 </style>
-  
