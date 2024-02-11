@@ -9,10 +9,10 @@
     <div class="eventWrapper">
         <div class="eventInfo">
             <div>
-                {{ event.name }}
+                {{ event.eventName }}
             </div>
             <div>
-                {{ event.date }}
+                {{ event.eventDate }}
             </div>
         </div>
     </div>
