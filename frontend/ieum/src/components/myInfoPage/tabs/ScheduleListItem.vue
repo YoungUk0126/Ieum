@@ -9,14 +9,14 @@
     <div style="width: 70%;">
         <div class="scheduleWrapper">
             <div class="scheduleName">
-                {{ schedule.name }}
+                {{ schedule.eventName }}
             </div>
             <div class="date">
                 <div>
-                    {{ schedule.date }}
+                    {{ schedule.eventDate }}
                 </div>
                 <div>
-                    {{  schedule.time }}
+                    시간은 추가필요
                 </div>
             </div>
         </div>
