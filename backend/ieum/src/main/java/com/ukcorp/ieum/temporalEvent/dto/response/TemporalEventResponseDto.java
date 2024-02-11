@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -22,5 +23,5 @@ public class TemporalEventResponseDto {
   private String eventName;
 
   @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDate eventDate;
+  private LocalDateTime eventDate;
 }

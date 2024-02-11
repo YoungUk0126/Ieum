@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +20,6 @@ public class TemporalEventUpdateRequestDto {
   private String eventName;
 
   @JsonFormat(shape = JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss")
-  private LocalDate eventDate;
+  private LocalDateTime eventDate;
 }
 
