@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TemporalEventRepository extends JpaRepository<TemporalEvent, Long> {
-  List<TemporalEvent> findByCareInfoCareNo(Long careNo);
+  List<TemporalEvent> findByCareInfoCareNoOrderByEventDate(Long careNo);
 
-  List<TemporalEvent> findByCareInfo_CareNoAndEventDateBetween(Long careNo, LocalDate startDate, LocalDate endDate);
+  List<TemporalEvent> findByCareInfo_CareNoAndEventDateBetweenOrderByEventDate(Long careNo, LocalDate startDate, LocalDate endDate);
 
 
 }
