@@ -36,7 +36,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
     try {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-      List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
+      List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNoOrderByEventDate(careNo);
 
       return temporalEventMapper.TemporalEventEntityToResponseDto(list);
     } catch (RuntimeException e) {
