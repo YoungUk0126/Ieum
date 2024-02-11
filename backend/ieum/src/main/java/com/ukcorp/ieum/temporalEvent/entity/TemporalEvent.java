@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @ToString
@@ -27,5 +28,5 @@ public class TemporalEvent {
   private String eventName;
 
   @Column(name = "EVENT_DATE")
-  private LocalDate eventDate;
+  private LocalDateTime eventDate;
 }
