@@ -142,6 +142,13 @@ public class SocketServiceImpl implements SocketService {
 
     @Override
     public void sendCallAlertToIot(Long careNo) {
+        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
 
+        ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+
+        Content content = new Content();
+        content.callToContent();
+        redisPublisher.publishPojo(topic, content);
     }
 }
