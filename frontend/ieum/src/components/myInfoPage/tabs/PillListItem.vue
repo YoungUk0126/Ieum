@@ -10,18 +10,18 @@
     <div class="pillWrapper">
         <div class="pillInfo">
             <div>
-                {{  pill.name }}
+                {{  pill.pillName }}
             </div>
             <div>
-                {{ pill.period }}
+                {{ pill.pillStartDate }} ~ {{ pill.pillEndDate }}
             </div>
         </div>
         <div class="pillInfo">
             <div>
-                {{ pill.week.join(" ") }}
+                {{ pill.pillDate }}
             </div>
             <div>
-                {{  pill.timing }}
+                {{  pill.pillMethod }}
             </div>
         </div>
     </div>
