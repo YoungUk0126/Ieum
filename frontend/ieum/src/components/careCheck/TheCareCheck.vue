@@ -26,7 +26,7 @@
       <input
           type="text"
           class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="careInfo.careSerial"
+          v-model="careInfo.careBirth"
           disabled
         />
     </div>
@@ -39,15 +39,6 @@
           disabled
         />
     </div>
-    <div id="gender" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
-      <label id="gender" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성별</label>
-      <input
-          type="text"
-          class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          v-model="careInfo.careGender"
-          disabled
-        />
-    </div>
     <div id="address" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
       <label id="address" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">주소</label>
       <input
@@ -56,6 +47,17 @@
           v-model="careInfo.careAddr"
           disabled
         />
+    </div>
+    <div id="gender" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
+      <label id="gender" class="color mt-4 block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성별</label>
+      <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+    <input id="bordered-radio-1" type="radio" v-model="careInfo.careGender" value="MALE" name="bordered-radio" class="radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" disabled>
+    <label for="bordered-radio-1" class="w-full py-4 ms-2 text-2xl font-medium text-gray-900 dark:text-gray-300">남</label>
+      </div>
+       <div class="flex items-center ps-4 border border-gray-200 rounded dark:border-gray-700">
+    <input checked id="bordered-radio-2" type="radio" v-model="careInfo.careGender" value="FEMALE" name="bordered-radio" class="radio w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" disabled>
+    <label for="bordered-radio-2" class="w-full py-4 ms-2 text-2xl font-medium text-gray-900 dark:text-gray-300">여</label>
+       </div>
     </div>
     <div class="flex justify-center ml-6 mt-20 ml-4">
       <button type="button" class="edit px-14 py-3.5 text-3xl font-bold text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -116,4 +118,5 @@ const link = () => {
 .color{
   color: #707070;
 }
+
 </style>
