@@ -2,16 +2,16 @@ package com.ukcorp.ieum.socket.service;
 
 public interface SocketService {
 
-    void sendPillDataToIot(Long careNo);
+  void sendPillDataToIot(Long careNo);
 
-    void sendEventDataToIot(Long careNo);
+  void sendEventDataToIot(Long careNo);
 
-    void sendSleepDataToIot(Long careNo);
+  void sendSleepDataToIot(Long careNo);
 
-    void sendMealDataToIot(Long careNo);
+  void sendMealDataToIot(Long careNo);
 
-    void sendMessageToIot(Long careNo);
+  void sendMessageToIot(Long careNo);
 
-    void sendCallAlertToIot(Long careNo);
+  void sendCallAlertToIot() throws Exception;
 
 }

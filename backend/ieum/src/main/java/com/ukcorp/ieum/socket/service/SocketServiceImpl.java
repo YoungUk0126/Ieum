@@ -5,6 +5,7 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.repository.CareRepository;
 import com.ukcorp.ieum.event.entity.RegularEvent;
 import com.ukcorp.ieum.event.repository.EventRepository;
+import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.meal.entity.Meal;
 import com.ukcorp.ieum.meal.repository.MealRepository;
 import com.ukcorp.ieum.message.repository.MessageRepository;
@@ -34,121 +35,124 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SocketServiceImpl implements SocketService {
 
-    //    private final ChannelTopic topic;
-    private final RedisPublisher redisPublisher;
+  //    private final ChannelTopic topic;
+  private final RedisPublisher redisPublisher;
 
-    private final CareRepository careRepository;
-    private final PillInfoRepository pillInfoRepository;
-    private final EventRepository eventRepository;
-    private final SleepRepository sleepRepository;
-    private final MealRepository mealRepository;
-    private final MessageRepository messageRepository;
+  private final CareRepository careRepository;
+  private final PillInfoRepository pillInfoRepository;
+  private final EventRepository eventRepository;
+  private final SleepRepository sleepRepository;
+  private final MealRepository mealRepository;
+  private final MessageRepository messageRepository;
 
-    private final PillSocketMapper pillSocketMapper;
-    private final MealSocketMapper mealSocketMapper;
-    private final RegularEventMapper regularEventMapper;
-    private final SleepSocketMapper sleepSocketMapper;
+  private final PillSocketMapper pillSocketMapper;
+  private final MealSocketMapper mealSocketMapper;
+  private final RegularEventMapper regularEventMapper;
+  private final SleepSocketMapper sleepSocketMapper;
 
-    @Override
-    public void sendPillDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
-        List<PillInfo> byCareInfoCareNo = pillInfoRepository.findByCareInfo_CareNo(careNo);
+  @Override
+  public void sendPillDataToIot(Long careNo) {
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+    List<PillInfo> byCareInfoCareNo = pillInfoRepository.findByCareInfo_CareNo(careNo);
 
-        String serial = careInfo.getCareSerial();
-        ChannelTopic topic = new ChannelTopic(serial);
+    String serial = careInfo.getCareSerial();
+    ChannelTopic topic = new ChannelTopic(serial);
 
-        List<PillInfoDto> pillInfoDtos = pillSocketMapper.infoesToDtoes(byCareInfoCareNo);
-        PillResponseDto pillResponseDto = PillResponseDto.builder()
-                .contents(pillInfoDtos)
-                .build();
+    List<PillInfoDto> pillInfoDtos = pillSocketMapper.infoesToDtoes(byCareInfoCareNo);
+    PillResponseDto pillResponseDto = PillResponseDto.builder()
+        .contents(pillInfoDtos)
+        .build();
 
-        Content content = new Content();
-        try {
-            content.pillToContent(pillResponseDto);
-            redisPublisher.publishPojo(topic, content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    Content content = new Content();
+    try {
+      content.pillToContent(pillResponseDto);
+      redisPublisher.publishPojo(topic, content);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void sendEventDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
-        List<RegularEvent> allByCareInfoCareNo = eventRepository.findAllByCareInfo_CareNo(careNo);
+  @Override
+  public void sendEventDataToIot(Long careNo) {
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+    List<RegularEvent> allByCareInfoCareNo = eventRepository.findAllByCareInfo_CareNo(careNo);
 
-        String serial = careInfo.getCareSerial();
-        ChannelTopic topic = new ChannelTopic(serial);
+    String serial = careInfo.getCareSerial();
+    ChannelTopic topic = new ChannelTopic(serial);
 
-        List<RegularEventDto> lists = regularEventMapper.regularEventsToListDto(allByCareInfoCareNo);
+    List<RegularEventDto> lists = regularEventMapper.regularEventsToListDto(allByCareInfoCareNo);
 
-        EventResponseDto eventResponseDto = EventResponseDto.builder()
-                .list(lists)
-                .build();
+    EventResponseDto eventResponseDto = EventResponseDto.builder()
+        .list(lists)
+        .build();
 
-        Content content = new Content();
-        try {
-            content.eventToContent(eventResponseDto);
-            redisPublisher.publishPojo(topic, content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    Content content = new Content();
+    try {
+      content.eventToContent(eventResponseDto);
+      redisPublisher.publishPojo(topic, content);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void sendSleepDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
-        SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND SLEEP INFO"));
+  @Override
+  public void sendSleepDataToIot(Long careNo) {
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+    SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND SLEEP INFO"));
 
-        ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+    ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
 
-        Content content = new Content();
-        SleepResponseDto sleepResponseDto = sleepSocketMapper.InfoToDto(sleepInfo);
+    Content content = new Content();
+    SleepResponseDto sleepResponseDto = sleepSocketMapper.InfoToDto(sleepInfo);
 
-        try {
-            content.sleepToContent(sleepResponseDto);
-            redisPublisher.publishPojo(topic, content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    try {
+      content.sleepToContent(sleepResponseDto);
+      redisPublisher.publishPojo(topic, content);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void sendMealDataToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
-        Meal meal = mealRepository.findByCareInfo_CareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEAL"));
+  @Override
+  public void sendMealDataToIot(Long careNo) {
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+    Meal meal = mealRepository.findByCareInfo_CareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND MEAL"));
 
-        ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+    ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
 
-        Content content = new Content();
-        MealResponseDto mealResponseDto = mealSocketMapper.mealToMealResponseDto(meal);
-        try {
-            content.mealToContent(mealResponseDto);
-            redisPublisher.publishPojo(topic, content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+    Content content = new Content();
+    MealResponseDto mealResponseDto = mealSocketMapper.mealToMealResponseDto(meal);
+    try {
+      content.mealToContent(mealResponseDto);
+      redisPublisher.publishPojo(topic, content);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void sendMessageToIot(Long careNo) {
+  @Override
+  public void sendMessageToIot(Long careNo) {
 
-    }
+  }
 
-    @Override
-    public void sendCallAlertToIot(Long careNo) {
-        CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
-                .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+  @Override
+  public void sendCallAlertToIot() throws Exception {
 
-        ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+    Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-        Content content = new Content();
-        content.callToContent();
-        redisPublisher.publishPojo(topic, content);
-    }
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+        .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+
+    ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+
+    Content content = new Content();
+    content.callToContent();
+    redisPublisher.publishPojo(topic, content);
+  }
 }
