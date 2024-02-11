@@ -12,44 +12,14 @@
           <h5 class="text-green-700 text-3xl font-semibold">영욱이 할아버지</h5>
         </div>
         <div class="recent-status flex items-center space-x-2 mt-2">
-          <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-          <div class="text-green-700 text-base font-normal">최근 대화 내역: 1일전</div>
-        </div>
-        <div class="flex">
-          <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
-            <ul
-              class="p-8 flex flex-col font-bold md:p-0 mt-4 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
-            >
-              <li>
-                <router-link
-                  :to="{ name: 'TheChatView' }"
-                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                  >대화목록
-                </router-link>
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'TheCareInfoCheckView' }"
-                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                  >부모님 정보</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'TheScheduleView' }"
-                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                  >일정</router-link
-                >
-              </li>
-              <li>
-                <router-link
-                  :to="{ name: 'TheAlarmView' }"
-                  class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-                  >알람</router-link
-                >
-              </li>
-            </ul>
-          </div>
+          <div
+            class="w-2 h-2"
+            :class="{
+              'bg-yellow-200 rounded-full': status === '현재 사용중입니다',
+              'bg-green-500 rounded-full': status !== '현재 사용중입니다'
+            }"
+          ></div>
+          <div class="text-green-700 text-base font-normal">{{ status }}</div>
         </div>
       </div>
     </div>
@@ -57,8 +27,18 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { getStatus } from '@/api/iot.js'
+
 const router = useRouter()
+const status = ref()
+
+onMounted(() => {
+  getStatus(({ data }) => {
+    status.value = data.result
+  })
+})
 
 const navigateToTheCallView = () => {
   router.push({

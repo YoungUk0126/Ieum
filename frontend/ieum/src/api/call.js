@@ -1,6 +1,6 @@
 import { localAxios, localSessionAxios } from '@/util/http-commons'
 import { fail } from './fail.js'
-const url = `https://localhost:8080`
+const url = `https://i10a303.p.ssafy.io:443`
 
 const localSession = localSessionAxios()
 
