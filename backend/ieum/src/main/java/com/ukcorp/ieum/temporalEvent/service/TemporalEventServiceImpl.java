@@ -36,7 +36,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
     try {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-      List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNo(careNo);
+      List<TemporalEvent> list = temporalEventRepository.findByCareInfoCareNoOrderByEventDate(careNo);
 
       return temporalEventMapper.TemporalEventEntityToResponseDto(list);
     } catch (RuntimeException e) {
@@ -50,7 +50,7 @@ public class TemporalEventServiceImpl implements TemporalEventService {
     try {
       Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
 
-      List<TemporalEvent> list = temporalEventRepository.findByCareInfo_CareNoAndEventDateBetween(careNo,
+      List<TemporalEvent> list = temporalEventRepository.findByCareInfo_CareNoAndEventDateBetweenOrderByEventDate(careNo,
           LocalDate.of(year, month, 1),  // 연-월의 시작일
           LocalDate.of(year, month, YearMonth.of(year, month).atEndOfMonth().getDayOfMonth()));
 
