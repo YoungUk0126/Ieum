@@ -7,10 +7,10 @@ const form = localSessionAxiosFormData()
 
 const endpoint = 'i10a303.p.ssafy.io'
 
-const url = `http://${endpoint}:8080/api/ani`
+const url = `https://${endpoint}:443/api/ani`
 
-function getAllEvent(param, success) {
-  local.get(`${url}/list/${param}`).then(success).catch(fail)
+function getAllEvent(success) {
+  local.get(`${url}`).then(success).catch(fail)
 }
 
 function getOneEvent(param, success) {
