@@ -1,6 +1,7 @@
 package com.ukcorp.ieum.temporalEvent.dto.request;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -17,5 +18,7 @@ public class TemporalEventUpdateRequestDto {
 
   private String eventName;
 
+  @JsonFormat(shape = JsonFormat.Shape.STRING ,pattern = "yyyy-MM-dd HH:mm:ss")
   private LocalDate eventDate;
 }
+
