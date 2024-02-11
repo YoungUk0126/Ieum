@@ -37,4 +37,9 @@ public class Content {
         this.type = "Event";
         this.content = data;
     }
+
+    public void callToContent() {
+        this.type = "Call";
+        this.content = null;
+    }
 }
