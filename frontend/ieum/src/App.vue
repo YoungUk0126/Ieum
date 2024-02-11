@@ -2,7 +2,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <div class="body">
     <TheHeader v-show="stores.headerState"></TheHeader>
-    <div style="height: 96px"></div>
+    <div v-show="stores.headerState" style="height: 96px"></div>
     <router-view></router-view>
   </div>
 </template>

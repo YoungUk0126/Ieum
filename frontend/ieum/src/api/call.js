@@ -1,6 +1,6 @@
 import { localAxios, localSessionAxios } from '@/util/http-commons'
-
-const url = `https://i10a303.p.ssafy.io:443`
+import { fail } from './fail.js'
+const url = `https://localhost:8080`
 
 const localSession = localSessionAxios()
 
@@ -16,12 +16,12 @@ const createSessionCare = async (serialNo) => {
 }
 // 보호자 세션 접속
 const createSession = async () => {
-  const response = await localSession.post(`${url}/api/sessions`)
+  const response = await localSession.post(`${url}/api/sessions`).catch(fail)
   return response.data
 }
 
 const createToken = async (sessionId) => {
-  const response = await localSession.post(`${url}/api/sessions/connections/${sessionId}`)
+  const response = await localSession.post(`${url}/api/sessions/connections/${sessionId}`).catch(fail)
   return response.data
 }
 
