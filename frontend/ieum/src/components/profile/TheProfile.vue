@@ -9,7 +9,9 @@
             alt="전화 걸기 아이콘"
             @click="navigateToTheCallView"
           />
-          <h5 class="text-green-700 text-3xl font-semibold">영욱이 할아버지</h5>
+          <h5 class="text-green-700 text-3xl font-semibold">
+            {{ `${care.careName}  ${care.gender}` }}
+          </h5>
         </div>
         <div class="recent-status flex items-center space-x-2 mt-2">
           <div
@@ -30,13 +32,22 @@
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { getStatus } from '@/api/iot.js'
+import { getCareInfo } from '@/api/careInfoModify.js'
 
 const router = useRouter()
 const status = ref()
+const care = ref({})
 
 onMounted(() => {
   getStatus(({ data }) => {
     status.value = data.result
+  })
+  getCareInfo(({ data }) => {
+    if (data.data !== undefined) {
+      console.log(data.data)
+      care.value = data.data
+      care.value.gender = care.value.gender === 'FEMALE' ? '할머니' : '할아버지'
+    }
   })
 })
 
