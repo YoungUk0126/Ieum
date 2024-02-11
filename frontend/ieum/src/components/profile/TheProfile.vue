@@ -3,12 +3,6 @@
     <div class="grid grid-cols-1 md:grid-cols-2">
       <div class="flex flex-col justify-center px-4 md:px-8 py-4">
         <div class="flex items-center space-x-4">
-          <img
-            src="@/assets/images/전화걸기.png"
-            class="w-16 rounded-md profile-img2 cursor-pointer"
-            alt="전화 걸기 아이콘"
-            @click="navigateToTheCallView"
-          />
           <h5 class="text-green-700 text-3xl font-semibold">
             {{ `${care.careName}  ${care.gender}` }}
           </h5>
