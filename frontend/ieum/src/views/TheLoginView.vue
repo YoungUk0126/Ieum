@@ -14,6 +14,6 @@ import TheLoginBody from '../components/login/TheLoginBody.vue'
   justify-content: center;
   align-items: center;
   min-height: calc(100vh - 96px);
-  background-color: #dcf2e5;
+  background-color: #d0d0d0;
 }
 </style>
