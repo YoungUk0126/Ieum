@@ -4,6 +4,9 @@
       class="shadow-md border-2 border-solid rounded-xl max-w-xl mx-auto h-full flex w-75 justify-start items-center p-6 bg-white"
     >
       <div class="w-full max-w-xl mx-auto">
+        <div class="mb-5 text-center font-bold text-xl text-gray-500">
+          <h3>로그인</h3>
+        </div>
         <div class="mb-5">
           <label for="id" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
             >ID
