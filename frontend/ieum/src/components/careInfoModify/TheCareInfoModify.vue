@@ -27,7 +27,7 @@
       <div id="birthDay" class="grid grid-cols-3 gap-4 ml-8 mr-20 mb-12">
         <label id="birthDay" class="color block text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">생일</label>
         <input
-            type="text"
+            type="date"
             class="col-span-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             v-model="careInfo.careBirth"
           />
@@ -144,6 +144,8 @@ const updateCareInfo = () => {
     profileEdit(
         formData,
         (response) => {
+        console.log(json)
+        console.log(response.data)
             if (response.data.success) {
                 swal('정보가 변경되었습니다.').then(
                     router.push('/carecheck')
