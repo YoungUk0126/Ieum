@@ -19,8 +19,10 @@
 </script>
 
 <template>
-    <div>
+    <div v-if="scheduleInfoList">
         <ScheduleListItem v-for="scheduleInfo in scheduleInfoList" :key="scheduleInfo.id" :schedule="scheduleInfo"></ScheduleListItem>
     </div>
-    
+    <div v-else>
+        등록된 일정 정보가 없습니다.
+    </div>
 </template>

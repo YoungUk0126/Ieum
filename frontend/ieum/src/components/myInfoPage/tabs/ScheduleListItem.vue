@@ -6,7 +6,7 @@
 </script>
 
 <template>
-    <div style="width: 70%;">
+    <div style="width: 80%;">
         <div class="scheduleWrapper">
             <div class="scheduleName">
                 {{ schedule.eventName }}
@@ -28,9 +28,10 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        border: 1px solid;
-        /* width: 70%; */
-        margin: 0 auto;
+        border-radius: 20px;
+        margin: 0.5% auto;
+        padding: 1.3% 3%;
+        background-color: #f1f3f5
     }
 
     .scheduleName {
