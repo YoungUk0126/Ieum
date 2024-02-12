@@ -15,11 +15,15 @@
         }, (error) => {
             console.log("Event Info 불러오던 중 Error 발생!!");
         })
+        
     });
 </script>
 
 <template>
-    <div>
+    <div v-if="eventInfoList">
         <EventList v-for="eventInfo in eventInfoList" :key="eventInfo.id" :event="eventInfo"></EventList>
+    </div>
+    <div v-else>
+        등록된 기념일 정보가 없습니다.
     </div>
 </template>

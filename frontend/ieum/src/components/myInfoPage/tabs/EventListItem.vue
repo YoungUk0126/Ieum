@@ -20,9 +20,14 @@
 
 <style>
     .eventWrapper {
-        border: 1px solid;
-        width: 70%;
-        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        /* border: 1px solid; */
+        border-radius: 20px;
+        margin: 0.5% auto;
+        padding: 1.3% 3%;
+        width: 80%;
+        background-color: #f1f3f5;
     }
 
     .eventInfo {
