@@ -4,9 +4,9 @@ import TheHeader from './components/common/TheHeader.vue'
 
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <TheHeader></TheHeader>
   <div class="body">
-    <TheHeader></TheHeader>
-    <div style="height: 96px"></div>
+    <div class="h-24"></div>
     <router-view></router-view>
   </div>
 </template>

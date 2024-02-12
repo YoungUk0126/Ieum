@@ -44,11 +44,15 @@
         <button
           type="button"
           class="w-full min-h-40 text-4xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          :data-modal-target="modalId"
+          :data-modal-toggle="modalId"
         >
+          <VModal :main-modal="modalId" />
           <div class="flex justify-center">
             <div>
               <img src="@/assets/images/calendar.png" class="w-16 h-16" />
             </div>
+            <!-- Modal toggle -->
             <div class="flex items-center">일정 등록</div>
           </div>
         </button>
@@ -57,6 +61,11 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from 'vue'
+import VModal from '../Alarm/VModal.vue'
+
+const modalId = ref('VModal')
+</script>
 
 <style scoped></style>
