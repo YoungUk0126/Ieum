@@ -70,9 +70,7 @@ public class CareController {
    */
 
   @GetMapping
-  private ResponseEntity<Map<String, Object>> getCareInfo() {
-
-    try {
+  private ResponseEntity<Map<String, Object>> getCar
       CareGetResponseDto careDto = careService.getCareInfo();
       return handleSuccess(careDto);
 
