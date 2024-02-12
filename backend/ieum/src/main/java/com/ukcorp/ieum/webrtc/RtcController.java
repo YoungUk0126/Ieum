@@ -1,7 +1,8 @@
 package com.ukcorp.ieum.webrtc;
 
+import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
+import com.ukcorp.ieum.care.service.CareService;
 import com.ukcorp.ieum.iot.service.IotService;
-import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.socket.service.SocketService;
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.ConnectionProperties;
@@ -32,6 +33,8 @@ public class RtcController {
   private final SocketService socketService;
   private final IotService iotService;
 
+  private final CareService careService;
+
   @Value("${openvidu.url}")
   private String OPENVIDU_URL;
 
@@ -55,9 +58,8 @@ public class RtcController {
   @PostMapping
   public ResponseEntity<String> initializeSession()
       throws Exception {
-    Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
-    System.out.println(careNo);
-    String serialCode = iotService.getSerialCode(careNo);
+    CareGetResponseDto care = careService.getCareInfo();
+    String serialCode = care.getCareSerial();
     SessionProperties properties = new SessionProperties.Builder().customSessionId(serialCode)
         .build();
     Session session = openvidu.createSession(properties);
