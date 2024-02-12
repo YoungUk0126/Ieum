@@ -36,7 +36,7 @@ public class CareController {
           MultipartFile file
   ) throws IOException {
     // 파일 저장 디렉토리 경로 (폴더 내에 프론트 프로젝트 함께 존재해야 함)
-    String uploadDir = "./profile/";
+    String uploadDir = "./images/";
     // 파일 저장할 경로
     String fileName = name + ".jpg";
     Path filePath = Paths.get(uploadDir, fileName);
