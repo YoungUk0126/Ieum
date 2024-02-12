@@ -71,7 +71,7 @@
                 <div class="col-span-4">
                     <input type="text" id="phone"
                         class="h-16 bg-gray-50 border border-gray-300 text-gray-900 text-2xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="john@company.com" v-model="userInfo.phone" @input="checkPhone" required />
+                        placeholder="010-xxxx-xxxx" v-model="userInfo.phone" @input="checkPhone" required />
                 </div>
                 <button type="button"
                     class="h-16 col-span-2 text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
