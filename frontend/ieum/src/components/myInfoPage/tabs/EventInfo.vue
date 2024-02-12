@@ -20,7 +20,7 @@
 </script>
 
 <template>
-    <div v-if="eventInfoList">
+    <div v-if="eventInfoList.length!=0">
         <EventList v-for="eventInfo in eventInfoList" :key="eventInfo.id" :event="eventInfo"></EventList>
     </div>
     <div v-else>

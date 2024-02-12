@@ -37,7 +37,7 @@
 </script>
 
 <template>
-    <div v-if="pillInfoList">
+    <div v-if="pillInfoList.length!=0">
         <PillList v-for="pillInfo in pillInfoList" :key="pillInfo.id" :pill="pillInfo"></PillList>
     </div>
     <div v-else>

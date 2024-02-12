@@ -19,7 +19,7 @@
 </script>
 
 <template>
-    <div v-if="scheduleInfoList">
+    <div v-if="scheduleInfoList.length!=0">
         <ScheduleListItem v-for="scheduleInfo in scheduleInfoList" :key="scheduleInfo.id" :schedule="scheduleInfo"></ScheduleListItem>
     </div>
     <div v-else>
