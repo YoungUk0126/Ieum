@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto my-12 p-6 w-full">
+  <div class="mx-auto my-12 p-6 w-full max-w-xl">
     <div class="border-b border-gray-900/10 pb-12">
       <div class="mt-10 grid grid-cols-3 gap-x-6 gap-y-8">
         <div class="col-span-3">

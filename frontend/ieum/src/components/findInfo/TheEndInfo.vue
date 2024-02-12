@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-auto my-12 p-6 w-full">
+  <div class="mx-auto my-12 p-6 w-full max-w-xl">
     <div class="flex flex-col items-center justify-center gap-3">
       <h1 class="font-mono text-5xl">변경 완료</h1>
       <p class="text-lg mt-4">비밀번호가 변경되었습니다.</p>
