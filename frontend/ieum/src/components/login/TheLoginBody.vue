@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto px-6">
     <div
-      class="rounded-xl max-w-xl mx-auto h-full flex w-75 justify-start items-center p-6 bg-white"
+      class="shadow-md border-2 border-solid rounded-xl max-w-xl mx-auto h-full flex w-75 justify-start items-center p-6 bg-white"
     >
       <div class="w-full max-w-xl mx-auto">
         <div class="mb-5">
