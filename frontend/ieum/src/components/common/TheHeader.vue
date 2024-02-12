@@ -3,13 +3,24 @@
     class="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 transition-all duration-500 ease-in-out"
   >
     <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-      <router-link
-        :to="{ name: 'TheMainViewVue' }"
-        class="flex items-center space-x-3 rtl:space-x-reverse"
-      >
-        <img src="@/assets/images/logo.png" class="h-16" />
-      </router-link>
+      <template v-if="!hide">
+        <router-link
+          :to="{ name: 'TheMainViewVue' }"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="@/assets/images/logo.png" class="h-16" />
+        </router-link>
+      </template>
+      <template v-if="hide">
+        <router-link
+          :to="{ name: 'TheLoginView' }"
+          class="flex items-center space-x-3 rtl:space-x-reverse"
+        >
+          <img src="@/assets/images/logo.png" class="h-16" />
+        </router-link>
+      </template>
       <button
+        v-show="!hide"
         ref="hamb"
         data-collapse-toggle="navbar-user"
         type="button"
