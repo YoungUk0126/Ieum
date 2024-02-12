@@ -125,6 +125,7 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
+    <audio ref="bgmAudio" src="/src/assets/bgm.mp3" controls style="display: none"></audio>
   </div>
 </template>
 
@@ -146,11 +147,15 @@ const who = ref(false)
 const videoState = ref(true)
 const audioState = ref(true)
 const soundRef = ref()
+const bgmAudio = ref()
 
 onMounted(() => {
+  bgmAudio.value.play() // 음원 재생
+
   joinSession()
 
   window.onunload = () => {
+    bgmAudio.value.pause() // 일시 정지
     if (session.value) session.value.disconnect()
     session.value = undefined
   }
@@ -167,16 +172,21 @@ const joinSession = () => {
     // 어떤 화면이든 소리를 듣기 위한 soundRef 추가시켜주기
     subscriber.value.addVideoElement(soundRef.value)
 
+    bgmAudio.value.pause() // 일시 정지
+
     subscriber.value.on('streamPlaying', (event) => {
       updateMainVideoStreamManager(event.target.stream.streamManager)
     })
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
-    if (mainStreamManager.value == stream.streamManager) {
+    /*if (mainStreamManager.value == stream.streamManager) {
       mainStreamManager.value = pub.value
       who.value = false
-    }
+    }*/
+    pub.value = undefined
+    subscriber.value = undefined
+    endSession()
   })
 
   session.value.on('exception', ({ exception }) => {
@@ -218,23 +228,27 @@ const leaveSession = () => {
     mainStreamManager.value = undefined
     subscriber.value = undefined
     OV.value = undefined
-
-    swal({
-      title: '종료',
-      text: '통화가 종료되었습니다.',
-      icon: 'info',
-      buttons: {
-        confirm: {
-          text: '확인',
-          visible: true,
-          className: '',
-          closeModal: true
-        }
-      }
-    }).then(() => {
-      router.push({ name: 'TheMainViewVue' })
-    })
+    bgmAudio.value.pause() // 일시 정지
+    endSession()
   }
+}
+
+const endSession = () => {
+  swal({
+    title: '종료',
+    text: '통화가 종료되었습니다.',
+    icon: 'info',
+    buttons: {
+      confirm: {
+        text: '확인',
+        visible: true,
+        className: '',
+        closeModal: true
+      }
+    }
+  }).then(() => {
+    router.push({ name: 'TheMainViewVue' })
+  })
 }
 
 const updateMainVideoStreamManager = (stream) => {
@@ -246,6 +260,7 @@ const updateMainVideoStreamManager = (stream) => {
 
 const getToken = async () => {
   const sessionId = await createSession()
+  console.log(sessionId)
   return await createToken(sessionId)
 }
 
