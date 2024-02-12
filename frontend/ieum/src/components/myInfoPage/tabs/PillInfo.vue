@@ -21,7 +21,7 @@
 
     onMounted(() => {
         // 추후에 api 조회 호출
-        console.log("Schedule Info onMounted");
+        console.log("Pill Info onMounted");
         getAllInject(
         (response) => {
             console.log("불러온 값", response.data.data);
@@ -31,13 +31,16 @@
             });
             pillInfoList.value = response.data.data;
         }, (error) => {
-            console.log("Schedule Info 불러오던 중 Error 발생!!");
+            console.log("Pill Info 불러오던 중 Error 발생!!");
         })
     });
 </script>
 
 <template>
-    <div>
+    <div v-if="pillInfoList">
         <PillList v-for="pillInfo in pillInfoList" :key="pillInfo.id" :pill="pillInfo"></PillList>
+    </div>
+    <div v-else>
+        등록된 복용약 정보가 없습니다.
     </div>
 </template>
