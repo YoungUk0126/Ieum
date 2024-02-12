@@ -1,5 +1,5 @@
 <template>
-  <div class="w-2/3 mx-auto">
+  <div class="w-full mx-auto max-w-3xl">
     <TheChatBody></TheChatBody>
   </div>
 </template>
