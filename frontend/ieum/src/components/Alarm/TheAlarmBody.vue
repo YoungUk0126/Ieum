@@ -16,7 +16,7 @@
       <VModal></VModal>
     </div>
     <!-- 동적으로 변경되는 내용 추가 -->
-    <div class="modax l-body">
+    <div class="modal l-body">
       <template v-if="selectedOption === 'anniversary'">
         <TheBodyAnniv :closeModal="closeModal"></TheBodyAnniv>
       </template>
