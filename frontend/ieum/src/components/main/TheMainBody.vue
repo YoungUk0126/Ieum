@@ -5,6 +5,7 @@
         <button
           type="button"
           class="w-full min-h-40 text-4xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          @click="changeRouter('TheCallView')"
         >
           <div class="flex justify-center">
             <div>
@@ -14,23 +15,24 @@
           </div>
         </button>
       </div>
-      <div class="w-1/2 pl-10 pr-2">
+      <div class="w-1/2 pl-10 pr-1">
         <button
           type="button"
-          class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          @click="changeRouter('TheChatView')"
         >
           <div class="flex justify-center gap-x-1">
             <div>
               <img src="@/assets/images/chat.png" class="w-10 h-10" />
             </div>
-            <div class="flex items-center">대화 목록</div>
+            <div class="flex items-center">대화목록</div>
           </div>
         </button>
       </div>
-      <div class="w-1/2 pr-10 pl-2">
+      <div class="w-1/2 pr-10 pl-1">
         <button
           type="button"
-          class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
         >
           <div class="flex justify-center gap-x-1">
             <div>
@@ -64,8 +66,14 @@
 <script setup>
 import { ref } from 'vue'
 import VModal from '../Alarm/VModal.vue'
+import { useRouter } from 'vue-router'
 
 const modalId = ref('VModal')
+const router = useRouter()
+
+const changeRouter = (name) => {
+  router.push({ name: name })
+}
 </script>
 
 <style scoped></style>
