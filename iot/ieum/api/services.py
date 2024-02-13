@@ -5,21 +5,19 @@ from ieum.keys import get_key
 from parser.pub import publish
 import requests
 import uuid
-import pyglet
+from parser.pub import publish
 
 
 def tts(text):
     path = get_key("FILE_PATH")
     res = requests.post(get_key("URL") + '/api/ieum/speak', json={"text": text})
-    print(res)
-    print(res.text)
     audio = BytesIO(res.content)
     exportName = uuid.uuid1()
     exportPath = path + str(exportName) + '.wav'
     seg = AudioSegment.from_file(audio, format="wav")
     seg.export(exportPath, format="wav")
-    song = pyglet.media.load(exportPath)
-    song.play()
+
+    return exportPath
 
 
 def chat(source):
@@ -41,20 +39,18 @@ def chat(source):
 
     publish("ChatResponse", exportPath)
 
-    song = pyglet.media.load(exportPath)
-    song.play()
 
 def activeCheck():
     serial = get_key("SERIAL_CODE")
     response = requests.post(get_key("URL") + '/api/devices/check-device', json={"serial": serial})
     jsonObj = response.json()
-    usable = jsonObj.get("usable")
+    usable = str(jsonObj.get("usable"))
     if(usable == "True"):
         # 전환 플래그 전송
-        print("TRUE")
+        publish("Status", "True")
     else:
         # 재부팅 플래스 전송
-        print("FALSE")
+        publish("Status", "False")
 def dataCheck():
     serial = get_key("SERIAL_CODE")
     response = requests.post(get_key("URL") + '/api/devices/check-info', json={'serial' : serial})

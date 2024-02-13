@@ -5,6 +5,9 @@ class Event(models.Model):
     eventName = models.CharField(max_length=30)
     eventDate = models.DateField(default=date.today)
 
+class AnyEvent(models.Model):
+    eventName = models.CharField(max_length=30)
+    eventDateTime = models.DateTimeField(null=True, blank=True)
 
 class Meal(models.Model):
     mealTime1 = models.IntegerField(null=True)

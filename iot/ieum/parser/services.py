@@ -18,6 +18,22 @@ def parser(data):
             event.eventDate = datetime.strptime(eventDate[:-1],'%Y-%m-%d')
             event.save()
 
+    elif(jsonObj.get("type") == "AnyEvent"):
+        AnyEvent.objects.all().delete()
+        jsonArr = jsonObj.get("content").get("list")
+        for list in jsonArr:
+            anyEvent = AnyEvent.objects.create()
+            anyEvent.eventName = list.get("eventName")
+            eventDate = ''
+            for date in list.get("eventDate"):
+                eventDate += (str(date) + ", ")
+            eventDate += '0'
+            eventDate = tuple(map(int, eventDate.split(', ')))
+            datetime_object = datetime(*eventDate)
+            formatted_date = datetime_object.strftime("%Y-%m-%d %H:%M:%S")
+            anyEvent.eventDateTime = formatted_date
+            anyEvent.save()
+
     elif(jsonObj.get("type") == "Sleep"):
         Sleep.objects.all().delete()
         jsonData = jsonObj.get("content")
