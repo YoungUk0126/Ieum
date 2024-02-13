@@ -4,7 +4,7 @@
       <div class="flex flex-col justify-center px-4 md:px-8 py-4">
         <div class="flex items-center space-x-4">
           <h5 class="text-green-700 text-3xl font-semibold">
-            {{ `${care.careName}  ${care.gender}` }}
+            {{ `${care.careName}  ${care.careGender}` }}
           </h5>
         </div>
         <div class="recent-status flex items-center space-x-2 mt-2">
@@ -39,9 +39,8 @@ onMounted(() => {
   })
   getCareInfo(({ data }) => {
     if (data.data !== undefined) {
-      console.log(data.data)
       care.value = data.data
-      care.value.gender = care.value.gender === 'FEMALE' ? '할머니' : '할아버지'
+      care.value.careGender = care.value.careGender === 'FEMALE' ? '할머니' : '할아버지'
     }
   })
 })
