@@ -9,6 +9,7 @@
     const components = ref({복용약, 기념일, 일정});
     const currentTab = ref(components.value.복용약);
     const tabs = ref(['복용약', '기념일', '일정']);
+    const imgUrl = ref('https://i10a303.p.ssafy.io/images/');
 
     const careInfo = ref({
         careName: '',
@@ -26,6 +27,9 @@
             (response) => {
                 console.log("불러온 값 ", response.data.data);
                 careInfo.value = response.data.data;
+                if (response.data.data.careImage) {
+                    careInfo.value.careImage = imgUrl.value + response.data.data.careImage;
+                }
             },
             (error) => {
                 console.log("getCareInfo API 호출 중 에러 발생!");
