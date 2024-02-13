@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container bg-white shadow-md rounded-md m-5">
+  <div class="profile-container max-w-2xl w-full ps-5 bg-white shadow-md rounded-md m-5">
     <div class="grid grid-cols-1 md:grid-cols-2">
       <div class="flex flex-col justify-center px-4 md:px-8 py-4">
         <div class="flex items-center space-x-4">
@@ -40,6 +40,10 @@ onMounted(() => {
     if (data.data !== undefined) {
       care.value = data.data
       care.value.careGender = care.value.careGender === 'FEMALE' ? '할머니' : '할아버지'
+      if (care.value.careName === null || care.value.careName === undefined) {
+        care.value.careName = '미등록'
+        care.value.careGender = ''
+      }
     }
   })
 })
