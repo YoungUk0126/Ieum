@@ -7,7 +7,7 @@ const form = localSessionAxiosFormData()
 
 const endpoint = 'i10a303.p.ssafy.io'
 
-const url = `http://${endpoint}:8080/api/sleepMode`
+const url = `http://${endpoint}:443/api/sleepMode`
 
 function getAllSleep(success) {
   local.get(`${url}`).then(success).catch(fail)
