@@ -1,6 +1,5 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <TheHeader></TheHeader>
   <div class="body">
     <TheHeader v-show="stores.headerState"></TheHeader>
     <div v-show="stores.headerState" style="height: 96px"></div>
