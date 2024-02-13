@@ -4,25 +4,15 @@ import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
 import com.ukcorp.ieum.care.service.CareService;
 import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.socket.service.SocketService;
-import io.openvidu.java.client.Connection;
-import io.openvidu.java.client.ConnectionProperties;
-import io.openvidu.java.client.OpenVidu;
-import io.openvidu.java.client.OpenViduHttpException;
-import io.openvidu.java.client.OpenViduJavaClientException;
-import io.openvidu.java.client.Session;
-import io.openvidu.java.client.SessionProperties;
-import java.util.Map;
-import javax.annotation.PostConstruct;
+import io.openvidu.java.client.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -102,5 +92,20 @@ public class RtcController {
     SessionProperties properties = SessionProperties.fromJson(params).build();
     Session session = openvidu.createSession(properties);
     return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
+  }
+  // 피보호자측 세션 연결
+  @PostMapping("/care/connections/{serialNo}")
+  public ResponseEntity<String> createCareConnection(@PathVariable("serialNo") String serialNo,
+                                                 @RequestBody(required = false) Map<String, Object> params)
+          throws OpenViduJavaClientException, OpenViduHttpException {
+
+    Session session = openvidu.getActiveSession(serialNo);
+    if (session == null) {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
+    Connection connection = session.createConnection(properties);
+
+    return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
   }
 }
