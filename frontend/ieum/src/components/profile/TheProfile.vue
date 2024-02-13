@@ -34,6 +34,7 @@ const care = ref({})
 
 onMounted(() => {
   getStatus(({ data }) => {
+    console.log(data)
     status.value = data.result
   })
   getCareInfo(({ data }) => {
