@@ -95,7 +95,7 @@
             </div>
             <img
               class="w-11 h-11 rounded-full"
-              :src="'/src/assets/images/' + care.careImage"
+              :src="'/assets/images/' + care.careImage"
               alt="Jese image"
             />
           </div>
