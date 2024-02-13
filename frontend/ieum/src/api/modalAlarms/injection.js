@@ -7,10 +7,10 @@ const form = localSessionAxiosFormData()
 
 const endpoint = 'i10a303.p.ssafy.io'
 
-const url = `http://${endpoint}:8080/api/pill`
+const url = `https://${endpoint}:443/api/pill`
 
-function getAllInject(param, success) {
-  local.get(`${url}/${param}`).then(success).catch(fail)
+function getAllInject(success) {
+  local.get(`${url}`).then(success).catch(fail)
 }
 
 function getOneInject(param, success) {

@@ -4,12 +4,12 @@
   >
     <div class="mx-auto border-b border-gray-900/10 pb-12">
       <div class="mt-10 grid grid-cols-3 gap-x-6 gap-y-8">
-        <div class="col-span-1 text-center">
-          <h2 class="text-base font-semibold leading-7 text-gray-900">회원 정보 수정</h2>
+        <div class="col-span-2 text-center">
+          <h2 class="text-3xl font-semibold leading-7 text-gray-900">회원 정보 수정</h2>
         </div>
-        <div class="col-span-2"></div>
+        <div class="col-span-1"></div>
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+          <label class="mt-2 block text-center text-xl font-semibold leading-6 text-gray-900"
             >아이디</label
           >
         </div>
@@ -24,7 +24,7 @@
           />
         </div>
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900">이름</label>
+          <label class="mt-2 block text-center text-xl font-semibold leading-6 text-gray-900">이름</label>
         </div>
         <div class="col-span-2">
           <input
@@ -37,7 +37,7 @@
         </div>
 
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+          <label class="mt-2 block text-center text-xl font-semibold leading-6 text-gray-900"
             >이메일</label
           >
         </div>
@@ -53,7 +53,7 @@
         </div>
 
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+          <label class="mt-2 block text-center text-base font-black leading-6 text-gray-900"
             >새 비밀번호</label
           >
         </div>
@@ -64,12 +64,12 @@
             autocomplete="given-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             v-model="password.newPwd"
-            placeholder="ieum@naver.com"
+            placeholder="•••••••••"
           />
         </div>
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
-            >새 비밀번호 확인</label
+          <label class="mt-2 block text-center text-base font-black leading-6 text-gray-900"
+            >비밀번호 확인</label
           >
         </div>
         <div class="col-span-2">
@@ -79,7 +79,7 @@
             autocomplete="given-name"
             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             v-model="password.newPwdCheck"
-            placeholder="ieum@naver.com"
+            placeholder="•••••••••"
           />
         </div>
 
@@ -93,11 +93,11 @@
         </div>
 
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
-            >전화 번호</label
+          <label class="mt-2 block text-center text-xl font-semibold leading-6 text-gray-900"
+            >전화번호</label
           >
         </div>
-        <div class="col-span-1 relative">
+        <div class="col-span-2 relative">
           <div
             class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none"
           >
@@ -125,10 +125,10 @@
           />
         </div>
 
-        <div class="col-span-1">
+        <div class="col-start-3 col-end-4">
           <button
             type="button"
-            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            class="w-full text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             @click="sendCode"
           >
             전송
@@ -145,11 +145,11 @@
         </div>
 
         <div class="col-span-1">
-          <label class="block text-center text-sm font-medium leading-6 text-gray-900"
+          <label class="mt-2 block text-center text-xl font-semibold leading-6 text-gray-900"
             >인증번호</label
           >
         </div>
-        <div class="col-span-1">
+        <div class="col-span-2">
           <input
             type="text"
             name="memberId"
@@ -159,10 +159,10 @@
             v-model="authCode"
           />
         </div>
-        <div class="col-span-1">
+        <div class="col-start-3 col-end-4">
           <button
             type="button"
-            class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            class="w-full text-white bg-green-500 hover:bg-[#1d7b66] focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-base px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             @click="verifyCode"
           >
             확인
@@ -172,7 +172,7 @@
       <div class="col-span-3 text-center mt-10">
         <button
           type="button"
-          class="w-1/2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+          class="edit w-1/2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-xl px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
           @click="edit"
         >
           수정
@@ -411,4 +411,9 @@ const checkPassword = () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.edit{
+  background-color: #8FF9F9;
+  color: #707070;
+}
+</style>
