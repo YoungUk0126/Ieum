@@ -10,24 +10,24 @@
 </script>
 
 <template>
-    <div class="pillWrapper">
-        <div class="pillInfo">
+    <div class="pillWrapper p-3">
+        <div class="pillInfo gap-2" >
             <div>
                 {{  pill.pillName }}
             </div>
-            <div>
+            <div class="text-xs">
                 {{ pill.pillDate }}
             </div>
         </div>
-        <div class="pillInfo pillDate">
-            <div>
+        <div class="pillInfo pillDate gap-2">
+            <div class="text-xs">
                 {{ pill.pillStartDate }} ~ {{ pill.pillEndDate }}
             </div>
-            <div>
+            <div class="text-s">
                 {{  pill.pillMethod }}
             </div>
         </div>
-        <div class="bin" @click="onDelete">
+        <div class="bin w-6 h-6" @click="onDelete">
             <img src="@/assets/images/trash_icon.png" />
         </div>
     </div>
@@ -36,10 +36,8 @@
 <style>
     .bin {
         display: flex;
-        width: 5%;
-        height: 5%;
-        margin: auto 0 auto 1%;
-        padding-left: 1%;
+        align-items: center;
+        margin: auto 0;
     }
 
     .pillWrapper {
@@ -49,21 +47,21 @@
         /* border: 1px solid; */
         border-radius: 20px;
         margin: 0.5% auto;
-        padding: 1.3% 3%;
+        /* padding: 1.3% 3%; */
         width: 80%;
-        height: 30%;
         background-color: #f1f3f5;
     }
 
     .pillDate {
         text-align: end;
-        flex:1%
+        flex:0.9
     }
 
     .pillInfo {
         display: flex;
         flex-direction: column;
+        /* flex: 0.5; */
         /* width: 100%; */
-        justify-content: space-between;
+        /* justify-content: space-between; */
     }
 </style>

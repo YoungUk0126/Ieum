@@ -48,7 +48,7 @@
 </script>
 
 <template>
-    <div v-if="scheduleInfoList.length!=0">
+    <div v-if="scheduleInfoList.length!=0" class = "overflow-x-auto" style="height: 55vh;">
         <ScheduleListItem v-for="scheduleInfo in scheduleInfoList" :key="scheduleInfo.eventNo" :schedule="scheduleInfo" @delete="handleDelete"></ScheduleListItem>
     </div>
     <div v-else>

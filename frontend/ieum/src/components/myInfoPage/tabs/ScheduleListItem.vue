@@ -11,19 +11,19 @@
 
 <template>
     <div style="width: 80%;">
-        <div class="scheduleWrapper">
+        <div class="scheduleWrapper p-3">
             <div class="scheduleName">
                 {{ schedule.eventName }}
             </div>
-            <div class="date">
-                <div>
+            <div class="date gap-1">
+                <div class="text-s">
                     {{ schedule.date }}
                 </div>
-                <div>
+                <div class="text-xs">
                     {{ schedule.time }}
                 </div>
             </div>
-            <div class="bin" @click="onDelete">
+            <div class="bin w-6 h-6" @click="onDelete">
                 <img src="@/assets/images/trash_icon.png" />
             </div>
         </div>
@@ -34,10 +34,7 @@
 <style>
     .bin {
         display: flex;
-        width: 5%;
-        height: 5%;
-        margin: auto 0 auto 1%;
-        padding-left: 1%;
+        align-items: center;
     }
 
     .scheduleWrapper {
@@ -46,13 +43,12 @@
         justify-content: space-between;
         border-radius: 20px;
         margin: 0.5% auto;
-        padding: 1.3% 3%;
         background-color: #f1f3f5
     }
 
     .scheduleName {
         margin: auto 0;
-        flex: 1%;
+        flex: 0.9;
     }
 
     .date {

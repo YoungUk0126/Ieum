@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <CareInfo></CareInfo>
   </div>
 </template>
@@ -8,4 +8,8 @@
 import CareInfo from '../components/myInfoPage/CareInfo.vue'
 </script>
 
-<style scoped></style>
+<style scoped>
+  .body {
+    min-height: calc(100vh - 96px);
+  }
+</style>

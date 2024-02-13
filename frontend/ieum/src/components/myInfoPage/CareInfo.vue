@@ -51,19 +51,19 @@
         </div>
         <div class="info">
             <div class="nameInfo">
-                <div>
+                <div class="text-xs">
                     {{ careInfo.careName }} &nbsp;
                 </div>
-                <div v-if="careInfo.careGender === 'FEMALE'">
+                <div v-if="careInfo.careGender === 'FEMALE'" class="text-xs">
                     할머니
                 </div>
-                <div v-else>
+                <div v-else class="text-xs">
                     할아버지
                 </div>
             </div>
-            <p> {{ careInfo.careAddr }}</p>
-            <p> {{ careInfo.carePhone }}</p>
-            <p> {{ careInfo.careSerial }} </p>
+            <p class="text-xs"> {{ careInfo.careAddr }}</p>
+            <p class="text-xs"> {{ careInfo.carePhone }}</p>
+            <p class="text-xs"> {{ careInfo.careSerial }} </p>
         </div>
     </div>
     <div v-else class="noInfo">
