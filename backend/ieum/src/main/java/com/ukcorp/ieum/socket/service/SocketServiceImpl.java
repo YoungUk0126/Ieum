@@ -140,9 +140,10 @@ public class SocketServiceImpl implements SocketService {
   }
 
   @Override
-  public void sendCallAlertToIot() throws Exception {
+  public void sendCallAlertToIot() {
 
-    Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
+    Long careNo = JwtUtil.getCareNo().orElseThrow(
+            () -> new NoSuchElementException("토큰에 CareNo에 없어요"));
 
     CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
         .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
@@ -151,6 +152,21 @@ public class SocketServiceImpl implements SocketService {
 
     Content content = new Content();
     content.callToContent();
+    redisPublisher.publishPojo(topic, content);
+  }
+
+  @Override
+  public void sendCallStopAlertToIot() {
+    Long careNo = JwtUtil.getCareNo().orElseThrow(
+            () -> new NoSuchElementException("토큰에 CareNo에 없어요"));
+
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+            .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+
+    ChannelTopic topic = new ChannelTopic(careInfo.getCareSerial());
+
+    Content content = new Content();
+    content.callStopToContent();
     redisPublisher.publishPojo(topic, content);
   }
 
