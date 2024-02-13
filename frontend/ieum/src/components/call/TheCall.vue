@@ -125,7 +125,7 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
-    <audio ref="bgmAudio" src="/src/assets/bgm.mp3" controls style="display: none"></audio>
+    <audio ref="bgmAudio" src="/assets/bgm.mp3" controls style="display: none"></audio>
   </div>
 </template>
 
