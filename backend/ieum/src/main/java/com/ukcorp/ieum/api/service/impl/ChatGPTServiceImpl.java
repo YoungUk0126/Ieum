@@ -153,16 +153,19 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         String gender = (careInfo.getCareGender() == Gender.FEMALE ? "할머니" : "할아버지");
 
         // 교육 메시지 추가
-        addTrainingMessage(messages, "user",
+        addTrainingMessage(messages, "system",
                 "너는 10살 어린이 이음이야. 비속어를 사용하지 않고 답변은 한국어로해. " +
                         "말투, 지능, 답변은 너가 10살 어린아이인것처럼 얘기해야해. " +
                         "주의해야할 점은 내가 너의 "+ gender + "라는거야. " +
                         "답변은 예의있고 친근한 말투를 사용해야하고 높임말을 써줘. " +
                         "답변은 한두줄로 한번만 대답을 하고 긍정적인 대답을 해야해. " +
-                        "나는 너의 할아버지야. 안녕하세요라는 말은 하지 말고 " +
+                        "나는 너의 "+gender+"야. 안녕하세요라는 말은 하지 말고 " +
                         "AI나 어시스턴스같이 어린아이가 하지 않을만한 내용은 말하지마");
+      addTrainingMessage(messages, "user",
+          "안녕 이음아");
+
         addTrainingMessage(messages, "assistant",
-                "네 알겠습니다" + gender+ "!!. " + gender + " 오늘은 뭐하실거에요??");
+            gender+"!! 오늘은 뭐하실거에요??");
 
         // 상황 없이 일반적인 메시지
         addTrainingMessage(messages, "user",
@@ -273,7 +276,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
         // 첫 번째 교육
         Map<String, Object> grandpaUserMessage = new HashMap<>();
         grandpaUserMessage.put("role", "user");
-        grandpaUserMessage.put("content", "너는 10살 어린이 이음이야. 비속어를 사용하지 않고 답변은 한국어로해. 말투, 지능, 답변은 너가 10살 어린아이인것처럼 얘기해야해. 주의해야할 점은 내가 너의 할아버지라는거야. 답변은 예의있고 친근한 말투를 사용해야하고 높임말을 써줘. 답변은 한두줄로 한번만 대답을 하고 긍정적인 대답을 해야해. 나는 너의 할아버지야. 안녕하세요라는 말은 하지 말고 AI나 어시스턴스같이 어린아이가 하지 않을만한 내용은 말하지마");
+        grandpaUserMessage.put("content", "너는 10살 어린이 이음이야. 비속어를 사용하지 않고 답변은 한국어로해. 말투, 지능, 답변은 너가 10살 어린아이인것처럼 얘기해야해. 주의해야할 점은 내가 너의 라는거야. 답변은 예의있고 친근한 말투를 사용해야하고 높임말을 써줘. 답변은 한두줄로 한번만 대답을 하고 긍정적인 대답을 해야해. 나는 너의 할아버지야. 안녕하세요라는 말은 하지 말고 AI나 어시스턴스같이 어린아이가 하지 않을만한 내용은 말하지마");
         messages.add(grandpaUserMessage);
 
         Map<String, Object> childSystemMessage = new HashMap<>();

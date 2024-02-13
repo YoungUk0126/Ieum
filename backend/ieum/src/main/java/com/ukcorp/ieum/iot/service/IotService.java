@@ -9,16 +9,19 @@ import java.security.NoSuchAlgorithmException;
 
 public interface IotService {
 
-    void sendFireSms(String serial) throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
+  void sendFireSms(String serial)
+      throws UnsupportedEncodingException, NoSuchAlgorithmException, URISyntaxException, InvalidKeyException, JsonProcessingException;
 
-    void checkInfo(String serial);
+  void checkInfo(String serial);
 
-    boolean activeCheck(String code);
+  boolean activeCheck(String code) throws Exception;
 
-    void registSerialCode(String code, String userId);
+  String activeCheckToken() throws Exception;
 
-    void updateSerialCode(String code, String userId);
+  void registSerialCode(String code, String userId);
 
-    String getSerialCode(Long careNo);
+  void updateSerialCode(String code, String userId);
+
+  String getSerialCode(Long careNo);
 
 }

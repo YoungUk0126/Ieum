@@ -1,7 +1,9 @@
 package com.ukcorp.ieum.webrtc;
 
+import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
+import com.ukcorp.ieum.care.service.CareService;
 import com.ukcorp.ieum.iot.service.IotService;
-import com.ukcorp.ieum.jwt.JwtUtil;
+import com.ukcorp.ieum.socket.service.SocketService;
 import io.openvidu.java.client.Connection;
 import io.openvidu.java.client.ConnectionProperties;
 import io.openvidu.java.client.OpenVidu;
@@ -28,7 +30,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RtcController {
 
+  private final SocketService socketService;
   private final IotService iotService;
+
+  private final CareService careService;
 
   @Value("${openvidu.url}")
   private String OPENVIDU_URL;
@@ -53,10 +58,10 @@ public class RtcController {
   @PostMapping
   public ResponseEntity<String> initializeSession()
       throws Exception {
-    Long careNo = JwtUtil.getCareNo().orElseThrow(() -> new Exception("토큰에 CareNo에 없어요"));
-    System.out.println(careNo);
-    String serialCode = iotService.getSerialCode(careNo);
-    SessionProperties properties = new SessionProperties.Builder().customSessionId(serialCode).build();
+    CareGetResponseDto care = careService.getCareInfo();
+    String serialCode = care.getCareSerial();
+    SessionProperties properties = new SessionProperties.Builder().customSessionId(serialCode)
+        .build();
     Session session = openvidu.createSession(properties);
     return new ResponseEntity<>(session.getSessionId(), HttpStatus.OK);
   }
@@ -72,12 +77,20 @@ public class RtcController {
   public ResponseEntity<String> createConnection(@PathVariable("serialNo") String serialNo,
       @RequestBody(required = false) Map<String, Object> params)
       throws OpenViduJavaClientException, OpenViduHttpException {
+
     Session session = openvidu.getActiveSession(serialNo);
     if (session == null) {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     ConnectionProperties properties = ConnectionProperties.fromJson(params).build();
     Connection connection = session.createConnection(properties);
+    try {
+      // 소켓을 통해서 iot측으로 call 연결 전송
+      socketService.sendCallAlertToIot();
+    } catch (Exception e) {
+      // Exception 상황은 careNo을 못찾는 상황
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     return new ResponseEntity<>(connection.getToken(), HttpStatus.OK);
   }
 

@@ -3,14 +3,17 @@ package com.ukcorp.ieum.iot.controller;
 import com.ukcorp.ieum.iot.dto.SerialRequestDto;
 import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.jwt.JwtUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/devices")
@@ -56,6 +59,20 @@ public class IotController {
             return handleError();
         }
     }
+
+  @GetMapping("/check-status")
+  public ResponseEntity<?> checkStatus() {
+    try {
+      Map<String, String> result = new HashMap<>();
+
+      result.put("result", iotService.activeCheckToken());
+
+      return new ResponseEntity<>(result, HttpStatus.OK);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return handleError();
+    }
+  }
 
     /**
      * 작성자 : 이성목
