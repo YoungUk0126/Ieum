@@ -13,14 +13,15 @@
             </div>
             <div class="date">
                 <div>
-                    {{ schedule.eventDate }}
+                    {{ schedule.date }}
                 </div>
                 <div>
-                    시간은 추가필요
+                    {{ schedule.time }}
                 </div>
             </div>
         </div>
     </div>
+    
 </template>
 
 <style>
