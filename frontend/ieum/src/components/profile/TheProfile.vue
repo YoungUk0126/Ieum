@@ -11,8 +11,8 @@
           <div
             class="w-2 h-2"
             :class="{
-              'bg-yellow-200 rounded-full': status === '현재 사용중입니다',
-              'bg-green-500 rounded-full': status !== '현재 사용중입니다'
+              'bg-yellow-200 rounded-full': status !== '현재 사용중입니다',
+              'bg-green-500 rounded-full': status === '현재 사용중입니다'
             }"
           ></div>
           <div class="text-green-700 text-base font-normal">{{ status }}</div>
@@ -24,17 +24,14 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { getStatus } from '@/api/iot.js'
 import { getCareInfo } from '@/api/careInfoModify.js'
 
-const router = useRouter()
 const status = ref()
 const care = ref({})
 
 onMounted(() => {
   getStatus(({ data }) => {
-    console.log(data)
     status.value = data.result
   })
   getCareInfo(({ data }) => {
@@ -44,12 +41,6 @@ onMounted(() => {
     }
   })
 })
-
-const navigateToTheCallView = () => {
-  router.push({
-    path: '/call'
-  })
-}
 </script>
 
 <style scoped>
