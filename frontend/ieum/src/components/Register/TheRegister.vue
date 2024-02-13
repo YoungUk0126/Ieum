@@ -1,6 +1,6 @@
 <template>
   <div class="max-w-xl p-6 my-10 mx-auto">
-    <div class="shadow-md border-2 border-solid rounded-xl max-w-xl p-6 mx-auto">
+    <div class="shadow-md border-2 border-solid rounded-xl px-2 max-w-xl">
       <div class="text-center mt-10 text-xl font-bold text-gray-500">
         <h1>회원가입</h1>
       </div>
@@ -72,7 +72,7 @@
               class="h-13 col-span-2 text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 font-bold rounded-lg text-sm px-2 py-3 me-2 mb-2 focus:outline-none"
               @click="checkValidateEmail"
             >
-              <span class="text-xxs mr-1 mt-3">중복 확인</span>
+              <span class="text-xxs mr-1 mt-3">중복확인</span>
             </button>
           </div>
           <label v-if="checkEmailType" class="emailIncorrect"
@@ -184,7 +184,7 @@
               class="col-span-3 text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 font-bold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
               @click="certifiedCheck"
             >
-              <span class="text-xxs mr-2 mt-3">인증 번호 확인</span>
+              <span class="text-xxs mt-3">인증번호 확인</span>
             </button>
           </div>
         </div>
