@@ -36,7 +36,7 @@
 </script>
 
 <template>
-    <div class="careInfo" v-if="!isLoading">
+    <div class="careInfo" v-if="careInfo.careName">
         <div class="profile">
             <div v-if="careInfo.careImage">
                 <img class="profileImage" :src="careInfo.careImage">
@@ -65,6 +65,9 @@
             <p> {{ careInfo.careSerial }} </p>
         </div>
     </div>
+    <div v-else class="noInfo">
+        등록된 보호자 정보가 없습니다
+    </div>
 
     <div class="tabs">
         <div class="buttons">
@@ -79,6 +82,11 @@
 </template>
 
 <style>
+    .noInfo {
+        margin: 10% auto;
+        text-align: center;
+    }
+
     .careInfo {
         display: flex;
         flex-direction: row;
@@ -135,6 +143,7 @@
     .buttons button.active {
         /* 선택된 버튼 */
         opacity: 1;
-        background-color: aquamarine;
+        background-color: #EBFBF7;
+        color: #00725E;
     }
 </style>
