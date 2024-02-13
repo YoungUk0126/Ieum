@@ -15,7 +15,9 @@
               'bg-green-500 rounded-full': status === '현재 사용중입니다'
             }"
           ></div>
-          <div class="text-green-700 text-base font-normal">{{ status }}</div>
+          <div class="text-green-700 text-base font-normal">
+            {{ status === undefined ? '사용한 이력이 없습니다' : status }}
+          </div>
         </div>
       </div>
     </div>
