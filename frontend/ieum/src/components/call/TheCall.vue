@@ -213,7 +213,21 @@ const joinSession = () => {
         session.value.publish(publisher)
       })
       .catch((error) => {
-        console.log('There was an error connecting to the session:', error.code, error.message)
+        swal({
+          title: '알림',
+          text: '현재 이음이가 자고 있어요. 나중에 다시 전화해주세요',
+          icon: 'info',
+          buttons: {
+            confirm: {
+              text: '확인',
+              visible: true,
+              className: '',
+              closeModal: true
+            }
+          }
+        }).then(() => {
+          router.push({ name: 'TheMainViewVue' })
+        })
       })
   })
 
@@ -260,7 +274,6 @@ const updateMainVideoStreamManager = (stream) => {
 
 const getToken = async () => {
   const sessionId = await createSession()
-  console.log(sessionId)
   return await createToken(sessionId)
 }
 
