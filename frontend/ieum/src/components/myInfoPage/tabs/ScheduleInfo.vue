@@ -22,11 +22,7 @@
                 } else {
                     console.log("삭제가 실패했습니다. 응답 상태 코드:", response.status);
                 }
-            },
-            (error) => {
-                console.error("삭제 요청 중 에러가 발생했습니다:", error);
-            }
-        );
+            });
     }
 
     function getAllSchedule() {
