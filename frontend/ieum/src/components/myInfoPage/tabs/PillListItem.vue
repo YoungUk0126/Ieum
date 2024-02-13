@@ -57,12 +57,12 @@
 
     .pillDate {
         text-align: end;
+        flex:1%
     }
 
     .pillInfo {
         display: flex;
         flex-direction: column;
-        flex: 1%;
         /* width: 100%; */
         justify-content: space-between;
     }
