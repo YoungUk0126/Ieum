@@ -1,78 +1,79 @@
 <template>
-  <div class="content-container p-6 flex flex-col space-y-4">
-    <!-- Time Input Section -->
-    <div class="major-c time-input row mb-4">
-      <!-- Wake Up Time -->
-      <div class="col-8">
-        <label for="start" class="block mb-1 text-sm font-medium text-gray-600">기상 시각</label>
-      </div>
-      <div class="row d-flex align-items-center">
-        <div class="col-3 d-flex flex-column"></div>
-        <div class="col-8 d-flex">
-          <select
-            v-model="selectedNumber"
-            id="numberSelect1"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+  <div
+    :id="props.modalId2"
+    tabindex="-1"
+    aria-hidden="true"
+    class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+  >
+    <div class="relative p-4 w-full max-w-2xl max-h-full">
+      <div class="content-container p-6 flex flex-col space-y-4">
+        <!-- Time Input Section -->
+        <div class="major-c time-input row mb-4">
+          <!-- Wake Up Time -->
+          <div class="col-8">
+            <label for="start" class="block mb-1 text-sm font-medium text-gray-600"
+              >기상 시각</label
+            >
+          </div>
+          <div class="row d-flex align-items-center">
+            <div class="col-3 d-flex flex-column"></div>
+            <div class="col-8 d-flex">
+              <input
+                v-model="selectedNumber"
+                class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              />
+              <span class="ml-2 mr-2">시</span>
+              <input
+                v-model="selectedNumber2"
+                class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              />
+              <span class="ml-2 mr-2">분</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sleep Time -->
+        <div class="major-c time-input row">
+          <div class="col-8">
+            <label for="start" class="block mb-2 text-sm font-medium text-gray-600"
+              >취침 시각</label
+            >
+          </div>
+          <div class="row d-flex align-items-center mb-4">
+            <div class="col-8 d-flex">
+              <input
+                v-model="selectedNumber3"
+                class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              />
+              <span class="ml-2 mr-2">시</span>
+              <input
+                v-model="selectedNumber4"
+                class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              />
+              <span class="ml-2 mr-2">분</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex justify-end mt-4 space-x-4">
+          <button
+            data-modal-hide="default-modal"
+            type="button"
+            class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
+            @click="postAlarmdata"
           >
-            <option v-for="num in numbers1" :key="num" :value="num">{{ num }}</option>
-          </select>
-          <span class="ml-2 mr-2">시</span>
-          <select
-            v-model="selectedNumber2"
-            id="numberSelect2"
-            class="p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+            확인
+          </button>
+          <button
+            type="button"
+            class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
+            @click="props.closeModal"
           >
-            <option v-for="num in numbers2" :key="num" :value="num">{{ num }}</option>
-          </select>
-          <span class="ml-2 mr-2">분</span>
+            취소
+          </button>
         </div>
       </div>
-    </div>
-
-    <!-- Sleep Time -->
-    <div class="major-c time-input row">
-      <div class="col-8">
-        <label for="start" class="block mb-2 text-sm font-medium text-gray-600">취침 시각</label>
-      </div>
-      <div class="row d-flex align-items-center mb-4">
-        <div class="col-8 d-flex">
-          <select
-            v-model="selectedNumber3"
-            id="numberSelect3"
-            class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers3" :key="num" :value="num">{{ num }}</option>
-          </select>
-          <span class="ml-2 mr-2">시</span>
-          <select
-            v-model="selectedNumber4"
-            id="numberSelect4"
-            class="p-2 border rounded bg-gray-10 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
-          >
-            <option v-for="num in numbers4" :key="num" :value="num">{{ num }}</option>
-          </select>
-          <span class="ml-2 mr-2">분</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal Footer -->
-    <div class="flex justify-end mt-4 space-x-4">
-      <button
-        data-modal-hide="default-modal"
-        type="button"
-        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 focus:outline-none focus:ring"
-        @click="postAlarmdata"
-      >
-        확인
-      </button>
-      <button
-        type="button"
-        class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-        @click="props.closeModal"
-      >
-        취소
-      </button>
     </div>
   </div>
 </template>
@@ -82,23 +83,25 @@ import { ref, defineProps } from 'vue'
 import { postSleep } from '@/api/modalAlarms/sleep.js'
 import swal from 'sweetalert'
 
-const numbers1 = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
-const numbers2 = ref(Array.from({ length: 60 }, (_, i) => i))
-const numbers3 = ref(Array.from({ length: 24 }, (_, i) => i + 1)) // 0부터 23까지의 숫자 배열
-const numbers4 = ref(Array.from({ length: 60 }, (_, i) => i))
+// 1. 사용자 입력받기
 
-const selectedNumber = ref(25) // 초기값 설정
-const selectedNumber2 = ref(61)
-const selectedNumber3 = ref(25) // 초기값 설정
-const selectedNumber4 = ref(61)
+// 1-1 사용자 입력값
+const selectedNumber = ref() // 초기값 설정
+const selectedNumber2 = ref()
+const selectedNumber3 = ref() // 초기값 설정
+const selectedNumber4 = ref()
 
 // 모달 닫기
-const props = defineProps(['closeModal'])
+const props = defineProps(['closeModal', 'modalId2'])
 
 const jsonData = ref({
   sleepStartTime: '',
   sleepEndTime: ''
 })
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// 2. json format으로 변경 후 post
 
 function formatTime(hours, minutes) {
   // 각 값이 한 자리 숫자일 경우 앞에 0을 붙여 두 자리로 만듭니다.
@@ -131,7 +134,6 @@ const postAlarmdata = () => {
     return
   }
 
-  console.log(jsonData.value)
   postSleep(jsonData.value, (response) => {
     console.log(response)
     if (response.data.success === true) {
