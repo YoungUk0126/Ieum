@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="loginBody">
     <TheLoginBody></TheLoginBody>
   </div>
 </template>
@@ -8,4 +8,11 @@
 import TheLoginBody from '../components/login/TheLoginBody.vue'
 </script>
 
-<style scoped></style>
+<style scoped>
+.loginBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 96px);
+}
+</style>
