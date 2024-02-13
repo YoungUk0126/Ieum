@@ -28,6 +28,11 @@ public class Content {
         this.type = "Message";
     }
 
+    public void anyEventToContent(AnyEventResponseDto data) throws JsonProcessingException {
+        this.type = "AnyEvent";
+        this.content = data;
+    }
+
     public void sleepToContent(SleepResponseDto data) throws JsonProcessingException {
         this.type = "Sleep";
         this.content = data;
