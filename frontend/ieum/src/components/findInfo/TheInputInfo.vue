@@ -1,8 +1,8 @@
 <template>
-  <div class="mx-auto my-12 p-6 w-full max-w-xl">
+  <div class="mx-auto my-12 p-6 w-full max-w-3xl">
     <div class="border-b border-gray-900/10 pb-12">
-      <div class="mt-10 grid grid-cols-3 gap-x-6 gap-y-8">
-        <div class="col-span-3">
+      <div class="mt-10 grid grid-cols-4 gap-x-6 gap-y-8">
+        <div class="col-span-4">
           <h2 class="text-base font-semibold leading-7 text-gray-900">비밀번호 찾기</h2>
           <p class="mt-1 text-sm leading-6 text-gray-600">
             찾으실 아이디와 전화번호를 입력해주세요
@@ -13,7 +13,7 @@
             >아이디</label
           >
         </div>
-        <div class="col-span-2">
+        <div class="col-span-3">
           <input
             type="text"
             name="memberId"
@@ -29,9 +29,9 @@
             >전화 번호</label
           >
         </div>
-        <div class="col-span-1 relative">
+        <div class="col-span-2 relative">
           <div
-            class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none"
+            class="absolute inset-y-0 start-0 top-0 flex items-center ps-3.5 pointer-events-none w-full"
           >
             <svg
               class="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -61,7 +61,7 @@
         <div class="col-span-1">
           <button
             type="button"
-            class="w-2/3 text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+            class="w-full text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 font-medium rounded-lg text-sm py-3 me-2 mb-2 focus:outline-none"
             @click="sendCode"
             :disabled="stateInfo.checkAuth"
           >
@@ -71,7 +71,7 @@
 
         <div class="col-span-3 items-center" v-show="stateInfo.checkInput">
           <div
-            class="mx-auto w-2/3 p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+            class="mx-auto w-full p-4 mb-4 text-sm text-center text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
             role="alert"
           >
             <span class="font-medium"> 입력되지 않은 정보가 존재합니다.</span>
@@ -82,7 +82,7 @@
             >인증번호</label
           >
         </div>
-        <div class="col-span-1">
+        <div class="col-span-2">
           <input
             type="text"
             name="memberId"
@@ -96,7 +96,7 @@
         <div class="col-span-1">
           <button
             type="button"
-            class="w-2/3 text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 focus:outline-none"
+            class="w-full text-white bg-gray-400 hover:bg-gray-600 focus:ring-4 font-medium rounded-lg text-sm py-3 me-2 mb-2 focus:outline-none"
             @click="verifyCode"
             :disabled="stateInfo.checkInput || stateInfo.checkAuth"
           >

@@ -5,17 +5,14 @@ import swal from 'sweetalert'
 import TheMainViewVue from '@/views/TheMainView.vue'
 import TheRegisterViewVue from '@/views/TheRegisterView.vue'
 import TheCallViewVue from '@/views/TheCallView.vue'
-import TheMessageViewVue from '@/views/TheMessageView.vue'
 import TheChatViewVue from '@/views/TheChatView.vue'
-import TheScheduleViewVue from '@/views/TheScheduleView.vue'
 import TheLoginViewVue from '@/views/TheLoginView.vue'
 import TheCareInfoModifyViewVue from '@/views/TheCareInfoModifyView.vue'
 import NotFound from '@/error/NotFound.vue'
 import TheFindInfoView from '@/views/TheFindInfoView.vue'
 import TheMemberInfoViewVue from '@/views/TheMemberInfoView.vue'
-import TheCareInfoCheckViewVue from '@/views/TheCareInfoCheck.vue'
+import TheCareInfoViewVue from '@/views/TheCareInfoView.vue'
 import TheAlarmViewVue from '@/views/TheAlarmView.vue'
-
 import TheCareCallViewVue from '@/views/TheCareCallView.vue'
 
 const router = createRouter({
@@ -46,13 +43,6 @@ const router = createRouter({
       component: TheCallViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
-    //전체 대화 페이지
-    {
-      path: '/message',
-      name: 'TheMessageView',
-      component: TheMessageViewVue,
-      meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },
     {
       path: '/chat',
       name: 'TheChatView',
@@ -60,22 +50,16 @@ const router = createRouter({
       meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
-      path: '/schedule',
-      name: 'TheScheduleView',
-      component: TheScheduleViewVue,
-      meta: { requiresAuth: true } // 세션 검증 할 것인지
-    },
-    {
       //정보수정페이지
-      path: '/careinfo',
+      path: '/careInfoModify',
       name: 'TheCareInfoModifyView',
       component: TheCareInfoModifyViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {
-      path: '/carecheck',
-      name: 'TheCareInfoCheckView',
-      component: TheCareInfoCheckViewVue,
+      path: '/careInfo',
+      name: 'TheCareInfo',
+      component: TheCareInfoViewVue,
       meta: { requiresAuth: true } // 세션 검증 할 것인지
     },
     {

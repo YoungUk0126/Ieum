@@ -213,6 +213,7 @@ const joinSession = () => {
         session.value.publish(publisher)
       })
       .catch((error) => {
+        bgmAudio.value.pause() // 일시 정지
         swal({
           title: '알림',
           text: '현재 이음이가 자고 있어요. 나중에 다시 전화해주세요',
@@ -242,12 +243,12 @@ const leaveSession = () => {
     mainStreamManager.value = undefined
     subscriber.value = undefined
     OV.value = undefined
-    bgmAudio.value.pause() // 일시 정지
     endSession()
   }
 }
 
 const endSession = () => {
+  bgmAudio.value.pause() // 일시 정지
   swal({
     title: '종료',
     text: '통화가 종료되었습니다.',
