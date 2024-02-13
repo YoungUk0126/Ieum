@@ -2,7 +2,11 @@
     import { defineProps, defineEmits } from 'vue';
 
     const props = defineProps({ schedule: Object})
-    const emit = defineEmits();
+    const emit = defineEmits(['delete']);
+
+    const onDelete = () => {
+        emit('delete', props.schedule.eventNo)
+    }
 </script>
 
 <template>
@@ -19,12 +23,23 @@
                     {{ schedule.time }}
                 </div>
             </div>
+            <div class="bin" @click="onDelete">
+                <img src="@/assets/images/trash_icon.png" />
+            </div>
         </div>
     </div>
     
 </template>
 
 <style>
+    .bin {
+        display: flex;
+        width: 5%;
+        height: 5%;
+        margin: auto 0 auto 1%;
+        padding-left: 1%;
+    }
+
     .scheduleWrapper {
         display: flex;
         flex-direction: row;
@@ -37,6 +52,7 @@
 
     .scheduleName {
         margin: auto 0;
+        flex: 1%;
     }
 
     .date {
