@@ -42,11 +42,7 @@
                     date: formatDate(new Date(item.eventDate)),
                     time: new Date(item.eventDate).toLocaleTimeString() // 시간
                 }));
-            },
-            (error) => {
-                console.log("Schedule Info 불러오던 중 Error 발생!!");
-            }
-        );
+            });
     }
 
     onMounted(() => {

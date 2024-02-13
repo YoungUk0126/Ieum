@@ -45,9 +45,7 @@
                     pill.pillDate = convertWeekdays(pill.pillDate);
                 });
                 pillInfoList.value = response.data.data;
-            }, (error) => {
-                console.log("Pill Info 불러오던 중 Error 발생!!");
-        });
+            });
     }
 
     onMounted(() => {

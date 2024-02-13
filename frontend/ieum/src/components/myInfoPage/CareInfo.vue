@@ -30,9 +30,6 @@
                 if (response.data.data.careImage) {
                     careInfo.value.careImage = imgUrl.value + response.data.data.careImage;
                 }
-            },
-            (error) => {
-                console.log("getCareInfo API 호출 중 에러 발생!");
             }
         );
         console.log("불러오기 완료");
