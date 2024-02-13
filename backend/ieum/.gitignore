@@ -555,8 +555,10 @@ gradle-app.setting
 
 
 ### yml 설정 파일
+src/main/resources/application.yml
 src/main/resources/application-prod.yml
 src/main/resources/application-dev.yml
+src/main/resources/AN-keystore.p12
 
 .idea/*
 

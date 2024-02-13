@@ -53,6 +53,7 @@ public class CareServiceImpl implements CareService {
 //      이미지는 가져와서 여기 빌더에 넣어!
       CareInfo care = CareInfo.builder()
               .careNo(careNo)
+              .careName(careDto.getCareName())
               .careAddr(careDto.getCareAddr())
               .careBirth(careDto.getCareBirth())
               .careGender(Gender.valueOf(careDto.getCareGender()))
