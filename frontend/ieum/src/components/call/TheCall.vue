@@ -23,9 +23,7 @@
       <video ref="soundRef" autoplay class="hidden"></video>
     </div>
   </div>
-  <div
-    class="fixed bottom-8 z-10 grid mt-10 w-full h-16 grid-cols-1 px-8 dark:bg-gray-700 dark:border-gray-600"
-  >
+  <div class="fixed bottom-8 z-10 grid mt-10 w-full h-16 grid-cols-1 px-8">
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
