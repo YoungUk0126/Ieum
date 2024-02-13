@@ -13,17 +13,14 @@ import com.ukcorp.ieum.pill.entity.PillInfo;
 import com.ukcorp.ieum.pill.repository.PillInfoRepository;
 import com.ukcorp.ieum.sleep.entity.SleepInfo;
 import com.ukcorp.ieum.sleep.repository.SleepRepository;
+import com.ukcorp.ieum.socket.dto.AnyEventDto;
 import com.ukcorp.ieum.socket.dto.PillInfoDto;
 import com.ukcorp.ieum.socket.dto.RegularEventDto;
-import com.ukcorp.ieum.socket.dto.response.EventResponseDto;
-import com.ukcorp.ieum.socket.dto.response.MealResponseDto;
-import com.ukcorp.ieum.socket.dto.response.PillResponseDto;
-import com.ukcorp.ieum.socket.dto.response.SleepResponseDto;
+import com.ukcorp.ieum.socket.dto.response.*;
 import com.ukcorp.ieum.socket.entity.Content;
-import com.ukcorp.ieum.socket.mapper.MealSocketMapper;
-import com.ukcorp.ieum.socket.mapper.PillSocketMapper;
-import com.ukcorp.ieum.socket.mapper.RegularEventMapper;
-import com.ukcorp.ieum.socket.mapper.SleepSocketMapper;
+import com.ukcorp.ieum.socket.mapper.*;
+import com.ukcorp.ieum.temporalEvent.entity.TemporalEvent;
+import com.ukcorp.ieum.temporalEvent.repository.TemporalEventRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Service;
@@ -43,12 +40,13 @@ public class SocketServiceImpl implements SocketService {
   private final EventRepository eventRepository;
   private final SleepRepository sleepRepository;
   private final MealRepository mealRepository;
-  private final MessageRepository messageRepository;
+  private final TemporalEventRepository temporalEventRepository;
 
   private final PillSocketMapper pillSocketMapper;
   private final MealSocketMapper mealSocketMapper;
   private final RegularEventMapper regularEventMapper;
   private final SleepSocketMapper sleepSocketMapper;
+  private final AnyEventSocketMapper anyEventSocketMapper;
 
   @Override
   public void sendPillDataToIot(Long careNo) {
@@ -154,5 +152,27 @@ public class SocketServiceImpl implements SocketService {
     Content content = new Content();
     content.callToContent();
     redisPublisher.publishPojo(topic, content);
+  }
+
+  @Override
+  public void sendAnyEventToIot(Long careNo) {
+    CareInfo careInfo = careRepository.findCareInfoByCareNo(careNo)
+            .orElseThrow(() -> new NoSuchElementException("NOT FOUND CARE INFO"));
+    List<TemporalEvent> events = temporalEventRepository.findByCareInfoCareNoOrderByEventDate(careInfo.getCareNo());
+    List<AnyEventDto> anyEvents = anyEventSocketMapper.temporalEventsToListDto(events);
+
+    AnyEventResponseDto eventResponseDto = AnyEventResponseDto.builder()
+            .list(anyEvents)
+            .build();
+
+    String serial = careInfo.getCareSerial();
+    ChannelTopic topic = new ChannelTopic(serial);
+    Content content = new Content();
+    try {
+      content.anyEventToContent(eventResponseDto);
+      redisPublisher.publishPojo(topic, content);
+    } catch (JsonProcessingException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
