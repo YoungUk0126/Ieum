@@ -63,6 +63,7 @@ public class IotServiceImpl implements IotService {
     socketService.sendSleepDataToIot(careNo);
     socketService.sendEventDataToIot(careNo);
     socketService.sendPillDataToIot(careNo);
+    socketService.sendAnyEventToIot(careNo);
   }
 
 
