@@ -36,7 +36,7 @@ public class CareController {
           MultipartFile file
   ) throws IOException {
     // 파일 저장 디렉토리 경로 (폴더 내에 프론트 프로젝트 함께 존재해야 함)
-    String uploadDir = "./profile/";
+    String uploadDir = "./images/";
     // 파일 저장할 경로
     String fileName = name + ".jpg";
     Path filePath = Paths.get(uploadDir, fileName);
@@ -51,7 +51,7 @@ public class CareController {
 
     try {
 //      파일이 Null값이 아니면 이미지 업로드
-      if(file != null) {
+      if (file != null) {
         uploadImage(careDto.getCareImage(), file);
       }
       careService.updateCareInfo(careDto);
@@ -71,11 +71,9 @@ public class CareController {
 
   @GetMapping
   private ResponseEntity<Map<String, Object>> getCareInfo() {
-
     try {
       CareGetResponseDto careDto = careService.getCareInfo();
       return handleSuccess(careDto);
-
     } catch (Exception e) {
       log.debug(e.getMessage());
       return handleError("Fail");
@@ -98,16 +96,16 @@ public class CareController {
 
   @PostMapping("/check-phone")
   private ResponseEntity<Map<String, Object>> checkDuplicatedPhone(@RequestBody CarePhoneRequestDto phoneDto) {
-      boolean isExists = careService.isExistsMemberPhone(phoneDto);
-      Map<String, Boolean> response = new HashMap<>();
-      if (isExists) {
-          // 이미 존재하는 핸드폰 번호인 경우
-          response.put("isDuplicated", true);
-      } else {
-          // 사용 가능한 핸드폰 번호인 경우
-          response.put("isDuplicated", false);
-      }
-      return handleSuccess(response);
+    boolean isExists = careService.isExistsMemberPhone(phoneDto);
+    Map<String, Boolean> response = new HashMap<>();
+    if (isExists) {
+      // 이미 존재하는 핸드폰 번호인 경우
+      response.put("isDuplicated", true);
+    } else {
+      // 사용 가능한 핸드폰 번호인 경우
+      response.put("isDuplicated", false);
+    }
+    return handleSuccess(response);
   }
 
   private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
