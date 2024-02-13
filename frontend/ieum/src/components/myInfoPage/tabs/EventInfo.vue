@@ -33,7 +33,7 @@
 </script>
 
 <template>
-    <div v-if="eventInfoList.length!=0">
+    <div v-if="eventInfoList.length!=0" class = "overflow-x-auto" style="height: 55vh;">
         <EventList v-for="eventInfo in eventInfoList" :key="eventInfo.eventNo" :event="eventInfo" @delete="handleDelete"></EventList>
     </div>
     <div v-else>

@@ -52,7 +52,7 @@
 </script>
 
 <template>
-    <div v-if="pillInfoList.length!=0">
+    <div v-if="pillInfoList.length!=0" class = "overflow-x-auto" style="height: 55vh;">
         <PillList v-for="pillInfo in pillInfoList" :key="pillInfo.pillInfoNo" :pill="pillInfo"  @delete="handleDelete"></PillList>
     </div>
     <div v-else>
