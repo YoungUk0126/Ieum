@@ -1,5 +1,5 @@
 <template>
-  <div class="call-body w-full mx-auto mt-4">
+  <div class="call-body w-full mx-auto">
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div
-    class="z-50 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
+    class="absolute z-10 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-center mx-auto">
       <button
@@ -227,7 +227,7 @@ const joinSession = () => {
             }
           }
         }).then(() => {
-          router.push({ name: 'TheMainViewVue' })
+          //router.push({ name: 'TheMainViewVue' })
         })
       })
   })

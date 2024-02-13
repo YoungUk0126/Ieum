@@ -19,6 +19,6 @@ onMounted(() => {
 }
 .fix-profile {
   position: absolute;
-  z-index: 100;
+  z-index: 10;
 }
 </style>
