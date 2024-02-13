@@ -47,4 +47,9 @@ public class Content {
         this.type = "Call";
         this.content = null;
     }
+
+    public void callStopToContent() {
+        this.type = "CallStop";
+        this.content = null;
+    }
 }
