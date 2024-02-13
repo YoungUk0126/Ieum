@@ -12,7 +12,7 @@ import { ref, onMounted } from 'vue'
 import { OpenVidu } from 'openvidu-browser'
 import UserMainVideo from './VUserMainVideo.vue'
 import swal from 'sweetalert'
-import { createToken, createSessionCare } from '@/api/call.js'
+import { createTokenCare, createSessionCare } from '@/api/call.js'
 import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const route = useRoute()
@@ -123,7 +123,7 @@ const updateMainVideoStreamManager = (stream) => {
 
 const getToken = async (serial) => {
   const sessionId = await createSessionCare(serial)
-  return await createToken(sessionId)
+  return await createTokenCare(sessionId)
 }
 
 // 네비게이션 가드를 사용하여 네비게이션 이벤트를 감지합니다.

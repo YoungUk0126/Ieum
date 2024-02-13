@@ -14,6 +14,12 @@ const createSessionCare = async (serialNo) => {
   )
   return response.data
 }
+
+const createTokenCare = async (sessionId) => {
+  const response = await local.post(`${url}/api/sessions/care/connections/${sessionId}`).catch(fail)
+  return response.data
+}
+
 // 보호자 세션 접속
 const createSession = async () => {
   const response = await localSession.post(`${url}/api/sessions`).catch(fail)
@@ -21,8 +27,10 @@ const createSession = async () => {
 }
 
 const createToken = async (sessionId) => {
-  const response = await localSession.post(`${url}/api/sessions/connections/${sessionId}`).catch(fail)
+  const response = await localSession
+    .post(`${url}/api/sessions/connections/${sessionId}`)
+    .catch(fail)
   return response.data
 }
 
-export { createSession, createToken, createSessionCare }
+export { createSession, createToken, createSessionCare, createTokenCare }
