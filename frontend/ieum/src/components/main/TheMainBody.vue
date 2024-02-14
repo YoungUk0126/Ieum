@@ -33,8 +33,8 @@
         <button
           type="button"
           class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-          :data-modal-target="injectionalarm"
-          :data-modal-toggle="injectionalarm"
+          :data-modal-target="openVModalPill"
+          :data-modal-toggle="openVModalPill"
         >
           <div class="flex justify-center gap-x-1">
             <div>
@@ -48,8 +48,8 @@
         <button
           type="button"
           class="w-full min-h-40 text-4xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-          :data-modal-target="alarmmain"
-          :data-modal-toggle="alarmmain"
+          :data-modal-target="openVModal"
+          :data-modal-toggle="openVModal"
         >
           <div class="flex justify-center">
             <div>
@@ -61,8 +61,8 @@
         </button>
       </div>
     </div>
-    <VModal :main-modal="alarmmain" />
-    <VModalInjection :inject-modal="injectionalarm" />
+    <VModal :vmodal="openVModal" />
+    <VModalInjection :vmodalpill="openVModalPill" />
   </div>
 </template>
 
@@ -72,8 +72,8 @@ import VModal from '../Alarm/VModal.vue'
 import VModalInjection from '../Alarm/VModalInjection.vue'
 import { useRouter } from 'vue-router'
 
-const alarmmain = ref('VModal')
-const injectionalarm = ref('Injection')
+const openVModal = ref('VModal')
+const openVModalPill = ref('VModalPill')
 const router = useRouter()
 
 const changeRouter = (name) => {

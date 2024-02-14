@@ -3,12 +3,12 @@
   <!-- Main modal -->
   <div
     data-modal-backdrop="static"
-    :id="props.mainModal"
+    :id="props.vmodal"
     tabindex="-1"
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
-    <button :data-modal-hide="props.mainModal" id="btn-close" type="button" class="hidden">
+    <button :data-modal-hide="props.vmodal" id="btn-close" type="button" class="hidden">
       취소
     </button>
     <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -20,7 +20,7 @@
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-md mr-4 w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            :data-modal-hide="props.mainModal"
+            :data-modal-hide="props.vmodal"
           >
             <svg
               class="w-4 h-4"
@@ -87,10 +87,9 @@ import VModalAnniversary from './VModalAnniversary.vue'
 import VModalMeal from './VModalMeal.vue'
 import VModalEvent from './VModalEvent.vue'
 
-const props = defineProps({ mainModal: String })
+const props = defineProps({ vmodal: String })
 const options = ref(['', '기념일', '식사 시간', '이벤트'])
 const selectedOption = ref('일정')
-const initOption = ref('')
 
 const closeModal = () => {
   document.getElementById('btn-close').click()
