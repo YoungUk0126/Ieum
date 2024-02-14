@@ -1,4 +1,4 @@
-# <img src="https://user-images.githubusercontent.com/24693833/129665846-234af092-1003-47aa-82f0-edff976605ed.png" width="50" height="50"> IEUM
+# <img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/ieum_logo.png" width="60" height="50"> IEUM
 독거노인을 위한 인공지능 스피커 "이음"
 <br>
 
