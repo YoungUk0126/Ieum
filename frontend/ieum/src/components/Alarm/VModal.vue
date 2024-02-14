@@ -73,7 +73,7 @@
             class="w-full text-black bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
             @click="selectOption(3)"
           >
-            이벤트 등록
+            일정 등록
           </button>
         </div>
       </div>
@@ -88,8 +88,8 @@ import VModalMeal from './VModalMeal.vue'
 import VModalEvent from './VModalEvent.vue'
 
 const props = defineProps({ mainModal: String })
-const options = ref(['', '기념일', '식사 시간', '이벤트'])
-const selectedOption = ref('일정')
+const options = ref(['', '기념일', '식사 시간', '일정'])
+const selectedOption = ref('보호자 일정')
 const initOption = ref('')
 
 const closeModal = () => {

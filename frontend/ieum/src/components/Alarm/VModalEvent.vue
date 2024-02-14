@@ -5,7 +5,7 @@
       <div class="major-c time-input row mb-4">
         <!-- 이벤트명 -->
         <div class="col-8">
-          <label for="start" class="block mb-1 text-sm font-medium text-gray-600">이벤트명</label>
+          <label for="start" class="block mb-1 text-sm font-medium text-gray-600">일정 이름</label>
         </div>
         <div class="row d-flex align-items-center">
           <div class="col-3 d-flex flex-column"></div>
