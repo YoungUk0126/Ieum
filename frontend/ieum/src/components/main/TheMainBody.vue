@@ -54,7 +54,7 @@
               <img src="@/assets/images/calendar.png" class="w-16 h-16" />
             </div>
             <!-- Modal toggle -->
-            <div class="flex items-center">일정 등록</div>
+            <div class="flex items-center">알림 등록</div>
           </div>
         </button>
       </div>
