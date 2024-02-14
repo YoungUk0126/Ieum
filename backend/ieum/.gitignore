@@ -1,5 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
+messageFile/*
+
 
 ### Django ###
 *.log
@@ -200,6 +202,9 @@ cython_debug/
 # Gradle
 .idea/**/gradle.xml
 .idea/**/libraries
+
+# datasource
+.idea/dataSources.xml
 
 # Gradle and Maven with auto-import
 # When using Gradle or Maven with auto-import, you should exclude module files,
@@ -488,9 +493,6 @@ pyrightconfig.json
 # TODO: where does this rule come from?
 docs/_book
 
-# TODO: where does this rule come from?
-test/
-
 ### Vuejs ###
 # Recommended template: Node.gitignore
 
@@ -550,5 +552,15 @@ gradle-app.setting
 ### Gradle Patch ###
 # Java heap dump
 *.hprof
+
+
+### yml 설정 파일
+src/main/resources/application.yml
+src/main/resources/application-prod.yml
+src/main/resources/application-dev.yml
+src/main/resources/AN-keystore.p12
+
+.idea/*
+
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,python,intellij+iml,pycharm+iml,gradle,visualstudiocode,django,vue,vuejs
