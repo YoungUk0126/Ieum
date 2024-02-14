@@ -92,6 +92,18 @@
               <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
                 {{ chat.message }}
               </p>
+              <div class="items-end">
+                <img
+                  v-if="
+                    chat.emotion !== undefined &&
+                    (chat.emotion.toLowerCase() === 'happy' ||
+                      chat.emotion.toLowerCase() === 'sad' ||
+                      chat.emotion.toLowerCase() === 'common')
+                  "
+                  class="w-8 ms-auto"
+                  :src="'/src/assets/images/' + chat.emotion + '.png'"
+                />
+              </div>
             </div>
             <img
               class="w-11 h-11 rounded-full"
