@@ -1,5 +1,5 @@
 <template>
-  <div class="call-body w-full mx-auto mt-4">
+  <div class="call-body w-full mx-auto">
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
@@ -24,7 +24,7 @@
     </div>
   </div>
   <div
-    class="z-50 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
+    class="absolute z-10 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
   >
     <div class="flex items-center justify-center mx-auto">
       <button
@@ -125,7 +125,7 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
-    <audio ref="bgmAudio" src="/src/assets/bgm.mp3" controls style="display: none"></audio>
+    <audio ref="bgmAudio" src="/assets/bgm.mp3" controls style="display: none"></audio>
   </div>
 </template>
 
@@ -213,7 +213,22 @@ const joinSession = () => {
         session.value.publish(publisher)
       })
       .catch((error) => {
-        console.log('There was an error connecting to the session:', error.code, error.message)
+        bgmAudio.value.pause() // 일시 정지
+        swal({
+          title: '알림',
+          text: '현재 이음이가 자고 있어요. 나중에 다시 전화해주세요',
+          icon: 'info',
+          buttons: {
+            confirm: {
+              text: '확인',
+              visible: true,
+              className: '',
+              closeModal: true
+            }
+          }
+        }).then(() => {
+          //router.push({ name: 'TheMainViewVue' })
+        })
       })
   })
 
@@ -228,12 +243,12 @@ const leaveSession = () => {
     mainStreamManager.value = undefined
     subscriber.value = undefined
     OV.value = undefined
-    bgmAudio.value.pause() // 일시 정지
     endSession()
   }
 }
 
 const endSession = () => {
+  bgmAudio.value.pause() // 일시 정지
   swal({
     title: '종료',
     text: '통화가 종료되었습니다.',
@@ -260,7 +275,6 @@ const updateMainVideoStreamManager = (stream) => {
 
 const getToken = async () => {
   const sessionId = await createSession()
-  console.log(sessionId)
   return await createToken(sessionId)
 }
 

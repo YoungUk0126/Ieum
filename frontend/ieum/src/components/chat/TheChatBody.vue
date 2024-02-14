@@ -82,7 +82,9 @@
               class="flex flex-col w-full leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700"
             >
               <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                <span class="text-sm font-semibold text-gray-900 dark:text-white">어르신</span>
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{
+                  `${care.careName} ${care.careGender}`
+                }}</span>
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
                   changeDateFormat(chat.date)
                 }}</span>
@@ -91,7 +93,11 @@
                 {{ chat.message }}
               </p>
             </div>
-            <img class="w-11 h-11 rounded-full" src="@/assets/images/care.png" alt="Jese image" />
+            <img
+              class="w-11 h-11 rounded-full"
+              :src="'/assets/images/' + care.careImage"
+              alt="Jese image"
+            />
           </div>
         </div>
       </template>
@@ -102,6 +108,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue'
 import { getList } from '../../api/chat.js'
+import { getCareInfo } from '@/api/careInfoModify'
 
 const datePicker = ref()
 
@@ -113,12 +120,19 @@ const pages = ref({
   endDate: '2022-02-02'
 })
 
+const care = ref({})
+
 const list = ref([])
 
 onMounted(() => {
   let today = new Date()
   const curDate = changeDateFormat(today)
   datePicker.value = curDate
+  getCareInfo(({ data }) => {
+    care.value = data.data
+    care.value.careImage = care.value.careGender === 'FEMALE' ? 'old-woman.png' : 'old-man.png'
+    care.value.careGender = care.value.careGender === 'FEMALE' ? '할머니' : '할아버지'
+  })
 })
 
 watch(

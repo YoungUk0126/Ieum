@@ -53,40 +53,19 @@
         <ul
           class="flex flex-col font-bold text-right space-y-2 p-4 md:p-0 mt-0 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0"
         >
+          <li></li>
           <li>
             <router-link
-              :to="{ name: 'TheChatView' }"
+              :to="{ name: 'TheMainViewVue' }"
               class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-              >대화목록
-            </router-link>
-          </li>
-          <li>
-            <a
-              href="#"
-              class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-              >부모님 정보</a
+              >홈</router-link
             >
           </li>
           <li>
             <router-link
-              :to="{ name: 'TheScheduleView' }"
-              href="#"
+              :to="{ name: 'TheCareInfo' }"
               class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-              >일정</router-link
-            >
-          </li>
-          <li>
-            <router-link
-              :to="{ name: 'TheCallView' }"
-              class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-              >화상통화</router-link
-            >
-          </li>
-          <li>
-            <router-link
-              :to="{ name: 'TheMessageView' }"
-              class="menu-block text-black rounded md:bg-transparent md:text-green-500 md:p-0 md:hover:text-green-600"
-              >메세지</router-link
+              >부모님 정보</router-link
             >
           </li>
           <li>

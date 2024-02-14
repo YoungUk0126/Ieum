@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex flex-wrap x-w-screen-xl w-screen">
+    <div class="flex flex-wrap x-w-screen-xl w-screen max-w-3xl">
       <div class="w-full px-10">
         <button
           type="button"
