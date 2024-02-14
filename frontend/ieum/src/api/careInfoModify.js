@@ -19,8 +19,12 @@ function profileEdit(data, success) {
   localSessionFormData.put(`${url}/care`, data).then(success).catch(fail)
 }
 
+function nonProfileEdit(data, success) {
+  localSessionFormData.put(`${url}/care/nopic`, data).then(success).catch(fail)
+}
+
 function phoneCheck(data, success) {
   localSession.post(`${url}/care/check-phone`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-export { userInfoEdit, getCareInfo, profileEdit, phoneCheck }
+export { userInfoEdit, getCareInfo, profileEdit, phoneCheck, nonProfileEdit }
