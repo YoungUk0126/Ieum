@@ -1,6 +1,6 @@
 <script setup>
     import EventList from './EventListItem.vue'
-    import { getAllEvent, deleteEvent } from '@/api/modalAlarms/event'
+    import { getAllAni, deleteAni } from '@/api/modalAlarms/ani';
     import { ref, onMounted } from 'vue'
 
 
@@ -8,7 +8,7 @@
 
     function handleDelete(eventNo) {
         console.log("삭제 요청 >> ", eventNo);
-        deleteEvent(eventNo,
+        deleteAni(eventNo,
             (response) => {
                 if (response.data.success) {
                     console.log("삭제가 성공했습니다.", response.data.success);
@@ -20,7 +20,7 @@
     }
 
     function getAll() {
-        getAllEvent(
+        getAllAni(
             (response) => {
                 console.log("불러온 값", response.data.data);
                 eventInfoList.value = response.data.data;
