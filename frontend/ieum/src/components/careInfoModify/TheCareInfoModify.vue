@@ -1,21 +1,26 @@
 <template>
   <div class="max-w-2xl p-6 mx-auto">
     <div id="image" class="flex justify-center mt-24 ml-6 mb-10">
-      <img
-        v-if="careInfo.careImage !== null"
-        :src="imgUrl + careInfo.careImage"
-        class="w-1/3 h-1/3"
-      />
+      <template v-if="!selectedImage">
+        <img
+          v-if="careInfo.careImage !== null"
+          :src="imgUrl + careInfo.careImage"
+          class="w-1/3 h-1/3"
+        />
 
-      <img
-        v-if="careInfo.careImage === null"
-        :src="
-          careInfo.careGender === 'MALE'
-            ? 'https://i10a303.p.ssafy.io/assets/images/old-man.png'
-            : 'https://i10a303.p.ssafy.io/assets/images/old-woman.png'
-        "
-        class="w-1/3 h-1/3"
-      />
+        <img
+          v-if="careInfo.careImage === null"
+          :src="
+            careInfo.careGender === 'MALE'
+              ? 'https://i10a303.p.ssafy.io/assets/images/old-man.png'
+              : 'https://i10a303.p.ssafy.io/assets/images/old-woman.png'
+          "
+          class="w-1/3 h-1/3"
+        />
+      </template>
+      <template v-if="selectedImage">
+        <img class="w-1/3" :src="careInfo.careImage" />
+      </template>
     </div>
     <div id="fileUpload" class="mb-24 flex justify-center">
       <input
@@ -196,6 +201,8 @@ const careInfo = ref({
 })
 
 const careImageName = ref('')
+
+const selectedImage = ref(false)
 
 const wakeSleepTime = ref({
   sleepStartTime: '',
@@ -389,6 +396,7 @@ const handleFileUpload = () => {
   imageUploadState.value = true
   //이미지를 업로드했을 때, true로 변경.
 
+  selectedImage.value = true
   careInfo.value.careImage = URL.createObjectURL(blob.value)
 }
 //이미지를 수정하는 메서드.
