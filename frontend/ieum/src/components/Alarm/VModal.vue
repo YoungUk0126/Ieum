@@ -44,33 +44,36 @@
         <div
           class="modal-body font-bold flex-col grid justify-items-center space-y-8 px-10 pt-4 pb-12"
         >
-          <template v-if="selectedOption === options[0]">
-            <VModalAnniversary :init-option="''"></VModalAnniversary>
-          </template>
-          <template v-else-if="selectedOption === options[1]">
-            <VModalMeal :init-option="''"></VModalMeal>
+          <template v-if="selectedOption === options[1]">
+            <VModalAnniversary
+              :selected-option="selectedOption"
+              :close-modal="closeModal"
+            ></VModalAnniversary>
           </template>
           <template v-else-if="selectedOption === options[2]">
-            <VModalWakeandSleep :init-option="''"></VModalWakeandSleep>
+            <VModalMeal :selected-option="selectedOption" :close-modal="closeModal"></VModalMeal>
+          </template>
+          <template v-else-if="selectedOption === options[3]">
+            <VModalEvent :selected-option="selectedOption" :close-modal="closeModal"></VModalEvent>
           </template>
           <button
-            class="w-full text-black text-xl bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
-            @click="selectOption(0)"
+            class="w-full text-black bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
+            @click="selectOption(1)"
           >
             기념일 등록
           </button>
           <button
-            class="w-full text-black text-xl bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
+            class="w-full text-black bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
             type="button"
-            @click="selectOption(1)"
+            @click="selectOption(2)"
           >
             식사 시간 등록
           </button>
           <button
-            class="w-full text-black text-xl bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
-            @click="selectOption(2)"
+            class="w-full text-black bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
+            @click="selectOption(3)"
           >
-            취침시간 등록
+            이벤트 등록
           </button>
         </div>
       </div>
@@ -82,11 +85,12 @@
 import { ref, defineProps } from 'vue'
 import VModalAnniversary from './VModalAnniversary.vue'
 import VModalMeal from './VModalMeal.vue'
-import VModalWakeandSleep from './VModalWakeandSleep.vue'
+import VModalEvent from './VModalEvent.vue'
 
 const props = defineProps({ mainModal: String })
-const options = ref(['기념일', '식사 시간', '취침 시간'])
+const options = ref(['', '기념일', '식사 시간', '이벤트'])
 const selectedOption = ref('일정')
+const initOption = ref('')
 
 const closeModal = () => {
   document.getElementById('btn-close').click()

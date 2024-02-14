@@ -7,14 +7,10 @@ const form = localSessionAxiosFormData()
 
 const endpoint = 'i10a303.p.ssafy.io'
 
-const url = `https://${endpoint}:443/api/ani`
+const url = `https://${endpoint}:443/api/event`
 
 function getAllEvent(success) {
   local.get(`${url}`).then(success).catch(fail)
-}
-
-function getOneEvent(param, success) {
-  local.get(`${url}/detail/${param}`).then(success).catch(fail)
 }
 
 function postEvent(data, success) {
@@ -24,9 +20,8 @@ function postEvent(data, success) {
 function modifyEvent(data, success) {
   form.put(`${url}`, data).then(success).catch(fail)
 }
-
-function deleteEvent(param, success) {
-  local.delete(`${url}/${param}`).then(success).catch(fail)
+function deleteEvent(sleep_info_no, success) {
+  local.delete(`${url}/${sleep_info_no}`).then(success).catch(fail)
 }
 
-export { getAllEvent, getOneEvent, postEvent, modifyEvent, deleteEvent }
+export { getAllEvent, postEvent, modifyEvent, deleteEvent }

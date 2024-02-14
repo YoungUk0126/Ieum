@@ -43,7 +43,7 @@
           <button
             type="button"
             class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-            @click="props.initOption"
+            @click="props.closeModal"
           >
             취소
           </button>
@@ -56,19 +56,17 @@
 
 <script setup>
 import { ref, defineProps } from 'vue'
-import { postEvent } from '@/api/modalAlarms/event.js'
+import { postAni } from '@/api/modalAlarms/ani.js'
 import swal from 'sweetalert'
 
-const props = defineProps(['closeModal', 'mainModal', 'initOption'])
-
-console.log(props.modalId0)
+const props = defineProps(['closeModal', 'mainModal', 'selectedOption'])
 
 const jsonData = ref({
   eventName: '',
   eventDate: ''
 })
 
-function postAlarmdata() {
+const postAlarmdata = () => {
   // 시간, 분, 초를 HH:mm:SS 형태로 조합하여 반환합니다.
 
   if (jsonData.value.eventName === '' || jsonData.value.eventDate === '') {
@@ -89,8 +87,7 @@ function postAlarmdata() {
 
     return 0
   }
-
-  postEvent(jsonData.value, (response) => {
+  postAni(jsonData.value, (response) => {
     if (response.data.success === true) {
       swal({
         title: '기념일 알리미',
@@ -105,8 +102,9 @@ function postAlarmdata() {
             closeModal: true
           }
         }
+      }).then(() => {
+        props.closeModal()
       })
-      props.closeModal()
     }
   })
 }
@@ -114,4 +112,4 @@ function postAlarmdata() {
 
 <style scoped></style>
 
---------------------------------------------------
+-------------------------------------------------- @/api/modalAlarms/ani.js
