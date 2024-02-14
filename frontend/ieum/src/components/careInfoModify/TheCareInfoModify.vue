@@ -370,15 +370,22 @@ const updateCareInfo = () => {
           )
         } else {
           //시간을 입력하지 않았다면,
-          modifySleep(wakeSleepTime.value, (response) => {
-            if (response.data.success) {
-              swal('정보가 변경되었습니다.').then(() => {
-                router.push('/careinfo')
-              })
-            } else {
-              swal('시간 형식을 다시 확인해주세요.')
+          modifySleep(
+            {
+              sleepInfoNo: wakeSleepTime.value.sleepInfoNo,
+              sleepStartTime: wakeSleepTime.value.sleepStartTime,
+              sleepEndTime: wakeSleepTime.value.sleepEndTime
+            },
+            (response) => {
+              if (response.data.success) {
+                swal('정보가 변경되었습니다.').then(() => {
+                  router.push('/careinfo')
+                })
+              } else {
+                swal('시간 형식을 다시 확인해주세요.')
+              }
             }
-          })
+          )
         }
       } else {
         swal('정보 변경 중 오류가 발생하였습니다.')
@@ -407,6 +414,7 @@ const updateCareInfo = () => {
                 sleepEndTime: wakeSleepTime.value.sleepEndTime
               },
               (response) => {
+                console.log(response)
                 if (response.data.success) {
                   swal('정보가 변경되었습니다.').then(() => {
                     router.push('/careinfo')
@@ -418,15 +426,23 @@ const updateCareInfo = () => {
             )
           } else {
             //시간을 입력하지 않았다면,
-            modifySleep(wakeSleepTime.value, (response) => {
-              if (response.data.success) {
-                swal('정보가 변경되었습니다.').then(() => {
-                  router.push('/careinfo')
-                })
-              } else {
-                swal('시간 형식을 다시 확인해주세요.')
+            modifySleep(
+              {
+                sleepInfoNo: wakeSleepTime.value.sleepInfoNo,
+                sleepStartTime: wakeSleepTime.value.sleepStartTime,
+                sleepEndTime: wakeSleepTime.value.sleepEndTime
+              },
+              (response) => {
+                console.log(response)
+                if (response.data.success) {
+                  swal('정보가 변경되었습니다.').then(() => {
+                    router.push('/careinfo')
+                  })
+                } else {
+                  swal('시간 형식을 다시 확인해주세요.')
+                }
               }
-            })
+            )
           }
         } else {
           swal('정보 변경 중 오류가 발생하였습니다.')
