@@ -291,7 +291,9 @@ const updateCareInfo = () => {
   if (wakeSleepTime.value.sleepEndTime === decoyWakeSleepTime.value.sleepEndTime) {
     wakeSleepTime.value.sleepEndTime = `${wakeSleepTime.value.sleepEndTime}:00`
   }
-  careInfo.value.careImage = careImageName.value
+  if (selectedImage.value) {
+    careInfo.value.careImage = careImageName.value
+  }
   const json = JSON.stringify(careInfo.value)
   const formJson = new Blob([json], { type: 'application/json' })
   formData.append('data', formJson)
