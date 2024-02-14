@@ -29,8 +29,11 @@ import { onMounted, ref } from 'vue'
 import { getStatus } from '@/api/iot.js'
 import { getCareInfo } from '@/api/careInfoModify.js'
 
-const status = ref()
-const care = ref({})
+const status = ref('사용한 이력이 없습니다')
+const care = ref({
+  careName: '미등록',
+  careGender: ''
+})
 
 onMounted(() => {
   getStatus(({ data }) => {
