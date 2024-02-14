@@ -102,8 +102,8 @@ public class IotServiceImpl implements IotService {
     SerialCode device = iotRepository.searchBySerialCode(care.getCareSerial()).orElseThrow(
         () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
 
-    if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
-      return "현재 사용중입니다";
+    if (!device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
+      return "사용이 시작되지 않은 기기입니다";
     }else{
       ChatHistory chat = chatRepository.findFirstByCareInfoCareNoOrderByChatDateDesc(careNo);
       if(chat == null){
