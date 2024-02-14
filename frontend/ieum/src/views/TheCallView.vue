@@ -10,6 +10,6 @@ import TheCall from '../components/call/TheCall.vue'
 
 <style scoped>
 .body {
-  min-height: 70vh;
+  min-height: calc(100vh - 96px);
 }
 </style>

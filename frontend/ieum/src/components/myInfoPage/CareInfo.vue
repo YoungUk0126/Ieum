@@ -9,6 +9,7 @@
     const components = ref({복용약, 기념일, 일정});
     const currentTab = ref(components.value.복용약);
     const tabs = ref(['복용약', '기념일', '일정']);
+    const imgUrl = ref('https://i10a303.p.ssafy.io/images/');
 
     const careInfo = ref({
         careName: '',
@@ -26,9 +27,9 @@
             (response) => {
                 console.log("불러온 값 ", response.data.data);
                 careInfo.value = response.data.data;
-            },
-            (error) => {
-                console.log("getCareInfo API 호출 중 에러 발생!");
+                if (response.data.data.careImage) {
+                    careInfo.value.careImage = imgUrl.value + response.data.data.careImage;
+                }
             }
         );
         console.log("불러오기 완료");
@@ -36,7 +37,7 @@
 </script>
 
 <template>
-    <div class="careInfo" v-if="!isLoading">
+    <div class="careInfo" v-if="careInfo.careName">
         <div class="profile">
             <div v-if="careInfo.careImage">
                 <img class="profileImage" :src="careInfo.careImage">
@@ -50,20 +51,23 @@
         </div>
         <div class="info">
             <div class="nameInfo">
-                <div>
+                <div class="text-xs">
                     {{ careInfo.careName }} &nbsp;
                 </div>
-                <div v-if="careInfo.careGender === 'FEMALE'">
+                <div v-if="careInfo.careGender === 'FEMALE'" class="text-xs">
                     할머니
                 </div>
-                <div v-else>
+                <div v-else class="text-xs">
                     할아버지
                 </div>
             </div>
-            <p> {{ careInfo.careAddr }}</p>
-            <p> {{ careInfo.carePhone }}</p>
-            <p> {{ careInfo.careSerial }} </p>
+            <p class="text-xs"> {{ careInfo.careAddr }}</p>
+            <p class="text-xs"> {{ careInfo.carePhone }}</p>
+            <p class="text-xs"> {{ careInfo.careSerial }} </p>
         </div>
+    </div>
+    <div v-else class="noInfo">
+        등록된 보호자 정보가 없습니다
     </div>
 
     <div class="tabs">
@@ -79,6 +83,11 @@
 </template>
 
 <style>
+    .noInfo {
+        margin: 10% auto;
+        text-align: center;
+    }
+
     .careInfo {
         display: flex;
         flex-direction: row;
@@ -135,6 +144,7 @@
     .buttons button.active {
         /* 선택된 버튼 */
         opacity: 1;
-        background-color: aquamarine;
+        background-color: #EBFBF7;
+        color: #00725E;
     }
 </style>

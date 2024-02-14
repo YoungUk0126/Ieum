@@ -2,40 +2,53 @@
     import { defineProps, defineEmits } from 'vue';
 
     const props = defineProps({ schedule: Object})
-    const emit = defineEmits();
+    const emit = defineEmits(['delete']);
+
+    const onDelete = () => {
+        emit('delete', props.schedule.eventNo)
+    }
 </script>
 
 <template>
     <div style="width: 80%;">
-        <div class="scheduleWrapper">
+        <div class="scheduleWrapper p-3">
             <div class="scheduleName">
                 {{ schedule.eventName }}
             </div>
-            <div class="date">
-                <div>
-                    {{ schedule.eventDate }}
+            <div class="date gap-1">
+                <div class="text-s">
+                    {{ schedule.date }}
                 </div>
-                <div>
-                    시간은 추가필요
+                <div class="text-xs">
+                    {{ schedule.time }}
                 </div>
+            </div>
+            <div class="bin w-6 h-6" @click="onDelete">
+                <img src="@/assets/images/trash_icon.png" />
             </div>
         </div>
     </div>
+    
 </template>
 
 <style>
+    .bin {
+        display: flex;
+        align-items: center;
+    }
+
     .scheduleWrapper {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         border-radius: 20px;
         margin: 0.5% auto;
-        padding: 1.3% 3%;
         background-color: #f1f3f5
     }
 
     .scheduleName {
         margin: auto 0;
+        flex: 0.9;
     }
 
     .date {
