@@ -299,6 +299,7 @@ watch(
       .replace(/\D+/g, '')
       .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
     careInfo.value.carePhone = formattedmemberPhone
+    validatePhoneState.value = false
   }
 )
 
@@ -480,6 +481,11 @@ const handleFileUpload = () => {
 
 const duplicatePhoneCheck = () => {
   if (prevPhone.value !== careInfo.value.carePhone) {
+    if (careInfo.value.carePhone.length < 13) {
+      swal('전화번호를 확인해주세요')
+      validatePhoneState.value = false
+      return
+    }
     phoneCheck(careInfo.value.carePhone, ({ data }) => {
       if (data.data.isDuplicated) {
         swal('이미 사용 중인 전화번호입니다.')
