@@ -51,8 +51,8 @@
         </button>
       </div>
     </div>
-    <VModal :main-modal="alarmmain" />
-    <VModalInjection :inject-modal="injectionalarm" />
+    <VModal :vmodal="openVModal" />
+    <VModalInjection :vmodalpill="openVModalPill" />
   </div>
 </template>
 
@@ -62,8 +62,8 @@ import VModal from '../Alarm/VModal.vue'
 import VModalInjection from '../Alarm/VModalInjection.vue'
 import { useRouter } from 'vue-router'
 
-const alarmmain = ref('VModal')
-const injectionalarm = ref('Injection')
+const openVModal = ref('VModal')
+const openVModalPill = ref('VModalPill')
 const router = useRouter()
 
 const changeRouter = (name) => {

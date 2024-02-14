@@ -1,12 +1,12 @@
 <template>
   <div
     data-modal-backdrop="static"
-    :id="props.injectModal"
+    :id="props.vmodalpill"
     tabindex="-1"
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
-    <button :data-modal-hide="props.injectModal" id="btn-close2" type="button" class="hidden">
+    <button :data-modal-hide="props.vmodalpill" id="btn-close2" type="button" class="hidden">
       취소
     </button>
     <div class="relative p-4 w-full max-w-2xl max-h-full">
@@ -212,7 +212,7 @@ const closeModal = () => {
   document.getElementById('btn-close2').click()
 }
 
-const props = defineProps({ injectModal: String })
+const props = defineProps({ vmodalpill: String })
 
 // 1 약 이름
 const pill_name = ref('')
