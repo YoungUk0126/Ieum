@@ -319,16 +319,13 @@ const updateInfo = () => {
 const checkSerialCode = () => {
   if (prevSerial.value !== careInfo.value.careSerial) {
     serialCheck.value = false
-    checkSerial(
-      {
-        serialCode: careInfo.value.careSerial
-      },
-      ({ data }) => {
-        if (data.data.success) {
+    if (careInfo.value.careSerial !== '' && careInfo.value.careSerial !== ' ') {
+      checkSerial(careInfo.value.careSerial, ({ data }) => {
+        if (data.success) {
           serialCheck.value = true
         }
-      }
-    )
+      })
+    }
   } else {
     serialCheck.value = true
   }

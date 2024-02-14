@@ -28,7 +28,7 @@ function phoneCheck(data, success) {
 }
 
 function checkSerial(data, success) {
-  localSession.get(`/api/devices/check-serial/${data}`).then(success).catch(fail)
+  localSession.get(`${url}/devices/check-serial/${data}`).then(success).catch(fail)
 }
 
 export { userInfoEdit, getCareInfo, profileEdit, phoneCheck, nonProfileEdit , checkSerial}
