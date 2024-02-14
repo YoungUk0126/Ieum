@@ -278,7 +278,7 @@ const beforeCareInfo = () => {
 
 const beforeSleepInfo = () => {
   getAllSleep(({ data }) => {
-    if (data && data.data) {
+    if (data.success) {
       const startTimeParts = data.data.sleepStartTime.split(':')
       const endTimeParts = data.data.sleepEndTime.split(':')
       wakeSleepTime.value.sleepStartTime = startTimeParts[0] + ':' + startTimeParts[1]
@@ -414,7 +414,6 @@ const updateCareInfo = () => {
                 sleepEndTime: wakeSleepTime.value.sleepEndTime
               },
               (response) => {
-                console.log(response)
                 if (response.data.success) {
                   swal('정보가 변경되었습니다.').then(() => {
                     router.push('/careinfo')
@@ -433,7 +432,6 @@ const updateCareInfo = () => {
                 sleepEndTime: wakeSleepTime.value.sleepEndTime
               },
               (response) => {
-                console.log(response)
                 if (response.data.success) {
                   swal('정보가 변경되었습니다.').then(() => {
                     router.push('/careinfo')
