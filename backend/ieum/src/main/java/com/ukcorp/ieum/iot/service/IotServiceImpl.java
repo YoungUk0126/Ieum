@@ -158,8 +158,8 @@ public class IotServiceImpl implements IotService {
     Member member = memberRepository.findByMemberId(userId).orElseThrow(
         () -> new NoSuchElementException());
 
-    CareInfo careInfo = careRepository.findCareInfoByCareSerial(code).orElseThrow(
-        () -> new NoSuchElementException());
+    CareInfo careInfo = member.getCareInfo();
+
     if (!activeCheck(code)) {
       SerialCode serialCode = iotRepository.searchBySerialCode(code).orElseThrow(
           () -> new NoSuchElementException());
