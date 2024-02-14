@@ -27,4 +27,8 @@ function phoneCheck(data, success) {
   localSession.post(`${url}/care/check-phone`, JSON.stringify(data)).then(success).catch(fail)
 }
 
-export { userInfoEdit, getCareInfo, profileEdit, phoneCheck, nonProfileEdit }
+function checkSerial(data, success) {
+  localSession.get(`/api/devices/check-serial/${data}`).then(success).catch(fail)
+}
+
+export { userInfoEdit, getCareInfo, profileEdit, phoneCheck, nonProfileEdit , checkSerial}

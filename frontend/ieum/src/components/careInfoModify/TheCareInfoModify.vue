@@ -52,8 +52,16 @@
       <input
         type="text"
         class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        v-model="careInfo.careSerial"
+        v-model.lazy="careInfo.careSerial"
+        @change="checkSerialCode"
       />
+    </div>
+    <div
+      class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+      role="alert"
+      v-show="!serialCheck"
+    >
+      <span class="font-medium">시리얼 코드를 확인해주세요</span>
     </div>
     <div id="birthDay" class="grid grid-cols-4 gap-4 mb-12">
       <label
@@ -79,19 +87,7 @@
         v-model="careInfo.careAddr"
       />
     </div>
-    <div id="sleepStartTime" class="grid grid-cols-4 gap-4 mb-12">
-      <label
-        id="sleepStartTime"
-        class="color text-xl text-gray-900 dark:text-white font-semibold flex justify-center"
-        >취침</label
-      >
-      <input
-        type="time"
-        class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        @input="checkSleepStart"
-        v-model="wakeSleepTime.sleepStartTime"
-      />
-    </div>
+
     <div id="sleepEndTime" class="grid grid-cols-4 gap-4 mb-12">
       <label
         id="sleepEndTime"
@@ -105,6 +101,19 @@
         v-model="wakeSleepTime.sleepEndTime"
       />
     </div>
+    <div id="sleepStartTime" class="grid grid-cols-4 gap-4 mb-12">
+      <label
+        id="sleepStartTime"
+        class="color text-xl text-gray-900 dark:text-white font-semibold flex justify-center"
+        >취침</label
+      >
+      <input
+        type="time"
+        class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        @input="checkSleepStart"
+        v-model="wakeSleepTime.sleepStartTime"
+      />
+    </div>
     <div id="phone" class="grid grid-cols-4 gap-4 mb-12">
       <label
         id="phone"
@@ -115,6 +124,7 @@
         type="text"
         class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
         @input="checkPhoneFunction"
+        maxLength="13"
         v-model="careInfo.carePhone"
       />
     </div>
@@ -182,10 +192,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { profileEdit, nonProfileEdit } from '../../api/careInfoModify'
 import { getCareInfo } from '../../api/careInfoModify'
-import { phoneCheck } from '../../api/careInfoModify'
+import { phoneCheck, checkSerial } from '../../api/careInfoModify'
 import swal from 'sweetalert'
 import router from '@/router'
 import { getAllSleep, modifySleep, postSleep } from '../../api/modalAlarms/sleep'
@@ -239,6 +249,10 @@ const imageUploadState = ref(false)
 const newSleepInfo = ref(false)
 //새로 정보를 넣어야할지
 
+const serialCheck = ref(false)
+
+const prevSerial = ref()
+
 onMounted(() => {
   beforeCareInfo()
   beforeSleepInfo()
@@ -252,6 +266,11 @@ const beforeCareInfo = () => {
       careInfo.value.careImage = data.data.careImage
     } else {
       careInfo.value.careImage = null
+    }
+
+    if (careInfo.value.careSerial !== null) {
+      prevSerial.value = careInfo.value.careSerial
+      serialCheck.value = true
     }
   })
 }
@@ -273,12 +292,45 @@ const beforeSleepInfo = () => {
   })
 }
 
+// 휴대폰 번호 입력 함수
+// watch를 사용하여 phone이 변경될 때마다 처리
+watch(
+  () => careInfo.value.carePhone,
+  (newValue) => {
+    const formattedmemberPhone = newValue
+      .replace(/\D+/g, '')
+      .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
+    careInfo.value.carePhone = formattedmemberPhone
+  }
+)
+
 const updateInfo = () => {
-  if (checkPhone.value && validatePhoneState.value) {
+  if (!serialCheck.value) {
+    swal('시리얼 코드를 다시 확인해주세요.')
+    return
+  } else if (checkPhone.value && validatePhoneState.value) {
     updateCareInfo()
   } else {
     swal('전화번호 확인을 다시 진행해주세요.')
     return
+  }
+}
+
+const checkSerialCode = () => {
+  if (prevSerial.value !== careInfo.value.careSerial) {
+    serialCheck.value = false
+    checkSerial(
+      {
+        serialCode: careInfo.value.careSerial
+      },
+      ({ data }) => {
+        if (data.data.success) {
+          serialCheck.value = true
+        }
+      }
+    )
+  } else {
+    serialCheck.value = true
   }
 }
 
