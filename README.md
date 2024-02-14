@@ -5,7 +5,7 @@
 ## 👩‍👩‍👧‍👦 팀원 소개
 <div align="center">
 
-| **김영욱-팀장** | **강다솔-팀원** | **서다찬-팀원** | **이성목-팀원** | **우혁-팀원** | **장태수-팀원** |
+| **김영욱-팀장**<br>BE, IOT | **강다솔-팀원**<br>BE, FE | **서다찬-팀원**<br>BE, FE | **이성목-팀원**<br>BE, IOT | **우혁-팀원**<br>FE | **장태수-팀원**<br>FE |
 | :------: |  :------: | :------: | :------: | :------: | :------: |
 | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/kim.png?ref_type=heads" height=150 width=150> <br/> @dmnion](https://lab.ssafy.com/dmnion) | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/kang.jpeg?ref_type=heads" height=150 width=150> <br/> @dasol199](https://lab.ssafy.com/dasol199) | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/seo.jpeg?ref_type=heads" height=150 width=150> <br/> @chn7894](https://lab.ssafy.com/chn7894) | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/lee.jpeg?ref_type=heads" height=150 width=150> <br/> @CocoisCat](https://lab.ssafy.com/CocoisCat) | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/woo.jpeg?ref_type=heads" height=150 width=150> <br/> @dngur12kr](https://lab.ssafy.com/dngur12kr) | [<img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/jang.jpeg?ref_type=heads" height=150 width=150> <br/> @use02042](https://lab.ssafy.com/use02042) |
 
