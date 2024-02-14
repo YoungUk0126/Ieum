@@ -28,7 +28,7 @@
               id="start"
               name="trip-start"
               value="2025-01-01"
-              min="2018-01-01"
+              min="1900-01-01"
               max="2100-12-31"
               class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
               v-model="selectedDate"

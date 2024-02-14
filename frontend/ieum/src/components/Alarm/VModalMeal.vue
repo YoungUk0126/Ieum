@@ -110,7 +110,6 @@ onMounted(() => {
       selectedNumber5.value = formatTimeH(data.data.mealTime3)
       selectedNumber6.value = formatTimeM(data.data.mealTime3)
       mealInfoNo.value = data.data.mealInfoNo
-      console.log(data.data)
     }
   })
 })
@@ -181,9 +180,7 @@ const postAlarmdata = () => {
   }
 
   if (mealInfoNo.value === undefined) {
-    console.log(mealInfoNo.value)
     postMeal(jsonData.value, (response) => {
-      console.log(response.data)
       if (response.data.success === true) {
         swal({
           title: '식사 알리미',
@@ -206,7 +203,6 @@ const postAlarmdata = () => {
   } else {
     jsonData.value.mealInfoNo = mealInfoNo.value
     modifyMeal(jsonData.value, (response) => {
-      console.log(response.data)
       if (response.data.success === true) {
         swal({
           title: '식사 알리미',
