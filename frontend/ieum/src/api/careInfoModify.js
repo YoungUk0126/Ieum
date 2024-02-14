@@ -20,7 +20,7 @@ function profileEdit(data, success) {
 }
 
 function nonProfileEdit(data, success) {
-  localSessionFormData.put(`${url}/care/nopic`, data).then(success).catch(fail)
+  localSession.put(`${url}/care/nopic`, JSON.stringify(data)).then(success).catch(fail)
 }
 
 function phoneCheck(data, success) {

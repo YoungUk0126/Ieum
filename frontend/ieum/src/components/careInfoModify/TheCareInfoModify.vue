@@ -248,7 +248,11 @@ onMounted(() => {
 const beforeCareInfo = () => {
   getCareInfo(({ data }) => {
     careInfo.value = data.data
-    careInfo.value.careImage = data.data.careImage
+    if (careInfo.value.careImage !== null && careInfo.value.careImage !== '') {
+      careInfo.value.careImage = data.data.careImage
+    } else {
+      careInfo.value.careImage = null
+    }
   })
 }
 //미리 기존 피보호자 정보를 불러오는 메서드.
@@ -293,85 +297,92 @@ const updateCareInfo = () => {
   formData.append('data', formJson)
   if (imageUploadState.value) {
     formData.append('file', blob.value, file.value.name)
-    if (newSleepInfo.value) {
-      postSleep(
-        {
-          sleepStartTime: wakeSleepTime.value.sleepStartTime,
-          sleepEndTime: wakeSleepTime.value.sleepEndTime
-        },
-        (response) => {
-          if (response.data.success) {
-            profileEdit(formData, (response) => {
+    //이미지 변경을 시도했다면,
+    profileEdit(formData, (response) => {
+      if (response.data.success) {
+        //만약 새로 시간을 입력해야한다면,
+        if (newSleepInfo.value) {
+          postSleep(
+            {
+              sleepStartTime: wakeSleepTime.value.sleepStartTime,
+              sleepEndTime: wakeSleepTime.value.sleepEndTime
+            },
+            (response) => {
               if (response.data.success) {
-                swal('정보가 변경되었습니다.').then(router.push('/careinfo'))
+                swal('정보가 변경되었습니다.').then(() => {
+                  router.push('/careinfo')
+                })
               } else {
-                swal('정보 변경 중 오류가 발생하였습니다.')
-                return
+                swal('시간 형식을 다시 확인해주세요.')
               }
-            })
-          } else {
-            swal('시간형식을 다시 확인해주세요.')
-            return
-          }
-        }
-      )
-    } else {
-      modifySleep(wakeSleepTime.value, (response) => {
-        if (response.data.success) {
-          profileEdit(formData, (response) => {
+            }
+          )
+        } else {
+          //시간을 입력하지 않았다면,
+          modifySleep(wakeSleepTime.value, (response) => {
             if (response.data.success) {
-              swal('정보가 변경되었습니다.').then(router.push('/careinfo'))
+              swal('정보가 변경되었습니다.').then(() => {
+                router.push('/careinfo')
+              })
             } else {
-              swal('정보 변경 중 오류가 발생하였습니다.')
-              return
+              swal('시간 형식을 다시 확인해주세요.')
             }
           })
-        } else {
-          swal('시간형식을 다시 확인해주세요.')
-          return
         }
-      })
-    }
+      } else {
+        swal('정보 변경 중 오류가 발생하였습니다.')
+        return
+      }
+    })
   } else {
-    if (newSleepInfo.value) {
-      postSleep(
-        {
-          sleepStartTime: wakeSleepTime.value.sleepStartTime,
-          sleepEndTime: wakeSleepTime.value.sleepEndTime
-        },
-        (response) => {
-          if (response.data.success) {
-            nonProfileEdit(formData, (response) => {
+    //이미지 변경이 없다면,
+    nonProfileEdit(
+      {
+        careBirth: careInfo.value.careBirth,
+        careAddr: careInfo.value.careAddr,
+        careName: careInfo.value.careName,
+        carePhone: careInfo.value.carePhone,
+        careGender: careInfo.value.careGender,
+        careImage: careInfo.value.careImage,
+        careSerial: careInfo.value.careSerial
+      },
+      (response) => {
+        if (response.data.success) {
+          //만약 새로 시간을 입력해야한다면,
+          if (newSleepInfo.value) {
+            postSleep(
+              {
+                sleepStartTime: wakeSleepTime.value.sleepStartTime,
+                sleepEndTime: wakeSleepTime.value.sleepEndTime
+              },
+              (response) => {
+                if (response.data.success) {
+                  swal('정보가 변경되었습니다.').then(() => {
+                    router.push('/careinfo')
+                  })
+                } else {
+                  swal('시간 형식을 다시 확인해주세요.')
+                }
+              }
+            )
+          } else {
+            //시간을 입력하지 않았다면,
+            modifySleep(wakeSleepTime.value, (response) => {
               if (response.data.success) {
-                swal('정보가 변경되었습니다.').then(router.push('/careinfo'))
+                swal('정보가 변경되었습니다.').then(() => {
+                  router.push('/careinfo')
+                })
               } else {
-                swal('정보 변경 중 오류가 발생하였습니다.')
-                return
+                swal('시간 형식을 다시 확인해주세요.')
               }
             })
-          } else {
-            swal('시간형식을 다시 확인해주세요.')
-            return
           }
-        }
-      )
-    } else {
-      modifySleep(wakeSleepTime.value, (response) => {
-        if (response.data.success) {
-          nonProfileEdit(formData, (response) => {
-            if (response.data.success) {
-              swal('정보가 변경되었습니다.').then(router.push('/careinfo'))
-            } else {
-              swal('정보 변경 중 오류가 발생하였습니다.')
-              return
-            }
-          })
         } else {
-          swal('시간형식을 다시 확인해주세요.')
+          swal('정보 변경 중 오류가 발생하였습니다.')
           return
         }
-      })
-    }
+      }
+    )
   }
 }
 //변경된 피보호자 정보를 보내는 메서드.
@@ -395,7 +406,6 @@ const handleFileUpload = () => {
 
   imageUploadState.value = true
   //이미지를 업로드했을 때, true로 변경.
-
   selectedImage.value = true
   careInfo.value.careImage = URL.createObjectURL(blob.value)
 }
