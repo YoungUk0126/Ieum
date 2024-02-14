@@ -63,6 +63,19 @@ public class CareController {
     }
   }
 
+  @PutMapping("/nopic")
+  private ResponseEntity<Map<String, Object>> updateNoPicCareInfo(@RequestBody CareUpdateRequestDto careDto) {
+
+    try {
+      careService.updateCareInfo(careDto);
+      return handleSuccess(careDto);
+
+    } catch (Exception e) {
+      log.debug(e.getMessage());
+      return handleError("Fail");
+    }
+  }
+
   /**
    * 피보호자의 PK로 피보호자 정보를 반환하는 기능
    *
