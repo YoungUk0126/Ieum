@@ -134,7 +134,7 @@ public class IotServiceImpl implements IotService {
     SerialCode serialCode = iotRepository.searchBySerialCode(serial).orElseThrow(
         () -> new NoSuchElementException());
 
-    return serialCode.getUsable().equals(Usable.ACTIVE);
+    return serialCode.getUsable().equals(Usable.INACTIVE);
   }
 
 
