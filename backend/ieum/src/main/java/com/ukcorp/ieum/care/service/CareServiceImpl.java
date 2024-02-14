@@ -54,10 +54,10 @@ public class CareServiceImpl implements CareService {
 //      이미지는 가져와서 여기 빌더에 넣어!
       CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new Exception("사용자가 존재하지 않아요"));
       String userId = JwtUtil.getMemberId().get();
-      if(care.getCareSerial() != null && careDto.getCareSerial() != null){
+      if(care.getCareSerial() != null && careDto.getCareSerial() != null && !care.getCareSerial().equals(careDto.getCareSerial())){
         // 새로운 값과 이전 값의 serial의 값이 다를 경우
         iotService.updateSerialCode(careDto.getCareSerial(), userId);
-      }else if(care.getCareSerial() == null){
+      }else if(care.getCareSerial() == null && careDto.getCareSerial() != null){
         iotService.registSerialCode(careDto.getCareSerial(), userId);
       }
       CareInfo newCare = CareInfo.builder()
@@ -70,7 +70,7 @@ public class CareServiceImpl implements CareService {
               .careImage(careDto.getCareImage())
               .careSerial(careDto.getCareSerial())
               .build();
-      careRepository.save(care);
+      careRepository.save(newCare);
     } catch (DataIntegrityViolationException e) {
       log.debug("수정 오류!");
       throw new Exception("수정 오류!");
