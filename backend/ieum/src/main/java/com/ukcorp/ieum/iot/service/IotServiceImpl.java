@@ -140,6 +140,11 @@ public class IotServiceImpl implements IotService {
     return null;
   }
 
+  @Override
+  public void sendCloseAlert() {
+    socketService.sendCallStopAlertToIot();
+  }
+
   /**
    * 작성자 : 이성목 기기 등록하는 서비스 메서드
    *

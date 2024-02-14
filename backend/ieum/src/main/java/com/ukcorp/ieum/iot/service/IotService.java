@@ -24,4 +24,6 @@ public interface IotService {
 
   String getSerialCode(Long careNo);
 
+  void sendCloseAlert();
+
 }
