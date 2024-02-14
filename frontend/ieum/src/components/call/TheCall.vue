@@ -135,7 +135,7 @@ import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
 import UserMainVideo from './VUserMainVideo.vue'
 import swal from 'sweetalert'
-import { createToken, createSession } from '@/api/call.js'
+import { createToken, createSession, sendEndAlert } from '@/api/call.js'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const OV = ref()
@@ -157,7 +157,7 @@ onMounted(() => {
   window.onunload = () => {
     bgmAudio.value.pause() // 일시 정지
     if (session.value) session.value.disconnect()
-    session.value = undefined
+    sendEndAlert()
   }
 })
 
@@ -180,10 +180,6 @@ const joinSession = () => {
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
-    /*if (mainStreamManager.value == stream.streamManager) {
-      mainStreamManager.value = pub.value
-      who.value = false
-    }*/
     pub.value = undefined
     subscriber.value = undefined
     endSession()
@@ -262,7 +258,13 @@ const endSession = () => {
       }
     }
   }).then(() => {
-    router.push({ name: 'TheMainViewVue' })
+    if (subscriber.value !== undefined) {
+      sendEndAlert(() => {
+        router.push({ name: 'TheMainViewVue' })
+      })
+    } else {
+      router.push({ name: 'TheMainViewVue' })
+    }
   })
 }
 
