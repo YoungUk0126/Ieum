@@ -88,24 +88,26 @@
 
 ## ⚙️ 기술 스택 
 
-<img src="./img/tech-stack-and-service-architecture.png" width="640">
-
-
 - frontend
-  - vue 3.1.5
-  - vuex 4.0.2
-  - vue-router 4.0.10
-  - sockjs-client 1.5.1, webstomp-client 1.2.6
+  - vue 3
 - backend
-  - MariaDB 10.4.20
-  - redis 6.2.4
-  - spring Boot 2.5.2
-- 화상미팅 관련
-  - openvidu-browser 2.19.0
-  - openvidu 2.19.0
+  - MySQL 8.0.35
+  - redis 
+  - spring Boot 3.2.1
+- IoT
+  - django 5.0.1
+  - python 3.12.1
+  - sqlite
+- 영상통화
+  - openvidu
+- API
+  - TTS, STT : 구글 어시스턴트
+  - 대화 생성 : Chat GPT-4
+  - 문자 전송 : 네이버 클라우드 API
 - 배포
   - aws
   - nginx
+  - docker
 
 <br>
 
