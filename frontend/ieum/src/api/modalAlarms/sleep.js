@@ -9,12 +9,14 @@ const local = localSessionAxios()
 
 const url = `https://i10a303.p.ssafy.io:443/api/sleepMode`
 
+// const url2 = `http://localhost:8080/api/sleepMode`
+
 function getAllSleep(success) {
   local.get(`${url}`).then(success).catch(fail)
 }
 
 function postSleep(data, success) {
-  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+  local.post(`${url}`, data).then(success).catch(fail)
 }
 
 function modifySleep(data, success) {

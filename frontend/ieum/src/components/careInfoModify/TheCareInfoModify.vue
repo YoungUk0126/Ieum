@@ -1,7 +1,7 @@
 <template>
     <div class="max-w-3xl p-6 mx-auto">
         <div id="image" class="flex justify-center mt-24 ml-6 mb-10">
-            <img :src="imageLink" alt="Your Image" class="w-1/3 h-1/3" />
+            <img :src="careInfo.careImage" alt="Your Image" class="w-1/3 h-1/3" />
         </div>
         <div id="fileUpload" class="mb-24 flex justify-center">
             <input
@@ -92,12 +92,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { profileEdit } from '../../api/careInfoModify';
+import { profileEdit, nonProfileEdit } from '../../api/careInfoModify';
 import { getCareInfo } from '../../api/careInfoModify';
 import { phoneCheck } from '../../api/careInfoModify';
 import swal from 'sweetalert';
 import router from "@/router";
-import { getAllSleep, modifySleep } from "../../api/modalAlarms/sleep";
+import { getAllSleep, modifySleep, postSleep } from "../../api/modalAlarms/sleep";
 
 const careInfo = ref({
     "careName": "",
@@ -108,6 +108,8 @@ const careInfo = ref({
     "careSerial": "",
     "careImage": ""
 })
+
+const careImageName = ref("")
 
 const wakeSleepTime = ref({
     "sleepStartTime": "",
@@ -122,16 +124,13 @@ const decoyWakeSleepTime = ref({
 
 const checkSleepStart = () => {
     wakeSleepTime.value.sleepStartTime = `${wakeSleepTime.value.sleepStartTime}:00`
-    // const sleepList = wakeSleepTime.value.sleepStartTime.split(':');
-    // const sleepValue = (sleepList[0] * 3600) + (sleepList[1] * 60)
-    // console.log(sleepValue)
 }
 
 const checkSleepEnd = () => {
     wakeSleepTime.value.sleepEndTime = `${wakeSleepTime.value.sleepEndTime}:00`
 }
 
-const imageLink = `https://i10a303.p.ssafy.io/images/${careInfo.value.careImage}`
+const imgUrl = ref('https://i10a303.p.ssafy.io/images/');
 
 const formData = new FormData()
 
@@ -144,6 +143,9 @@ const validatePhoneState = ref(true);
 const imageUploadState = ref(false);
 //이미지가 업로드 되어 있는지 확인하기 위한 변수.
 
+const newSleepInfo = ref(false)
+//새로 정보를 넣어야할지 
+
 onMounted(() => {
     beforeCareInfo()
     beforeSleepInfo()
@@ -154,6 +156,7 @@ const beforeCareInfo = () => {
     getCareInfo(
         ({ data }) => {
             careInfo.value = data.data
+            careInfo.value.careImage = imgUrl.value + data.data.careImage
         }
 
     )
@@ -163,13 +166,18 @@ const beforeCareInfo = () => {
 const beforeSleepInfo = () => {
     getAllSleep(
         ({ data }) => {
-            const startTimeParts = data.data.sleepStartTime.split(':');
-            const endTimeParts = data.data.sleepEndTime.split(':');
-            wakeSleepTime.value.sleepStartTime = startTimeParts[0] + ':' + startTimeParts[1];
-            wakeSleepTime.value.sleepEndTime = endTimeParts[0] + ':' + endTimeParts[1];
-            decoyWakeSleepTime.value.sleepStartTime = wakeSleepTime.value.sleepStartTime
-            decoyWakeSleepTime.value.sleepEndTime = wakeSleepTime.value.sleepEndTime
-            wakeSleepTime.value.sleepInfoNo = data.data.sleepInfoNo;
+            if (data && data.data) {
+                const startTimeParts = data.data.sleepStartTime.split(':');
+                const endTimeParts = data.data.sleepEndTime.split(':');
+                wakeSleepTime.value.sleepStartTime = startTimeParts[0] + ':' + startTimeParts[1];
+                wakeSleepTime.value.sleepEndTime = endTimeParts[0] + ':' + endTimeParts[1];
+                decoyWakeSleepTime.value.sleepStartTime = wakeSleepTime.value.sleepStartTime
+                decoyWakeSleepTime.value.sleepEndTime = wakeSleepTime.value.sleepEndTime
+                wakeSleepTime.value.sleepInfoNo = data.data.sleepInfoNo;
+            }
+            else {
+                newSleepInfo.value = true;
+            }
         }
     )
 }
@@ -193,61 +201,133 @@ const updateCareInfo = () => {
     if (wakeSleepTime.value.sleepEndTime === decoyWakeSleepTime.value.sleepEndTime) {
         wakeSleepTime.value.sleepEndTime = `${wakeSleepTime.value.sleepEndTime}:00`
     }
+    careInfo.value.careImage = careImageName.value
     const json = JSON.stringify(careInfo.value)
     const formJson = new Blob([json], { type: 'application/json' })
     formData.append('data', formJson)
     if (imageUploadState.value) {
         formData.append('file', blob.value, file.value.name)
+        if (newSleepInfo.value) {
+            postSleep(
+                {
+                    sleepStartTime: wakeSleepTime.value.sleepStartTime,
+                    sleepEndTime: wakeSleepTime.value.sleepEndTime
+                },
+                (response) => {
+                    if (response.data.success) {
+                        profileEdit(
+                            formData,
+                            (response) => {
+                                if (response.data.success) {
+                                    swal('정보가 변경되었습니다.').then(
+                                        router.push('/careinfo')
+                                    )
+                                }
+                                else {
+                                    swal('정보 변경 중 오류가 발생하였습니다.')
+                                    return;
+                                }
+                            }
+                        )
+                    }
+                    else {
+                        swal('시간형식을 다시 확인해주세요.')
+                        return;
+                    }
+                }
+
+            )
+
+        }
+        else {
+            modifySleep(
+                wakeSleepTime.value,
+                (response) => {
+                    if (response.data.success) {
+                        profileEdit(
+                            formData,
+                            (response) => {
+                                if (response.data.success) {
+                                    swal('정보가 변경되었습니다.').then(
+                                        router.push('/careinfo')
+                                    )
+                                }
+                                else {
+                                    swal('정보 변경 중 오류가 발생하였습니다.')
+                                    return;
+                                }
+                            }
+                        )
+                    }
+                    else {
+                        swal('시간형식을 다시 확인해주세요.')
+                        return;
+                    }
+                }
+            )
+        }
     }
     else {
-        formData.append('file', null)
-    }
-    modifySleep(
-        wakeSleepTime.value,
-        (response) => {
-            console.log(wakeSleepTime.value)
-            console.log(response.data.success)
-            console.log(response)
-            if (response.data.success) {
-                profileEdit(
-                    formData,
-                    (response) => {
-                        console.log(json)
-                        console.log(response.data)
-                        if (response.data.success) {
-                            swal('정보가 변경되었습니다.').then(
-                                router.push('/careinfo')
-                            )
-                        }
-                        else {
-                            swal('정보 변경 중 오류가 발생하였습니다.')
-                            return;
-                        }
+        if (newSleepInfo.value) {
+            postSleep(
+                {
+                    sleepStartTime: wakeSleepTime.value.sleepStartTime,
+                    sleepEndTime: wakeSleepTime.value.sleepEndTime
+                },
+                (response) => {
+                    if (response.data.success) {
+                        nonProfileEdit(
+                            formData,
+                            (response) => {
+                                if (response.data.success) {
+                                    swal('정보가 변경되었습니다.').then(
+                                        router.push('/careinfo')
+                                    )
+                                }
+                                else {
+                                    swal('정보 변경 중 오류가 발생하였습니다.')
+                                    return;
+                                }
+                            }
+                        )
                     }
-                )
-            }
-            else {
-                swal('시간형식을 다시 확인해주세요.')
-                return;
-            }
+                    else {
+                        swal('시간형식을 다시 확인해주세요.')
+                        return;
+                    }
+                }
+
+            )
+
         }
-    )
-    // profileEdit(
-    //     formData,
-    //     (response) => {
-    //         console.log(json)
-    //         console.log(response.data)
-    //         if (response.data.success) {
-    //             swal('정보가 변경되었습니다.').then(
-    //                 router.push('/careinfo')
-    //             )
-    //         }
-    //         else {
-    //             swal('정보 변경 중 오류가 발생하였습니다.')
-    //             return;
-    //         }
-    //     }
-    // )
+        else {
+            modifySleep(
+                wakeSleepTime.value,
+                (response) => {
+                    if (response.data.success) {
+                        nonProfileEdit(
+                            formData,
+                            (response) => {
+                                if (response.data.success) {
+                                    swal('정보가 변경되었습니다.').then(
+                                        router.push('/careinfo')
+                                    )
+                                }
+                                else {
+                                    swal('정보 변경 중 오류가 발생하였습니다.')
+                                    return;
+                                }
+                            }
+                        )
+                    }
+                    else {
+                        swal('시간형식을 다시 확인해주세요.')
+                        return;
+                    }
+                }
+            )
+        }
+    }
 
 
 }
@@ -265,11 +345,15 @@ const handleFileUpload = () => {
     // careImage이름 넣어주기
     careInfo.value.careImage = file.value.name;
 
+    careImageName.value = file.value.name;
+
     // Blob 사용해서 이미지 파일 만들기
     blob.value = new Blob([file.value], { type: file.value.type })
 
     imageUploadState.value = true;
     //이미지를 업로드했을 때, true로 변경.
+
+    careInfo.value.careImage = URL.createObjectURL(blob.value);
 };
 //이미지를 수정하는 메서드.
 
