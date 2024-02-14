@@ -65,6 +65,11 @@
             <p class="text-xs"> {{ careInfo.carePhone }}</p>
             <p class="text-xs"> {{ careInfo.careSerial }} </p>
         </div>
+        <div>
+            <router-link :to="{name : 'TheCareInfoModifyView'}">
+                <img class="modify-btn w-6 h-6" src="@/assets/images/modify.png" />
+            </router-link>
+        </div>
     </div>
     <div v-else class="noInfo">
         등록된 보호자 정보가 없습니다
@@ -83,6 +88,10 @@
 </template>
 
 <style>
+    .modifyBtn {
+        margin-right: 3%;
+    }
+
     .noInfo {
         margin: 10% auto;
         text-align: center;
