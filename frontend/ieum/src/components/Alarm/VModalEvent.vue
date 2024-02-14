@@ -40,9 +40,7 @@
       <!-- 이벤트 시각 -->
       <div class="major-c time-input row">
         <div class="col-8">
-          <label for="start" class="block mb-2 text-sm font-medium text-gray-600"
-            >이벤트 시각</label
-          >
+          <label for="start" class="block mb-2 text-sm font-medium text-gray-600">일정 시각</label>
         </div>
         <div class="row d-flex align-items-center mb-4">
           <div class="col-8 d-flex">
@@ -173,4 +171,3 @@ const postAlarmdata = () => {
   margin-right: 0.5rem;
 }
 </style>
-@/api/modalAlarms/event.js

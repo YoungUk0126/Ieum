@@ -103,12 +103,6 @@ onMounted(() => {
       // 이전 데이터
       // data.data
       // 변환해서 selectedNumber에 각각 넣어주기
-      selectedNumber.value = formatTimeH(data.data.mealTime1)
-      selectedNumber2.value = formatTimeM(data.data.mealTime1)
-      selectedNumber3.value = formatTimeH(data.data.mealTime2)
-      selectedNumber4.value = formatTimeM(data.data.mealTime2)
-      selectedNumber5.value = formatTimeH(data.data.mealTime3)
-      selectedNumber6.value = formatTimeM(data.data.mealTime3)
       mealInfoNo.value = data.data.mealInfoNo
     }
   })
