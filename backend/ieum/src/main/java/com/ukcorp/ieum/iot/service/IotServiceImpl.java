@@ -63,6 +63,7 @@ public class IotServiceImpl implements IotService {
     socketService.sendSleepDataToIot(careNo);
     socketService.sendEventDataToIot(careNo);
     socketService.sendPillDataToIot(careNo);
+    socketService.sendAnyEventToIot(careNo);
   }
 
 
@@ -137,6 +138,11 @@ public class IotServiceImpl implements IotService {
       return device.getSerialCode();
     }
     return null;
+  }
+
+  @Override
+  public void sendCloseAlert() {
+    socketService.sendCallStopAlertToIot();
   }
 
   /**

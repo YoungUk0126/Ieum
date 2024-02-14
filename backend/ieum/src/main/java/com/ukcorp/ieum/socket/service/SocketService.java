@@ -12,6 +12,9 @@ public interface SocketService {
 
   void sendMessageToIot(Long careNo);
 
-  void sendCallAlertToIot() throws Exception;
+  void sendCallAlertToIot();
 
+  void sendCallStopAlertToIot();
+
+  void sendAnyEventToIot(Long careNo);
 }

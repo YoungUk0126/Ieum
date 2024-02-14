@@ -113,18 +113,24 @@ public class SleepServiceImpl implements SleepService {
             // 피보호자 정보가 있으면 가져오고 없으면 예외 처리
             CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new NoSuchElementException("존재하지 않는 피보호자 데이터입니다."));
             // 수정할 끼니시간 정보가 있으면 가져오고 없으면 예외 처리
-            if (!sleepRepository.existsById(sleep.getSleepInfoNo())) {
-                throw new NoSuchElementException("존재하지 않는 취침 시간 정보입니다.");
-            }
+//            if (!sleepRepository.existsById(sleep.getSleepInfoNo())) {
+//                throw new NoSuchElementException("존재하지 않는 취침 시간 정보입니다.");
+//            }
 
-            SleepInfo entity = SleepInfo.builder()
-                    .careInfo(care)
-                    .sleepStartTime(sleep.getSleepStartTime().getHour() * 3600L
-                            + sleep.getSleepStartTime().getMinute() * 60L)
-                    .sleepEndTime(sleep.getSleepEndTime().getHour() * 3600L
-                            + sleep.getSleepEndTime().getMinute() * 60L)
-                    .build();
-            sleepRepository.save(entity);
+            SleepInfo sleepInfo = sleepRepository.findByCareInfo_CareNo(care.getCareNo()).orElseThrow(
+                    () -> new NoSuchElementException("존재하지 않는 취침 시간 정보입니다.")
+            );
+            sleepInfo.updateSleepTime(sleep.getSleepStartTime().getHour() * 3600L
+                            + sleep.getSleepStartTime().getMinute() * 60L, sleep.getSleepEndTime().getHour() * 3600L
+                            + sleep.getSleepEndTime().getMinute() * 60L);
+//            SleepInfo entity = SleepInfo.builder()
+//                    .careInfo(care)
+//                    .sleepStartTime(sleep.getSleepStartTime().getHour() * 3600L
+//                            + sleep.getSleepStartTime().getMinute() * 60L)
+//                    .sleepEndTime(sleep.getSleepEndTime().getHour() * 3600L
+//                            + sleep.getSleepEndTime().getMinute() * 60L)
+//                    .build();
+//            sleepRepository.save(entity);
 
             // socket 전송
             socketService.sendSleepDataToIot(careNo);

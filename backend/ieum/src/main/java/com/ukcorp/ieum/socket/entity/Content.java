@@ -28,6 +28,11 @@ public class Content {
         this.type = "Message";
     }
 
+    public void anyEventToContent(AnyEventResponseDto data) throws JsonProcessingException {
+        this.type = "AnyEvent";
+        this.content = data;
+    }
+
     public void sleepToContent(SleepResponseDto data) throws JsonProcessingException {
         this.type = "Sleep";
         this.content = data;
@@ -40,6 +45,11 @@ public class Content {
 
     public void callToContent() {
         this.type = "Call";
+        this.content = null;
+    }
+
+    public void callStopToContent() {
+        this.type = "CallStop";
         this.content = null;
     }
 }

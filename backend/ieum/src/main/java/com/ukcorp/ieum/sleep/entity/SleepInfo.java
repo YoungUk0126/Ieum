@@ -29,5 +29,10 @@ public class SleepInfo {
 
   @Column(name = "SLEEP_END_TIME")
   private Long sleepEndTime;
+
+  public void updateSleepTime(Long sleepStartTime, Long sleepEndTime) {
+    this.sleepStartTime = sleepStartTime;
+    this.sleepEndTime = sleepEndTime;
+  }
 }
 
