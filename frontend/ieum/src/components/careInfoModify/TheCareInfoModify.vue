@@ -8,19 +8,19 @@
                 class="w-50 text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                 id="file_input" type="file" @change="handleFileUpload" accept=".jpg, .png">
         </div>
-        <div id="name" class="grid grid-cols-4 gap-4 mb-12">
-            <label id="name"
-                class="color text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성함</label>
-            <input type="text"
-                class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                v-model="careInfo.careName" />
-        </div>
         <div id="code" class="grid grid-cols-4 gap-4 mb-12">
             <label id="code"
                 class="color text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">코드</label>
             <input type="text"
                 class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 v-model="careInfo.careSerial" />
+        </div>
+        <div id="name" class="grid grid-cols-4 gap-4 mb-12">
+            <label id="name"
+                class="color text-3xl text-gray-900 dark:text-white font-semibold flex justify-center">성함</label>
+            <input type="text"
+                class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                v-model="careInfo.careName" />
         </div>
         <div id="birthDay" class="grid grid-cols-4 gap-4 mb-12">
             <label id="birthDay"
@@ -92,12 +92,13 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { profileEdit, nonProfileEdit } from '../../api/careInfoModify';
+import { profileEdit } from '../../api/careInfoModify';
 import { getCareInfo } from '../../api/careInfoModify';
 import { phoneCheck } from '../../api/careInfoModify';
 import swal from 'sweetalert';
 import router from "@/router";
 import { getAllSleep, modifySleep, postSleep } from "../../api/modalAlarms/sleep";
+// import { registerSerial } from "../../api/iot"
 
 const careInfo = ref({
     "careName": "",
@@ -143,7 +144,7 @@ const validatePhoneState = ref(true);
 const imageUploadState = ref(false);
 //이미지가 업로드 되어 있는지 확인하기 위한 변수.
 
-const newSleepInfo = ref(false)
+const newSleepInfo = ref(true)
 //새로 정보를 넣어야할지 
 
 onMounted(() => {
@@ -151,6 +152,21 @@ onMounted(() => {
     beforeSleepInfo()
 })
 //미리 기존 정보를 씌우기 위한 onMounted
+
+// const codeRegister = () => {
+//     registerSerial(
+//         careInfo.value.careSerial,
+//         (response) => {
+//             console.log(response.data)
+//             if (response.data.success) {
+//                 swal('시리얼코드가 등록되었습니다.')
+//             }
+//             else {
+//                 swal('시리얼코드를 다시 입력해주세요.')
+//             }
+//         }
+//     )
+// }
 
 const beforeCareInfo = () => {
     getCareInfo(
@@ -166,18 +182,14 @@ const beforeCareInfo = () => {
 const beforeSleepInfo = () => {
     getAllSleep(
         ({ data }) => {
-            if (data && data.data) {
-                const startTimeParts = data.data.sleepStartTime.split(':');
-                const endTimeParts = data.data.sleepEndTime.split(':');
-                wakeSleepTime.value.sleepStartTime = startTimeParts[0] + ':' + startTimeParts[1];
-                wakeSleepTime.value.sleepEndTime = endTimeParts[0] + ':' + endTimeParts[1];
-                decoyWakeSleepTime.value.sleepStartTime = wakeSleepTime.value.sleepStartTime
-                decoyWakeSleepTime.value.sleepEndTime = wakeSleepTime.value.sleepEndTime
-                wakeSleepTime.value.sleepInfoNo = data.data.sleepInfoNo;
-            }
-            else {
-                newSleepInfo.value = true;
-            }
+            const startTimeParts = data.data.sleepStartTime.split(':');
+            const endTimeParts = data.data.sleepEndTime.split(':');
+            wakeSleepTime.value.sleepStartTime = startTimeParts[0] + ':' + startTimeParts[1];
+            wakeSleepTime.value.sleepEndTime = endTimeParts[0] + ':' + endTimeParts[1];
+            decoyWakeSleepTime.value.sleepStartTime = wakeSleepTime.value.sleepStartTime
+            decoyWakeSleepTime.value.sleepEndTime = wakeSleepTime.value.sleepEndTime
+            wakeSleepTime.value.sleepInfoNo = data.data.sleepInfoNo;
+            newSleepInfo.value = (false)
         }
     )
 }
@@ -207,129 +219,57 @@ const updateCareInfo = () => {
     formData.append('data', formJson)
     if (imageUploadState.value) {
         formData.append('file', blob.value, file.value.name)
-        if (newSleepInfo.value) {
-            postSleep(
-                {
-                    sleepStartTime: wakeSleepTime.value.sleepStartTime,
-                    sleepEndTime: wakeSleepTime.value.sleepEndTime
-                },
-                (response) => {
-                    if (response.data.success) {
-                        profileEdit(
-                            formData,
+        //이미지 변경을 시도했다면,
+        profileEdit(
+            formData,
+            (response) => {
+                if (response.data.success) {
+                    //만약 새로 시간을 입력해야한다면,
+                    if (newSleepInfo.value) {
+                        postSleep(
+                            {
+                                sleepStartTime: wakeSleepTime.value.sleepStartTime,
+                                sleepEndTime: wakeSleepTime.value.sleepEndTime
+                            },
                             (response) => {
                                 if (response.data.success) {
-                                    swal('정보가 변경되었습니다.').then(
+                                    swal('정보가 변경되었습니다.').then(() => {
                                         router.push('/careinfo')
-                                    )
+                                    })
                                 }
                                 else {
-                                    swal('정보 변경 중 오류가 발생하였습니다.')
-                                    return;
+                                    swal('시간 형식을 다시 확인해주세요.')
+                                }
+
+                            }
+                        )
+
+                    }
+                    else {
+                        //시간을 입력하지 않았다면,
+                        modifySleep(
+                            wakeSleepTime.value,
+                            (response) => {
+                                if (response.data.success) {
+                                    swal('정보가 변경되었습니다.').then(() => {
+                                        router.push('/careinfo')
+                                    })
+                                }
+                                else {
+                                    swal('시간 형식을 다시 확인해주세요.')
                                 }
                             }
                         )
                     }
-                    else {
-                        swal('시간형식을 다시 확인해주세요.')
-                        return;
-                    }
                 }
-
-            )
-
-        }
-        else {
-            modifySleep(
-                wakeSleepTime.value,
-                (response) => {
-                    if (response.data.success) {
-                        profileEdit(
-                            formData,
-                            (response) => {
-                                if (response.data.success) {
-                                    swal('정보가 변경되었습니다.').then(
-                                        router.push('/careinfo')
-                                    )
-                                }
-                                else {
-                                    swal('정보 변경 중 오류가 발생하였습니다.')
-                                    return;
-                                }
-                            }
-                        )
-                    }
-                    else {
-                        swal('시간형식을 다시 확인해주세요.')
-                        return;
-                    }
+                else {
+                    swal('정보 변경 중 오류가 발생하였습니다.')
+                    return;
                 }
-            )
-        }
+            }
+        )
+
     }
-    else {
-        if (newSleepInfo.value) {
-            postSleep(
-                {
-                    sleepStartTime: wakeSleepTime.value.sleepStartTime,
-                    sleepEndTime: wakeSleepTime.value.sleepEndTime
-                },
-                (response) => {
-                    if (response.data.success) {
-                        nonProfileEdit(
-                            formData,
-                            (response) => {
-                                if (response.data.success) {
-                                    swal('정보가 변경되었습니다.').then(
-                                        router.push('/careinfo')
-                                    )
-                                }
-                                else {
-                                    swal('정보 변경 중 오류가 발생하였습니다.')
-                                    return;
-                                }
-                            }
-                        )
-                    }
-                    else {
-                        swal('시간형식을 다시 확인해주세요.')
-                        return;
-                    }
-                }
-
-            )
-
-        }
-        else {
-            modifySleep(
-                wakeSleepTime.value,
-                (response) => {
-                    if (response.data.success) {
-                        nonProfileEdit(
-                            formData,
-                            (response) => {
-                                if (response.data.success) {
-                                    swal('정보가 변경되었습니다.').then(
-                                        router.push('/careinfo')
-                                    )
-                                }
-                                else {
-                                    swal('정보 변경 중 오류가 발생하였습니다.')
-                                    return;
-                                }
-                            }
-                        )
-                    }
-                    else {
-                        swal('시간형식을 다시 확인해주세요.')
-                        return;
-                    }
-                }
-            )
-        }
-    }
-
-
 }
 //변경된 피보호자 정보를 보내는 메서드.
 

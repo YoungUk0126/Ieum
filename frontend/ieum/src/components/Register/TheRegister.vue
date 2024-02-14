@@ -340,8 +340,6 @@ const checkPolicyAgree = () => {
     validatephonestate.value
   ) {
     registerFunc()
-    swal('회원가입이 완료되었습니다. 로그인 해주세요.')
-    router.push('/')
   } else {
     swal('회원가입 중 오류가 발생하였습니다.')
   }

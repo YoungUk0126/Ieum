@@ -1,4 +1,4 @@
-import {  localSessionAxios } from '@/util/http-commons'
+import { localSessionAxios } from '@/util/http-commons'
 import { fail } from './fail.js'
 
 const localSession = localSessionAxios()
@@ -9,4 +9,8 @@ function getStatus(success) {
   localSession.get(`${url}/check-status`).then(success).catch(fail)
 }
 
-export { getStatus }
+function registerSerial(data, success) {
+  localSession.post(`${url}`, JSON.stringify(data)).then(success)
+}
+
+export { getStatus, registerSerial }
