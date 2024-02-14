@@ -1,9 +1,10 @@
 <script setup>
-    import EventList from './EventListItem.vue';
-    import { getAllEvent, deleteEvent } from '@/api/modalAlarms/event';
-    import { ref, onMounted } from "vue";
+  import EventList from './EventListItem.vue'
+  import { getAllEvent } from '@/api/modalAlarms/event'
+  import { ref, onMounted } from 'vue'
 
-    const eventInfoList = ref([]);
+
+  const eventInfoList = ref([])
 
     function handleDelete(eventNo) {
         console.log("삭제 요청 >> ", eventNo);
