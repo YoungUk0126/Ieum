@@ -27,7 +27,7 @@
     }
 
     onMounted(() => {
-        console.log("Schedule Info onMounted");
+        console.log("Event Info onMounted");
         getAll();
     });
 </script>
