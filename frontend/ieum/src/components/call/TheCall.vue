@@ -1,5 +1,5 @@
 <template>
-  <div class="call-body w-full mx-auto mt-4">
+  <div class="call-body w-full mx-auto">
     <div id="session" v-if="session">
       <div id="video-container">
         <template v-if="who">
@@ -23,9 +23,7 @@
       <video ref="soundRef" autoplay class="hidden"></video>
     </div>
   </div>
-  <div
-    class="z-50 grid mt-10 w-full h-16 grid-cols-1 px-8 bg-white dark:bg-gray-700 dark:border-gray-600"
-  >
+  <div class="fixed bottom-8 z-10 grid mt-10 w-full h-16 grid-cols-1 px-8">
     <div class="flex items-center justify-center mx-auto">
       <button
         data-tooltip-target="tooltip-microphone"
@@ -125,7 +123,7 @@
         <div class="tooltip-arrow" data-popper-arrow></div>
       </div>
     </div>
-    <audio ref="bgmAudio" src="/src/assets/bgm.mp3" controls style="display: none"></audio>
+    <audio ref="bgmAudio" src="/assets/bgm.mp3" controls style="display: none"></audio>
   </div>
 </template>
 
@@ -135,7 +133,7 @@ import { OpenVidu } from 'openvidu-browser'
 import UserVideo from './VUserVideo.vue'
 import UserMainVideo from './VUserMainVideo.vue'
 import swal from 'sweetalert'
-import { createToken, createSession } from '@/api/call.js'
+import { createToken, createSession, sendEndAlert } from '@/api/call.js'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const OV = ref()
@@ -157,7 +155,7 @@ onMounted(() => {
   window.onunload = () => {
     bgmAudio.value.pause() // 일시 정지
     if (session.value) session.value.disconnect()
-    session.value = undefined
+    sendEndAlert()
   }
 })
 
@@ -180,10 +178,6 @@ const joinSession = () => {
   })
 
   session.value.on('streamDestroyed', ({ stream }) => {
-    /*if (mainStreamManager.value == stream.streamManager) {
-      mainStreamManager.value = pub.value
-      who.value = false
-    }*/
     pub.value = undefined
     subscriber.value = undefined
     endSession()
@@ -262,7 +256,13 @@ const endSession = () => {
       }
     }
   }).then(() => {
-    router.push({ name: 'TheMainViewVue' })
+    if (subscriber.value !== undefined) {
+      sendEndAlert(() => {
+        router.push({ name: 'TheMainViewVue' })
+      })
+    } else {
+      router.push({ name: 'TheMainViewVue' })
+    }
   })
 }
 
