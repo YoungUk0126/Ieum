@@ -1,6 +1,5 @@
 package com.ukcorp.ieum.care.service;
 
-import com.ukcorp.ieum.care.dto.request.CareInsertRequestDto;
 import com.ukcorp.ieum.care.dto.request.CarePhoneRequestDto;
 import com.ukcorp.ieum.care.dto.request.CareUpdateRequestDto;
 import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
@@ -8,15 +7,15 @@ import com.ukcorp.ieum.care.entity.CareInfo;
 import com.ukcorp.ieum.care.entity.Gender;
 import com.ukcorp.ieum.care.mapper.CareMapper;
 import com.ukcorp.ieum.care.repository.CareRepository;
+import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.jwt.JwtUtil;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,8 @@ public class CareServiceImpl implements CareService {
 
   private final CareRepository careRepository;
   private final CareMapper careMapper;
+
+  private final IotService iotService;
 
   @Override
   public CareGetResponseDto getCareInfo() throws Exception {
@@ -51,7 +52,15 @@ public class CareServiceImpl implements CareService {
         throw new NoSuchElementException("피보호자 정보가 없습니다.");
       }
 //      이미지는 가져와서 여기 빌더에 넣어!
-      CareInfo care = CareInfo.builder()
+      CareInfo care = careRepository.findById(careNo).orElseThrow(() -> new Exception("사용자가 존재하지 않아요"));
+      String userId = JwtUtil.getMemberId().get();
+      if(care.getCareSerial() != null && careDto.getCareSerial() != null){
+        // 새로운 값과 이전 값의 serial의 값이 다를 경우
+        iotService.updateSerialCode(careDto.getCareSerial(), userId);
+      }else if(care.getCareSerial() == null){
+        iotService.registSerialCode(careDto.getCareSerial(), userId);
+      }
+      CareInfo newCare = CareInfo.builder()
               .careNo(careNo)
               .careName(careDto.getCareName())
               .careAddr(careDto.getCareAddr())

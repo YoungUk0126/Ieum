@@ -124,6 +124,22 @@ public class IotServiceImpl implements IotService {
 
 
   /**
+   * 시리얼 번호 확인
+   *
+   * @param careNo
+   * @return
+   */
+  @Override
+  public boolean checkSerialCode(String serial) {
+    SerialCode serialCode = iotRepository.searchBySerialCode(serial).orElseThrow(
+        () -> new NoSuchElementException());
+
+    return serialCode.getUsable().equals(Usable.ACTIVE);
+  }
+
+
+
+  /**
    * 해당 careNo에 해당하는 기기 시리얼 번호 확인
    *
    * @param careNo

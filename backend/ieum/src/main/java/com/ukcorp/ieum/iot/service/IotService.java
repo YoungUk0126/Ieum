@@ -26,4 +26,6 @@ public interface IotService {
 
   void sendCloseAlert();
 
+  boolean checkSerialCode(String serial);
+
 }
