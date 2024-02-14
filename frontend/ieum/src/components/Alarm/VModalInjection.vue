@@ -1,14 +1,11 @@
 <template>
   <div
     data-modal-backdrop="static"
-    :id="props.vmodalpill"
+    id="VModalPill"
     tabindex="-1"
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
-    <button :data-modal-hide="props.vmodalpill" id="btn-close2" type="button" class="hidden">
-      취소
-    </button>
     <div class="relative p-4 w-full max-w-2xl max-h-full">
       <!-- Modal content -->
 
@@ -189,7 +186,7 @@
             <button
               type="button"
               class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-              @click="closeModal"
+              @click="props.closeModal"
             >
               취소
             </button>
@@ -206,13 +203,8 @@ import { postInject } from '@/api/modalAlarms/injection.js'
 import swal from 'sweetalert'
 import moment from 'moment'
 
-// 0. 모달 닫기
-
-const closeModal = () => {
-  document.getElementById('btn-close2').click()
-}
-
-const props = defineProps({ vmodalpill: String })
+// 0. 모달 닫기, 열기
+const props = defineProps(['openModal', 'closeModal'])
 
 // 1 약 이름
 const pill_name = ref('')
@@ -513,7 +505,7 @@ const postAlarmdata = () => {
             }
           }
         })
-        closeModal()
+        props.closeModal()
       } else {
         console.log('무슨문제일까요?1')
         console.log(response)

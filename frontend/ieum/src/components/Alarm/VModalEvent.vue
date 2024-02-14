@@ -61,7 +61,6 @@
       <!-- Modal Footer -->
       <div class="flex justify-end mt-4 space-x-4">
         <button
-          :data-modal-hide="props.mainModal"
           type="button"
           class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
           @click="postAlarmdata"

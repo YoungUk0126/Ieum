@@ -3,14 +3,11 @@
   <!-- Main modal -->
   <div
     data-modal-backdrop="static"
-    :id="props.vmodal"
+    id="VModal"
     tabindex="-1"
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
   >
-    <button :data-modal-hide="props.vmodal" id="btn-close" type="button" class="hidden">
-      취소
-    </button>
     <div class="relative p-4 w-full max-w-2xl max-h-full">
       <!-- Modal content -->
       <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -20,7 +17,7 @@
           <button
             type="button"
             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-md mr-4 w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-            :data-modal-hide="props.vmodal"
+            @click="props.closeModal"
           >
             <svg
               class="w-4 h-4"
@@ -47,14 +44,20 @@
           <template v-if="selectedOption === options[1]">
             <VModalAnniversary
               :selected-option="selectedOption"
-              :close-modal="closeModal"
+              :close-modal="props.closeModal"
             ></VModalAnniversary>
           </template>
           <template v-else-if="selectedOption === options[2]">
-            <VModalMeal :selected-option="selectedOption" :close-modal="closeModal"></VModalMeal>
+            <VModalMeal
+              :selected-option="selectedOption"
+              :close-modal="props.closeModal"
+            ></VModalMeal>
           </template>
           <template v-else-if="selectedOption === options[3]">
-            <VModalEvent :selected-option="selectedOption" :close-modal="closeModal"></VModalEvent>
+            <VModalEvent
+              :selected-option="selectedOption"
+              :close-modal="props.closeModal"
+            ></VModalEvent>
           </template>
           <button
             class="w-full text-black bg-green-200 hover:bg-gradient-to-br focus:ring-2 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-3.5 text-center"
@@ -82,18 +85,15 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref } from 'vue'
 import VModalAnniversary from './VModalAnniversary.vue'
 import VModalMeal from './VModalMeal.vue'
 import VModalEvent from './VModalEvent.vue'
 
-const props = defineProps({ vmodal: String })
+const props = defineProps(['openModal', 'closeModal'])
+
 const options = ref(['', '기념일', '식사 시간', '일정'])
 const selectedOption = ref('부모님 일정')
-
-const closeModal = () => {
-  document.getElementById('btn-close').click()
-}
 
 const selectOption = (index) => {
   selectedOption.value = options.value[index]

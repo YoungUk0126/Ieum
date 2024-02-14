@@ -33,7 +33,6 @@
         <!-- Modal footer -->
         <div class="flex ml-auto items-center mt-4 space-x-4">
           <button
-            :data-modal-hide="props.mainModal"
             type="button"
             class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
             @click="postAlarmdata"
@@ -59,7 +58,7 @@ import { ref, defineProps } from 'vue'
 import { postAni } from '@/api/modalAlarms/ani.js'
 import swal from 'sweetalert'
 
-const props = defineProps(['closeModal', 'mainModal', 'selectedOption'])
+const props = defineProps(['closeModal', 'selectedOption'])
 
 const jsonData = ref({
   eventName: '',
