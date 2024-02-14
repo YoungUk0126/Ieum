@@ -14,6 +14,10 @@ import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
 import com.ukcorp.ieum.socket.service.SocketService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -21,9 +25,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

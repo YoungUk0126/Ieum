@@ -97,7 +97,7 @@ public class SleepServiceImpl implements SleepService {
             sleepRepository.save(entity);
 
             // socket 전송
-            // socketService.sendSleepDataToIot(careNo);
+            socketService.sendSleepDataToIot(careNo);
         } catch (DataIntegrityViolationException e) {
             log.debug("등록 오류!");
             throw new Exception("등록 오류!");
@@ -133,7 +133,7 @@ public class SleepServiceImpl implements SleepService {
 //            sleepRepository.save(entity);
 
             // socket 전송
-            //socketService.sendSleepDataToIot(careNo);
+            socketService.sendSleepDataToIot(careNo);
         } catch (DataIntegrityViolationException e) {
             log.debug("수정 오류!");
             throw new Exception("수정 오류!");
