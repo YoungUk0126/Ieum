@@ -113,28 +113,29 @@
 
 ## 🏑 conventionss
 ### commit message convention
-- algular commit message convention 
-  - type(scope): short summary
-  - type 종류
-    - feat : 새로운 기능 추가
-    - fix : 버그 수정
-    - docs : 문서 관련
-    - style : 스타일 변경 (포매팅 수정, 들여쓰기 추가, …)
-    - refactor : 코드 리팩토링
-    - test : 테스트 관련 코드
-    - build : 빌드 관련 파일 수정
-    - ci : CI 설정 파일 수정
-    - perf : 성능 개선
-  - short summary
-    - 마침표 쓰지 않기
-    - 한글 영문, 모두 가능
+- init : 프로젝트 초기 설정
+- feat: 새로운 기능 추가
+- chore : 빌드 관련 파일, 패키지 매니저 수정 (.gitignore or build.gradle) - 프로덕션 코드 변경 x, 예외 처리 추가
+- add: feat 이외의 코드 or 라이브러리 or 파일 추가
+- style: 스타일 관련 기능 (오타 수정, 변수명 변경, 코드 포맷팅, 세미콜론 누락, 코드 자체에는 변경이 없는 경우)
+- conf : 환경 설정(properties, yml)
+- fix: 버그 수정
+- refactor : 코드 리팩토링
+- comment : 주석 추가 및 변경
+- perf: 성능 개선
+- ci: CI/CD 설정 변경
+- docs: 문서 수정(README.md 수정)
+- design: CSS 등 사용자 UI 디자인 변경
+- test : 테스트 코드, 리펙토링 테스트 코드 추가
+- !HOTFIX: 급하게 치명적인 버그를 고쳐야하는 경우
+- rename: 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우
+- remove: 파일을 삭제하는 작업만 한 경우
 
 ### git branch convention
-
+- Git-Flow 사용
 - master - develop - feature
 - 개인 개발한 것들은 모두 feature/기능 브랜치에서 수행
 - 프론트와 백에서 asignee로 지명된 이들이 심사후 develop으로 merge
-- master에 merge할 경우 팀원 모두 모여서 회의 후 진행
 
 
 <br>
