@@ -123,7 +123,6 @@
       <input
         type="text"
         class="col-span-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
-        @input="checkPhoneFunction"
         maxLength="13"
         v-model="careInfo.carePhone"
       />
@@ -237,9 +236,6 @@ const imgUrl = ref('https://i10a303.p.ssafy.io/images/')
 
 const formData = new FormData()
 
-const checkPhone = ref(true)
-//전화번호 유효 체크 변수.
-
 const validatePhoneState = ref(true)
 //전화번호 중복 상태 체크 변수.
 
@@ -252,6 +248,8 @@ const newSleepInfo = ref(false)
 const serialCheck = ref(false)
 
 const prevSerial = ref()
+
+const prevPhone = ref()
 
 onMounted(() => {
   beforeCareInfo()
@@ -267,7 +265,7 @@ const beforeCareInfo = () => {
     } else {
       careInfo.value.careImage = null
     }
-
+    prevPhone.value = careInfo.value.carePhone
     if (careInfo.value.careSerial !== null) {
       prevSerial.value = careInfo.value.careSerial
       serialCheck.value = true
@@ -308,11 +306,13 @@ const updateInfo = () => {
   if (!serialCheck.value) {
     swal('시리얼 코드를 다시 확인해주세요.')
     return
-  } else if (checkPhone.value && validatePhoneState.value) {
-    updateCareInfo()
-  } else {
+  } else if (!(prevPhone.value === careInfo.value.carePhone || validatePhoneState.value)) {
     swal('전화번호 확인을 다시 진행해주세요.')
     return
+  } else if (wakeSleepTime.value.sleepEndTime === '' || wakeSleepTime.value.sleepStartTime === '') {
+    swal('기상 & 취침 시간을 입력해주세요')
+  } else {
+    updateCareInfo()
   }
 }
 
@@ -476,28 +476,21 @@ const handleFileUpload = () => {
 }
 //이미지를 수정하는 메서드.
 
-const checkPhoneFunction = () => {
-  const validatephone = /^010-\d{4}-\d{4}$/
-  checkPhone.value = validatephone.test(careInfo.value.carePhone)
-  validatePhoneState.value = false
-}
 //전화번호가 유효한 형식인지 알아보는 메서드.
 
 const duplicatePhoneCheck = () => {
-  if (!checkPhone.value) {
-    swal('전화번호 형식을 확인해주세요.')
-    return
+  if (prevPhone.value !== careInfo.value.carePhone) {
+    phoneCheck(careInfo.value.carePhone, ({ data }) => {
+      if (data.data.isDuplicated) {
+        swal('이미 사용 중인 전화번호입니다.')
+        validatePhoneState.value = false
+        return
+      } else {
+        swal('사용 가능한 전화번호입니다.')
+        validatePhoneState.value = true
+      }
+    })
   }
-  phoneCheck(careInfo.value.carePhone, ({ data }) => {
-    if (data.data.isDuplicated) {
-      swal('이미 사용 중인 전화번호입니다.')
-      validatePhoneState.value = false
-      return
-    } else {
-      swal('사용 가능한 전화번호입니다.')
-      validatePhoneState.value = true
-    }
-  })
 }
 </script>
 
