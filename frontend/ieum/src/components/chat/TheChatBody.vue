@@ -101,7 +101,7 @@
                       chat.emotion.toLowerCase() === 'common')
                   "
                   class="w-8 ms-auto"
-                  :src="'/src/assets/images/' + chat.emotion + '.png'"
+                  :src="'/assets/images/' + chat.emotion + '.png'"
                 />
               </div>
             </div>

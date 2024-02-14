@@ -33,8 +33,13 @@ const createToken = async (sessionId) => {
   return response.data
 }
 
-const sendEndAlert = (success) => {
-  localSession.get(`${url}/api/devices/closeAlert`).then(success).catch(fail)
+const sendEndAlert = () => {
+  localSession
+    .get(`${url}/api/devices/closeAlert`)
+    .then((response) => {
+      console.log(response)
+    })
+    .catch(fail)
 }
 
 export { createSession, createToken, createSessionCare, createTokenCare, sendEndAlert }
