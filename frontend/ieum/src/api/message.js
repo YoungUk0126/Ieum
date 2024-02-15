@@ -1,20 +1,23 @@
-/*
-import { localAxios } from "@/util/http-commons";
+import { localSessionAxiosFormData, localSessionAxios } from '@/util/http-commons'
+import { fail } from './fail.js'
 
-const local = localAxios();
+const local = localSessionAxios()
 
-const url = "/example"
+const form = localSessionAxiosFormData()
 
-function example1(param, success, fail) {
-  local.get(`${url}`, { params: param }).then(success).catch(fail);
+const url = `https://i10a303.p.ssafy.io:443/api/message`
+
+function getApi(success) {
+  local.get(`${url}`).then(success).catch(fail)
 }
-function example2(data, success, fail) {
-  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail);
+function registApi(data, success) {
+  local.post(`${url}`, JSON.stringify(data)).then(success).catch(fail)
+}
+function modifyApi(data, success) {
+  form.put(`${url}`, data).then(success).catch(fail)
+}
+function removeApi(param, success) {
+  local.delete(`${url}/${param}`).then(success).catch(fail)
 }
 
-export {
-    example1,
-    example2
-};
-
-*/
+export { getApi, registApi, modifyApi, removeApi }

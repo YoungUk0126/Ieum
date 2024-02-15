@@ -1,22 +1,110 @@
 package com.ukcorp.ieum.pill.controller;
 
+import com.ukcorp.ieum.pill.dto.request.PillInfoInsertRequestDto;
+import com.ukcorp.ieum.pill.dto.request.PillInfoUpdateRequestDto;
+import com.ukcorp.ieum.pill.dto.response.PillInfoJoinResponseDto;
+import com.ukcorp.ieum.pill.service.PillServiceImpl;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/pill")
 @AllArgsConstructor
+@Slf4j
 public class PillController {
 
+    private final PillServiceImpl pillService;
+    /**
+     * @author : 김영욱
+     * 피보호자의 PK를 받아 피보호자와 관련된
+     * 약 정보들을 받기 위한 Controller
+     */
+    @GetMapping
+    public ResponseEntity<Map<String, Object>> getPillList() {
+        try{
+            List<PillInfoJoinResponseDto> result = pillService.getAllPillInfo();
+            return handleSuccess(result);
+        } catch (Exception e){
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
 
-//    final PillServiceimpl PillService;
+    /**
+     * @author : 김영욱
+     * 약 PK를 받아 약 상세 정보를 받기 위한 Controller
+     */
+    @GetMapping("/detail/{pill-info-no}")
+    public ResponseEntity<Map<String, Object>> getPill(@PathVariable ("pill-info-no") Long pillInfoNo) {
+        try {
+            PillInfoJoinResponseDto result = pillService.getPillInfo(pillInfoNo);
+            return handleSuccess(result);
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
 
+    /**
+     * @author : 김영욱
+     * 약 정보를 넣기 위한 Controller
+     */
+    @PostMapping
+    public ResponseEntity<Map<String, Object>> insertPill(@RequestBody PillInfoInsertRequestDto pillInfo) {
+        System.out.println("약 정보 등록 시작");
+        System.out.println(pillInfo.toString());
+//        System.out.println(careNo);
+        try {
+            pillService.insertPill(pillInfo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    @PutMapping
+    public ResponseEntity<Map<String, Object>> updatePill(@RequestBody PillInfoUpdateRequestDto pillInfo) {
+        log.debug("==============약 정보 수정 시작===============");
+        try {
+            pillService.updatePill(pillInfo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    @DeleteMapping("/{pill-info-no}")
+    public ResponseEntity<Map<String, Object>> deletePillInfo(@PathVariable("pill-info-no") Long pillInfoNo) {
+        log.debug("==============약 정보 삭제 시작===============");
+        try {
+            pillService.deletePillInfo(pillInfoNo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
+
+    @DeleteMapping("/time/{pill-time-no}")
+    public ResponseEntity<Map<String, Object>> deletePillTime(@PathVariable("pill-time-no") Long pillTimeNo) {
+        log.debug("==============약 시간 정보 삭제 시작===============");
+        try {
+            pillService.deletePillTime(pillTimeNo);
+            return handleSuccess("");
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+            return handleError("Fail");
+        }
+    }
 
     private ResponseEntity<Map<String, Object>> handleSuccess(Object data) {
         Map<String, Object> result = new HashMap<>();
