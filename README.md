@@ -166,7 +166,7 @@
 - 배포
   <div>
     <img src="https://img.shields.io/badge/distribute-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/aws-%23FF9900?style=for-the-badge&logo=amazon ec2&logoColor=white"><br>
-    <img src="https://img.shields.io/badge/distribute-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/nginx-%23009639?style=for-the-badge&logo=openai&logoColor=white"><br>
+    <img src="https://img.shields.io/badge/distribute-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/nginx-%23009639?style=for-the-badge&logo=nginx&logoColor=white"><br>
     <img src="https://img.shields.io/badge/distribute-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/docker-%232496ED?style=for-the-badge&logo=docker&logoColor=white"><br>
   </div>
 
