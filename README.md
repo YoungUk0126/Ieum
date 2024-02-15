@@ -205,86 +205,124 @@
 
 ## 🌐 배포 방법
 
-[frontend/src/constant/prod.js](./frontend/src/constant/prod.js)에서 올바른 도메인 이름으로 변경합니다.
+1. Front End
 
-WebRTC를 사용하기 때문에 STUN/TURN 서버가 필요합니다.
+nginx path : /
 
-오픈 소스 프로젝트인 [coturn](https://github.com/coturn/coturn)을 설치하는 방법은 다음과 같습니다
-
-```sh
-sudo apt-get update && sudo apt-get install --no-install-recommends --yes coturn
-```
-
-`/etc/default/coturn`의 내용을 다음과 같이 수정합니다.
-
-```sh
-TURNSERVER_ENABLED=1
-```
-
-`/etc/turnserver.conf`의 내용을 다음과 같이 수정합니다.
-
-```sh
-listening-port=3478
-tls-listening-port=5349
-listening-ip=<EC2의 프라이빗 IPv4 주소>
-external-ip=<EC2의 퍼블릭 IPv4 주소>/<EC2의 프라이빗 IPv4 주소>
-relay-ip=<EC2의 프라이빗 IPv4 주소>
-fingerprint
-lt-cred-mech
-user=myuser:mypassword
-realm=myrealm
-log-file=/var/log/turn.log
-simple-log
-```
-
-coturn을 재기동합니다.
+Vue.js 배포
 
 ```
-sudo service coturn restart
+npm install
 ```
 
-다음 명령어를 통해 coturn의 상태를 확인할 수 있습니다.
+- 필요한 패키지에 대한 install 을 실행합니다.
 
 ```
-sudo systemctl status coturn
+npm run build
 ```
 
-배포를 하기 위해서는 서버에 docker와 docker-compose가 설치되어 있어야 합니다.  
-docker는 [공식 웹페이지에 나와 있는 debian에서의 설치 방법](https://docs.docker.com/engine/install/debian/#install-using-the-repository)으로 설치하면 되고, docker-compose는 apt-get 명령어를 통해 설치가 가능합니다.
+- 빌드 결과로 나온 dist 폴더를 Ec2서버의 /var/www/frontend 디렉토리에 옮겨줍니다.
 
-프로젝트의 root 위치에서 docker-compose를 실행하면 빌드 및 배포까지 자동으로 이루어집니다.
+2. Back End
 
-```sh
-docker-compose up -d
+Spring Boot 배포
+
+- ./gradlew.bat -x test build
+
+- java -jar ieum.0.0.1.jar
+
+3. OpenVidu
+
+EC2 설정
+
+```
+sudo su
+
 ```
 
-단, docker-compose를 실행하기 위해서는 `prod.env` 파일이 필요합니다. `prod.env`의 내용은 다음과 같습니다.
-
-```env
-# backend
-GOOGLE_CLIENT_ID=1q2w3e4r-1q2w3e4r.apps.googleusercontent.com
-GOOGLE_CLIENT_SECRET=4r3e2w1q4r3e2w1q
-SPRING_DATASOURCE_USERNAME=a104
-SPRING_DATASOURCE_PASSWORD=a1041234
-JWT_SECRET=1q2w3e4r
-#OPENVIDU_URL=https://<service domain name>:3333/
-OPENVIDU_URL=https://openvidu:3333/
-APP_BASE_URL=https://<service domain name>
-
-# openvidu
-KMS_STUN_IP=<coturn server ip>
-KMS_STUN_PORT=3478
-KMS_TURN_URL=myuser:mypassword@<coturn server ip>:3478?transport=udp
-DOMAIN_OR_PUBLIC_IP=<service domain name>
-
-# backend & openvidu
-OPENVIDU_SECRET=MY_SECRET
-
-# mysql
-MYSQL_USER=a104
-MYSQL_PASSWORD=a1041234
-MYSQL_ROOT_PASSWORD=a1041234
 ```
+cd /opt
+
+```
+
+`curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest.sh | bash`
+
+- 위 명령어들로 전체 이미지를 다운 받기
+
+- port 열어주기 → 기본적으로 Openvidu가 사용하는 포트 목록
+
+```
+ufw allow ssh
+ufw allow 80/tcp
+ufw allow 443/tcp
+ufw allow 3478/tcp
+ufw allow 3478/udp
+ufw allow 40000:57000/tcp
+ufw allow 40000:57000/udp
+ufw allow 57001:65535/tcp
+ufw allow 57001:65535/udp
+ufw enable
+```
+
+- .env 수정
+
+```
+DOMAIN_OR_PUBLIC_IP=i10a303.p.ssafy.io
+
+HTTPS_PORT=4443
+```
+
+- 실행
+
+```
+./openvidu
+```
+
+```
+server{
+
+    listen 443 ssl;
+
+    server_name i10a303.p.ssafy.io;
+
+
+    ssl_certificate "/etc/letsencrypt/live/i10a303.p.ssafy.io/fullchain.pem";
+    ssl_certificate_key "/etc/letsencrypt/live/i10a303.p.ssafy.io/privkey.pem";
+
+
+    location /openvidu{
+        rewrite ^/openvidu(.*)$ $1 break;
+            proxy_pass https://i10a303.p.ssafy.io:4443;
+            proxy_http_version 1.1;
+            proxy_set_header Host $host;
+
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_read_timeout 86400;
+    }
+
+
+    location /api{
+        proxy_pass https://localhost:8080;
+        proxy_set_header Host $host;
+    }
+
+
+    location /images{
+        root /home/ubuntu;
+        #try_files $uri.png $uri.jpg $uri.jpeg =404;
+    }
+
+    location / {
+
+        root        /var/www/front;
+        index       index.html index.htm;
+        try_files $uri $uri/ /index.html;
+    }
+
+```
+
+4. Django
 
 ### 첫 배포시 주의 사항
 
