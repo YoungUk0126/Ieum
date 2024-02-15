@@ -207,9 +207,8 @@
 
 1. Front End  
 
-  nginx path : /
-
-  Vue.js 배포
+> nginx path : /  
+Vue.js 배포
 
   ```
   npm install
