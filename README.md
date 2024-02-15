@@ -115,7 +115,7 @@
 
 ### 3. WebRTC
 
-> 1대 1로 사용자와 영상 통화를 수행합니다.
+> 1대 1로 사용자와 WEBRTC를 통해 실시간 대화를 수행합니다.
 
 <img src="./readmeimg/2.PNG" width="200" height="400"/>
 
