@@ -71,37 +71,37 @@
 
 1. 기념일 등록
 
-![](./readmeimg/기념일등록.gif)
+<img src="./readmeimg/기념일등록.gif" width="200" height="400"/>
 
 <br>
 
 2. 보호자정보등록
 
-![](./readmeimg/보호자정보등록.gif)
+<img src="./readmeimg/보호자정보등록.gif" width="200" height="400"/>
 
 <br>
 
 3. 보호자정보수정
 
-![](./readmeimg/보호자정보수정.gif)
+<img src="./readmeimg/보호자정보수정.gif" width="200" height="400"/>
 
 <br>
 
 4. 투약 등록
 
-![](./readmeimg/복용약추가.gif)
+<img src="./readmeimg/복용약추가.gif" width="200" height="400"/>
 
 <br>
 
 5. 식사시간 등록
 
-![](./readmeimg/식사시간등록.gif)
+<img src="./readmeimg/식사시간등록.gif" width="200" height="400"/>
 
 <br>
 
 6. 일정 등록
 
-![](./readmeimg/일정등록.gif)
+<img src="./readmeimg/일정등록.gif" width="200" height="400"/>
 
 <br></br>
 
@@ -115,7 +115,7 @@
 
 > 1대 1로 사용자와 영상 통화를 수행합니다.
 
-![dd](./readmeimg/2.PNG)
+<img src="./readmeimg/2.PNG" width="200" height="400"/>
 
 <br>
 
