@@ -1,6 +1,6 @@
 <template>
   <div class="profile-container max-w-2xl w-full ps-5 bg-white shadow-md rounded-md m-5">
-    <div class="grid grid-cols-1 md:grid-cols-2">
+    <div class="grid">
       <div class="flex flex-col justify-center px-4 md:px-8 py-4">
         <div class="flex items-center space-x-4">
           <h5 class="text-green-700 text-3xl font-semibold">
