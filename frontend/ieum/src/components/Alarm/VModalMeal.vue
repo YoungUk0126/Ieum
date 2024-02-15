@@ -201,10 +201,8 @@ const postAlarmdata = () => {
               closeModal: true
             }
           }
-        }).then = () => {
-          console.log(props.closeModal)
-          props.closeModal()
-        }
+        })
+        props.closeModal()
       }
     })
   } else {
