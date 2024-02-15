@@ -33,8 +33,7 @@
         <button
           type="button"
           class="w-full min-h-40 text-xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-3 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-          :data-modal-target="openVModalPill"
-          :data-modal-toggle="openVModalPill"
+          @click="openInjectionModal"
         >
           <div class="flex justify-center gap-x-1">
             <div>
@@ -48,33 +47,112 @@
         <button
           type="button"
           class="w-full min-h-40 text-4xl font-bold text-gray-500 bg-gray-200 hover:bg-gray-500 hover:text-gray-200 focus:outline-none focus:ring-4 focus:ring-gray-300 rounded-lg px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-          :data-modal-target="openVModal"
-          :data-modal-toggle="openVModal"
+          @click="openVModal"
         >
           <div class="flex justify-center">
             <div>
               <img src="@/assets/images/calendar.png" class="w-16 h-16" />
             </div>
             <!-- Modal toggle -->
-            <div class="flex items-center">일정 등록</div>
+            <div class="flex items-center">알림 등록</div>
           </div>
         </button>
       </div>
     </div>
-    <VModal :vmodal="openVModal" />
-    <VModalInjection :vmodalpill="openVModalPill" />
+    <VModal :open-modal="openVModal" :close-modal="closeVModal" />
+    <VModalInjection :open-modal="openInjectionModal" :close-modal="closeInjectionModal" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import VModal from '../Alarm/VModal.vue'
 import VModalInjection from '../Alarm/VModalInjection.vue'
 import { useRouter } from 'vue-router'
+import { Modal } from 'flowbite'
 
-const openVModal = ref('VModal')
-const openVModalPill = ref('VModalPill')
 const router = useRouter()
+const injectionModal = ref()
+const allModal = ref()
+
+onMounted(() => {
+  initInjectionModal()
+  initVModal()
+})
+
+const initInjectionModal = () => {
+  const $targetEl = document.getElementById('VModalPill')
+
+  // options with default values
+  const options = {
+    placement: 'center',
+    backdrop: 'static',
+    backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+    closable: true,
+    onHide: () => {
+      console.log('modal is hidden')
+    },
+    onShow: () => {
+      console.log('modal is shown')
+    },
+    onToggle: () => {
+      console.log('modal has been toggled')
+    }
+  }
+
+  // instance options object
+  const instanceOptions = {
+    id: 'VModalPill',
+    override: true
+  }
+
+  injectionModal.value = new Modal($targetEl, options, instanceOptions)
+}
+
+const openInjectionModal = () => {
+  injectionModal.value.show()
+}
+
+const closeInjectionModal = () => {
+  injectionModal.value.hide()
+}
+
+const initVModal = () => {
+  const $targetEl = document.getElementById('VModal')
+
+  // options with default values
+  const options = {
+    placement: 'center',
+    backdrop: 'static',
+    backdropClasses: 'bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40',
+    closable: true,
+    onHide: () => {
+      console.log('modal is hidden')
+    },
+    onShow: () => {
+      console.log('modal is shown')
+    },
+    onToggle: () => {
+      console.log('modal has been toggled')
+    }
+  }
+
+  // instance options object
+  const instanceOptions = {
+    id: 'VModal',
+    override: true
+  }
+
+  allModal.value = new Modal($targetEl, options, instanceOptions)
+}
+
+const openVModal = () => {
+  allModal.value.show()
+}
+
+const closeVModal = () => {
+  allModal.value.hide()
+}
 
 const changeRouter = (name) => {
   router.push({ name: name })

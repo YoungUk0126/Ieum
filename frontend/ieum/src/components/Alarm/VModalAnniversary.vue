@@ -1,53 +1,47 @@
 <template>
   <div class="relative p-4 w-full max-w-2xl max-h-full">
-    <div class="content-container">
-      <div class="p-4 flex flex-col items-center space-y-4">
-        <div class="w-full flex space-x-4">
-          <div class="m-3 w-1/4">
-            <label for="title" class="block mb-2 text-sm font-medium text-gray-700"></label>
-            <input
-              type="text"
-              id="title"
-              class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-              placeholder="기념일을 입력해주세요"
-              v-model="jsonData.eventName"
-            />
-          </div>
-        </div>
-        <div class="w-full flex space-x-4">
-          <div class="m-3 w-1/4">
-            <label for="date" class="block mb-2 text-sm font-medium text-gray-700">날짜:</label>
-            <input
-              type="date"
-              id="start"
-              name="trip-start"
-              value="2025-01-01"
-              min="1900-01-01"
-              max="2100-12-31"
-              class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
-              v-model="jsonData.eventDate"
-            />
-          </div>
-        </div>
+    <div class="content-container relative p-4 flex flex-col items-center space-y-4">
+      <div class="m-3 w-full">
+        <label for="title" class="block mb-2 text-sm font-medium text-gray-700"></label>
+        <input
+          type="text"
+          id="title"
+          class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+          placeholder="기념일을 입력해주세요"
+          v-model="jsonData.eventName"
+        />
+      </div>
 
-        <!-- Modal footer -->
-        <div class="flex ml-auto items-center mt-4 space-x-4">
-          <button
-            :data-modal-hide="props.mainModal"
-            type="button"
-            class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
-            @click="postAlarmdata"
-          >
-            확인
-          </button>
-          <button
-            type="button"
-            class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
-            @click="props.closeModal"
-          >
-            취소
-          </button>
-        </div>
+      <div class="m-3 w-full">
+        <label for="date" class="block mb-2 text-sm font-medium text-gray-700">날짜:</label>
+        <input
+          type="date"
+          id="start"
+          name="trip-start"
+          value="2025-01-01"
+          min="1900-01-01"
+          max="2100-12-31"
+          class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+          v-model="jsonData.eventDate"
+        />
+      </div>
+
+      <!-- Modal footer -->
+      <div class="flex ml-auto items-center mt-4 space-x-4">
+        <button
+          type="button"
+          class="bg-green-400 text-white px-4 py-2 rounded hover:bg-green-500 focus:outline-none focus:ring"
+          @click="postAlarmdata"
+        >
+          확인
+        </button>
+        <button
+          type="button"
+          class="text-gray-500 bg-white px-4 py-2 rounded border border-gray-300 hover:text-gray-900 focus:outline-none focus:ring focus:border-blue-300"
+          @click="props.closeModal"
+        >
+          취소
+        </button>
       </div>
     </div>
   </div>
@@ -59,7 +53,7 @@ import { ref, defineProps } from 'vue'
 import { postAni } from '@/api/modalAlarms/ani.js'
 import swal from 'sweetalert'
 
-const props = defineProps(['closeModal', 'mainModal', 'selectedOption'])
+const props = defineProps(['closeModal', 'selectedOption'])
 
 const jsonData = ref({
   eventName: '',
@@ -111,5 +105,3 @@ const postAlarmdata = () => {
 </script>
 
 <style scoped></style>
-
--------------------------------------------------- @/api/modalAlarms/ani.js
