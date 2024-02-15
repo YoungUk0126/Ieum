@@ -207,7 +207,7 @@
 
 1. Front End  
 
-> nginx path : /  
+nginx path : /  
 Vue.js 배포
 
   ```
