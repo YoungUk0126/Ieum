@@ -1,19 +1,16 @@
 package com.ukcorp.ieum.iot.controller;
 
-import com.ukcorp.ieum.care.dto.response.CareGetResponseDto;
-import com.ukcorp.ieum.care.service.CareService;
 import com.ukcorp.ieum.iot.dto.SerialRequestDto;
 import com.ukcorp.ieum.iot.service.IotService;
 import com.ukcorp.ieum.jwt.JwtUtil;
-
+import com.ukcorp.ieum.socket.service.SocketService;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.ukcorp.ieum.socket.service.SocketService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,6 +51,21 @@ public class IotController {
       return handleError();
     }
   }
+
+  @GetMapping("/check-serial/{serial}")
+  public ResponseEntity<Map<String, Object>> checkSerial(@PathVariable String serial) {
+    try {
+      if(iotService.checkSerialCode(serial)){
+        return handleSuccess();
+      }else{
+        return handleError();
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      return handleError();
+    }
+  }
+
 
   @PostMapping("/check-device")
   public ResponseEntity<?> checkDevice(@RequestBody SerialRequestDto serial) {

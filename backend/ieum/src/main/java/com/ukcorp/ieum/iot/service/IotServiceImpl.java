@@ -14,6 +14,10 @@ import com.ukcorp.ieum.jwt.JwtUtil;
 import com.ukcorp.ieum.member.entity.Member;
 import com.ukcorp.ieum.member.repository.MemberRepository;
 import com.ukcorp.ieum.socket.service.SocketService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
@@ -21,9 +25,6 @@ import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -102,8 +103,8 @@ public class IotServiceImpl implements IotService {
     SerialCode device = iotRepository.searchBySerialCode(care.getCareSerial()).orElseThrow(
         () -> new NoSuchElementException("해당 코드의 기기를 찾을 수 없습니다"));
 
-    if (device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
-      return "현재 사용중입니다";
+    if (!device.getUsable().equals(Usable.ACTIVE)) { //기기가 사용 중이라면
+      return "사용이 시작되지 않은 기기입니다";
     }else{
       ChatHistory chat = chatRepository.findFirstByCareInfoCareNoOrderByChatDateDesc(careNo);
       if(chat == null){
@@ -121,6 +122,22 @@ public class IotServiceImpl implements IotService {
       }
     }
   }
+
+
+  /**
+   * 시리얼 번호 확인
+   *
+   * @param careNo
+   * @return
+   */
+  @Override
+  public boolean checkSerialCode(String serial) {
+    SerialCode serialCode = iotRepository.searchBySerialCode(serial).orElseThrow(
+        () -> new NoSuchElementException());
+
+    return serialCode.getUsable().equals(Usable.INACTIVE);
+  }
+
 
 
   /**

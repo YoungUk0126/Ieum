@@ -49,12 +49,12 @@ public class GoogleServiceImpl implements GoogleService {
       VoiceSelectionParams voice =
               VoiceSelectionParams.newBuilder()
                       .setLanguageCode("ko-KR")
-                      .setName("ko-KR-Standard-D")
+                      .setName("ko-KR-Standard-A")
                       .setSsmlGender(SsmlVoiceGender.FEMALE)
                       .build();
       // 오디오 설정으로 인코딩은 기본 LINEAR16
       AudioConfig audioConfig =
-              AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.LINEAR16).build();
+              AudioConfig.newBuilder().setAudioEncoding(AudioEncoding.LINEAR16).setSpeakingRate(0.8).build();
 
       // client측 완성된 정보를 서버로 전송해서 response 받기
       // response는 byte[] 형태로 날라온다.
