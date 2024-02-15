@@ -67,7 +67,7 @@
               <div class="flex items-center space-x-2 rtl:space-x-reverse">
                 <span class="text-sm font-semibold text-gray-900 dark:text-white">이음이</span>
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
-                  changeDateFormat(chat.date)
+                  changeDateTime(chat.date)
                 }}</span>
               </div>
               <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
@@ -86,7 +86,7 @@
                   `${care.careName} ${care.careGender}`
                 }}</span>
                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
-                  changeDateFormat(chat.date)
+                  changeDateTime(chat.date)
                 }}</span>
               </div>
               <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">
@@ -197,6 +197,12 @@ const nextPage = () => {
 const changeDateFormat = (value) => {
   const dateObject = new Date(value)
   const formattedDate = `${dateObject.getFullYear()}-${padZero(dateObject.getMonth() + 1)}-${padZero(dateObject.getDate())}`
+  return formattedDate
+}
+
+const changeDateTime = (value) => {
+  const dateObject = new Date(value)
+  const formattedDate = `${padZero(dateObject.getHours())}:${padZero(dateObject.getMinutes())}`
   return formattedDate
 }
 
