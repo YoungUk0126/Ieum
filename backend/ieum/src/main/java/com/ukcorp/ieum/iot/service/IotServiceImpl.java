@@ -113,9 +113,15 @@ public class IotServiceImpl implements IotService {
         LocalDateTime now = LocalDateTime.now();
         Duration duration = Duration.between(chat.getChatDate(), now);
         long daysAgo = duration.toDays();
+        long hoursAgo = duration.toHours();
+        long minutesAgo = duration.toMinutes();
+
         if (daysAgo == 0) {
-          long hoursAgo = duration.toHours();
-          return hoursAgo + "시간 전에 마지막으로 대화하셨습니다";
+          if (hoursAgo == 0) {
+            return minutesAgo + "분 전에 마지막으로 대화하셨습니다";
+          } else {
+            return hoursAgo + "시간 " + (minutesAgo % 60) + "분 전에 마지막으로 대화하셨습니다";
+          }
         } else {
           return daysAgo + "일 전에 마지막으로 대화하셨습니다";
         }
