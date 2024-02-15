@@ -113,7 +113,7 @@
 
 <br><br/>
 
-### 3. WebRTC를 활용한 영상통화
+### 3. WebRTC
 
 > 1대 1로 사용자와 영상 통화를 수행합니다.
 
@@ -172,7 +172,7 @@
 
 <br>
 
-## 🏑 conventionss
+## 🏑 conventions
 
 ### commit message convention
 
