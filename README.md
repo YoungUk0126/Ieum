@@ -472,13 +472,3 @@ openvidu:
 ```
 <br></br>
 
-
-### 첫 배포시 주의 사항
-
-첫 배포시에는 [init-letsencrypt.sh](./init-letsencrypt.sh)을 실행시켜 certbot에 의해 SSL/TLS 인증서를 생성하도록 해야 합니다.
-
-init-letsencrypt.sh 내용에서 `domains`와 `data_path`, `email`을 알맞게 수정한 뒤 실행시키면 됩니다.
-
-### 배포시 주의 사항
-
-redis/redis-data와 mysql/mysql-data는 각각 redis container와 mysql(mariadb) container의 데이터 저장 directory를 mount하고 있으니 각별히 주의해야 합니다.
