@@ -229,6 +229,118 @@
 
 2. Back End
 
+- application.yml
+```
+logging:
+  level:
+    org.springframework.web.client: debug
+    org.hibernate.sql: debug
+    org.hibernate.type: trace
+    org.springframework.security: debug
+
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+
+spring:
+  profiles:
+    default: dev
+```
+
+- application-dev.yml
+```
+openai:
+  model: gpt-4
+  secret-key: 
+
+naver-cloud-sms:
+  accessKey: 
+  secretKey: 
+  serviceId: 
+  senderPhone: 
+
+naver-cloud-stt:
+  secret: 
+  id: 
+
+cloud:
+  aws:
+    s3:
+      bucket: 
+    stack.auto: false
+    region.static: 
+    credentials:
+      accessKey: 
+      secretKey: 
+
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        auto_quote_keyword: true
+        format_sql: true
+        show_sql: true
+      defer-datasource-initialization: true
+      sql:
+        init:
+          mode: always
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 
+    username: 
+    password: 
+
+    # 커넥션 풀
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      connection-init-sql: SELECT 1
+      validation-timeout: 2000
+      minimum-idle: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  data:
+    redis:
+      host: 
+      port: 
+      host2: 
+      port2: 
+
+# jwt
+jwt:
+  secret-key: 
+  expiration: 86400000
+  refresh:
+    expiration: 604800000
+
+server:
+  ssl:
+    enabled: true
+    key-store: 
+    key-store-type: PKCS12
+    key-alias: 
+    key-store-password: 
+  port: 443
+
+
+openvidu:
+  url: https://i10a303.p.ssafy.io:4443/
+  secret: MY_SECRET
+```
+
+
 <div>
   Spring Boot 배포
 
