@@ -451,36 +451,25 @@ openvidu:
 
 프로젝트 폴더 이동
 
-<br>
+```
+  # virtualenv 설치
+  sudo apt install virtualenv
 
-# virtualenv 설치
-sudo apt install virtualenv
+  # 가상환경 생성
+  virtualenv venv
 
-<br>
+  # 가상환경 실행
+  source venv/bin/activate
 
-# 가상환경 생성
-virtualenv venv
+  # 라이브러리 설치
+  pip install -r requirements.txt
 
-<br>
+  # 장고 서버 실행
+  python manage.py runserver --noreload
 
-# 가상환경 실행
-source venv/bin/activate
-
-<br>
-
-# 라이브러리 설치
-pip install -r requirements.txt
-
-<br>
-
-# 장고 서버 실행
-python manage.py runserver --noreload
-
-<br>
-
-# 가상환경 종료
-deactivate
-
+  # 가상환경 종료
+  deactivate
+```
 <br></br>
 
 
