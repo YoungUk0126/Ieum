@@ -232,9 +232,9 @@
 <div>
   Spring Boot 배포
 
-  - ./gradlew.bat -x test build
+    - ./gradlew.bat -x test build
 
-  - java -jar ieum.0.0.1.jar
+    - java -jar ieum.0.0.1.jar
 </div>
 
 <br></br>
@@ -242,94 +242,94 @@
 3. OpenVidu
 
 <div>
-EC2 설정
+  EC2 설정
 
-```
-sudo su
+  ```
+  sudo su
 
-```
+  ```
 
-```
-cd /opt
+  ```
+  cd /opt
 
-```
+  ```
 
-`curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest.sh | bash`
+  `curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest.sh | bash`
 
-- 위 명령어들로 전체 이미지를 다운 받기
+  - 위 명령어들로 전체 이미지를 다운 받기
 
-- port 열어주기 → 기본적으로 Openvidu가 사용하는 포트 목록
+  - port 열어주기 → 기본적으로 Openvidu가 사용하는 포트 목록
 
-```
-ufw allow ssh
-ufw allow 80/tcp
-ufw allow 443/tcp
-ufw allow 3478/tcp
-ufw allow 3478/udp
-ufw allow 40000:57000/tcp
-ufw allow 40000:57000/udp
-ufw allow 57001:65535/tcp
-ufw allow 57001:65535/udp
-ufw enable
-```
+  ```
+  ufw allow ssh
+  ufw allow 80/tcp
+  ufw allow 443/tcp
+  ufw allow 3478/tcp
+  ufw allow 3478/udp
+  ufw allow 40000:57000/tcp
+  ufw allow 40000:57000/udp
+  ufw allow 57001:65535/tcp
+  ufw allow 57001:65535/udp
+  ufw enable
+  ```
 
-- .env 수정
+  - .env 수정
 
-```
-DOMAIN_OR_PUBLIC_IP=i10a303.p.ssafy.io
+  ```
+  DOMAIN_OR_PUBLIC_IP=i10a303.p.ssafy.io
 
-HTTPS_PORT=4443
-```
+  HTTPS_PORT=4443
+  ```
 
-- 실행
+  - 실행
 
-```
-./openvidu
-```
+  ```
+  ./openvidu
+  ```
 
-```
-server{
+  ```
+  server{
 
-    listen 443 ssl;
+      listen 443 ssl;
 
-    server_name i10a303.p.ssafy.io;
-
-
-    ssl_certificate "/etc/letsencrypt/live/i10a303.p.ssafy.io/fullchain.pem";
-    ssl_certificate_key "/etc/letsencrypt/live/i10a303.p.ssafy.io/privkey.pem";
+      server_name i10a303.p.ssafy.io;
 
 
-    location /openvidu{
-        rewrite ^/openvidu(.*)$ $1 break;
-            proxy_pass https://i10a303.p.ssafy.io:4443;
-            proxy_http_version 1.1;
-            proxy_set_header Host $host;
-
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection "upgrade";
-            proxy_read_timeout 86400;
-    }
+      ssl_certificate "/etc/letsencrypt/live/i10a303.p.ssafy.io/fullchain.pem";
+      ssl_certificate_key "/etc/letsencrypt/live/i10a303.p.ssafy.io/privkey.pem";
 
 
-    location /api{
-        proxy_pass https://localhost:8080;
-        proxy_set_header Host $host;
-    }
+      location /openvidu{
+          rewrite ^/openvidu(.*)$ $1 break;
+              proxy_pass https://i10a303.p.ssafy.io:4443;
+              proxy_http_version 1.1;
+              proxy_set_header Host $host;
+
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+              proxy_read_timeout 86400;
+      }
 
 
-    location /images{
-        root /home/ubuntu;
-        #try_files $uri.png $uri.jpg $uri.jpeg =404;
-    }
+      location /api{
+          proxy_pass https://localhost:8080;
+          proxy_set_header Host $host;
+      }
 
-    location / {
 
-        root        /var/www/front;
-        index       index.html index.htm;
-        try_files $uri $uri/ /index.html;
-    }
+      location /images{
+          root /home/ubuntu;
+          #try_files $uri.png $uri.jpg $uri.jpeg =404;
+      }
 
-```
+      location / {
+
+          root        /var/www/front;
+          index       index.html index.htm;
+          try_files $uri $uri/ /index.html;
+      }
+
+  ```
 </div>
 
 <br></br>
