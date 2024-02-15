@@ -1,6 +1,6 @@
 # <img src="https://lab.ssafy.com/s10-webmobile1-sub2/S10P12A303/-/raw/CocoisCat-master-patch-77607/IMG/ieum_logo.png" width="60" height="50"> IEUM
 
-독거노인을 위한 인공지능 스피커 "이음이이"
+독거노인을 위한 인공지능 스피커 "이음이"
 <br>
 
 ## 👩‍👩‍👧‍👦 팀원 소개
