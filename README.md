@@ -205,7 +205,7 @@
 
 ## 🌐 배포 방법
 
-1. Front End  
+### 1. Front End  
 
 nginx path : /  
 Vue.js 배포
@@ -225,7 +225,7 @@ Vue.js 배포
 
 <br></br>
 
-2. Back End  
+### 2. Back End  
 
 - application.yml
 ```
@@ -349,7 +349,7 @@ openvidu:
 
 <br></br>
 
-3. OpenVidu  
+### 3. OpenVidu  
 
 <div>
   EC2 설정
@@ -445,7 +445,7 @@ openvidu:
 <br></br>
 
 
-4. Django  
+### 4. Django  
 
 <br>
 
