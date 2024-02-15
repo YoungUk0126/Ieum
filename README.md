@@ -73,37 +73,37 @@
 
 <img src="./readmeimg/기념일등록.gif" width="200" height="400"/>
 
-<br>
+<br><br/>
 
 2. 보호자정보등록
 
 <img src="./readmeimg/보호자정보등록.gif" width="200" height="400"/>
 
-<br>
+<br><br/>
 
 3. 보호자정보수정
 
 <img src="./readmeimg/보호자정보수정.gif" width="200" height="400"/>
 
-<br>
+<br><br/>
 
 4. 투약 등록
 
 <img src="./readmeimg/복용약추가.gif" width="200" height="400"/>
 
-<br>
+<br><br/>
 
 5. 식사시간 등록
 
 <img src="./readmeimg/식사시간등록.gif" width="200" height="400"/>
 
-<br>
+<br><br/>
 
 6. 일정 등록
 
 <img src="./readmeimg/일정등록.gif" width="200" height="400"/>
 
-<br></br>
+<br><br/>
 
 ### 2. 독거노인의 상태 모니터링
 
