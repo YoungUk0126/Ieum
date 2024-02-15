@@ -205,9 +205,8 @@
 
 ## 🌐 배포 방법
 
-1. Front End
+1. Front End  
 
-<div>
   nginx path : /
 
   Vue.js 배포
@@ -223,11 +222,11 @@
   ```
 
   - 빌드 결과로 나온 dist 폴더를 Ec2서버의 /var/www/frontend 디렉토리에 옮겨줍니다.
-</div>
+
 
 <br></br>
 
-2. Back End
+2. Back End  
 
 - application.yml
 ```
@@ -351,7 +350,7 @@ openvidu:
 
 <br></br>
 
-3. OpenVidu
+3. OpenVidu  
 
 <div>
   EC2 설정
@@ -447,7 +446,7 @@ openvidu:
 <br></br>
 
 
-4. Django
+4. Django  
 
 ### 첫 배포시 주의 사항
 
