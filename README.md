@@ -447,6 +447,43 @@ openvidu:
 
 4. Django  
 
+<br>
+
+프로젝트 폴더 이동
+
+<br>
+
+# virtualenv 설치
+sudo apt install virtualenv
+
+<br>
+
+# 가상환경 생성
+virtualenv venv
+
+<br>
+
+# 가상환경 실행
+source venv/bin/activate
+
+<br>
+
+# 라이브러리 설치
+pip install -r requirements.txt
+
+<br>
+
+# 장고 서버 실행
+python manage.py runserver --noreload
+
+<br>
+
+# 가상환경 종료
+deactivate
+
+<br></br>
+
+
 ### 첫 배포시 주의 사항
 
 첫 배포시에는 [init-letsencrypt.sh](./init-letsencrypt.sh)을 실행시켜 certbot에 의해 SSL/TLS 인증서를 생성하도록 해야 합니다.
