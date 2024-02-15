@@ -21,7 +21,7 @@
       <!-- 이벤트 날짜 -->
       <div class="major-c time-input row">
         <div class="w-full flex space-x-4">
-          <div class="mb-3 w-1/4">
+          <div class="mb-3 w-full">
             <label for="date" class="block mb-2 text-sm font-medium text-gray-700">날짜:</label>
             <input
               type="date"
@@ -30,7 +30,7 @@
               value="2025-01-01"
               min="1900-01-01"
               max="2100-12-31"
-              class="p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
+              class="w-full p-2 border border-gray-300 rounded placeholder-gray-400 focus:outline-none focus:ring focus:border-blue-300"
               v-model="selectedDate"
             />
           </div>
@@ -45,11 +45,13 @@
         <div class="row d-flex align-items-center mb-4">
           <div class="col-8 d-flex">
             <input
+              maxlength="2"
               v-model="selectedHour"
               class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">시</span>
             <input
+              maxlength="2"
               v-model="selectedMinute"
               class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />

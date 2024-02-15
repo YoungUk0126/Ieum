@@ -13,13 +13,15 @@
         <div class="row d-flex align-items-center">
           <div class="col-8 d-flex">
             <input
+              maxlength="2"
               v-model="selectedNumber"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">시</span>
             <input
+              maxlength="2"
               v-model="selectedNumber2"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">분</span>
           </div>
@@ -33,13 +35,15 @@
         <div class="row d-flex align-items-center">
           <div class="col-8 d-flex">
             <input
+              maxlength="2"
               v-model="selectedNumber3"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">시</span>
             <input
+              maxlength="2"
               v-model="selectedNumber4"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">분</span>
           </div>
@@ -53,13 +57,15 @@
         <div class="row d-flex align-items-center">
           <div class="col-8 d-flex">
             <input
+              maxlength="2"
               v-model="selectedNumber5"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">시</span>
             <input
+              maxlength="2"
               v-model="selectedNumber6"
-              class="w-1/5 p-2 border rounded bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
+              class="w-1/5 bg-gray-10 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 p-2.5 dark:bg-gray-400 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gray-400 dark:focus:border-gray-400"
             />
             <span class="ml-2 mr-2">분</span>
           </div>
@@ -95,7 +101,7 @@ const mealInfoNo = ref()
 
 onMounted(() => {
   getMeal(({ data }) => {
-    if (data.data === false) {
+    if (!data.success) {
       // 이전 데이터가 없는 경우
       mealInfoNo.value = undefined
     } else {
@@ -103,6 +109,14 @@ onMounted(() => {
       // data.data
       // 변환해서 selectedNumber에 각각 넣어주기
       mealInfoNo.value = data.data.mealInfoNo
+      selectedNumber.value = formatTimeH(data.data.mealTime1)
+      selectedNumber2.value = formatTimeM(data.data.mealTime1)
+
+      selectedNumber3.value = formatTimeH(data.data.mealTime2)
+      selectedNumber4.value = formatTimeM(data.data.mealTime2)
+
+      selectedNumber5.value = formatTimeH(data.data.mealTime3)
+      selectedNumber6.value = formatTimeM(data.data.mealTime3)
     }
   })
 })
@@ -149,7 +163,6 @@ const postAlarmdata = () => {
   jsonData.value.mealTime2 = formatTime2(selectedNumber3.value, selectedNumber4.value)
   jsonData.value.mealTime3 = formatTime2(selectedNumber5.value, selectedNumber6.value)
 
-  console.log(jsonData.value)
   if (
     jsonData.value.mealTime1 === '' ||
     jsonData.value.mealTime2 === '' ||
@@ -189,6 +202,7 @@ const postAlarmdata = () => {
             }
           }
         }).then = () => {
+          console.log(props.closeModal)
           props.closeModal()
         }
       }
@@ -210,9 +224,9 @@ const postAlarmdata = () => {
               closeModal: true
             }
           }
-        }).then = () => {
-          props.closeModal()
-        }
+        })
+
+        props.closeModal()
       }
     })
   }
