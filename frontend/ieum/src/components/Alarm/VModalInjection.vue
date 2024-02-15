@@ -204,7 +204,7 @@ import swal from 'sweetalert'
 import moment from 'moment'
 
 // 0. 모달 닫기, 열기
-const props = defineProps(['openModal', 'closeModal'])
+const props = defineProps(['openModal', 'closeModal', 'selectedOption'])
 
 // 1 약 이름
 const pill_name = ref('')

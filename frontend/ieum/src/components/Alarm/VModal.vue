@@ -44,19 +44,16 @@
           <template v-if="selectedOption === options[1]">
             <VModalAnniversary
               :selected-option="selectedOption"
-              :close-modal="props.closeModal"
+              :close-modal="coloseEndInit"
             ></VModalAnniversary>
           </template>
           <template v-else-if="selectedOption === options[2]">
-            <VModalMeal
-              :selected-option="selectedOption"
-              :close-modal="props.closeModal"
-            ></VModalMeal>
+            <VModalMeal :selected-option="selectedOption" :close-modal="coloseEndInit"></VModalMeal>
           </template>
           <template v-else-if="selectedOption === options[3]">
             <VModalEvent
               :selected-option="selectedOption"
-              :close-modal="props.closeModal"
+              :close-modal="coloseEndInit"
             ></VModalEvent>
           </template>
           <button
@@ -98,6 +95,10 @@ const selectedOption = ref('부모님 일정')
 const selectOption = (index) => {
   selectedOption.value = options.value[index]
   // 각 모달을 변경하는 로직 추가
+}
+const coloseEndInit = () => {
+  selectOption(0)
+  props.closeModal()
 }
 </script>
 
