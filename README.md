@@ -151,9 +151,6 @@
     <img src="https://img.shields.io/badge/db-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/sqlite-%23003B57?style=for-the-badge&logo=sqlite&logoColor=white"><br>
   </div>
 
-- 영상통화
-
-  - openvidu
 
 - API
 
@@ -170,6 +167,9 @@
     <img src="https://img.shields.io/badge/distribute-%23121011?style=for-the-badge"><img src="https://img.shields.io/badge/docker-%232496ED?style=for-the-badge&logo=docker&logoColor=white"><br>
   </div>
 
+
+- 영상통화
+  - openvidu
 <br>
 
 ## 🏑 conventions
