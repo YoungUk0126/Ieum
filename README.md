@@ -58,7 +58,7 @@
 
 > ChatGPT 기반의 10살 지능을 가진 대화형 인공지능을 활용하여 독거노인의 말동무가 되어줄 수 있습니다
 
-![login](./readmeimg/1.jpg)
+<img src="./readmeimg/1.jpg" width="400" height="400"/>
 
 - 여러가지 대화가 가능하며, 상호작용합니다.
 
