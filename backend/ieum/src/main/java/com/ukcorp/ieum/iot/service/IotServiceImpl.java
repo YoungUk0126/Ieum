@@ -49,7 +49,7 @@ public class IotServiceImpl implements IotService {
 
     MessageDTO sendMessage = MessageDTO.builder()
         .to(phone)
-        .content("[이음] 보호자의 자택에 화재가 발생했습니다").build();
+        .content("[이음] 어르신 자택에 화재가 발생했습니다").build();
 
     naverService.sendSms(sendMessage);
   }
