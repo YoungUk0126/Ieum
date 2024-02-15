@@ -207,32 +207,41 @@
 
 1. Front End
 
-nginx path : /
+<div>
+  nginx path : /
 
-Vue.js 배포
+  Vue.js 배포
 
-```
-npm install
-```
+  ```
+  npm install
+  ```
 
-- 필요한 패키지에 대한 install 을 실행합니다.
+  - 필요한 패키지에 대한 install 을 실행합니다.
 
-```
-npm run build
-```
+  ```
+  npm run build
+  ```
 
-- 빌드 결과로 나온 dist 폴더를 Ec2서버의 /var/www/frontend 디렉토리에 옮겨줍니다.
+  - 빌드 결과로 나온 dist 폴더를 Ec2서버의 /var/www/frontend 디렉토리에 옮겨줍니다.
+</div>
+
+<br></br>
 
 2. Back End
 
-Spring Boot 배포
+<div>
+  Spring Boot 배포
 
-- ./gradlew.bat -x test build
+  - ./gradlew.bat -x test build
 
-- java -jar ieum.0.0.1.jar
+  - java -jar ieum.0.0.1.jar
+</div>
+
+<br></br>
 
 3. OpenVidu
 
+<div>
 EC2 설정
 
 ```
@@ -321,6 +330,10 @@ server{
     }
 
 ```
+</div>
+
+<br></br>
+
 
 4. Django
 
