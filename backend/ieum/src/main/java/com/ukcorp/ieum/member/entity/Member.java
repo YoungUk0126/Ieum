@@ -1,29 +1,89 @@
 package com.ukcorp.ieum.member.entity;
 
+import com.ukcorp.ieum.care.entity.CareInfo;
+import com.ukcorp.ieum.member.dto.MemberRequestDto;
+import com.ukcorp.ieum.member.dto.MemberUpdateDto;
+import com.ukcorp.ieum.member.entity.converter.StringListConverter;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
-@Setter
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 @Entity
-@Table(name = "MEMBER")
+@Table(name = "MEMBERS")
 public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long memberNo;
-    private long careNo;
+    @Column(name = "MEMBER_NO")
+    private Long memberNo;
+
+    @JoinColumn(name = "CARE_NO")
+    @OneToOne(fetch = FetchType.LAZY)
+    private CareInfo careInfo;
+
+    @Column(name = "MEMBER_ID")
     private String memberId;
+
+    @Column(name = "MEMBER_PASSWORD")
     private String memberPassword;
+
+    @Column(name = "SERIAL_CODE")
     private String serialCode;
+
+    @Column(name = "MEMBER_NAME")
     private String memberName;
+
+    @Column(name = "MEMBER_EMAIL")
     private String memberEmail;
+
+    @Column(name = "MEMBER_PHONE")
     private String memberPhone;
-    private boolean withdrawal;
+
+    @Column(name = "WITHDRAWAL")
+    @Enumerated(EnumType.STRING)
+    private Withdrawal withdrawal;
+
+    @Column(name = "role")
+    @Convert(converter = StringListConverter.class)
+    private List<String> authorities;
+
+    public void setNewMember(CareInfo careInfo) {
+        List<String> auth = new ArrayList<>();
+        auth.add("ROLE_USER");
+        this.authorities = auth;
+        this.careInfo = careInfo;
+        this.withdrawal = Withdrawal.ACTIVE;
+    }
+
+    public void withdrawMember() {
+        this.withdrawal = Withdrawal.INACTIVE;
+        authorities = new ArrayList<>();
+    }
+
+    public void updateMember(MemberUpdateDto updateMember) {
+        this.memberName = updateMember.getName();
+        this.memberEmail = updateMember.getEmail();
+        this.memberPhone = updateMember.getPhone();
+    }
+
+    public void updateSerial(String serial) {
+        this.serialCode = serial;
+    }
+
+    public void updateSerialCode(String code) {
+        this.serialCode = code;
+    }
+
+    public void updatePassword(String password) {
+        this.memberPassword = password;
+    }
+
 }
