@@ -1,0 +1,1 @@
+default_app_config = 'ieum.parser.apps.AppConfig'
