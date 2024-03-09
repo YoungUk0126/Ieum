@@ -1,0 +1,275 @@
+from threading import Thread
+import voice, call, flame, parser
+
+
+if __name__ == '__main__':
+    # 스레드로 각자 센서들 감지하게 만듬
+    detectedVoiceProc = Thread(target=voice.detectedVoice, args=()) # 저기 이음아 감지
+    detectedFlameProc = Thread(target=flame.detectedFlame, args=()) # 불 감지
+    # Parser도 항상 파싱 기다림
+    detectedParserProc = Thread(target=parser.detectedJson, args=())
+
+    detectedVoiceProc.start()
+    detectedFlameProc.start()
+    detectedParserProc.start()
+====main.py====
+import json
+import pygame
+import call
+import sound_output
+import voice
+from ieum.keys import get_key
+import redis
+
+def parser(data):
+    jsonObj = json.loads(data)
+
+    if(jsonObj.get("type") == "MealAlert"):
+        jsonData = jsonObj.get("content")
+        sound_output.soundPlay(jsonData)
+    # 오디오 파일 재생 로직( 밥 먹을 시간이에요~~ )
+
+    elif(jsonObj.get("type") == "PillAlert"):
+        jsonData = jsonObj.get("content")
+        sound_output.soundPlay(jsonData)
+    # 오디오 파일 재생 로직( 약 먹을 시간이에요~~ )
+
+    elif(jsonObj.get("type") == "SleepAlert"):
+        jsonData = jsonObj.get("content")
+        sound_output.soundPlay(jsonData)
+    # 오디오 파일 재생 로직( 곧 잘 시간이에요~~ )
+
+    elif(jsonObj.get("type") == "EventAlert"):
+        jsonData = jsonObj.get("content")
+        sound_output.soundPlay(jsonData)
+    # 오디오 파일 재생 로직( 어디 갈 시간이에요~~ )
+
+    elif (jsonObj.get("type") == "CallAlert"):
+        jsonData = jsonObj.get("content")
+        p = sound_output.soundPlay('friendSong.mp3')
+        call.detectedBtn(p)
+    elif (jsonObj.get("type") == "SmallTalk"):
+        pass
+        # 산발적 대화 기능 있었으면 좋겠어~~
+    elif (jsonObj.get("type") == "ChatResponse"):
+        jsonData = jsonObj.get("content")
+        # 받아온 음성파일 데이터 경로대로 소리 출력해주는 함수
+        mixer = sound_output.soundPlay(jsonData)
+        # mixer가 계속 실행중이라면 실행이 끝날때까지 대기
+        while mixer.get_busy() :
+            pass
+        # 다시 녹음하고 보내는 파일
+        voice.recordVoice()
+
+redis_client = redis.Redis(host='i10a303.p.ssafy.io', port=6379)
+def publish(type, content):
+    # 얜 뭐임?
+    channel = get_key("aaaaaa")
+    message = '{"type": "' + type + '", "content":"' + content + '"}'
+    print(message)
+    redis_client.publish(channel, message)
+
+def subscribe(topic):
+    pubsub = redis_client.pubsub()
+    pubsub.subscribe(topic)
+    for message in pubsub.listen():
+        if message['type'] == 'message':
+            # UTF-8로 디코딩하여 출력
+            data = message['data'].decode('utf-8')
+            print(f"Received message: {data}")
+            parser(data)
+===parser.py===
+import pygame
+
+
+pygame.mixer.init()
+pygame.mixer.music.set_volume(1.0)
+
+def soundPlay(ieumAnswer) :
+    p = pygame.mixer.Sound(ieumAnswer)
+    p.play()
+    mixer = pygame.mixer
+    return mixer
+
+def soundStop(sound) :
+    sound.stop()
+===sound_output.py===
+import pvporcupine
+import pvrecorder
+import pyaudio
+import wave
+import audioop
+import time
+import parser
+import uuid
+
+# 오디오 녹음
+def recordVoice():
+    # 녹음할 오디오 스트림을 설정합니다.
+    chunk = 1024  # 음성을 처리할 청크 크기
+    sample_format = pyaudio.paInt16  # 16비트 형식으로 설정
+    channels = 1  # 모노 오디오 설정
+    fs = 44100  # 샘플링 주파수 설정
+
+    p = pyaudio.PyAudio()  # PyAudio 객체 생성
+    stream = p.open(format=sample_format,
+                    channels=channels,
+                    rate=fs,
+                    frames_per_buffer=chunk,
+                    input=True)
+
+    print("녹음을 시작합니다.")
+
+    frames = []  # 음성 데이터를 저장할 리스트
+    MIN_SILENCE = 2000  # RMS 임계값을 조정합니다.
+    silence_counter = 0
+    record_time = 0
+
+    while True:
+        data = stream.read(chunk)
+        frames.append(data)
+        record_time += (chunk / fs)
+
+        rms = audioop.rms(data, 2)  # audioop 라이브러리를 사용하여 RMS 값을 계산합니다.
+        if rms < MIN_SILENCE:
+            print("음성 미감지")
+            silence_counter += (chunk / fs)  # 실제 시간 단위로 카운터를 증가시킵니다.
+        else:
+            print("음성 감지")
+            silence_counter = 0
+
+        if silence_counter >= 2:  # 2초 동안 무음이면 녹음을 멈춥니다.
+            if record_time <= 3:  # 총 녹음 시간이 3초라면 대화가 없었다고 판단 후
+                return      # 더 이상 이 녹음파일을 저장하지도 보내지도 않습니다
+            break
+
+
+    print("녹음을 종료합니다.")
+
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+
+    # 저장된 음성 데이터를 파일로 저장할 수도 있습니다.
+    # 예를 들어, WAV 파일로 저장하려면 다음과 같이 저장할 수 있습니다.
+
+    # UUID 만들어서 보내기
+    filename = "/home/ieum/voice/" + uuid.uuid1()
+    wf = wave.open(filename, 'wb')
+    wf.setnchannels(channels)
+    wf.setsampwidth(p.get_sample_size(sample_format))
+    wf.setframerate(fs)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+
+    # 장고한테 JSON보냄
+    parser.publish('Chat', filename)
+# 음성 감지
+def detectedVoice():
+    try:
+        recorder.start()
+
+        while True:
+            # 저기 이음아 감지하면 양수값 반환
+            keyword_index = porcupine.process(recorder.read())
+            if keyword_index >= 0:
+                print("이음이 감지됨")
+                # 응답 녹음 함수
+                recordVoice()
+
+
+    except KeyboardInterrupt:
+        recorder.stop()
+    finally:
+        porcupine.delete()
+        recorder.delete()
+
+
+porcupine = pvporcupine.create(
+    access_key='TWRRcSHa87fPhqBXYpSl4OFfjBf5ZjXd8Tj86DQ+yrnGQd/xI6pLQQ==',
+    keyword_paths=['ieum_ko_raspberry-pi_v3_0_0.ppn'],
+    model_path='porcupine_params_ko.pv'
+)
+recorder = pvrecorder.PvRecorder(device_index=-1, frame_length=porcupine.frame_length)
+===voice.py===
+import time
+import RPi.GPIO as GPIO
+import parser
+
+
+GPIO.setmode(GPIO.BCM)  # 핀모드 설정
+
+# 사용할 GPIO 핀의 번호를 설정
+flame_pin = 21
+
+
+GPIO.setwarnings(False)
+# 버튼 핀의 입력설정 , PULL DOWN 설정
+GPIO.setup(flame_pin, GPIO.IN)
+
+def flameCallBack():
+    # 불 감지했으니 장고로 불났다는 정보를 보내는 로직이 필요
+    print("flame detected")
+    parser.publish("flameDetected", "flame")
+
+# 불꽃 감지 센서
+def detectedFlame():
+    GPIO.add_event_detect(flame_pin, GPIO.BOTH, bouncetime=300)
+    GPIO.add_event_callback(flame_pin, flameCallBack)
+
+    while True:
+        time.sleep(1)
+===flame.py===
+import RPi.GPIO as GPIO
+import time
+import threading
+import subprocess
+import pygame
+
+import sound_output
+
+button_pin = 15  # 버튼이 연결된 GPIO 핀 번호
+# 웹 브라우저 프로세스를 저장할 변수
+browser_process = None
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(button_pin, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+
+def answer_call():
+    global browser_process
+    print("Answering the call...")
+    if browser_process is None or browser_process.poll() is not None:
+        # 웹 브라우저가 실행 중이지 않으면 시작
+        time.sleep(0.5)
+        sound_output.soundPlay('connect_sound.wav')
+        browser_process = open_browser()
+    else:
+        # 웹 브라우저가 실행 중이면 종료
+        browser_process.terminate()
+        browser_process = None
+        print("web closed")
+
+
+def open_browser():
+    url = 'https://i10a303.p.ssafy.io:443/callcare?serial=aaaaaa'
+    return subprocess.Popen(['chromium-browser', '--kiosk', '--noerrdialogs', '--disable-infobars', url])
+
+
+def detectedBtn(bell: pygame.mixer.Sound):
+    # 30초 셀때까지 버튼 인풋 안받으면 전화 끊게끔 하는 로직 필요하다.
+    # 버튼 감지 무한루프 중지하는 로직 필요하다.
+    while True:
+        if GPIO.input(button_pin) == GPIO.HIGH:
+            # 이 음악이 재생되고 있는지 확인하는 코드가 있었으면 좋겠다.
+            sound_output.soundStop(bell)
+            # print문은 구현 끝나면 꼭 지우자
+            print("Button pushed!")
+            answer_call()
+        time.sleep(0.1)
+===call.py===
+
+
+
+
+
