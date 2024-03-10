@@ -95,7 +95,7 @@ def detectedVoice():
 
 
 porcupine = pvporcupine.create(
-    access_key='TWRRcSHa87fPhqBXYpSl4OFfjBf5ZjXd8Tj86DQ+yrnGQd/xI6pLQQ==',
+    access_key= { access-key },
     keyword_paths=['ieum_ko_raspberry-pi_v3_0_0.ppn'],
     model_path='porcupine_params_ko.pv'
 )
